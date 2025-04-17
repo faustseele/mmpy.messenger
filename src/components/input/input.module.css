@@ -1,0 +1,61 @@
+.inputWrap {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+
+  width: 100%;
+  padding: 14px 8px 15px 8px;
+
+  display: flex;
+  text-align: center;
+  
+  border: none;
+  border-bottom: solid 1px var(--color-panel-lightest);  
+  box-sizing: border-box;
+
+  background-color: transparent;
+
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+  color: var(--color-content-light);
+
+  transition: 0.2s ease-in-out;
+}
+
+.input_profileEdit {
+  text-align: right;
+  font-style: italic;
+}
+
+.input::placeholder {
+  color: var(--color-content-darkest);
+}
+
+.input_profileEdit::placeholder {
+  color: var(--color-content-light);
+}
+
+.input:hover {
+  border-color: var(--color-acc-bold);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-acc);
+}
+
+.inputEditLabel {
+  position: absolute;
+  top: 14px;
+  left: 8px;
+
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+  color: var(--color-content-darkest);
+}

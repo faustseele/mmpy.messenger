@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --color-alert: #f5ae75;
+  --color-acc-bold: #607A52;
+  --color-acc: #b9dfa5;
+  --color-acc-light: #dbf5cd;
+  --color-acc-lightest: #f0fee8;
+  --color-content: #f0f3ee;
+  --color-content-light: #ffffff;
+  --color-content-dark: #D9EAC8;
+  --color-content-darkest: #bac6b2;
+  --color-panel-dark: #050a02;
+  --color-panel: #101607;
+  --color-panel-light: #181c12;
+  --color-panel-lightest: #2f2d2d;
+
+  --font-family: "Montserrat", Helvetica, Arial, sans-serif;
+
+
+  --color-universal-br: var(--color-panel-lightest);
+  --color-universal-br: var(--color-panel-lightest);
+
+  --color-item-bg: rgba(255, 255, 255, 0.06);
+
+  --color-btn-bg: rgba(127, 237, 69, 0.05);
+  --color-btn-br: rgba(255, 255, 255, 0.1);
+  --color-universal-br-active: rgba(255, 255, 255, 0.4);
+
+  --transition: 0.2s ease-in-out;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-panel-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: var(--font-family);
+}
+
+h2, a, p, label {
+  color: var(--color-content-light);
+}
+
+nav {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+}

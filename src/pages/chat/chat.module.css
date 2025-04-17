@@ -1,0 +1,85 @@
+.moduleWindow_chat {
+  width: auto;
+  max-width: 1100px;
+  height: calc(100vh - 100px);
+
+  flex-direction: row;
+}
+
+.catalogue {
+  width: 320px;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-panel-light);
+  border-right: var(--color-universal-br) 1px solid;
+}
+
+.catalogue__head {
+  padding: 0 8px 8px 8px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+
+  border-bottom: var(--color-universal-br) 1px solid;
+}
+
+.catalogue__headings {
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 13px 8px;
+  box-sizing: border-box;
+
+  border: 1px solid transparent;
+  outline: none;
+  border-radius: 4px;
+
+  background-color: var(--color-btn-bg);
+
+  font-family: inherit;
+  color: var(--color-content-light);
+  text-align: center;
+
+  transition: var(--transition);
+}
+
+.searchInput::placeholder {
+  color: var(--color-content-darkest);
+}
+
+.searchInput:hover {
+  border-color: var(--color-universal-br);
+}
+
+.searchInput:focus {
+  border-color: var(--color-universal-br-active);
+}
+
+.catalogue__items {
+  margin-top: 8px;
+  
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.chat {
+  min-width: 500px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
