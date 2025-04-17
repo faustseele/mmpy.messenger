@@ -5,7 +5,8 @@ export const chatsData = {
     },
     {
       text: "Профиль ➛",
-      isClickable: true
+      isClickable: true,
+      link: "/profile"
     }
   ],
   searchLabel: "Поиск",

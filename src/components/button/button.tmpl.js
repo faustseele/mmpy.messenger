@@ -11,7 +11,11 @@ export default function regButton() {
         {{#if isSilent}}
           ${css.button_silent}
         {{/if}}
-      " type="{{type}}">{{label}}</button>
+      " type="{{type}}">
+        <a href="{{link}}" class="newRoute">
+          {{label}}
+        </a>
+      </button>
     {{/each}}
     `
   );

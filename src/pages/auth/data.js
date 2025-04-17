@@ -40,7 +40,8 @@ export const signUpData = {
     {
       modifier: "button",
       type: "submit",
-      label: "Зарегистрироваться ✓"
+      label: "Зарегистрироваться ✓",
+      link: "/chats"
     }
   ]
 }
@@ -67,11 +68,13 @@ export const signInData = {
     {
       type: "button",
       label: "Впервые?",
-      isSilent: true
+      isSilent: true,
+      link: "/sign-up"
     },
     {
       type: "submit",
-      label: "Авторизоваться ✓"
+      label: "Авторизоваться ✓",
+      link: "/chats"
     }
   ]
 }

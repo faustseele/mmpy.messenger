@@ -15,7 +15,8 @@ export const errorData404 = {
   buttonData: [
     {
       type: "button",
-      label: "Назад к чатам"
+      label: "Назад к чатам",
+      link: "/chats"
     }
   ]
 }
@@ -37,7 +38,8 @@ export const errorData500 = {
   buttonData: [
     {
       type: "button",
-      label: "Назад к чатам"
+      label: "Назад к чатам",
+      link: "/chats"
     }
   ]
 }

@@ -3,6 +3,7 @@ export const profileData = {
     {
       text: "⮘ Назад",
       isClickable: true,
+      link: "/chats"
     },
     {
       text: "Профиль",
@@ -52,16 +53,19 @@ export const profileData = {
   buttonData: [
     {
       type: "button",
-      label: "Изменить данные"
+      label: "Изменить данные",
+      link: "/chats"
     },
     {
       type: "button",
-      label: "Изменить пароль"
+      label: "Изменить пароль",
+      link: "/chats"
     },
     {
       type: "button",
       label: "Выйти",
-      isSilent: true
+      isSilent: true,
+      link: "/sign-in"
     },
 
   ]

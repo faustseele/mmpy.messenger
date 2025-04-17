@@ -45,6 +45,8 @@
   font-family: inherit;
   font-size: 13px;
   line-height: 15px;
+
+  color: var(--color-content-light);
 }
 
 .contentText {
@@ -57,6 +59,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  color: var(--color-content-dark);
 }
 
 .catalogueItem__infoBox {
@@ -85,10 +89,11 @@
   text-overflow: ellipsis;
   overflow: hidden;
 
-  color: var(--color-content-dark);
+  color: var(--color-content-darkest);
+  opacity: 0.8;
 }
 
 .infoBoxText_unread {
-  color: var(--color-acc);
-
+  color: var(--color-content-dark);
+  opacity: 1;
 }

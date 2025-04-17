@@ -10,7 +10,7 @@ import { getPage } from "./src/pages/utils.js";
 })()
 
 // Initial render
-routeTo('/profile')
+routeTo('/sign-up')
 
 // React on new address
 document.addEventListener("click", (e) => {

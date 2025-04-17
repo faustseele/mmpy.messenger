@@ -14,7 +14,9 @@ export default function regHeading() {
           ${css.heading_drama}
         {{/if}}"
       >
-        {{text}}
+        <a href="{{link}}" class="newRoute">
+          {{text}}
+        </a>
       </h1>
     {{/each}}
   `);
