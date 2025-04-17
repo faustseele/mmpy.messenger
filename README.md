@@ -1,6 +1,7 @@
 #### Project
 **Name**: middle.messenger.praktikum.yandex
 **Tech-Stack**: Vanilla JS, HandleBars, PostCSS & CSS-Modules
+**Netlify Link**: dynamic-smakager-a6d4a4.netlify.app
 
 ##### How to run
 ```bash
