@@ -34,32 +34,3 @@ export function getChatPage() {
 
   return compiledTemplate(chatsData);
 }
-
-/* For future markup: */
-
-{/* <div class="${css.chatHeader}">
-<div class="${css.chatHeader__profile}">
-  <img class="${css.avatar}" alt="User's Avatar" />
-  <p class="${css.userName}">Андрей</p> 
-</div>
-
-<div class="${css.chatHeader__tools}">
-  {{> button}}
-  <button class="${css.chatToolsBtn}" />
-</div>
-</div>
-
-<div class="${css.chatFeed}">
-<div class="${css.message}">'afaffa'</div>
-<div class="${css.message}">'afaffa'</div>
-<div class="${css.message}">'afaffa'</div>  
-<div class="${css.message}">'afaffa'</div>
-<div>
-
-<div class="${css.chatFooter}">
-<button class="${css.mshAttachmentBtn}" />
-<input class="${css.msgInput}" type="text" placeholder="{{inputMessageLabel}}" />
-<button class="${css.msgSendBtn}" />
-</div>
- */}
- 
