@@ -1,7 +1,7 @@
 export const signUpData = {
   headingData: [
     {
-      text: "Регистрация",
+      text: "Регистрация 🎀",
     }
   ],
   inputData: [

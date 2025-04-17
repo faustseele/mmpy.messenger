@@ -6,17 +6,21 @@ export default function regHeading() {
     /* html */
     `
     {{#each headingData}}
-      <h1 class="${css.heading}
+      <h1 class="${css.heading}">
         {{#if isClickable}}
-          ${css.heading_clickable}
+          <a class="${css.heading__text} ${css.heading__text_clickable} newRoute"
+            href="{{link}}">
+            {{text}}
+          </a>
+        {{else}}
+          <p class="${css.heading__text}
+            {{#if isDrama}}
+              ${css.heading__text_drama}
+            {{/if}}"
+          >
+            {{text}}
+          </p>
         {{/if}}
-        {{#if isDrama}}
-          ${css.heading_drama}
-        {{/if}}"
-      >
-        <a href="{{link}}" class="newRoute">
-          {{text}}
-        </a>
       </h1>
     {{/each}}
   `);

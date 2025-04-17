@@ -1,7 +1,7 @@
 export const chatsData = {
   headingData: [
     {
-      text: "Чаты",
+      text: "Чаты 👥",
     },
     {
       text: "Профиль ➛",

@@ -6,7 +6,7 @@ export const profileData = {
       link: "/chats"
     },
     {
-      text: "Профиль",
+      text: "Профиль 👤",
     },
   ],
   profileData: {

@@ -1,22 +1,14 @@
 .heading {
  margin: 0;
-
+ padding: 0;
+ 
  border-bottom: 1px transparent;
 }
 
-.heading_clickable {
- border-bottom: 1px solid var(--color-universal-br);
- cursor: pointer;
- transition: var(--transition);
-}
-
-.heading_clickable:hover {
-  border-bottom: 1px solid var(--color-acc-bold);
-}
-
-.heading > a {
+.heading__text {
   display: block;
   padding: 17px 0px 12px 0px;
+  margin: 0;
   box-sizing: border-box;
 
   font-size: 25px;
@@ -27,14 +19,19 @@
   color: var(--color-acc);
   white-space: nowrap;
   text-decoration: none;
-
-  cursor: auto;
 }
 
-.heading_clickable > a {
-  cursor: pointer;
+.heading__text_clickable {
+ border-bottom: 1px solid var(--color-universal-br);
+
+ cursor: pointer;
+ transition: var(--transition);
 }
 
-.heading_drama > a {
+.heading__text_clickable:hover {
+  border-bottom: 1px solid var(--color-acc-bold);
+}
+
+.heading__text_drama {
   color: var(--color-alert);
 }

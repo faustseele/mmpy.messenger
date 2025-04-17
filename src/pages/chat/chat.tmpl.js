@@ -17,7 +17,7 @@ export function getChatPage() {
           <div class="${css.catalogue__headings}">
             {{> heading}}
           </div>
-          <input class="${css.searchInput}" type="text" placeholder="Поиск" />
+          <input class="${css.searchInput}" type="text" placeholder="Поиск 🔍" />
         </div>
 
         <div class="${css.catalogue__items}">

@@ -7,7 +7,7 @@ export const errorData404 = {
   ],
   subheadingData: [
     {
-      text: "Не туда попали",
+      text: "🌑 Не туда попали",
       isDrama: true
     }
   ],
@@ -24,7 +24,7 @@ export const errorData404 = {
 export const errorData500 = {
   headingData: [
     {
-      text: "⚙ Ошибка ️500",
+      text: "🪜 Ошибка ️500",
       isDrama: true
     }
   ],
