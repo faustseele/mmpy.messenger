@@ -8,7 +8,7 @@ export default function regInputEditor() {
     `
     {{#each inputEditorData}}
       <div class="${css.inputWrap}">
-        <input class="${css.input} ${css.input_profileEdit}" type="{{type}}" id="{{id}}" placeholder="{{placeholder}}" />
+        <input class="${css.input} ${css.input_profileEdit}" name="{{id}}" type="{{type}}" id="{{id}}" placeholder="{{placeholder}}" />
         <label class="${css.inputEditLabel}" for="{{id}}">{{label}}</label>
       </div>
     {{/each}}
