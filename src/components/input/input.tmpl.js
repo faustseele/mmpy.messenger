@@ -8,7 +8,7 @@ export default function regInput() {
     `
     {{#each inputData}}
       <div class="${css.inputWrap}">
-        <input class="${css.input}" type="{{type}}" id="{{id}}" placeholder="{{label}}" />
+        <input class="${css.input}" name="{{id}}" type="{{type}}" id="{{id}}" placeholder="{{label}}" />
       </div>
     {{/each}}
     `
