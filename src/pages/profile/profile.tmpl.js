@@ -11,24 +11,26 @@ export function getProfilePage() {
   const html =
     /* html */
     `<div class="${cssPages.moduleWindow} ${css.moduleWindow_profile}">
-      <div class="${css.profileHeadings}">
+      <header class="${css.profileHeadings}">
         {{> heading}}
-      </div>
+      </header>
       
-      <div class="${css.profileFace}">
-        <img alt="User's avatar" src="${profileAvatar}" />
-        <h2 class="${css.profileFace__name}">{{profileData.name}}</h2>
-      </div>
-
-      <div class="${css.profileInputs}">
-        <div class="${css.profileInputs__list}">
-          {{> inputEditor}}
+      <main class="${css.profileContent}">
+        <div class="${css.profileFace}">
+          <img alt="User's avatar" src="${profileAvatar}" />
+          <h2 class="${css.profileFace__name}">{{profileData.name}}</h2>
         </div>
-      </div>
 
-      <div class="${css.profileFooter}">
+        <div class="${css.profileInputs}">
+          <div class="${css.profileInputs__list}">
+            {{> inputEditor}}
+          </div>
+        </div>
+      </main>
+
+      <footer class="${css.profileFooter}">
         {{> button}}
-      </div>
+      </footer>
     </div>`;
 
   const compiledTemplate = Handlebars.compile(html);

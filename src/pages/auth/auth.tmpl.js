@@ -16,19 +16,19 @@ export function getAuthPage(type) {
   const html =
     /* html */
     `<div class="${cssPages.moduleWindow}">
-      <div class="${css.authHeading}">
+      <header class="${css.authHeading}">
         {{> heading}}
-      </div>
+      </header>
 
-      <div class="${css.authContent}">
+      <main class="${css.authContent}">
         <div class="${css.authContent__list}">
           {{> input}}
         </div>
-      </div>
+      </main>
 
-      <div class="${css.authFooter} ${footerModifier}">
+      <footer class="${css.authFooter} ${footerModifier}">
         {{> button}}
-      </div>
+      </footer>
     </div>`;
 
   const compiledTemplate = Handlebars.compile(html);

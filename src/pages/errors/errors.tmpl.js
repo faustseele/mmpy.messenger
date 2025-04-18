@@ -12,13 +12,14 @@ export function getErrorPage(link) {
     /* html */
     `
     <div class="${cssPages.moduleWindow} ${css.moduleWindow_errors}">
-      <div class="${css.errorsHeadings}">
+      <header class="${css.errorsHeadings}">
         {{> heading}}
         {{> subheading}}
-      </div>
+      </header>
 
-      {{>button}}
-      
+      <main>
+        {{>button}}
+      </main>
     </div>`;
 
   const compiledTemplate = Handlebars.compile(html);

@@ -13,5 +13,4 @@ export default function regInput() {
     {{/each}}
     `
   );
-//<label class="${css.inputLabel}" for="{{id}}">{{ label }}</label>
 }

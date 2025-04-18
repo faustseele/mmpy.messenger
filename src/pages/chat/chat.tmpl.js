@@ -13,21 +13,21 @@ export function getChatPage() {
     /* html */
     `<div class="${pagesCss.moduleWindow} ${css.moduleWindow_chat}">
       <div class="${css.catalogue}">
-        <div class="${css.catalogue__head}">
+        <header class="${css.catalogue__head}">
           <div class="${css.catalogue__headings}">
             {{> heading}}
           </div>
           <input class="${css.searchInput}" type="text" placeholder="Поиск 🔍" />
-        </div>
+        </header>
 
         <div class="${css.catalogue__items}">
           {{> catalogueItem}}
         </div>
       </div>
 
-      <div class="${css.chat}">
+      <main class="${css.chat}">
         <p style="font-size: 14px; color: var(--color-content-darkest); opacity: 0.5;">С кем початимся? (Заглушка)</p>
-      </div>
+      </main>
     </div>`;
 
   const compiledTemplate = Handlebars.compile(html);
