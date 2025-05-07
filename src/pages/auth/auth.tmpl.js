@@ -1,17 +1,18 @@
-import Handlebars from "handlebars";
-import { signInData, signUpData } from "./data";
-import regInput from "../../components/input/input.tmpl";
-import css from "./auth.module.css";
-import cssPages from "../pages.module.css";
+import Handlebars from 'handlebars'
+import { signInData, signUpData } from './data'
+import regInput from '../../components/input/input.tmpl'
+import css from './auth.module.css'
+import cssPages from '../pages.module.css'
+import getErrorPage from '../errors/errors.tmpl.js'
 
-export function getAuthPage(type) {
-  regInput();
+export function getAuthPage (type) {
+  regInput()
 
-  const isSignUp = type === "/sign-up";
-  const isSignIn = type === "/sign-in";
+  const isSignUp = type === '/sign-up'
+  const isSignIn = type === '/sign-in'
 
   /* Handling 1 vs 2 buttons */
-  const footerModifier = isSignUp ? css.authFooter_signUp : "";
+  const footerModifier = isSignUp ? css.authFooter_signUp : ''
 
   const html =
     /* html */
@@ -29,16 +30,16 @@ export function getAuthPage(type) {
       <footer class="${css.authFooter} ${footerModifier}">
         {{> button}}
       </footer>
-    </div>`;
+    </div>`
 
-  const compiledTemplate = Handlebars.compile(html);
+  const compiledTemplate = Handlebars.compile(html)
 
   if (isSignUp) {
-    return compiledTemplate(signUpData);
+    return compiledTemplate(signUpData)
   } else if (isSignIn) {
-    return compiledTemplate(signInData);
+    return compiledTemplate(signInData)
   } else {
-    console.error("Wrong page type:", type);
-    return getErrorPage("/404");
+    console.error('Wrong page type:', type)
+    return getErrorPage('/404')
   }
 }

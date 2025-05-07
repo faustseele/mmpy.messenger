@@ -1,9 +1,9 @@
-import Handlebars from "handlebars";
-import css from "./button.module.css"
+import Handlebars from 'handlebars'
+import css from './button.module.css'
 
-export default function regButton() {
+export default function regButton () {
   Handlebars.registerPartial(
-    "button",
+    'button',
     /* html */
     `
     {{#each buttonData}}
@@ -18,5 +18,5 @@ export default function regButton() {
       </button>
     {{/each}}
     `
-  );
+  )
 }

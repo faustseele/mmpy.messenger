@@ -1,11 +1,11 @@
-import Handlebars from "handlebars";
-import regInputEditor from "../../components/input/inputEditor.tmpl";
-import { profileData } from "./data";
-import cssPages from "../pages.module.css"
-import css from "./profile.module.css"
-import profileAvatar from "../../../static/profile-avatar.png"
+import Handlebars from 'handlebars'
+import regInputEditor from '../../components/input/inputEditor.tmpl'
+import { profileData } from './data'
+import cssPages from '../pages.module.css'
+import css from './profile.module.css'
+import profileAvatar from '../../../static/profile-avatar.png'
 
-export function getProfilePage() {
+export function getProfilePage () {
   regInputEditor()
 
   const html =
@@ -31,10 +31,10 @@ export function getProfilePage() {
       <footer class="${css.profileFooter}">
         {{> button}}
       </footer>
-    </div>`;
+    </div>`
 
-  const compiledTemplate = Handlebars.compile(html);
-  const renderedTemplate = compiledTemplate(profileData);
+  const compiledTemplate = Handlebars.compile(html)
+  const renderedTemplate = compiledTemplate(profileData)
 
-  return renderedTemplate;
+  return renderedTemplate
 }

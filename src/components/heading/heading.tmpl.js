@@ -1,8 +1,9 @@
-import Handlebars from "handlebars";
-import css from "./heading.module.css";
+import Handlebars from 'handlebars'
+import css from './heading.module.css'
 
-export default function regHeading() {
-  Handlebars.registerPartial('heading',
+export default function regHeading () {
+  Handlebars.registerPartial(
+    'heading',
     /* html */
     `
     {{#each headingData}}
@@ -23,5 +24,6 @@ export default function regHeading() {
         {{/if}}
       </h1>
     {{/each}}
-  `);
-} 
+  `
+  )
+}

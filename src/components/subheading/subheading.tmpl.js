@@ -1,8 +1,9 @@
-import Handlebars from "handlebars";
-import css from "./subheading.module.css"
+import Handlebars from 'handlebars'
+import css from './subheading.module.css'
 
-export default function regSubheading() {
-  Handlebars.registerPartial('subheading',
+export default function regSubheading () {
+  Handlebars.registerPartial(
+    'subheading',
     /* html */
     `
     {{#each subheadingData}}
@@ -12,5 +13,6 @@ export default function regSubheading() {
       {{/if}}"
     >{{text}}</h2>
     {{/each}}
-  `);
-} 
+  `
+  )
+}

@@ -1,12 +1,11 @@
-import Handlebars from "handlebars";
-import { errorData404, errorData500 } from "./data";
-import cssPages from "../pages.module.css";
-import css from "./errors.module.css";
+import Handlebars from 'handlebars'
+import { errorData404, errorData500 } from './data'
+import cssPages from '../pages.module.css'
+import css from './errors.module.css'
 
-export function getErrorPage(link) {
-
-  const is404 = link === "/404";
-  const is500 = link === "/500";
+export function getErrorPage (link) {
+  const is404 = link === '/404'
+  const is500 = link === '/500'
 
   const html =
     /* html */
@@ -20,17 +19,16 @@ export function getErrorPage(link) {
       <main>
         {{>button}}
       </main>
-    </div>`;
+    </div>`
 
-  const compiledTemplate = Handlebars.compile(html);
+  const compiledTemplate = Handlebars.compile(html)
 
   if (is404) {
     return compiledTemplate(errorData404)
-  }
-  else if (is500) {
+  } else if (is500) {
     return compiledTemplate(errorData500)
   } else {
-    console.error("Wrong link:", link);
+    console.error('Wrong link:', link)
     return compiledTemplate(errorData404)
   }
 }

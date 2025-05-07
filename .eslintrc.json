@@ -1,7 +1,7 @@
 {
-  "extends": "airbnb",
+  "extends": "standard",
   "rules": {
-    "max-len": [2, 100],
+    "max-len": [2, 88],
     "max-params": [2, 3]
     }
 }

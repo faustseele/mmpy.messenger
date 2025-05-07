@@ -1,12 +1,10 @@
-import Handlebars from "handlebars";
-import regInput from "../../components/input/input.tmpl";
-import { chatsData } from "./data";
-import regCatalogueItem from "../../components/catalogueItem/catalogueItem.tmpl";
-import pagesCss from "../pages.module.css"
-import css from "./chat.module.css"
+import Handlebars from 'handlebars'
+import { chatsData } from './data'
+import regCatalogueItem from '../../components/catalogueItem/catalogueItem.tmpl'
+import pagesCss from '../pages.module.css'
+import css from './chat.module.css'
 
-export function getChatPage() {
-
+export function getChatPage () {
   regCatalogueItem()
 
   const html =
@@ -26,11 +24,15 @@ export function getChatPage() {
       </div>
 
       <main class="${css.chat}">
-        <p style="font-size: 14px; color: var(--color-content-darkest); opacity: 0.5;">С кем початимся? (Заглушка)</p>
+        <p style="font-size: 14px;
+          color: var(--color-content-darkest);
+          opacity: 0.5;">
+          С кем початимся? (Заглушка)
+        </p>
       </main>
-    </div>`;
+    </div>`
 
-  const compiledTemplate = Handlebars.compile(html);
+  const compiledTemplate = Handlebars.compile(html)
 
-  return compiledTemplate(chatsData);
+  return compiledTemplate(chatsData)
 }

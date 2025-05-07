@@ -1,9 +1,10 @@
-import Handlebars from "handlebars";
-import css from "./catalogueItem.module.css";
-import avatar from "../../../static/avatar.png"
+import Handlebars from 'handlebars'
+import css from './catalogueItem.module.css'
+import avatar from '../../../static/avatar.png'
 
-export default function regCatalogueItem() {
-  Handlebars.registerPartial('catalogueItem',
+export default function regCatalogueItem () {
+  Handlebars.registerPartial(
+    'catalogueItem',
     /* html */
     `
     {{#each catalogueItemData}}
@@ -21,5 +22,6 @@ export default function regCatalogueItem() {
       </div>
     </article>
     {{/each}}
-  `);
+  `
+  )
 }

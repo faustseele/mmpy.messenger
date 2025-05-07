@@ -1,16 +1,21 @@
-import Handlebars from "handlebars";
-import css from "./input.module.css"
+import Handlebars from 'handlebars'
+import css from './input.module.css'
 
-export default function regInput() {
+export default function regInput () {
   Handlebars.registerPartial(
-    "input",
+    'input',
     /* html */
     `
     {{#each inputData}}
       <div class="${css.inputWrap}">
-        <input class="${css.input}" name="{{id}}" type="{{type}}" id="{{id}}" placeholder="{{label}}" />
+        <input
+          class="${css.input}"
+          name="{{id}}"
+          type="{{type}}"
+          id="{{id}}"
+          placeholder="{{label}}" />
       </div>
     {{/each}}
     `
-  );
+  )
 }
