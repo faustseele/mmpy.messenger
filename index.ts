@@ -1,8 +1,9 @@
-/* global document */
 import regButton from "./src/components/button/button.tmpl";
 import regHeading from "./src/components/heading/heading.tmpl";
 import regSubheading from "./src/components/subheading/subheading.tmpl";
 import { getPage } from "./src/pages/utils";
+
+const app: HTMLElement | null = document.getElementById("app");
 
 (function regUniversalPartials() {
   regHeading();
@@ -14,12 +15,21 @@ import { getPage } from "./src/pages/utils";
 routeTo("/sign-up");
 
 // React on new address
-document.addEventListener("click", (e) => {
+document.addEventListener("click", (e: Event) => {
   // Checking if the event caused by a click on an <a> tag
-  if (e.target.classList.contains("newRoute")) {
+  if (
+    e.target instanceof HTMLElement &&
+    e.target.classList?.contains("newRoute")
+  ) {
     e.preventDefault();
 
-    const link = event.target.getAttribute("href");
+    const link = e.target.getAttribute("href");
+
+    if (!link) {
+      console.error("link is null");
+      return;
+    }
+
     routeTo(link);
   }
 });
@@ -30,7 +40,12 @@ document.addEventListener("click", (e) => {
   - sign-up
   - sign-in
 */
-function routeTo(link) {
+function routeTo(link: string) {
+  if (!app) {
+    console.error("app is null");
+    return;
+  }
+
   const page = getPage(link);
 
   app.innerHTML = page;

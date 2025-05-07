@@ -1,7 +1,0 @@
-{
-  "extends": "standard",
-  "rules": {
-    "max-len": [2, 88],
-    "max-params": [2, 3]
-    }
-}
