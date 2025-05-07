@@ -1,0 +1,14 @@
+.moduleWindow_errors {
+  padding: 72px 0 62px 0;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 22px;
+}
+
+.errorsHeadings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

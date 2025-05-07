@@ -1,0 +1,26 @@
+.authHeading {
+  padding: 0 8px;
+  height: auto;
+}
+
+.authContent {
+  padding: 215px 0;
+}
+
+.authContent__list {
+  border-top: 1px solid var(--color-panel-lightest);
+
+}
+
+.authFooter {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.authFooter_signUp {
+  justify-content: center;
+}
