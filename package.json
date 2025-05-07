@@ -8,14 +8,18 @@
   "scripts": {
     "start": "vite",
     "start:fresh": "rm -rf node_modules/.vite && vite",
-    "build": "vite build",
+    "prebuild": "tsc --noEmit",
+    "build": "npm run prebuild && vite build",
     "preview": "vite preview",
     "lint": "eslint ./src"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
     "handlebars": "^4.7.8",
     "postcss": "^8.5.3",
+    "typescript": "^5.8.3",
     "vite": "^6.2.6"
   }
 }
