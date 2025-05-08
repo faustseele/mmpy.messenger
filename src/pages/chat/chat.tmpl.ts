@@ -9,6 +9,8 @@ export function getChatPage() {
   regCatalogueItem();
   regInputMessage();
 
+  const optionsStyle = `background-image: url(../../../static/options.svg)`;
+
   const html =
     /* html */
     `<div class="${pagesCss.moduleWindow} ${css.moduleWindow_chat}">
@@ -28,8 +30,14 @@ export function getChatPage() {
       <main class="${css.chat}">
         <div class="${css.chat__header}">
           <div class="${css.chatParticipant}">
-            <img class="${css.chatParticipant__avatar}" src="${chatData.chatData.particantAvatar}"/>
-            <p class="${css.chatParticipant__name}">{{chatData.chatData.participantName}}</p>
+            <img class="${css.chatParticipant__avatar}" src="${chatData.chatData.participantAvatar}"/>
+            <p class="${css.chatParticipant__name}">{{chatData.participantName}}</p>
+          </div>
+
+          <div class="${css.chatOptions}">
+            {{> button}}
+            <button type="button" class="${css.chatOptions__button}"
+              style="${optionsStyle}"></button>
           </div>
         </div>
 
