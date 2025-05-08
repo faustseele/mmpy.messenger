@@ -1,6 +1,7 @@
-import { ChatsData } from "./chat.d";
+import { ChatData } from "./chat.d";
+import particantAvatar from "../../../static/avatar.png"
 
-export const chatsData: ChatsData = {
+export const chatData: ChatData = {
   headingData: [
     {
       text: "Чаты 👥",
@@ -28,4 +29,8 @@ export const chatsData: ChatsData = {
   ],
   button_removeChat: "Удалить чат",
   inputMessageLabel: "Cообщение",
+  chatData: {
+    particantAvatar: particantAvatar,
+    participantName: "Андрей"
+  }
 };

@@ -82,4 +82,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+}
+
+.chat__header {
+  width: 100%;
+  flex: 0 0 auto;
+
+  padding: 16px 11px;
+  box-sizing: border-box;
+  
+  border-bottom: 1px solid var(--color-universal-br);
+}
+
+.chatParticipant {
+  display: flex;
+  column-gap: 8px;
+}
+
+.chatParticipant__avatar {
+  width: 34px;
+  height: 34px;
+}
+
+.chatParticipant__name {
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 15px;
+
+  color: var(--color-content-light);
+}
+
+
+.chat__feed {
+  flex: 1;
+
 }

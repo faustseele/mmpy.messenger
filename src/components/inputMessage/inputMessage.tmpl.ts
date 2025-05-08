@@ -1,11 +1,9 @@
 import Handlebars from "handlebars";
 import css from "./inputMessage.module.css";
-import attachIc from "../../../static/attach.svg";
-import sendIc from "../../../static/send-msg.svg";
 
 export default function regInputMessage() {
-  const attachStyle = `background-image: url(${attachIc})`;
-  const sendStyle = `background-image: url(${sendIc})`;
+  const attachStyle = `background-image: url(../../../static/attach.svg)`;
+  const sendStyle = `background-image: url(../../../static/send-msg.svg)`;
 
   Handlebars.registerPartial(
     "inputMessage",
@@ -13,17 +11,17 @@ export default function regInputMessage() {
     `
       <div class="${css.inputWrap}">
         <button type="button" class="${css.inputButton}"
-          style="${attachStyle}" />
+          style="${attachStyle}"></button>
 
         <input
           class="${css.input} ${css.input_editor}"
           name="{{id}}"
           type="{{type}}"
           id="{{id}}"
-          placeholder="{{placeholder}}" />
+          placeholder="{{inputMessageLabel}}"/>
 
         <button type="submit" class="${css.inputButton}"
-          style="${sendStyle}" />
+          style="${sendStyle}"></button>
       </div>
     `,
   );
