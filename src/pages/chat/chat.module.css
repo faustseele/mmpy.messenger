@@ -148,8 +148,8 @@
   opacity: 1;
 }
 
-
 .chat__feed {
+  width: 100%;
   flex: 1;
 
 }

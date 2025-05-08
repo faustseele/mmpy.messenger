@@ -15,6 +15,9 @@
   --color-panel-light: #181c12;
   --color-panel-lightest: #2f2d2d;
 
+  --color-msg-in-bg: rgba(255, 255, 255, 0.06);
+  --color-msg-out-bg: rgba(255, 255, 255, 0.14);
+
   --font-family: "Montserrat", Helvetica, Arial, sans-serif;
 
 

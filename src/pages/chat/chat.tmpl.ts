@@ -4,10 +4,12 @@ import css from "./chat.module.css";
 import pagesCss from "../pages.module.css";
 import regCatalogueItem from "../../components/catalogueItem/catalogueItem.tmpl";
 import regInputMessage from "../../components/inputMessage/inputMessage.tmpl.ts";
+import regMessage from "../../components/message/message.tmpl.ts";
 
 export function getChatPage() {
   regCatalogueItem();
   regInputMessage();
+  regMessage();
 
   const optionsStyle = `background-image: url(../../../static/options.svg)`;
 
@@ -42,6 +44,7 @@ export function getChatPage() {
         </div>
 
         <div class="${css.chat__feed}">
+          {{> message}}
         
         </div>
 
