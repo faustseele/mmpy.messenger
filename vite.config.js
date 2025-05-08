@@ -11,4 +11,11 @@ export default defineConfig({
     },
     postcss: "./postcss.config.js",
   },
+  resolve: {
+    /* The resolve.extensions option tells Vite
+      which file extensions to try when resolving imports.
+      Including .ts and .d.ts ensures Vite can handle
+      TypeScript files with explicit extensions */
+    extensions: [".js", ".ts", ".d.ts"],
+  },
 });

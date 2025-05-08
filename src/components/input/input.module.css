@@ -26,7 +26,7 @@
   transition: 0.2s ease-in-out;
 }
 
-.input_profileEdit {
+.input_editor {
   text-align: right;
   font-style: italic;
 }
@@ -35,7 +35,7 @@
   color: var(--color-content-darkest);
 }
 
-.input_profileEdit::placeholder {
+.input_editor::placeholder {
   color: var(--color-content-light);
 }
 

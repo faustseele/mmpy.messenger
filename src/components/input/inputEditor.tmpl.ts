@@ -1,19 +1,20 @@
 import Handlebars from 'handlebars'
 import css from './input.module.css'
 
-export default function regInput () {
+export default function regInputEditor () {
   Handlebars.registerPartial(
-    'input',
+    'inputEditor',
     /* html */
     `
-    {{#each inputData}}
+    {{#each inputEditorData}}
       <div class="${css.inputWrap}">
         <input
-          class="${css.input}"
+          class="${css.input} ${css.input_editor}"
           name="{{id}}"
           type="{{type}}"
           id="{{id}}"
-          placeholder="{{label}}" />
+          placeholder="{{placeholder}}" />
+        <label class="${css.inputEditLabel}" for="{{id}}">{{label}}</label>
       </div>
     {{/each}}
     `

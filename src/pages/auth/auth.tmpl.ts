@@ -1,11 +1,12 @@
 import Handlebars from "handlebars";
-import { signInData, signUpData } from "./data";
+import { signInData, signUpData } from "./data.ts";
 import regInput from "../../components/input/input.tmpl";
 import css from "./auth.module.css";
 import cssPages from "../pages.module.css";
-import { getErrorPage } from "../errors/errors.tmpl.js";
+import { getErrorPage } from "../errors/errors.tmpl";
+import { Link } from "../pages.d";
 
-export function getAuthPage(type) {
+export function getAuthPage(type: Link) {
   regInput();
 
   const isSignUp = type === "/sign-up";

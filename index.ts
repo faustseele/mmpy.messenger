@@ -1,7 +1,8 @@
 import regButton from "./src/components/button/button.tmpl";
 import regHeading from "./src/components/heading/heading.tmpl";
 import regSubheading from "./src/components/subheading/subheading.tmpl";
-import { getPage } from "./src/pages/utils";
+import { guardLink, Link } from "./src/pages/pages.d";
+import { getPage } from "./src/pages/utils.ts";
 
 const app: HTMLElement | null = document.getElementById("app");
 
@@ -12,7 +13,7 @@ const app: HTMLElement | null = document.getElementById("app");
 })();
 
 // Initial render
-routeTo("/sign-up");
+routeTo("/chats");
 
 // React on new address
 document.addEventListener("click", (e: Event) => {
@@ -25,7 +26,7 @@ document.addEventListener("click", (e: Event) => {
 
     const link = e.target.getAttribute("href");
 
-    if (!link) {
+    if (!guardLink(link)) {
       console.error("link is null");
       return;
     }
@@ -40,7 +41,7 @@ document.addEventListener("click", (e: Event) => {
   - sign-up
   - sign-in
 */
-function routeTo(link: string) {
+function routeTo(link: Link) {
   if (!app) {
     console.error("app is null");
     return;

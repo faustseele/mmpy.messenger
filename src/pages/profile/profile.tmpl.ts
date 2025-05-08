@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
 import regInputEditor from "../../components/input/inputEditor.tmpl";
-import { profileData } from "./data";
+import { profileData } from "./data.ts";
 import cssPages from "../pages.module.css";
 import css from "./profile.module.css";
 import profileAvatar from "../../../static/profile-avatar.png";

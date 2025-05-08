@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import { chatsData } from './data'
+import { chatsData } from './data.ts'
 import regCatalogueItem from '../../components/catalogueItem/catalogueItem.tmpl'
 import pagesCss from '../pages.module.css'
 import css from './chat.module.css'
