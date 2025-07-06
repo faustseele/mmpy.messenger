@@ -15,7 +15,7 @@ import type {
 
 export default abstract class Component {
   protected domService: DOMService;
-  protected templateService: FragmentService;
+  protected fragmentService: FragmentService;
 
   private eventBus: EventBus = new EventBus();
 
@@ -34,15 +34,15 @@ export default abstract class Component {
 
     /* Dependencies modules */
     domService: DOMService,
-    templateService: FragmentService,
+    fragmentService: FragmentService,
   ) {
-    const { configs, events = {} } = props;
+    const { configs = {}, events = {} } = props;
     this.events = events;
     this.children = children;
     this.configs = this._proxifyConfigs(configs);
 
     this.domService = domService;
-    this.templateService = templateService;
+    this.fragmentService = fragmentService;
 
     this.id = this.domService.id;
 
@@ -121,7 +121,7 @@ export default abstract class Component {
     if (!element) return;
 
     /* Get a compiled (innerHTML) DocumentFragment from FragmentService */
-    const innerFragment = this.templateService.compile(
+    const innerFragment = this.fragmentService.compile(
       this.getSourceMarkup(),
       { ...this.configs } /* De-Proxy configs */,
       this.children,
@@ -142,7 +142,9 @@ export default abstract class Component {
 
     /* Recusively mounting children */
     Object.values(this.children).forEach((childrenArr) =>
-      childrenArr.forEach((childrenArr) => childrenArr.dispatchChildrenComponentDidMount()),
+      childrenArr.forEach((childrenArr) =>
+        childrenArr.dispatchChildrenComponentDidMount(),
+      ),
     );
   }
 

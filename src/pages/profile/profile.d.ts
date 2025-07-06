@@ -1,21 +1,16 @@
-import { Button } from "../../components/button/button.tmpl";
-import { Heading } from "../../components/heading/heading.tmpl";
-import { Input } from "../../components/input/input.tmpl";
+import { IButtonData } from "../../components/button/button.d";
+import { IHeadingData } from "../../components/heading/heading.d";
+import { IInputData } from "../../components/input/input.d";
+import { ComponentConfigs } from "../../core/Component/Component.d";
 
-type ProfileInfo = {
-  name: string;
-};
+export interface IProfileContextData {
+  __name: string;
+}
 
-type InputEditorItem = {
-  id: string;
-  type: "email" | "text" | "tel";
-  label: string;
-  placeholder: string;
-};
-
-export type ProfileData = {
-  headingData: Heading[];
-  profileData: ProfileInfo;
-  inputEditorData: Input[];
-  buttonData: Button[];
-};
+export interface IProfilePageData extends ComponentConfigs {
+  __name: string;
+  headingData: IHeadingData[];
+  profileData: IProfileContextData;
+  inputEditorData: IInputData[];
+  buttonData: IButtonData[];
+}

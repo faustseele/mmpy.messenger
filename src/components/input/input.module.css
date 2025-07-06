@@ -4,7 +4,6 @@
 }
 
 .input {
-
   width: 100%;
   padding: 14px 8px 15px 8px;
 
@@ -37,6 +36,10 @@
 
 .input_editor::placeholder {
   color: var(--color-content-light);
+}
+
+.input_search {
+  border-bottom: none;
 }
 
 .input:hover {

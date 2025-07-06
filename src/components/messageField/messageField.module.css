@@ -15,27 +15,35 @@
 
 .inputButton {
   flex: 0 0 auto;
-
   width: 20px;
-  min-width: 20px;
   height: 20px;
-
+  
   border: none;
   outline: none;
-  background-color: transparent;
-
-  background-size:auto;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  opacity: 0.8;
-
-  transition: var(--transition);
+  
   cursor: pointer;
+  transition: var(--transition);
+  
+  opacity: 0.8;
+  
+  background-color: var(--color-content-darkest);
+
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
 
 .inputButton:hover {
   opacity: 1;
+}
+
+.attachButton {
+  mask-image: url('../../../static/attach.svg');
+}
+
+.sendButton {
+  mask-image: url('../../../static/send-msg.svg');
+  width: 17px;
 }
 
 .input {

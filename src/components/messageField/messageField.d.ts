@@ -1,10 +1,9 @@
 import { ComponentConfigs } from "../../core/Component/Component.d";
 
-export interface IInputData extends ComponentConfigs {
-  __label: string;
-  __isSearch?: boolean;
-  placeholder: string;
+export interface IMessageFieldData extends ComponentConfigs {
   id: string;
   type: "text" | "email" | "password" | "tel";
+  placeholder?: string;
+  __label: string;
   class?: string;
 }

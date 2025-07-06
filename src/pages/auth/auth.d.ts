@@ -1,16 +1,13 @@
-import { Button } from "../../components/button/button.tmpl";
-import { Heading } from "../../components/heading/heading.tmpl";
-import { Input } from "../../components/input/input.tmpl";
+import { IButtonData } from "../../components/button/button.d";
+import { IHeadingData } from "../../components/heading/heading.d";
+import { IInputData } from "../../components/input/input.d";
+import { ComponentConfigs } from "../../core/Component/Component.d";
 
-export type SignUpData = {
-  headingData: Heading[];
-  inputData: Input[];
-  buttonData: Button[];
-};
+export type TAuthPage = "/sign-in" | "/sign-up";
 
-export type SignInData = {
-  headingData: Heading[];
-  inputData: Input[];
-  buttonData: Button[];
-};
-
+export interface IAuthPageData extends ComponentConfigs {
+  type: TAuthPage;
+  headingData: IHeadingData[];
+  inputData: IInputData[];
+  buttonData: IButtonData[];
+}

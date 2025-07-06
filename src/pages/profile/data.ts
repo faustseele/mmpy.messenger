@@ -1,73 +1,74 @@
-import { ProfileData } from "./profile.d";
+import { IProfilePageData } from "./profile.d";
 
-export const profileData: ProfileData = {
+export const profileData: IProfilePageData = {
+  __name: "Vanya",
   headingData: [
     {
-      text: "⮘ Назад",
-      isClickable: true,
-      link: "/chats",
+      __text: "⮘ Назад",
+      __isClickable: true,
+      __link: "/chats",
     },
     {
-      text: "Профиль 👤",
+      __text: "Профиль 👤",
     },
   ],
   profileData: {
-    name: "Vanya",
+    __name: "Vanya",
   },
   inputEditorData: [
     {
       id: "email",
       type: "email",
-      label: "Эл. почта",
+      __label: "Эл. почта",
       placeholder: "pochta@yandex.ru",
     },
     {
       id: "first_name",
       type: "text",
-      label: "Имя",
+      __label: "Имя",
       placeholder: "Иван",
     },
     {
       id: "second_name",
       type: "text",
-      label: "Фамилия",
+      __label: "Фамилия",
       placeholder: "Иванов",
     },
     {
       id: "login",
       type: "text",
-      label: "Логин",
+      __label: "Логин",
       placeholder: "ivanov",
     },
     {
       id: "display_name",
       type: "text",
-      label: "Имя в чате",
+      __label: "Имя в чате",
       placeholder: "Vanya",
     },
     {
       id: "phone",
       type: "tel",
-      label: "Номер телефона",
+      __label: "Номер телефона",
       placeholder: "8905551234",
     },
   ],
   buttonData: [
     {
       type: "button",
-      label: "Изменить данные",
-      link: "/chats",
+      __label: "Изменить данные",
+      __link: "/chats",
     },
     {
       type: "button",
-      label: "Изменить пароль",
-      link: "/chats",
+      __label: "Изменить пароль",
+      __link: "/chats",
     },
     {
       type: "button",
-      label: "Выйти",
-      isSilent: true,
-      link: "/sign-in",
+      __label: "Выйти",
+      __isSilent: true,
+      __link: "/sign-in",
     },
   ],
 };

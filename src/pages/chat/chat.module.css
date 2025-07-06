@@ -37,7 +37,6 @@
 
 .searchInput {
   width: 100%;
-  padding: 13px 8px;
   box-sizing: border-box;
 
   border: 1px solid transparent;
@@ -129,20 +128,26 @@
 .chatOptions__button {
   width: 20px;
   min-width: 20px;
-  height: 20px;
+  height: 17px;
 
   border: none;
   outline: none;
-  background-color: transparent;
+  background-color: var(--color-content-darkest);
 
   background-size:auto;
   background-repeat: no-repeat;
   background-position: center;
 
+  mask-image: url('../../../static/options.svg');
+
   opacity: 0.8;
 
   transition: var(--transition);
   cursor: pointer;
+
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
 
 .chatOptions__button:hover {

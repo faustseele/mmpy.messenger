@@ -1,47 +1,49 @@
-import { ErrorData404, ErrorData500 } from "./errors.d";
+import { IErrorPageData } from "./errors.d";
 
-export const errorData404: ErrorData404 = {
+export const errorData404: IErrorPageData = {
+  __code: "404",
   headingData: [
     {
-      text: "⛔ Ошибка ️404",
-      isDrama: true,
+      __text: "⛔ Ошибка ️404",
+      __isDrama: true,
     },
   ],
   subheadingData: [
     {
-      text: "🌑 Не туда попали",
-      isDrama: true,
+      __text: "🌑 Не туда попали",
+      __isDrama: true,
     },
   ],
 
   buttonData: [
     {
       type: "button",
-      label: "Назад к чатам",
-      link: "/chats",
+      __label: "Назад к чатам",
+      __link: "/chats",
     },
   ],
 };
 
-export const errorData500: ErrorData500 = {
+export const errorData500: IErrorPageData = {
+  __code: "500",
   headingData: [
     {
-      text: "🪜 Ошибка ️500",
-      isDrama: true,
+      __text: "🪜 Ошибка ️500",
+      __isDrama: true,
     },
   ],
   subheadingData: [
     {
-      text: "🔧 Мы уже фиксим",
-      isDrama: true,
+      __text: "🔧 Мы уже фиксим",
+      __isDrama: true,
     },
   ],
 
   buttonData: [
     {
       type: "button",
-      label: "Назад к чатам",
-      link: "/chats",
+      __label: "Назад к чатам",
+      __link: "/chats",
     },
   ],
 };

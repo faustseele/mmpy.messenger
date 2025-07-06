@@ -15,7 +15,7 @@ import { tagNames } from "./DOM.d";
 
 export default class DOMService {
   public readonly id: string = makeUUID();
-  public readonly tagName: string;
+  public readonly tagName: tagNames;
 
   private _configs: ComponentConfigs | null = null;
 

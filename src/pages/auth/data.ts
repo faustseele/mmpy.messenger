@@ -1,6 +1,7 @@
-import { SignInData, SignUpData } from "./auth.d";
+import { IAuthPageData } from "./auth.d";
 
-export const signUpData: SignUpData = {
+export const signUpData: IAuthPageData = {
+  type: "/sign-up",
   headingData: [
     {
       __text: "Регистрация 🎀",
@@ -11,44 +12,51 @@ export const signUpData: SignUpData = {
       id: "first_name",
       type: "text",
       __label: "Имя",
+      placeholder: "Имя",
     },
     {
       id: "second_name",
       type: "text",
       __label: "Фамилия",
+      placeholder: "Фамилия",
     },
     {
       id: "login",
       type: "text",
       __label: "Логин",
+      placeholder: "Логин",
     },
     {
       id: "email",
       type: "email",
       __label: "Эл. почта",
+      placeholder: "Эл. почта",
     },
     {
       id: "password",
       type: "password",
       __label: "Пароль",
+      placeholder: "Пароль",
     },
     {
       id: "phone",
       type: "tel",
       __label: "Номер телефона",
+      placeholder: "Номер телефона",
     },
   ],
   buttonData: [
     {
-      __modifier: "button",
       type: "submit",
+      __modifier: "button",
       __label: "Зарегистрироваться ✓",
       __link: "/chats",
     },
   ],
 };
 
-export const signInData: SignInData = {
+export const signInData: IAuthPageData = {
+  type: "/sign-in",
   headingData: [
     {
       __text: "Вход 🚪",
@@ -59,11 +67,13 @@ export const signInData: SignInData = {
       id: "login",
       type: "text",
       __label: "Логин",
+      placeholder: "Логин",
     },
     {
       id: "password",
       type: "password",
       __label: "Пароль",
+      placeholder: "Пароль",
     },
   ],
   buttonData: [

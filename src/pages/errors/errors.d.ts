@@ -1,15 +1,13 @@
-import { Button } from "../../components/button/button.tmpl";
-import { Heading } from "../../components/heading/heading.tmpl";
-import { Subheading } from "../../components/subheading/subheading.tmpl";
+import { IButtonData } from "../../components/button/button.d";
+import { IHeadingData } from "../../components/heading/heading.d";
+import { ISubheadingData } from "../../components/subheading/subheading.d";
+import { ComponentConfigs } from "../../core/Component/Component.d";
 
-export type ErrorData404 = {
-  headingData: Heading[];
-  subheadingData: Subheading[];
-  buttonData: Button[];
-};
+export type TErrorPage = "404" | "500";
 
-export type ErrorData500 = {
-  headingData: Heading[];
-  subheadingData: Subheading[];
-  buttonData: Button[];
-};
+export interface IErrorPageData extends ComponentConfigs {
+  __code: TErrorPage;
+  headingData: IHeadingData[];
+  subheadingData: ISubheadingData[];
+  buttonData: IButtonData[];
+}

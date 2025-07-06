@@ -2,15 +2,15 @@ import { ComponentProps } from "../../core/Component/Component.d";
 import Component from "../../core/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
-import { IInputData } from "./input.d";
-import css from "./input.module.css";
+import { IMessageFieldData } from "./messageField.d";
+import css from "./messageField.module.css";
 
-export interface InputProps extends ComponentProps {
-  configs: IInputData;
+export interface MessageFieldProps extends ComponentProps {
+  configs: IMessageFieldData;
 }
 
-export class Input extends Component {
-  constructor(props: InputProps) {
+export class MessageField extends Component {
+  constructor(props: MessageFieldProps) {
     const domService = new DOMService("div", {
       class: `${css.inputWrap} ${props.configs.class || ""}`,
     });
@@ -20,17 +20,18 @@ export class Input extends Component {
   }
 
   public getSourceMarkup(): string {
+    // The buttons no longer need inline styles.
+    // We will add unique classes to them instead.
     return /*html*/ `
+        <button type="button" class="${css.inputButton} ${css.attachButton}"></button>
         <input
-          class="${css.input}
-            {{#if __isSearch}}
-              ${css.input_search}
-            {{/if}}"
+          class="${css.input}"
           name="{{id}}"
           type="{{type}}"
           id="{{id}}"
           placeholder="{{placeholder}}"
         />
+        <button type="submit" class="${css.inputButton} ${css.sendButton}"></button>
       `;
   }
 }
