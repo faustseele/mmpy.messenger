@@ -3,47 +3,47 @@ import { SignInData, SignUpData } from "./auth.d";
 export const signUpData: SignUpData = {
   headingData: [
     {
-      text: "Регистрация 🎀",
+      __text: "Регистрация 🎀",
     },
   ],
   inputData: [
     {
       id: "first_name",
       type: "text",
-      label: "Имя",
+      __label: "Имя",
     },
     {
       id: "second_name",
       type: "text",
-      label: "Фамилия",
+      __label: "Фамилия",
     },
     {
       id: "login",
       type: "text",
-      label: "Логин",
+      __label: "Логин",
     },
     {
       id: "email",
       type: "email",
-      label: "Эл. почта",
+      __label: "Эл. почта",
     },
     {
       id: "password",
       type: "password",
-      label: "Пароль",
+      __label: "Пароль",
     },
     {
       id: "phone",
       type: "tel",
-      label: "Номер телефона",
+      __label: "Номер телефона",
     },
   ],
   buttonData: [
     {
-      modifier: "button",
+      __modifier: "button",
       type: "submit",
-      label: "Зарегистрироваться ✓",
-      link: "/chats",
+      __label: "Зарегистрироваться ✓",
+      __link: "/chats",
     },
   ],
 };
@@ -51,32 +51,32 @@ export const signUpData: SignUpData = {
 export const signInData: SignInData = {
   headingData: [
     {
-      text: "Вход 🚪",
+      __text: "Вход 🚪",
     },
   ],
   inputData: [
     {
       id: "login",
       type: "text",
-      label: "Логин",
+      __label: "Логин",
     },
     {
       id: "password",
       type: "password",
-      label: "Пароль",
+      __label: "Пароль",
     },
   ],
   buttonData: [
     {
       type: "button",
-      label: "Впервые?",
-      isSilent: true,
-      link: "/sign-up",
+      __label: "Впервые?",
+      __isSilent: true,
+      __link: "/sign-up",
     },
     {
       type: "submit",
-      label: "Авторизоваться ✓",
-      link: "/chats",
+      __label: "Авторизоваться ✓",
+      __link: "/chats",
     },
   ],
 };

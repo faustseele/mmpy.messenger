@@ -28,7 +28,12 @@ export const chatData: ChatData = {
       unreadCount: "1",
     },
   ],
-  inputMessageLabel: "Cообщение",
+  inputMessage: {
+    id: "message",
+    label: "Cообщение",
+    placeholder: "Cообщение",
+    type: "text",
+  },
   chatData: {
     participantAvatar,
     participantName: "Андрей",

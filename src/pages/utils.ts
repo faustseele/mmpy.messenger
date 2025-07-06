@@ -12,9 +12,9 @@ export function getPage(link: Link) {
 
   switch (link) {
     case "/sign-up":
-      return getAuthPage(link);
+      return getAuthPage();
     case "/sign-in":
-      return getAuthPage(link);
+      return getAuthPage();
     case "/chats":
       return getChatPage();
     case "/profile":

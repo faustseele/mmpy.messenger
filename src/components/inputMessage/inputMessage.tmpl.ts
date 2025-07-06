@@ -15,10 +15,10 @@ export default function regInputMessage() {
 
         <input
           class="${css.input} ${css.input_editor}"
-          name="{{id}}"
-          type="{{type}}"
-          id="{{id}}"
-          placeholder="{{inputMessageLabel}}"/>
+          name="{{inputMessage.id}}"
+          type="{{inputMessage.type}}"
+          id="{{inputMessage.id}}"
+          placeholder="{{inputMessage.placeholder}}"/>
 
         <button type="submit" class="${css.inputButton}"
           style="${sendStyle}"></button>

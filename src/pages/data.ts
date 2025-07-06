@@ -1,4 +1,4 @@
-import { Link } from "./pages.types";
+import { Link } from "./pages.d";
 
 export const pageLinks: Array<Link> = [
   "/sign-up",
