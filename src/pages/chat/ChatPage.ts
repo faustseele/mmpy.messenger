@@ -109,29 +109,40 @@ export class ChatPage extends Component {
     return /*html*/ `
         <div class="${css.catalogue}">
           <header class="${css.catalogue__head}">
+
             <div class="${css.catalogue__headings}">
               {{{ __headings }}}
             </div>
+
             {{{ __searchInput }}}
+            
           </header>
+
           <div class="${css.catalogue__items}">
             {{{ __catalogueItems }}}
           </div>
         </div>
+
         <main class="${css.chat}">
+
           <header class="${css.chat__header}">
             <div class="${css.chatParticipant}">
               <img class="${css.chatParticipant__avatar}" src="{{ __participantAvatar }}"/>
               <p class="${css.chatParticipant__name}">{{ __participantName }}</p>
             </div>
+
             <div class="${css.chatOptions}">
+
               {{{ __deleteChatButton }}}
+
               <button type="button" class="${css.chatOptions__button}"></button>
             </div>
           </header>
+
           <div class="${css.chat__feed}">
             {{{ __messages }}}
           </div>
+
           {{{ __messageField }}}
         </main>
       `;

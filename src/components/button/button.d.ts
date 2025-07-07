@@ -5,7 +5,6 @@ export interface IButtonData extends ComponentConfigs {
   __label: string;
   __modifier?: string;
   __isSilent?: boolean;
-  __link?: Link;
   __modifier?: string;
   class?: string;
 }

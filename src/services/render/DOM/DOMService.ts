@@ -39,7 +39,6 @@ export default class DOMService {
     /* Handling Elements attributes */
     newElement.setAttribute("data-id", this.id);
     Object.entries(this._configs).forEach(([key, value]) => {
-      /* 'childrenMarkup' is reserved for Handlebars */
       if (key.startsWith("__")) return;
 
       newElement.setAttribute(key, String(value));

@@ -26,13 +26,17 @@ export default tseslint.config(
     },
     rules: {
       "eol-last": ["warn", "always"],
-      // Enforce extensions for TypeScript files
+      "no-unused-vars": ["warn"],
+      "@typescript-eslint/no-unused-vars": ["warn"],
+      /* Enforce extensions for TypeScript files */
       "import/extensions": [
         "error",
         "always",
         {
-          ts: "always", // Require .ts for TypeScript files
-          dts: "always", // Require .d.ts for declaration files
+          /* Require .ts for TypeScript files */
+          ts: "always",
+          /* Require .d.ts for declaration files */
+          dts: "always",
         },
       ],
     },

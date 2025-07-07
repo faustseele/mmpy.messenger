@@ -1,56 +1,24 @@
-import regButton from "./src/components/button/button.tmpl";
-import regHeading from "./src/components/heading/heading.tmpl";
-import regSubheading from "./src/components/subheading/subheading.tmpl";
-import { guardLink, Link } from "./src/pages/pages.d";
-import { getPage } from "./src/pages/utils.ts";
+import { TLink } from "./src/pages/pages.ts";
+import { routeTo } from "./src/utils/router.ts";
 
-const app: HTMLElement | null = document.getElementById("app");
+/* Handling Browser's ⬅️ / ➡️ buttons */
+window.addEventListener("popstate", (event) => {
+  const path = event.state?.path || "/sign-in";
+  routeTo(path, event);
+});
 
-(function regUniversalPartials() {
-  regHeading();
-  regSubheading();
-  regButton();
-})();
-
-// Initial render
-routeTo("/chats");
-
-// React on new address
+/* Handling clicks on links */
 document.addEventListener("click", (e: Event) => {
-  // Checking if the event caused by a click on an <a> tag
   if (
-    e.target instanceof HTMLElement &&
-    e.target.classList?.contains("newRoute")
+    e.target instanceof HTMLAnchorElement &&
+    e.target.classList.contains("navButton")
   ) {
-    e.preventDefault();
-
     const link = e.target.getAttribute("href");
-
-    if (!guardLink(link)) {
-      console.error("link is null");
-      return;
+    if (link) {
+      routeTo(link as TLink, e);
     }
-
-    routeTo(link);
   }
 });
 
-/*
-  Rendering modules (pages) based on the current address
-  Available adresses:
-  - sign-up
-  - sign-in
-*/
-function routeTo(link: Link) {
-  if (!app) {
-    console.error("app is null");
-    return;
-  }
-
-  const page = getPage(link);
-
-  app.innerHTML = page;
-
-  // Updating URL without reloading
-  window.history.pushState({}, "", link);
-}
+/* Handling initial page load */
+routeTo("/sign-up", "initial route");

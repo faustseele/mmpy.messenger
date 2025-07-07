@@ -11,12 +11,36 @@ export interface InputProps extends ComponentProps {
 
 export class Input extends Component {
   constructor(props: InputProps) {
+    const { configs } = props;
+
     const domService = new DOMService("div", {
-      class: `${css.inputWrap} ${props.configs.class || ""}`,
+      class: `${css.inputWrap} ${configs.class || ""}`,
     });
     const fragmentService = new FragmentService();
 
     super(props, {}, domService, fragmentService);
+  }
+
+  public getNameAndValue(): { name: string; value: string } {
+    const inputElement = this.getElement()?.querySelector("input");
+    return inputElement
+      ? { name: inputElement.name, value: inputElement.value }
+      : { name: "", value: "" };
+  }
+
+  public showError(message: string): void {
+    const errorLabel = this.getElement()?.querySelector(`.${css.errorLabel}`);
+    if (errorLabel instanceof HTMLElement) {
+      errorLabel.textContent = message;
+      errorLabel.style.display = "none";
+    }
+  }
+
+  public hideError(): void {
+    const errorLabel = this.getElement()?.querySelector(`.${css.errorLabel}`);
+    if (errorLabel instanceof HTMLElement) {
+      errorLabel.style.display = "none";
+    }
   }
 
   public getSourceMarkup(): string {
@@ -31,6 +55,7 @@ export class Input extends Component {
           id="{{id}}"
           placeholder="{{placeholder}}"
         />
+          <span class="${css.errorLabel}">{{__errorMessage}}</span>
       `;
   }
 }

@@ -24,7 +24,7 @@ export class Heading extends Component {
     return /*html*/ `
         {{#if __isClickable}}
           <a class="${css.heading__text}
-          ${css.heading__text_clickable} newRoute" href="{{__link}}">
+          ${css.heading__text_clickable} navButton" href="{{__link}}">
             {{__text}}
           </a>
         {{else}}

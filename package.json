@@ -8,10 +8,9 @@
   "scripts": {
     "start": "vite",
     "start:fresh": "rm -rf node_modules/.vite && vite",
-    "prebuild": "tsc --noEmit",
-    "build": "npm run prebuild && vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src && tsc --noEmit",
     "stylelint": "stylelint '**/*.css'"
   },
   "devDependencies": {
@@ -32,5 +31,8 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0",
     "vite": "^6.2.6"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0"
   }
 }

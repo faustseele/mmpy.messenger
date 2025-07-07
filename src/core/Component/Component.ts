@@ -20,6 +20,7 @@ export default abstract class Component {
   private eventBus: EventBus = new EventBus();
 
   public readonly id: string;
+  public props: ComponentProps;
   public configs: ComponentConfigs;
   public children: ComponentChildren = {};
   public events: ComponentEvents;
@@ -36,6 +37,7 @@ export default abstract class Component {
     domService: DOMService,
     fragmentService: FragmentService,
   ) {
+    this.props = props;
     const { configs = {}, events = {} } = props;
     this.events = events;
     this.children = children;
@@ -83,7 +85,6 @@ export default abstract class Component {
 
   /**
    * Implementing Reactivity through Proxy
-   * @param configs
    */
   private _proxifyConfigs<T extends ComponentConfigs>(configs: T): T {
     if (typeof configs !== "object" || !configs) {
@@ -133,6 +134,13 @@ export default abstract class Component {
     this.domService.insertFragmentIntoElement(innerFragment); //
 
     this.domService.addListeners(this.events);
+
+    this.componentDidRender();
+  }
+
+  public componentDidRender(): void {
+    /* Is redefined for special event listeners
+      in concrete components */
   }
 
   /* This one is called by DOMService
@@ -148,16 +156,14 @@ export default abstract class Component {
     );
   }
 
-  public setProps(nextConfigs: ComponentConfigs): void {
-    if (!nextConfigs) return;
+  public setProps(nextProps: ComponentProps): void {
+    if (!nextProps) return;
 
-    /* De-Proxify configs for the flow:CDU reference */
-    const oldProps = { ...this.configs };
+    Object.assign(this.props, nextProps);
+    Object.assign(this.configs, this.props.configs);
+    Object.assign(this.events, this.props.events);
 
-    /* Merge configs with new props */
-    Object.assign(this.configs, nextConfigs);
-
-    this.eventBus.emit("flow:component-did-update", oldProps, this.configs);
+    this.eventBus.emit("flow:component-did-update");
   }
 
   public show(): void {

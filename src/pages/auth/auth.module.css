@@ -7,10 +7,6 @@
   padding-top: 215px;
 }
 
-.authContent__form {
-  border-top: 1px solid var(--color-panel-lightest);
-}
-
 .authFooter {
   width: 100%;
   padding: 215px 8px 8px 8px;

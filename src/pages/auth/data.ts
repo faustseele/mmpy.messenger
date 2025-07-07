@@ -1,3 +1,4 @@
+import { routeTo } from "../../utils/router.ts";
 import { IAuthPageData } from "./auth.d";
 
 export const signUpData: IAuthPageData = {
@@ -45,14 +46,26 @@ export const signUpData: IAuthPageData = {
       placeholder: "Номер телефона",
     },
   ],
-  buttonData: [
-    {
-      type: "submit",
-      __modifier: "button",
-      __label: "Зарегистрироваться ✓",
-      __link: "/chats",
+  buttonData_reroute: {
+    configs: {
+      type: "button",
+      __label: "Я свой!",
+      __isSilent: true,
     },
-  ],
+    events: {
+      click: (e: Event) => routeTo("/sign-in", e),
+    },
+  },
+  buttonData_submit: {
+    configs: {
+      type: "button",
+      __label: "Зарегистрироваться ✓",
+      __isSilent: false,
+    },
+    events: {
+      /* Submit handling is added dynamically */
+    },
+  },
 };
 
 export const signInData: IAuthPageData = {
@@ -76,17 +89,24 @@ export const signInData: IAuthPageData = {
       placeholder: "Пароль",
     },
   ],
-  buttonData: [
-    {
+  buttonData_reroute: {
+    configs: {
       type: "button",
       __label: "Впервые?",
       __isSilent: true,
-      __link: "/sign-up",
     },
-    {
-      type: "submit",
+    events: {
+      click: (e: Event) => routeTo("/sign-up", e),
+    },
+  },
+  buttonData_submit: {
+    configs: {
+      type: "button",
       __label: "Авторизоваться ✓",
-      __link: "/chats",
+      __isSilent: false,
     },
-  ],
+    events: {
+      /* Submit handling is added dynamically */
+    },
+  },
 };
