@@ -18,10 +18,8 @@ export class Button extends Component {
     const { configs } = props;
 
     const domService = new DOMService("button", {
-      class: `${css.button}
-                ${configs.__isSilent ? css.button_silent : ""}
-                ${configs.class || ""}`,
-      type: props.configs.__type,
+      ...configs,
+      class: `${css.button} ${configs.__isSilent ? css.button_silent : ""}`,
     });
     const fragmentService = new FragmentService();
 
@@ -30,9 +28,7 @@ export class Button extends Component {
 
   public getSourceMarkup(): string {
     return /*html*/ `
-      <a href="{{__link}}">
         {{__label}}
-      </a>
     `;
   }
 }

@@ -1,11 +1,18 @@
 .button {
- width: min-content;
+ display: block;
+ box-sizing: border-box;
 
- padding: 0;
+ width: min-content;
+ 
+ padding: 14px 6px;
 
  font-size: 14px;
  line-height: 15px;
  letter-spacing: 0.02em;
+ font-family: var(--font-family);
+ color: var(--color-content);
+ white-space: nowrap;
+ text-decoration: none;
 
  border-radius: 6px;
  border: 1px solid transparent;
@@ -26,13 +33,3 @@
   border-color: var(--color-universal-br-active);
 }
 
-.button > a {
-  display: block;
-  padding: 14px 6px;
-  box-sizing: border-box;
-
-  font-family: var(--font-family);
-  color: var(--color-content);
-  white-space: nowrap;
-  text-decoration: none;
-}

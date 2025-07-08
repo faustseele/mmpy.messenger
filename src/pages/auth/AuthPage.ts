@@ -1,5 +1,6 @@
 import { ComponentProps } from "../../core/Component/Component.d";
 import Component from "../../core/Component/Component.ts";
+import Router from "../../core/Router/Router.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import cssPages from "../pages.module.css";
@@ -13,25 +14,44 @@ export interface AuthPageProps extends ComponentProps {
 }
 
 export class AuthPage extends Component {
-  constructor(props: AuthPageProps) {
-    const { configs } = props;
+  public componentName = "AuthPage";
 
-    const children = createChildren(configs);
-
-    const formController = new FormController(children.__inputs);
-
+  constructor(router: Router, props: AuthPageProps) {
     const domService = new DOMService("form", {
       class: cssPages.moduleWindow,
     });
-
     const fragmentService = new FragmentService();
 
-    /* Handling form onSubmit & onBlur */
+    const { configs } = props;
+    const children = createChildren(configs);
+
+    const formController = new FormController(router, children.__inputs);
+    
+    const buttonSubmit = children.__buttonSubmit[0];
+    const buttonReroute = children.__buttonReroute[0];
+
+    buttonSubmit.setProps({
+      ...buttonSubmit,
+      events: {
+        // click: formController.onSubmit,
+      },
+    });
+
+    buttonReroute.setProps({
+      ...buttonReroute,
+      events: {
+        // click: (e: Event) =>
+        //   router.routeTo(configs.buttonData_reroute.configs.__link!, e),
+      },
+    });
+
+    /* Handling form onSubmit & onBlur
+      Expect 2nd render */
     super(
       {
         configs,
         events: {
-          submit: formController.handleSubmit,
+          submit: formController.onSubmit,
         },
       },
       children,
@@ -39,12 +59,7 @@ export class AuthPage extends Component {
       fragmentService,
     );
 
-    children.__buttonSignUp[0].setProps({
-      configs: children.__buttonSignUp[0].configs,
-      events: {
-        click: formController.handleSubmit,
-      },
-    });
+
   }
 
   public getSourceMarkup(): string {
@@ -57,12 +72,14 @@ export class AuthPage extends Component {
         </header>
 
         <main class="${css.authContent}">
-          {{{ __inputs }}}
+          <div class="${css.inputsWrapper}">
+            {{{ __inputs }}}
+          </div>
         </main>
 
         <footer class="${css.authFooter} ${footerModifier}">
-          {{{ __buttonSignIn }}}
-          {{{ __buttonSignUp }}}
+          {{{ __buttonReroute }}}
+          {{{ __buttonSubmit }}}
         </footer>
     `;
   }

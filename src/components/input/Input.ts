@@ -23,9 +23,13 @@ export class Input extends Component {
 
   public getNameAndValue(): { name: string; value: string } {
     const inputElement = this.getElement()?.querySelector("input");
-    return inputElement
-      ? { name: inputElement.name, value: inputElement.value }
-      : { name: "", value: "" };
+
+    if (!inputElement) {
+      // console.error("Input element is not defined", this, inputElement);
+      return { name: "", value: "" };
+    }
+    
+    return { name: inputElement.name, value: inputElement.value };
   }
 
   public showError(message: string): void {
@@ -46,16 +50,12 @@ export class Input extends Component {
   public getSourceMarkup(): string {
     return /*html*/ `
         <input
-          class="${css.input}
-            {{#if __isSearch}}
-              ${css.input_search}
-            {{/if}}"
+          class="${css.input} {{#if __isSearch}}${css.input_search} {{/if}}"
           name="{{id}}"
           type="{{type}}"
           id="{{id}}"
           placeholder="{{placeholder}}"
         />
-          <span class="${css.errorLabel}">{{__errorMessage}}</span>
       `;
   }
 }

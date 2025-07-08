@@ -22,6 +22,9 @@ export class Subheading extends Component {
     const domService = new DOMService("h2", { class: subheadingClasses });
     const fragmentService = new FragmentService();
 
+    /* Setting subheading to lowercase for better readability */
+    props.configs.__text = props.configs.__text.toLowerCase();
+
     super(props, {}, domService, fragmentService);
   }
 

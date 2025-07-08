@@ -1,4 +1,3 @@
-import { routeTo } from "../../utils/router.ts";
 import { IAuthPageData } from "./auth.d";
 
 export const signUpData: IAuthPageData = {
@@ -51,14 +50,15 @@ export const signUpData: IAuthPageData = {
       type: "button",
       __label: "Я свой!",
       __isSilent: true,
+      __link: '/sign-in'
     },
     events: {
-      click: (e: Event) => routeTo("/sign-in", e),
+      // click: (e: Event) => router.routeTo("/sign-in", e),
     },
   },
   buttonData_submit: {
     configs: {
-      type: "button",
+      type: "submit",
       __label: "Зарегистрироваться ✓",
       __isSilent: false,
     },
@@ -94,14 +94,15 @@ export const signInData: IAuthPageData = {
       type: "button",
       __label: "Впервые?",
       __isSilent: true,
+      __link: '/sign-up'
     },
     events: {
-      click: (e: Event) => routeTo("/sign-up", e),
+      // click: (e: Event) => router.routeTo("/sign-up", e),
     },
   },
   buttonData_submit: {
     configs: {
-      type: "button",
+      type: "submit",
       __label: "Авторизоваться ✓",
       __isSilent: false,
     },

@@ -1,24 +1,29 @@
-import { TLink } from "./src/pages/pages.ts";
-import { routeTo } from "./src/utils/router.ts";
+import { TLink } from "./src/core/Router/routes.d";
+import Router from "./src/core/Router/Router.ts";
+
+export const router = new Router();
 
 /* Handling Browser's ⬅️ / ➡️ buttons */
 window.addEventListener("popstate", (event) => {
   const path = event.state?.path || "/sign-in";
-  routeTo(path, event);
+  router.routeTo(path, event);
 });
 
 /* Handling clicks on links */
-document.addEventListener("click", (e: Event) => {
+
+const nav = document.getElementsByTagName("nav")[0];
+nav?.addEventListener("click", (e: Event) => {
+  e.preventDefault();
   if (
     e.target instanceof HTMLAnchorElement &&
     e.target.classList.contains("navButton")
   ) {
     const link = e.target.getAttribute("href");
     if (link) {
-      routeTo(link as TLink, e);
+      router.routeTo(link as TLink, e);
     }
   }
 });
 
 /* Handling initial page load */
-routeTo("/sign-up", "initial route");
+router.routeTo("/sign-in", "initial route");

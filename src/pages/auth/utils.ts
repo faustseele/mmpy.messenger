@@ -11,8 +11,8 @@ export const createChildren = (configs: IAuthPageData) => {
     configs;
 
   const children = {
-    __buttonSignIn: [createButton(buttonData_reroute)],
-    __buttonSignUp: [createButton(buttonData_submit)],
+    __buttonReroute: [createButton(buttonData_reroute)],
+    __buttonSubmit: [createButton(buttonData_submit)],
     __heading: [createHeading({ configs: headingData[0] })],
     __inputs: inputData.map((inputProps) =>
       createInput({ configs: inputProps }),
@@ -22,7 +22,7 @@ export const createChildren = (configs: IAuthPageData) => {
    * @operator 'satisfies' validates that 'children'
    * match ComponentChildren without changing
    * the inferred type of 'children'.
-   * E.g. __buttonSignIn – Button[], __inputs – Input[].
+   * E.g. __buttonReroute – Button[], __inputs – Input[].
    * */
 
   return children;

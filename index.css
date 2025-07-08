@@ -33,6 +33,8 @@
   --transition: 0.2s ease-in-out;
 }
 
+/* The actual persistent
+  background color of the page */
 body {
   margin: 0;
   background-color: var(--color-panel-dark);
@@ -44,6 +46,8 @@ body {
 }
 
 
+/* Navigation bar on the left for
+  quick page-switching */
 nav {
   position: absolute;
   left: 16px;
@@ -58,4 +62,18 @@ nav > a {
  font-family: inherit;
  font-size: 14px;
  color: var(--color-content-darkest);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    /* Setting the bg of inputs
+      to transparent on autofill */
+    -webkit-transition-delay: 999999s;
+    transition-delay: 999999s;
+    
+    /* Setting the text-color
+      of inputs on autofill */
+    -webkit-text-fill-color: var(--color-content-light) !important;
 }

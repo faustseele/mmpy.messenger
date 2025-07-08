@@ -35,6 +35,7 @@ const regexToErrorMessage = {
 export function validateInputField(fieldName: string, value: string): string {
   switch (fieldName) {
     case "first_name":
+      return regexToErrorMessage.name(value);
     case "second_name":
       return regexToErrorMessage.name(value);
     case "login":
@@ -48,6 +49,6 @@ export function validateInputField(fieldName: string, value: string): string {
     case "message":
       return regexToErrorMessage.message(value);
     default:
-      return "";
+      return "Dev-Error: The field name is not defined.";
   }
 }

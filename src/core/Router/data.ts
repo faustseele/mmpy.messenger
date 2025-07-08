@@ -1,4 +1,4 @@
-import { TLink } from "./pages.d";
+import { TLink } from "./routes.d";
 
 export const pageLinks: Array<TLink> = [
   "/sign-up",

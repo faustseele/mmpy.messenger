@@ -18,6 +18,7 @@ import {
   Subheading,
   SubheadingProps,
 } from "../components/subheading/Subheading.ts";
+import Router from "../core/Router/Router.ts";
 import { TAuthPage } from "../pages/auth/auth.d";
 import { AuthPage } from "../pages/auth/AuthPage.ts";
 import { signInData, signUpData } from "../pages/auth/data.ts";
@@ -35,7 +36,7 @@ import { ProfilePage } from "../pages/profile/ProfilePage.ts";
  * TODO: Add a type-guard for the factory functions
  */
 
-export function createAuthPage(type: TAuthPage): AuthPage {
+export function createAuthPage(type: TAuthPage, router: Router): AuthPage {
   let authData = undefined;
   if (type === "/sign-in") authData = signInData;
   if (type === "/sign-up") authData = signUpData;
@@ -45,7 +46,7 @@ export function createAuthPage(type: TAuthPage): AuthPage {
     authData = signUpData;
   }
 
-  return new AuthPage({ configs: authData });
+  return new AuthPage(router, { configs: authData });
 }
 
 export function createButton(props: ButtonProps): Button {

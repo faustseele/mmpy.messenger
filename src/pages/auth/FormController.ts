@@ -1,5 +1,5 @@
 import { Input } from "../../components/input/Input.ts";
-import { routeTo } from "../../utils/router.ts";
+import Router from "../../core/Router/Router.ts";
 import { validateInputField } from "../../utils/validators.ts";
 
 const logMessages = {
@@ -9,25 +9,52 @@ const logMessages = {
 
 export class FormController {
   private inputs: Input[];
+  private router: Router;
 
-  constructor(inputs: Input[]) {
+  constructor(router: Router, inputs: Input[]) {
     this.inputs = inputs;
+    this.router = router;
   }
 
-  /* Handles the entire form submission process. */
-  public handleSubmit = (event: Event): void => {
+  public onSubmit = (event: Event): void => {
     event.preventDefault();
 
+    /* Evading the non-KeyEvents*/
+    // if (!(event instanceof KeyboardEvent) || !(event instanceof SubmitEvent)) return;
+
+    /* Evading the non-Enter keypress */
+    // if (event instanceof KeyboardEvent && event.key !== "Enter") return;
+
+    this._handleSubmit(event);
+  };
+
+  private _handleSubmit = (event: Event): void => {
+    // console.log(event);
     const isFormValid = this._handleFormValidation();
 
     if (isFormValid) {
       const formData = this._getFormData();
       console.log(logMessages.formIsValid, formData);
-      routeTo("/chats", event);
+      this.router.routeTo("/chats", event);
     } else {
       console.log(logMessages.formHasErrors);
+      event.stopPropagation()
     }
   };
+
+  /* Validates all inputs in the form
+    and returns if the form is valid. */
+  private _handleFormValidation(): boolean {
+    let formIsValid = true;
+
+    this.inputs.forEach((input) => {
+      if (!this._handleFieldValidation(input)) {
+        formIsValid = false;
+      }
+    });
+
+    return formIsValid;
+  }
 
   /* Validates a single input component
     and shows/hides its error. */
@@ -36,24 +63,13 @@ export class FormController {
     const errorMessage = validateInputField(name, value);
 
     // input.setError(errorMessage);
-    console.log(errorMessage);
-    const isInputValid = !errorMessage;
+    /* No error message -> input is valid */
+    const inputIsValid = !errorMessage;
 
-    return isInputValid;
-  }
+    /* Logging current invalid input fields */
+    if (!inputIsValid) console.log(errorMessage);
 
-  /* Validates all inputs in the form
-    and returns if the form is valid. */
-  private _handleFormValidation(): boolean {
-    let isFormValid = true;
-
-    this.inputs.forEach((input) => {
-      if (!this._handleFieldValidation(input)) {
-        isFormValid = false;
-      }
-    });
-
-    return isFormValid;
+    return inputIsValid;
   }
 
   /* Collects data from all inputs into a single object. */
