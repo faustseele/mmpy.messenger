@@ -26,31 +26,24 @@ export class AuthPage extends Component {
     const children = createChildren(configs);
 
     const formController = new FormController(router, children.__inputs);
-    
-    const buttonSubmit = children.__buttonSubmit[0];
-    const buttonReroute = children.__buttonReroute[0];
 
-    buttonSubmit.setProps({
-      ...buttonSubmit,
-      events: {
-        // click: formController.onSubmit,
-      },
-    });
+    const buttonReroute = children.__buttonReroute[0];
 
     buttonReroute.setProps({
       ...buttonReroute,
       events: {
-        // click: (e: Event) =>
-        //   router.routeTo(configs.buttonData_reroute.configs.__link!, e),
+        click: (e: Event) =>
+          router.routeTo(configs.buttonData_reroute.configs.__link!, e),
       },
     });
 
-    /* Handling form onSubmit & onBlur
-      Expect 2nd render */
     super(
       {
         configs,
         events: {
+          /* Handling <form> onSubmit.
+            Submit-button's event-listener is attached
+            automatically through <form> 'submit' listener */
           submit: formController.onSubmit,
         },
       },
@@ -58,8 +51,6 @@ export class AuthPage extends Component {
       domService,
       fragmentService,
     );
-
-
   }
 
   public getSourceMarkup(): string {
