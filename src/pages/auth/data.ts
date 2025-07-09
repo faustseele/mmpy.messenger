@@ -9,13 +9,13 @@ export const signUpData: IAuthPageData = {
   ],
   inputData: [
     {
-      id: "first_name",
+      id: "name",
       type: "text",
       __label: "Имя",
       placeholder: "Имя",
     },
     {
-      id: "second_name",
+      id: "surname",
       type: "text",
       __label: "Фамилия",
       placeholder: "Фамилия",
@@ -53,7 +53,7 @@ export const signUpData: IAuthPageData = {
       __link: '/sign-in'
     },
     events: {
-      // click: (e: Event) => router.routeTo("/sign-in", e),
+      // click: () => console.log('click'),
     },
   },
   buttonData_submit: {
@@ -62,9 +62,7 @@ export const signUpData: IAuthPageData = {
       __label: "Зарегистрироваться ✓",
       __isSilent: false,
     },
-    events: {
-      /* Submit handling is added dynamically */
-    },
+    events: {},
   },
 };
 
@@ -96,9 +94,7 @@ export const signInData: IAuthPageData = {
       __isSilent: true,
       __link: '/sign-up'
     },
-    events: {
-      // click: (e: Event) => router.routeTo("/sign-up", e),
-    },
+    events: {},
   },
   buttonData_submit: {
     configs: {

@@ -3,7 +3,7 @@ import Router from "../../core/Router/Router.ts";
 import { validateInputField } from "../../utils/validators.ts";
 
 const logMessages = {
-  formIsValid: "✅ Form is valid! Here it is~",
+  formIsValid: "✅ Form is valid! Here it is 👇",
   formHasErrors: "❌ Hey! Form has errors.. Please correct them. 👆",
 };
 
@@ -16,20 +16,16 @@ export class FormController {
     this.router = router;
   }
 
+  public onBlur = (event: Event): void => {
+    // event.preventDefault();
+    console.log(event);
+    this._handleFormValidation();
+  }
+
   public onSubmit = (event: Event): void => {
     event.preventDefault();
-
-    /* Evading the non-KeyEvents*/
-    // if (!(event instanceof KeyboardEvent) || !(event instanceof SubmitEvent)) return;
-
-    /* Evading the non-Enter keypress */
-    // if (event instanceof KeyboardEvent && event.key !== "Enter") return;
-
-    this._handleSubmit(event);
-  };
-
-  private _handleSubmit = (event: Event): void => {
     // console.log(event);
+
     const isFormValid = this._handleFormValidation();
 
     if (isFormValid) {
@@ -38,7 +34,7 @@ export class FormController {
       this.router.routeTo("/chats", event);
     } else {
       console.log(logMessages.formHasErrors);
-      event.stopPropagation()
+      event.stopPropagation();
     }
   };
 
@@ -62,9 +58,9 @@ export class FormController {
     const { name, value } = input.getNameAndValue();
     const errorMessage = validateInputField(name, value);
 
-    // input.setError(errorMessage);
     /* No error message -> input is valid */
     const inputIsValid = !errorMessage;
+    input.showError(errorMessage);
 
     /* Logging current invalid input fields */
     if (!inputIsValid) console.log(errorMessage);

@@ -1,7 +1,15 @@
-const regexToErrorMessage = {
+import { TFieldNames } from "../components/input/input.d";
+
+/* 'value' is actually used */
+// eslint-disable-next-line no-unused-vars
+const getRegex: Record<TFieldNames, (value: string) => string> = {
   name: (value: string): string => {
     const regex = /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/;
     return regex.test(value) ? "" : "Странное имя.";
+  },
+  surname: (value: string): string => {
+    const regex = /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/;
+    return regex.test(value) ? "" : "Странная у вас фамилия.";
   },
   login: (value: string): string => {
     const regex = /^(?!^\d+$)[a-zA-Z0-9_-]{3,20}$/;
@@ -15,7 +23,7 @@ const regexToErrorMessage = {
     const regex = /^(?=.*[A-Z])(?=.*\d).{8,40}$/;
     return regex.test(value)
       ? ""
-      : "Пароль: 8-40 символов, минимум одна цифра и заглавная буква.";
+      : "Пароль: 8-40 символов, минимум 1 цифра и заглавная буква.";
   },
   phone: (value: string): string => {
     const regex = /^\+?\d{10,15}$/;
@@ -32,23 +40,11 @@ const regexToErrorMessage = {
  * @param value The value to validate.
  * @returns An empty string if valid, or an error message string if invalid.
  */
-export function validateInputField(fieldName: string, value: string): string {
-  switch (fieldName) {
-    case "first_name":
-      return regexToErrorMessage.name(value);
-    case "second_name":
-      return regexToErrorMessage.name(value);
-    case "login":
-      return regexToErrorMessage.login(value);
-    case "email":
-      return regexToErrorMessage.email(value);
-    case "password":
-      return regexToErrorMessage.password(value);
-    case "phone":
-      return regexToErrorMessage.phone(value);
-    case "message":
-      return regexToErrorMessage.message(value);
-    default:
-      return "Dev-Error: The field name is not defined.";
-  }
+export function validateInputField(
+  fieldName: TFieldNames | '',
+  value?: string,
+): string {
+  if (!fieldName) return "";
+  if (!value) return "Заполните поле.";
+  return getRegex[fieldName](value);
 }

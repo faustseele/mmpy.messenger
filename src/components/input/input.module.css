@@ -30,14 +30,23 @@
   font-style: italic;
 }
 
+
+.input_error::placeholder {
+  opacity: 0.4;
+}
+
 .errorLabel {
+  display: block;
+
   position: absolute;
-  left: 4px;
-  bottom: 4px;
-  font-size: 12px;
+  right: 4px;
+  bottom: 9px;
+
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 8px;
   color: var(--color-alert);
-  text-align: center;
-  min-height: 15px; /* Prevents layout shifts when error appears */
+  text-align: right;
 }
 
 .input::placeholder {

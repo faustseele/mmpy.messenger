@@ -29,7 +29,7 @@ export const profileData: IProfilePageData = {
       placeholder: "Иван",
     },
     {
-      id: "second_name",
+      id: "surname",
       type: "text",
       __label: "Фамилия",
       placeholder: "Иванов",

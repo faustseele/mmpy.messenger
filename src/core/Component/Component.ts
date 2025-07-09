@@ -6,6 +6,7 @@ import type {
   ComponentConfigs,
   ComponentEvents,
   ComponentProps,
+  ComponentPropsForCDU,
 } from "./Component.d";
 
 /** Abstract class for the Component
@@ -48,6 +49,7 @@ export default abstract class Component {
     const { configs = {}, events = {} } = props;
     this.events = events;
     this.childrenMap = childrenMap;
+
     this.configs = this._proxifyConfigs(configs);
 
     this.domService = domService;
@@ -80,7 +82,7 @@ export default abstract class Component {
   private _initComponent(): void {
     /* Creating the Element, do CDR */
     this.eventBus.emit("flow:render");
-    
+
     /* The Element exists, so we can call the CDM */
     this.eventBus.emit("flow:component-did-mount");
   }
@@ -102,7 +104,7 @@ export default abstract class Component {
     );
   }
 
-  /* On _initComponent & CDM */
+  /* On _initComponent & CDM; On CDU */
   private _componentDidRender(): void {
     /* Create the Component Element */
     this.domService.createElement();
@@ -183,13 +185,35 @@ export default abstract class Component {
     return proxiedProps;
   }
 
-  /* Invokes Proxy-setters. EventBus emits 'CDU' */
-  public setProps(nextProps: ComponentProps): void {
+  /* Invokes Proxy-setters.
+    New configs -> invoke Proxy-setters
+    New events -> invoke swap listeners
+    TODO: implement proxifed events */ 
+  public setProps(nextProps: ComponentPropsForCDU): void {
     if (!nextProps) return;
 
+    const hasConfigs = nextProps.configs !== undefined;
+    const hasEvents = nextProps.events !== undefined;
+
+    if (hasConfigs) {
+      Object.assign(this.configs, nextProps.configs);
+    }
+
+    if (hasEvents) {
+      const newEvents = Object.assign(this.events, nextProps.events);
+
+      /* Hot-swap the listeners on the current DOM element */
+      if (this.domService.element) {
+        this.domService.removeListeners(this.events);
+        this.domService.addListeners(newEvents);
+      }
+
+      this.events = newEvents;
+    }
+
+
+    // Also update the base props object
     Object.assign(this.props, nextProps);
-    Object.assign(this.configs, this.props.configs);
-    Object.assign(this.events, this.props.events);
   }
 
   /* DOMService helper */

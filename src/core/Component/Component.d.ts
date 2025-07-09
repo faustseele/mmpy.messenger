@@ -21,6 +21,11 @@ export interface ComponentProps {
   events?: ComponentEvents;
 }
 
+export interface ComponentPropsForCDU extends ComponentProps {
+  configs?: ComponentConfigs;
+  events?: ComponentEvents;
+}
+
 export type ComponentChildren = Record<string, Component[]>;
 
 export type BrowserEventKeys =
