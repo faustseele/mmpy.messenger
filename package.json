@@ -25,7 +25,6 @@
     "prettier": "^3.5.3",
     "prettier-eslint": "^16.4.2",
     "stylelint": "^16.19.1",
-    "stylelint-config-standard": "^38.0.0",
     "stylelint-selector-bem-pattern": "^4.0.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0",

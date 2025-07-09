@@ -52,7 +52,7 @@ export class ProfilePage extends Component {
     inputs.forEach((input) => {
       input.setProps({
         events: {
-          focusout: (e: Event) => formController.onInputBlur(e, input),
+          focusout: () => formController.onInputBlur(input),
         },
       });
     });
