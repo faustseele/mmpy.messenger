@@ -29,6 +29,10 @@ const getRegex: Record<TFieldNames, (value: string) => string> = {
     const regex = /^\+?\d{10,15}$/;
     return regex.test(value) ? "" : "Неправильный номер телефона.";
   },
+  display_name: (value: string): string => {
+    const regex = /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/;
+    return regex.test(value) ? "" : "Странный ник.";
+  },
   message: (value: string): string => {
     return value.length > 0 ? "" : "Напишите что-нибудь.";
   },

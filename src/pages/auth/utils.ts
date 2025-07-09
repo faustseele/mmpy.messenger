@@ -11,10 +11,10 @@ export const createChildren = (configs: IAuthPageData) => {
     configs;
 
   const children = {
-    __buttonReroute: [createButton(buttonData_reroute)],
-    __buttonFormSubmit: [createButton(buttonData_submit)],
-    __heading: [createHeading({ configs: headingData[0] })],
-    __inputs: inputData.map((inputProps) =>
+    buttonReroute: [createButton(buttonData_reroute)],
+    buttonFormSubmit: [createButton(buttonData_submit)],
+    heading: [createHeading({ configs: headingData[0] })],
+    inputs: inputData.map((inputProps) =>
       createInput({ configs: inputProps }),
     ),
   } satisfies ComponentChildren;

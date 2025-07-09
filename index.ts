@@ -26,4 +26,4 @@ nav?.addEventListener("click", (e: Event) => {
 });
 
 /* Handling initial page load */
-router.routeTo("/sign-up", "initial route");
+router.routeTo("/profile", "initial route");

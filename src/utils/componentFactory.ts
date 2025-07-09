@@ -73,8 +73,8 @@ export function createChatPage(): ChatPage {
   return new ChatPage({ configs: chatData });
 }
 
-export function createProfilePage(): ProfilePage {
-  return new ProfilePage({ configs: profileData });
+export function createProfilePage(router: Router): ProfilePage {
+  return new ProfilePage({ configs: profileData }, router);
 }
 
 export function createCatalogueItem(props: CatalogueItemProps): CatalogueItem {

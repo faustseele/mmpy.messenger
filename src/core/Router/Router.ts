@@ -22,7 +22,7 @@ export default class Router {
       case "/chats":
         return createChatPage();
       case "/profile":
-        return createProfilePage();
+        return createProfilePage(this);
       case "/404":
         return createErrorPage("404");
       case "/500":

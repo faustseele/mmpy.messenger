@@ -7,6 +7,7 @@ export type TFieldNames =
   | "email"
   | "password"
   | "phone"
+  | "display_name"
   | "message";
 
 export interface IInputData extends ComponentConfigs {

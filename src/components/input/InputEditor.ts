@@ -1,34 +1,28 @@
 import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
 import { IInputData } from "./input.d";
 import css from "./input.module.css";
+import { Input } from "./Input.ts";
 
 export interface InputEditorProps extends ComponentProps {
   configs: IInputData;
 }
 
-export class InputEditor extends Component {
+export class InputEditor extends Input {
   constructor(props: InputEditorProps) {
-    const domService = new DOMService("div", {
-      class: `${css.inputWrap} ${props.configs.class || ""}`,
-    });
-    const fragmentService = new FragmentService();
-
-    super(props, {}, domService, fragmentService);
+    super(props);
   }
 
   public getSourceMarkup(): string {
     return /*html*/ `
         <input
           class="${css.input} ${css.input_editor}"
-          name="{{__id}}"
-          type="{{__type}}"
-          id="{{__id}}"
+          name="{{id}}"
+          type="{{type}}"
+          id="{{id}}"
           placeholder="{{placeholder}}"
         />
-        <label class="${css.inputEditLabel}" for="{{__id}}">{{__label}}</label>
+        <label class="${css.inputEditLabel}" for="{{id}}">{{__label}}</label>
+        <span class="${css.errorLabel}"></span>
       `;
   }
 }

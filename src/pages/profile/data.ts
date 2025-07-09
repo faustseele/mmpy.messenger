@@ -23,7 +23,7 @@ export const profileData: IProfilePageData = {
       placeholder: "pochta@yandex.ru",
     },
     {
-      id: "first_name",
+      id: "name",
       type: "text",
       __label: "Имя",
       placeholder: "Иван",
@@ -53,22 +53,29 @@ export const profileData: IProfilePageData = {
       placeholder: "8905551234",
     },
   ],
-  buttonData: [
-    {
+  buttonDataEditInfo: {
+    configs: {
       type: "button",
       __label: "Изменить данные",
       __link: "/chats",
     },
-    {
+    events: {},
+  },
+  buttonDataEditPassword: {
+    configs: {
       type: "button",
       __label: "Изменить пароль",
       __link: "/chats",
     },
-    {
+    events: {},
+  },
+  buttonDataLogout: {
+    configs: {
       type: "button",
       __label: "Выйти",
       __isSilent: true,
       __link: "/sign-in",
     },
-  ],
+    events: {},
+  },
 };

@@ -25,7 +25,7 @@ export class AuthPage extends Component {
     const { configs } = props;
     const children = createChildren(configs);
 
-    const formController = new FormController(router, children.__inputs);
+    const formController = new FormController(router, children.inputs);
 
     super(
       {
@@ -34,7 +34,7 @@ export class AuthPage extends Component {
           /* Handling <form> onFormSubmit.
             Submit-button's event-listener is attached
             automatically through <form> 'submit' listener */
-          submit: formController.onFormSubmit,
+          submit: (e: Event) => formController.onFormSubmit(e, "/chats"),
         },
       },
       children,
@@ -42,8 +42,8 @@ export class AuthPage extends Component {
       fragmentService,
     );
 
-    const buttonReroute = children.__buttonReroute[0];
-    const inputs = children.__inputs;
+    const buttonReroute = children.buttonReroute[0];
+    const inputs = children.inputs;
 
     /* Setting event for the auth-reroute button */
     buttonReroute.setProps({
@@ -69,18 +69,18 @@ export class AuthPage extends Component {
     // The root of the template must be the <form> for the 'submit' event to fire.
     return /*html*/ `
         <header class="${css.authHeading}">
-          {{{ __heading }}}
+          {{{ heading }}}
         </header>
 
         <main class="${css.authContent}">
           <div class="${css.inputsWrapper}">
-            {{{ __inputs }}}
+            {{{ inputs }}}
           </div>
         </main>
 
         <footer class="${css.authFooter} ${footerModifier}">
-          {{{ __buttonReroute }}}
-          {{{ __buttonFormSubmit }}}
+          {{{ buttonReroute }}}
+          {{{ buttonFormSubmit }}}
         </footer>
     `;
   }

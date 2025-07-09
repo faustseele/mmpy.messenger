@@ -1,5 +1,7 @@
 import { Input } from "../../components/input/Input.ts";
+import { InputEditor } from "../../components/input/InputEditor.ts";
 import Router from "../../core/Router/Router.ts";
+import { TLink } from "../../core/Router/routes.d";
 import { validateInputField } from "../../utils/validators.ts";
 
 const logMessages = {
@@ -8,21 +10,20 @@ const logMessages = {
 };
 
 export class FormController {
-  private inputs: Input[];
+  private inputs: Input[] | InputEditor[];
   private router: Router;
 
-  constructor(router: Router, inputs: Input[]) {
+  constructor(router: Router, inputs: Input[] | InputEditor[]) {
     this.inputs = inputs;
     this.router = router;
   }
 
   public onInputBlur = (event: Event, input: Input): void => {
-    // event.preventDefault();
     console.log(event);
     this._handleFieldValidation(input);
-  }
+  };
 
-  public onFormSubmit = (event: Event): void => {
+  public onFormSubmit = (event: Event, link: TLink): void => {
     event.preventDefault();
     // console.log(event);
 
@@ -31,7 +32,7 @@ export class FormController {
     if (isFormValid) {
       const formData = this._getFormData();
       console.log(logMessages.formIsValid, formData);
-      this.router.routeTo("/chats", event);
+      this.router.routeTo(link, event);
     } else {
       console.log(logMessages.formHasErrors);
       event.stopPropagation();
@@ -54,7 +55,7 @@ export class FormController {
 
   /* Validates a single input component
     and shows/hides its error. */
-  private _handleFieldValidation(input: Input): boolean {
+  private _handleFieldValidation(input: Input | InputEditor): boolean {
     const { name, value } = input.getNameAndValue();
     const errorMessage = validateInputField(name, value);
 

@@ -12,5 +12,16 @@ export interface IProfilePageData extends ComponentConfigs {
   headingData: IHeadingData[];
   profileData: IProfileContextData;
   inputEditorData: IInputData[];
-  buttonData: IButtonData[];
+  buttonDataEditInfo: {
+    configs: IButtonData;
+    events: ComponentConfigs;
+  };
+  buttonDataEditPassword: {
+    configs: IButtonData;
+    events: ComponentConfigs;
+  };
+  buttonDataLogout: {
+    configs: IButtonData;
+    events: ComponentConfigs;
+  }
 }
