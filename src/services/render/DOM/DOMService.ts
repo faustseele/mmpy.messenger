@@ -53,7 +53,7 @@ export default class DOMService {
       return;
     }
 
-    this.element.innerHTML = "";
+    this.element.textContent = "";
 
     /* Child nodes of the DocumentFragment
       are moved into the Element */

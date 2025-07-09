@@ -57,7 +57,7 @@ export default class Router {
     this.currentPage = this._getPage(path);
 
     /* Clearing previous page content + appending the new one */
-    app.innerHTML = "";
+    app.textContent = "";
     const pageElement = this.currentPage.getElement();
     if (pageElement) app.appendChild(pageElement);
 
