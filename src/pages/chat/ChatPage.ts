@@ -32,10 +32,10 @@ export class ChatPage extends Component {
     } = configs;
 
     const children = {
-      __headings: headingData.map((headingProps) =>
+      headings: headingData.map((headingProps) =>
         createHeading({ configs: { ...headingProps } }),
       ),
-      __searchInput: [
+      searchInput: [
         createInput({
           configs: {
             id: "search",
@@ -47,7 +47,7 @@ export class ChatPage extends Component {
           },
         }),
       ],
-      __catalogueItems: catalogueItemData.map((itemProps) =>
+      catalogueItems: catalogueItemData.map((itemProps) =>
         createCatalogueItem({
           configs: {
             __title: itemProps.__title,
@@ -57,7 +57,7 @@ export class ChatPage extends Component {
           },
         }),
       ),
-      __deleteChatButton: buttonData.map((buttonProps) =>
+      deleteChatButton: buttonData.map((buttonProps) =>
         createButton({
           configs: {
             type: buttonProps.type,
@@ -68,7 +68,7 @@ export class ChatPage extends Component {
           },
         }),
       ),
-      __messages: messageData.map((messageProps) =>
+      messages: messageData.map((messageProps) =>
         createMessage({
           configs: {
             __isOutgoing: messageProps.__isOutgoing,
@@ -80,7 +80,7 @@ export class ChatPage extends Component {
           },
         }),
       ),
-      __messageField: [
+      messageField: [
         createMessageField({
           configs: {
             id: messageField.id,
@@ -98,8 +98,8 @@ export class ChatPage extends Component {
     const fragmentService = new FragmentService();
 
     const pageConfigs = {
-      __participantAvatar: chatData.participantAvatar,
-      __participantName: chatData.__participantName,
+      participantAvatar: chatData.participantAvatar,
+      participantName: chatData.__participantName,
     };
 
     super({ configs: pageConfigs }, children, domService, fragmentService);
@@ -111,15 +111,15 @@ export class ChatPage extends Component {
           <header class="${css.catalogue__head}">
 
             <div class="${css.catalogue__headings}">
-              {{{ __headings }}}
+              {{{ headings }}}
             </div>
 
-            {{{ __searchInput }}}
+            {{{ searchInput }}}
             
           </header>
 
           <div class="${css.catalogue__items}">
-            {{{ __catalogueItems }}}
+            {{{ catalogueItems }}}
           </div>
         </div>
 
@@ -127,23 +127,23 @@ export class ChatPage extends Component {
 
           <header class="${css.chat__header}">
             <div class="${css.chatParticipant}">
-              <img class="${css.chatParticipant__avatar}" src="{{ __participantAvatar }}"/>
-              <p class="${css.chatParticipant__name}">{{ __participantName }}</p>
+              <img class="${css.chatParticipant__avatar}" src="{{ participantAvatar }}"/>
+              <p class="${css.chatParticipant__name}">{{ participantName }}</p>
             </div>
 
             <div class="${css.chatOptions}">
 
-              {{{ __deleteChatButton }}}
+              {{{ deleteChatButton }}}
 
               <button type="button" class="${css.chatOptions__button}"></button>
             </div>
           </header>
 
           <div class="${css.chat__feed}">
-            {{{ __messages }}}
+            {{{ messages }}}
           </div>
 
-          {{{ __messageField }}}
+          {{{ messageField }}}
         </main>
       `;
   }

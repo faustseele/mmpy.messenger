@@ -1,4 +1,4 @@
-import { ComponentConfigs } from "../../core/Component/Component.d";
+import { ComponentConfigs } from "../core/Component/Component.d";
 
 export type TFieldNames =
   | "name"
@@ -8,6 +8,7 @@ export type TFieldNames =
   | "password"
   | "phone"
   | "display_name"
+  | "search"
   | "message";
 
 export interface IInputData extends ComponentConfigs {

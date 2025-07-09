@@ -3,7 +3,7 @@ import Component from "../../core/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import { guardHTMLElement } from "../../utils/guards.ts";
-import { IInputData, TFieldNames } from "./input.d";
+import { IInputData, TFieldNames } from "../../utils/input.d";
 import css from "./input.module.css";
 
 export interface InputProps extends ComponentProps {

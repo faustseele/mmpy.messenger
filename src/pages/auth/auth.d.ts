@@ -2,7 +2,7 @@
 /* ...params are used */
 import { IButtonData } from "../../components/button/button.d";
 import { IHeadingData } from "../../components/heading/heading.d";
-import { IInputData } from "../../components/input/input.d";
+import { IInputData } from "../../utils/input.d";
 import {
   ComponentConfigs,
   ComponentEvents,

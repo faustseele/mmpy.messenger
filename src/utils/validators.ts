@@ -1,4 +1,4 @@
-import { TFieldNames } from "../components/input/input.d";
+import { TFieldNames } from "./input.d";
 
 /* 'value' is actually used */
 // eslint-disable-next-line no-unused-vars
@@ -34,6 +34,9 @@ const getRegex: Record<TFieldNames, (value: string) => string> = {
     return regex.test(value) ? "" : "Странный ник.";
   },
   message: (value: string): string => {
+    return value.length > 0 ? "" : "Напишите что-нибудь.";
+  },
+  search: (value: string): string => {
     return value.length > 0 ? "" : "Напишите что-нибудь.";
   },
 };

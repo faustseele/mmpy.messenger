@@ -1,5 +1,5 @@
 import { ComponentProps } from "../../core/Component/Component.d";
-import { IInputData } from "./input.d";
+import { IInputData } from "../../utils/input.d";
 import css from "./input.module.css";
 import { Input } from "./Input.ts";
 
