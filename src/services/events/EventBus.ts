@@ -6,14 +6,14 @@ import type { TEvent, IMappedEvents, EventCallback } from "./EventBus.d";
 export default class EventBus {
   private listeners: IMappedEvents = {};
 
-  // Subscribe to the event
+  /* Subscribe to the event */
   public on(event: TEvent, callback: EventCallback): void {
     if (!this.listeners[event]?.length) this.listeners[event] = [];
 
     this.listeners[event].push(callback);
   }
 
-  // Unsubscribe from the event
+  /* Unsubscribe from the event */
   public off(event: TEvent, callback: EventCallback): void {
     if (!this.listeners[event]?.length) this._throwNotFoundError(event, "off");
 

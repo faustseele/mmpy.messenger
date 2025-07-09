@@ -5,7 +5,8 @@ export interface IMessageData extends ComponentConfigs {
   __isIncoming: boolean;
   __isDateBubble: boolean;
   __text?: string;
-  __image?: string; // This will be used in an `src` attribute
+  /* This will be used in an `src` attribute */
+  __image?: string;
   __date: string;
   class?: string;
 }

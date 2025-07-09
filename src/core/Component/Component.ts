@@ -89,7 +89,6 @@ export default abstract class Component {
 
   /* Informational. Propagates to childrenMap */
   private _componentDidMount(): void {
-    // console.log(this, "componentDidMount");
     this.componentDidMount();
   }
 
@@ -127,7 +126,7 @@ export default abstract class Component {
     this.domService.removeListeners(this.events);
 
     /* DOMService renders: handles innerHTML and appendChild */
-    this.domService.insertFragmentIntoElement(innerFragment); //
+    this.domService.insertFragmentIntoElement(innerFragment);
 
     this.domService.addListeners(this.events);
   }
@@ -219,7 +218,7 @@ export default abstract class Component {
       this.events = newEvents;
     }
 
-    // Also update the base props object
+    /* Also updatign the base props object */
     Object.assign(this.props, nextProps);
   }
 

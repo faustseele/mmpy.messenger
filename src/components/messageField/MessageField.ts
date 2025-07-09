@@ -20,8 +20,6 @@ export class MessageField extends Component {
   }
 
   public getSourceMarkup(): string {
-    // The buttons no longer need inline styles.
-    // We will add unique classes to them instead.
     return /*html*/ `
         <button type="button" class="${css.inputButton} ${css.attachButton}"></button>
         <input

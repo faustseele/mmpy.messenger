@@ -18,13 +18,12 @@ export class FormController {
     this.router = router;
   }
 
-  public onInputBlur = (event: Event, input: Input): void => {
+  public onInputBlur = (input: Input): void => {
     this._handleFieldValidation(input);
   };
 
   public onFormSubmit = (event: Event, link: TLink): void => {
     event.preventDefault();
-    // console.log(event);
 
     const isFormValid = this._handleFormValidation();
 

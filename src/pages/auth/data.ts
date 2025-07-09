@@ -50,9 +50,7 @@ export const signUpData: IAuthPageData = {
       __isSilent: true,
       __link: "/sign-in",
     },
-    events: {
-      // click: () => console.log('click'),
-    },
+    events: { },
   },
   buttonData_submit: {
     configs: {

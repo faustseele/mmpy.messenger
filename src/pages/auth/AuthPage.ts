@@ -57,7 +57,7 @@ export class AuthPage extends Component {
     inputs.forEach((input) => {
       input.setProps({
         events: {
-          focusout: (e: Event) => formController.onInputBlur(e, input),
+          focusout: () => formController.onInputBlur(input),
         },
       });
     });
@@ -66,7 +66,6 @@ export class AuthPage extends Component {
   public getSourceMarkup(): string {
     const footerModifier = this.configs.isSignUp ? css.authFooter_signUp : "";
 
-    // The root of the template must be the <form> for the 'submit' event to fire.
     return /*html*/ `
         <header class="${css.authHeading}">
           {{{ heading }}}

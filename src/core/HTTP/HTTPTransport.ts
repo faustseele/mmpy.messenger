@@ -93,6 +93,7 @@ export default class HTTPTransport {
          }
       }
 
+      /* Catching the response */
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           /* xhr should be a JSON object here */
