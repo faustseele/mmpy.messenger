@@ -1,5 +1,4 @@
 import { ComponentChildren } from "../../core/Component/Component.d";
-import Router from "../../core/Router/Router.ts";
 import {
   createButton,
   createHeading,
@@ -7,25 +6,19 @@ import {
 } from "../../utils/componentFactory.ts";
 import { IAuthPageData } from "./auth.d";
 
-export const createChildren = (configs: IAuthPageData, router: Router) => {
+export const createChildren = (configs: IAuthPageData) => {
   const { headingData, inputData, buttonData_reroute, buttonData_submit } =
     configs;
 
   const children = {
-/*     __buttonReroute: [createButton({
-      ...buttonData_reroute,
-      events: {
-        click: (event: Event) => router.routeTo("/sign-in", event),
-      },
-    })],
- */
     __buttonReroute: [createButton(buttonData_reroute)],
-    __buttonSubmit: [createButton(buttonData_submit)],
+    __buttonFormSubmit: [createButton(buttonData_submit)],
     __heading: [createHeading({ configs: headingData[0] })],
     __inputs: inputData.map((inputProps) =>
       createInput({ configs: inputProps }),
     ),
   } satisfies ComponentChildren;
+
   /**
    * @operator 'satisfies' validates that 'children'
    * match ComponentChildren without changing

@@ -16,13 +16,13 @@ export class FormController {
     this.router = router;
   }
 
-  public onBlur = (event: Event): void => {
+  public onInputBlur = (event: Event, input: Input): void => {
     // event.preventDefault();
     console.log(event);
-    this._handleFormValidation();
+    this._handleFieldValidation(input);
   }
 
-  public onSubmit = (event: Event): void => {
+  public onFormSubmit = (event: Event): void => {
     event.preventDefault();
     // console.log(event);
 

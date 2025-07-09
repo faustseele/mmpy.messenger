@@ -188,7 +188,7 @@ export default abstract class Component {
   /* Invokes Proxy-setters.
     New configs -> invoke Proxy-setters
     New events -> invoke swap listeners
-    TODO: implement proxifed events */ 
+    TODO: implement proxifed event */ 
   public setProps(nextProps: ComponentPropsForCDU): void {
     if (!nextProps) return;
 

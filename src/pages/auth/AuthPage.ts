@@ -23,8 +23,7 @@ export class AuthPage extends Component {
     const fragmentService = new FragmentService();
 
     const { configs } = props;
-    const children = createChildren(configs, router);
-
+    const children = createChildren(configs);
 
     const formController = new FormController(router, children.__inputs);
 
@@ -32,11 +31,10 @@ export class AuthPage extends Component {
       {
         configs,
         events: {
-          /* Handling <form> onSubmit.
+          /* Handling <form> onFormSubmit.
             Submit-button's event-listener is attached
             automatically through <form> 'submit' listener */
-          submit: formController.onSubmit,
-          // onblur: formController.onBlur,
+          submit: formController.onFormSubmit,
         },
       },
       children,
@@ -45,7 +43,9 @@ export class AuthPage extends Component {
     );
 
     const buttonReroute = children.__buttonReroute[0];
+    const inputs = children.__inputs;
 
+    /* Setting event for the auth-reroute button */
     buttonReroute.setProps({
       events: {
         click: (e: Event) =>
@@ -53,6 +53,14 @@ export class AuthPage extends Component {
       },
     });
 
+    /* Setting blur-events for the input fields */
+    inputs.forEach((input) => {
+      input.setProps({
+        events: {
+          focusout: (e: Event) => formController.onInputBlur(e, input),
+        },
+      });
+    });
   }
 
   public getSourceMarkup(): string {
@@ -72,7 +80,7 @@ export class AuthPage extends Component {
 
         <footer class="${css.authFooter} ${footerModifier}">
           {{{ __buttonReroute }}}
-          {{{ __buttonSubmit }}}
+          {{{ __buttonFormSubmit }}}
         </footer>
     `;
   }
