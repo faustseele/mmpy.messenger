@@ -1,5 +1,6 @@
 import { ComponentProps } from "../../core/Component/Component.d";
 import Component from "../../core/Component/Component.ts";
+import Router from "../../core/Router/Router.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import {
@@ -16,26 +17,27 @@ export interface ErrorPageProps extends ComponentProps {
 }
 
 export class ErrorPage extends Component {
-  constructor(props: ErrorPageProps) {
-
-    const children = {
-      heading: props.configs.headingData.map((headingProps) =>
-        createHeading({ configs: headingProps }),
-      ),
-      subheading: props.configs.subheadingData.map((subheadingProps) =>
-        createSubheading({ configs: subheadingProps }),
-      ),
-      button: props.configs.buttonData.map((buttonProps) =>
-        createButton({ configs: buttonProps }),
-      ),
-    };
-
+  constructor(props: ErrorPageProps, router: Router) {
     const domService = new DOMService("div", {
       class: `${pagesCss.moduleWindow} ${css.moduleWindow_errors}`,
     });
     const templateService = new FragmentService();
 
+    const { configs } = props;
+
+    const children = {
+      heading: createHeading({ configs: configs.headingData }),
+      subheading: createSubheading({ configs: configs.subheadingData }),
+      button: createButton({ configs: configs.buttonData }),
+    };
+
     super({ configs: props.configs }, children, domService, templateService);
+
+    children.button.setProps({
+      events: {
+        click: (e: Event) => router.routeTo(configs.buttonData.__link!, e),
+      },
+    });
   }
 
   public getSourceMarkup(): string {
@@ -44,6 +46,7 @@ export class ErrorPage extends Component {
         {{{ heading }}}
         {{{ subheading }}}
       </header>
+      
       <main>
         {{{ button }}}
       </main>

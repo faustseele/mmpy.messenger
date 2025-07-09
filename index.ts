@@ -26,4 +26,4 @@ nav?.addEventListener("click", (e: Event) => {
 });
 
 /* Handling initial page load */
-router.routeTo("/profile", "initial route");
+router.routeTo("/chats", "initial route");

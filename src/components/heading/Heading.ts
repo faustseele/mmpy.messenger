@@ -11,7 +11,6 @@ export interface HeadingProps extends ComponentProps {
 
 export class Heading extends Component {
   constructor(props: HeadingProps) {
-
     const domService = new DOMService("h1", {
       class: `${css.heading} ${props.configs.class || ""}`,
     });
@@ -24,10 +23,12 @@ export class Heading extends Component {
     return /*html*/ `
         {{#if __isClickable}}
           <a class="${css.heading__text}
-          ${css.heading__text_clickable}" href="{{__link}}">
+            ${css.heading__text_clickable}"">
             {{__text}}
           </a>
+
         {{else}}
+        
           <p class="${css.heading__text}
             {{#if __isDrama}}
               ${css.heading__text_drama}

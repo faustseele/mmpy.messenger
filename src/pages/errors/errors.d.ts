@@ -7,7 +7,7 @@ export type TErrorPage = "404" | "500";
 
 export interface IErrorPageData extends ComponentConfigs {
   __code: TErrorPage;
-  headingData: IHeadingData[];
-  subheadingData: ISubheadingData[];
-  buttonData: IButtonData[];
+  headingData: IHeadingData;
+  subheadingData: ISubheadingData;
+  buttonData: IButtonData;
 }

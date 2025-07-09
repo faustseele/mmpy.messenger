@@ -2,16 +2,15 @@ import { IProfilePageData } from "./profile.d";
 
 export const profileData: IProfilePageData = {
   __name: "Vanya",
-  headingData: [
-    {
-      __text: "⮘ Назад",
-      __isClickable: true,
-      __link: "/chats",
-    },
-    {
-      __text: "Профиль 👤",
-    },
-  ],
+  headingData_profile: {
+    __text: "Профиль 👤",
+  },
+  headingData_backToChats: {
+    __text: "⮘ Назад",
+    __isClickable: true,
+    __link: "/chats",
+  },
+
   profileData: {
     __name: "Vanya",
   },
@@ -53,7 +52,7 @@ export const profileData: IProfilePageData = {
       placeholder: "8905551234",
     },
   ],
-  buttonDataEditInfo: {
+  buttonData_editInfo: {
     configs: {
       type: "button",
       __label: "Изменить данные",
@@ -61,7 +60,7 @@ export const profileData: IProfilePageData = {
     },
     events: {},
   },
-  buttonDataEditPassword: {
+  buttonData_editPassword: {
     configs: {
       type: "button",
       __label: "Изменить пароль",
@@ -69,7 +68,7 @@ export const profileData: IProfilePageData = {
     },
     events: {},
   },
-  buttonDataLogout: {
+  buttonData_signOut: {
     configs: {
       type: "button",
       __label: "Выйти",

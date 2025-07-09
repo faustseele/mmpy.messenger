@@ -8,22 +8,22 @@ import { IProfilePageData } from "./profile.d";
 
 export const createChildren = (configs: IProfilePageData) => {
   const {
-    headingData,
+    headingData_profile,
+    headingData_backToChats,
     inputEditorData,
-    buttonDataEditInfo,
-    buttonDataEditPassword,
-    buttonDataLogout,
+    buttonData_editInfo,
+    buttonData_editPassword,
+    buttonData_signOut,
   } = configs;
   const children = {
-    headings: headingData.map((headingProps) =>
-      createHeading({ configs: headingProps }),
-    ),
+    heading_profile: createHeading({ configs: headingData_profile }),
+    heading_backToChats: createHeading({ configs: headingData_backToChats }),
     inputs: inputEditorData.map((inputProps) =>
       createInputEditor({ configs: inputProps }),
     ),
-    buttonEditInfo: [createButton(buttonDataEditInfo)],
-    buttonEditPassword: [createButton(buttonDataEditPassword)],
-    buttonLogout: [createButton(buttonDataLogout)],
+    buttonEditInfo: createButton(buttonData_editInfo),
+    buttonEditPassword: createButton(buttonData_editPassword),
+    buttonLogout: createButton(buttonData_signOut),
   } satisfies ComponentChildren;
 
   return children;

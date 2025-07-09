@@ -3,19 +3,23 @@ import { ICatalogueItemData } from "../../components/catalogueItem/catalogueItem
 import { IHeadingData } from "../../components/heading/heading.d";
 import { IMessageData } from "../../components/message/message.d";
 import { IMessageFieldData } from "../../components/messageField/messageField.d";
-import { ComponentConfigs } from "../../core/Component/Component.d";
+import { ComponentConfigs, ComponentEvents } from "../../core/Component/Component.d";
 
 export interface IChatPageData extends ComponentConfigs {
-  headingData: IHeadingData[];
+  headingData_chats: IHeadingData;
+  headingData_goToProfile: IHeadingData;
   searchLabel: string;
-  catalogueItemData: ICatalogueItemData[];
+  catalogueItemsData: ICatalogueItemData[];
   messageField: IMessageFieldData;
   chatData: IChatContextData;
-  buttonData: IButtonData[];
-  messageData: IMessageData[];
+  buttonData_delete: { 
+    configs: IButtonData;
+    events: ComponentEvents;
+   };
+  messagesData: IMessageData[];
 }
 
 export interface IChatContextData {
-  participantAvatar: string; /* src attribute */
+  participantAvatar: string /* src attribute */;
   __participantName: string;
 }

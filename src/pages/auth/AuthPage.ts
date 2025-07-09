@@ -42,7 +42,7 @@ export class AuthPage extends Component {
       fragmentService,
     );
 
-    const buttonReroute = children.buttonReroute[0];
+    const buttonReroute = children.buttonReroute;
     const inputs = children.inputs;
 
     /* Setting event for the auth-reroute button */

@@ -69,8 +69,8 @@ export function createMessageField(props: MessageFieldProps): MessageField {
   return new MessageField(props);
 }
 
-export function createChatPage(): ChatPage {
-  return new ChatPage({ configs: chatData });
+export function createChatPage(router: Router): ChatPage {
+  return new ChatPage({ configs: chatData }, router);
 }
 
 export function createProfilePage(router: Router): ProfilePage {
@@ -89,7 +89,7 @@ export function createSubheading(props: SubheadingProps): Subheading {
   return new Subheading(props);
 }
 
-export function createErrorPage(type: TErrorPage): ErrorPage {
+export function createErrorPage(type: TErrorPage, router: Router): ErrorPage {
   let errorData = undefined;
   if (type === "404") errorData = errorData404;
   if (type === "500") errorData = errorData500;
@@ -99,5 +99,5 @@ export function createErrorPage(type: TErrorPage): ErrorPage {
     console.error("Bad error-page type", type);
   }
 
-  return new ErrorPage({ configs: errorData });
+  return new ErrorPage({ configs: errorData }, router);
 }

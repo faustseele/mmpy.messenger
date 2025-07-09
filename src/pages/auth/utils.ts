@@ -11,9 +11,9 @@ export const createChildren = (configs: IAuthPageData) => {
     configs;
 
   const children = {
-    buttonReroute: [createButton(buttonData_reroute)],
-    buttonFormSubmit: [createButton(buttonData_submit)],
-    heading: [createHeading({ configs: headingData[0] })],
+    buttonReroute: createButton(buttonData_reroute),
+    buttonFormSubmit: createButton(buttonData_submit),
+    heading: createHeading({ configs: headingData }),
     inputs: inputData.map((inputProps) =>
       createInput({ configs: inputProps }),
     ),

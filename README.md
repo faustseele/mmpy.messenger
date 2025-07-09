@@ -1,7 +1,7 @@
 #### Project
 **Name**: middle.messenger.praktikum.yandex
 **Tech-Stack**
-Runs on: Vanilla JS + HandleBars
+Runs on: Vanilla JS + HandleBars + XHR
 Styles: PostCSS + CSS-Modules
 Code Style by: Eslint (Standard), Stylelint
 

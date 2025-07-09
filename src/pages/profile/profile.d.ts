@@ -9,18 +9,19 @@ export interface IProfileContextData {
 
 export interface IProfilePageData extends ComponentConfigs {
   __name: string;
-  headingData: IHeadingData[];
+  headingData_backToChats: IHeadingData;
+  headingData_profile: IHeadingData;
   profileData: IProfileContextData;
   inputEditorData: IInputData[];
-  buttonDataEditInfo: {
+  buttonData_editInfo: {
     configs: IButtonData;
     events: ComponentConfigs;
   };
-  buttonDataEditPassword: {
+  buttonData_editPassword: {
     configs: IButtonData;
     events: ComponentConfigs;
   };
-  buttonDataLogout: {
+  buttonData_signOut: {
     configs: IButtonData;
     events: ComponentConfigs;
   }

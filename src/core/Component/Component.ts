@@ -97,11 +97,15 @@ export default abstract class Component {
     after the Parent-Component is mounted */
   public componentDidMount(): void {
     /* Recusively mounting children on one nested level */
-    Object.values(this.childrenMap).forEach((childrenGroup) =>
-      childrenGroup.forEach((child) =>
-        child.eventBus.emit("flow:component-did-mount"),
-      ),
-    );
+    Object.values(this.childrenMap).forEach((childrenGroup) => {
+      if (Array.isArray(childrenGroup)) {
+        childrenGroup.forEach((child) =>
+          child.eventBus.emit("flow:component-did-mount"),
+        );
+      } else {
+        childrenGroup.eventBus.emit("flow:component-did-mount");
+      }
+    });
   }
 
   /* On _initComponent & CDM; On CDU */
@@ -147,11 +151,15 @@ export default abstract class Component {
     this.eventBus.emit("flow:component-did-unmount");
 
     /* Recusively mounting children on one nested level */
-    Object.values(this.childrenMap).forEach((childrenGroup) =>
-      childrenGroup.forEach((child) =>
-        child.eventBus.emit("flow:component-did-unmount"),
-      ),
-    );
+    Object.values(this.childrenMap).forEach((childrenGroup) => {
+      if (Array.isArray(childrenGroup)) {
+        childrenGroup.forEach((child) =>
+          child.eventBus.emit("flow:component-did-unmount"),
+        );
+      } else {
+        childrenGroup.eventBus.emit("flow:component-did-unmount");
+      }
+    });
   }
 
   /* Implementing Reactivity through Proxy. Emits 'CDU' */
@@ -188,7 +196,7 @@ export default abstract class Component {
   /* Invokes Proxy-setters.
     New configs -> invoke Proxy-setters
     New events -> invoke swap listeners
-    TODO: implement proxifed event */ 
+    TODO: implement proxifed event */
   public setProps(nextProps: ComponentPropsForCDU): void {
     if (!nextProps) return;
 
@@ -210,7 +218,6 @@ export default abstract class Component {
 
       this.events = newEvents;
     }
-
 
     // Also update the base props object
     Object.assign(this.props, nextProps);

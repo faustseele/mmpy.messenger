@@ -12,7 +12,7 @@ export type TAuthPage = Extract<TLink, "/sign-in" | "/sign-up">;
 
 export interface IAuthPageData extends ComponentConfigs {
   type: TAuthPage;
-  headingData: IHeadingData[];
+  headingData: IHeadingData;
   inputData: IInputData[];
   buttonData_submit: {
     configs: IButtonData;

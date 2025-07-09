@@ -3,20 +3,18 @@ import sunsetImage from "../../../static/sunset.jpeg";
 import { IChatPageData } from "./chat.d";
 
 export const chatData: IChatPageData = {
-  headingData: [
-    {
-      __text: "Чаты 👥",
-      __isClickable: false,
-      __isDrama: false,
-    },
-    {
-      __text: "Профиль ➛",
-      __isClickable: true,
-      __link: "/profile",
-    },
-  ],
+  headingData_chats: {
+    __text: "Чаты 👥",
+    __isClickable: false,
+    __isDrama: false,
+  },
+  headingData_goToProfile: {
+    __text: "Профиль ➛",
+    __isClickable: true,
+    __link: "/profile",
+  },
   searchLabel: "Поиск",
-  catalogueItemData: [
+  catalogueItemsData: [
     {
       __title: "Андрей",
       __contentText: "Привет, я Андрей! Чат с Андреем для тестов",
@@ -40,16 +38,17 @@ export const chatData: IChatPageData = {
     participantAvatar,
     __participantName: "Андрей",
   },
-  buttonData: [
-    {
+  buttonData_delete: {
+    configs: {
       type: "button",
       __modifier: "button",
       __label: "Удалить чат",
       __link: "/404",
       __isSilent: true,
     },
-  ],
-  messageData: [
+    events: {},
+  },
+  messagesData: [
     {
       __isOutgoing: false,
       __isIncoming: true,

@@ -59,7 +59,11 @@ export default class FragmentService {
     childrenMap: ComponentChildren,
   ): ComponentConfigs {
     Object.entries(childrenMap).forEach(([key, childrenGroup]) => {
-      configs[key] = this._createMarkupForGroup(childrenGroup);
+      if (Array.isArray(childrenGroup)) {
+        configs[key] = this._createMarkupForGroup(childrenGroup);
+      } else {
+        configs[key] = this._createMarkupForComponent(childrenGroup);
+      }
     });
 
     return configs;
@@ -74,6 +78,10 @@ export default class FragmentService {
       (childInstance) => `<div data-id="${childInstance.id}"></div>`,
     );
     return placeholders.join("");
+  }
+
+  private _createMarkupForComponent(childInstance: Component): string {
+    return `<div data-id="${childInstance.id}"></div>`;
   }
 
   /**
@@ -92,25 +100,45 @@ export default class FragmentService {
     childrenMap: ComponentChildren,
   ): void {
     Object.values(childrenMap).forEach((childrenGroup) => {
-      childrenGroup.forEach((childInstance) => {
+      if (Array.isArray(childrenGroup)) {
+        childrenGroup.forEach((childInstance) => {
+          const placeholder = fragment.querySelector(
+            `[data-id="${childInstance.id}"]`,
+          );
+          const childElement = childInstance.getElement();
+
+          if (placeholder && childElement) {
+            placeholder.replaceWith(childElement);
+          } else {
+            console.error(
+              `FragmentService Error: Could not replace child placeholder.
+              Child ID: ${childInstance.id}.
+              Placeholder found: ${!!placeholder}.
+              Child element obtained: ${!!childElement}.
+              DocumentFragment content:`,
+              fragment,
+            );
+          }
+        });
+      } else {
         const placeholder = fragment.querySelector(
-          `[data-id="${childInstance.id}"]`,
+          `[data-id="${childrenGroup.id}"]`,
         );
-        const childElement = childInstance.getElement();
+        const childElement = childrenGroup.getElement();
 
         if (placeholder && childElement) {
           placeholder.replaceWith(childElement);
         } else {
           console.error(
             `FragmentService Error: Could not replace child placeholder.
-            Child ID: ${childInstance.id}.
+            Child ID: ${childrenGroup.id}.
             Placeholder found: ${!!placeholder}.
             Child element obtained: ${!!childElement}.
             DocumentFragment content:`,
             fragment,
           );
         }
-      });
+      }
     });
   }
 }

@@ -19,7 +19,6 @@ export class FormController {
   }
 
   public onInputBlur = (event: Event, input: Input): void => {
-    console.log(event);
     this._handleFieldValidation(input);
   };
 

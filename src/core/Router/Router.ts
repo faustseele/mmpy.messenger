@@ -20,15 +20,15 @@ export default class Router {
       case "/sign-in":
         return createAuthPage("/sign-in", this);
       case "/chats":
-        return createChatPage();
+        return createChatPage(this);
       case "/profile":
         return createProfilePage(this);
       case "/404":
-        return createErrorPage("404");
+        return createErrorPage("404", this);
       case "/500":
-        return createErrorPage("500");
+        return createErrorPage("500", this);
       default:
-        return createErrorPage("404");
+        return createErrorPage("404", this);
     }
   }
 

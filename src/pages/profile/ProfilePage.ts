@@ -16,19 +16,21 @@ export interface ProfilePageProps extends ComponentProps {
 
 export class ProfilePage extends Component {
   constructor(props: ProfilePageProps, router: Router) {
-    const { configs } = props;
-
     const domService = new DOMService("form", {
       class: `${pagesCss.moduleWindow} ${css.moduleWindow_profile}`,
     });
     const templateService = new FragmentService();
 
+    const { configs } = props;
     const children = createChildren(configs);
 
-    const buttonEditInfo = children.buttonEditInfo[0];
-    const buttonEditPassword = children.buttonEditPassword[0];
-    const buttonLogout = children.buttonLogout[0];
-    const inputs = children.inputs;
+    const {
+      heading_backToChats,
+      inputs,
+      buttonEditInfo,
+      buttonEditPassword,
+      buttonLogout,
+    } = children;
 
     const formController = new FormController(router, inputs);
 
@@ -54,6 +56,11 @@ export class ProfilePage extends Component {
         },
       });
     });
+    heading_backToChats.setProps({
+      events: {
+        click: (e: Event) => router.routeTo("/chats", e),
+      },
+    });
 
     super({ configs }, children, domService, templateService);
   }
@@ -61,7 +68,8 @@ export class ProfilePage extends Component {
   public getSourceMarkup(): string {
     return /*html*/ `
       <header class="${css.profileHeadings}">
-        {{{ headings }}}
+        {{{ heading_profile }}}
+        {{{ heading_backToChats }}}
       </header>
       
       <main class="${css.profileContent}">

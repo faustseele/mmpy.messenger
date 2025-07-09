@@ -26,7 +26,7 @@ export interface ComponentPropsForCDU extends ComponentProps {
   events?: ComponentEvents;
 }
 
-export type ComponentChildren = Record<string, Component[]>;
+export type ComponentChildren = Record<string, Component[] | Component>;
 
 export type BrowserEventKeys =
   // Form Events

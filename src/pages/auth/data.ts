@@ -2,11 +2,9 @@ import { IAuthPageData } from "./auth.d";
 
 export const signUpData: IAuthPageData = {
   type: "/sign-up",
-  headingData: [
-    {
-      __text: "Регистрация 🎀",
-    },
-  ],
+  headingData: {
+    __text: "Регистрация 🎀",
+  },
   inputData: [
     {
       id: "name",
@@ -50,7 +48,7 @@ export const signUpData: IAuthPageData = {
       type: "button",
       __label: "Я свой!",
       __isSilent: true,
-      __link: '/sign-in'
+      __link: "/sign-in",
     },
     events: {
       // click: () => console.log('click'),
@@ -68,11 +66,9 @@ export const signUpData: IAuthPageData = {
 
 export const signInData: IAuthPageData = {
   type: "/sign-in",
-  headingData: [
-    {
-      __text: "Вход 🚪",
-    },
-  ],
+  headingData: {
+    __text: "Вход 🚪",
+  },
   inputData: [
     {
       id: "login",
@@ -92,7 +88,7 @@ export const signInData: IAuthPageData = {
       type: "button",
       __label: "Впервые?",
       __isSilent: true,
-      __link: '/sign-up'
+      __link: "/sign-up",
     },
     events: {},
   },

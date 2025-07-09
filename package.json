@@ -10,8 +10,7 @@
     "start:fresh": "rm -rf node_modules/.vite && vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint ./src && tsc --noEmit",
-    "stylelint": "stylelint '**/*.css'"
+    "lint": "eslint ./src && tsc --noEmit && stylelint '**/*.css'"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
