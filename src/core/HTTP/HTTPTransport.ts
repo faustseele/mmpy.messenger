@@ -49,28 +49,28 @@ export default class HTTPTransport {
 
   public get = (url: string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
     const urlWithQuery = options.data ? `${url}${queryStringify(options.data as TQueryData)}` : url;
-    return this._request(urlWithQuery, { ...options, method: Method.GET }, options.timeout);
+    return this._request(urlWithQuery, { ...options, method: Method.GET });
   };
 
   public post = (url:string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
-    return this._request(url, { ...options, method: Method.POST }, options.timeout);
+    return this._request(url, { ...options, method: Method.POST });
   };
 
   public put = (url: string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
-    return this._request(url, { ...options, method: Method.PUT }, options.timeout);
+    return this._request(url, { ...options, method: Method.PUT });
   };
 
   public delete = (url: string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
-    return this._request(url, { ...options, method: Method.DELETE }, options.timeout);
+    return this._request(url, { ...options, method: Method.DELETE });
   };
 
   /**
-   * @returns Promise, which is allowed with a typed response or rejects with an error.
+   * @returns Promise, which is allowed with a typed response
+   * or rejects with an error.
    */
   private _request = <TResponse>(
     url: string,
     options: TOptions & { method: Method },
-    timeout = 5000,
   ): Promise<TResponse> => {
     const { method, data, headers = {}, withCredentials = true } = options;
 
@@ -111,7 +111,7 @@ export default class HTTPTransport {
       xhr.onerror = () => reject({ reason: 'Network error' });
       xhr.ontimeout = () => reject({ reason: 'Request timed out' });
 
-      xhr.timeout = timeout;
+      xhr.timeout = options.timeout || 5000;
       xhr.withCredentials = withCredentials;
 
       if (method === Method.GET || !data) {
