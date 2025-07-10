@@ -1,7 +1,7 @@
 import { Input } from "../../components/input/Input.ts";
 import { InputEditor } from "../../components/input/InputEditor.ts";
 import Router from "../../core/Router/Router.ts";
-import { TLink } from "../../core/Router/routes.d";
+import { Routes } from "../../core/Router/routes.d";
 import { validateInputField } from "../../utils/validators.ts";
 
 const logMessages = {
@@ -22,7 +22,7 @@ export class FormController {
     this._handleFieldValidation(input);
   };
 
-  public onFormSubmit = (event: Event, link: TLink): void => {
+  public onFormSubmit = (event: Event, link: Routes): void => {
     event.preventDefault();
 
     const isFormValid = this._handleFormValidation();

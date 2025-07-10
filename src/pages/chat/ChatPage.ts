@@ -1,6 +1,7 @@
 import { ComponentProps } from "../../core/Component/Component.d";
 import Component from "../../core/Component/Component.ts";
 import Router from "../../core/Router/Router.ts";
+import { Routes } from "../../core/Router/routes.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import pagesCss from "../pages.module.css";
@@ -26,13 +27,13 @@ export class ChatPage extends Component {
 
     children.deleteChatButton.setProps({
       events: {
-        click: (e: Event) => router.routeTo("/sign-in", e),
+        click: (e: Event) => router.routeTo(Routes.SignIn, e),
       },
     });
 
     children.heading_goToProfile.setProps({
       events: {
-        click: (e: Event) => router.routeTo("/profile", e),
+        click: (e: Event) => router.routeTo(Routes.Profile, e),
       },
     });
   }

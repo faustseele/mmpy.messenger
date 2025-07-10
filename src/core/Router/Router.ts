@@ -1,4 +1,4 @@
-import { TLink } from "./routes.d";
+import { Routes } from "./routes.d";
 import {
   createAuthPage,
   createChatPage,
@@ -13,26 +13,26 @@ export default class Router {
   constructor() {}
 
   /* Defining routes and the Components they should render. */
-  private _getPage(path: TLink) {
+  private _getPage(path: Routes) {
     switch (path) {
       case "/sign-up":
-        return createAuthPage("/sign-up", this);
+        return createAuthPage(path, this);
       case "/sign-in":
-        return createAuthPage("/sign-in", this);
+        return createAuthPage(path, this);
       case "/chats":
         return createChatPage(this);
       case "/profile":
         return createProfilePage(this);
       case "/404":
-        return createErrorPage("404", this);
+        return createErrorPage(path, this);
       case "/500":
-        return createErrorPage("500", this);
+        return createErrorPage(path, this);
       default:
-        return createErrorPage("404", this);
+        return createErrorPage(Routes.NotFound, this);
     }
   }
 
-  public routeTo(path: TLink, event: Event | "initial route") {
+  public routeTo(path: Routes, event: Event | "initial route") {
     const app: HTMLElement | null = document.getElementById("app");
     if (!app) {
       console.error("App container not found!");

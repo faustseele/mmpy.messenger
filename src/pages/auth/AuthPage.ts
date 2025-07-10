@@ -1,6 +1,7 @@
 import { ComponentProps } from "../../core/Component/Component.d";
 import Component from "../../core/Component/Component.ts";
 import Router from "../../core/Router/Router.ts";
+import { Routes } from "../../core/Router/routes.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import cssPages from "../pages.module.css";
@@ -34,7 +35,7 @@ export class AuthPage extends Component {
           /* Handling <form> onFormSubmit.
             Submit-button's event-listener is attached
             automatically through <form> 'submit' listener */
-          submit: (e: Event) => formController.onFormSubmit(e, "/chats"),
+          submit: (e: Event) => formController.onFormSubmit(e, Routes.Chats),
         },
       },
       children,

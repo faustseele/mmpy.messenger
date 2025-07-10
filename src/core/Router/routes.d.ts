@@ -1,20 +1,19 @@
 /* eslint-disable no-unused-vars */
-/* K in TLink is a type-guard */
+/* K in Routes is a type-guard */
 
-import { pageLinks } from "./data.ts";
-
-export type TLink =
-  | "/sign-up"
-  | "/sign-in"
-  | "/chats"
-  | "/profile"
-  | "/404"
-  | "/500";
+export enum Routes {
+  SignUp = "/sign-up",
+  SignIn = "/sign-in",
+  Chats = "/chats",
+  Profile = "/profile",
+  NotFound = "/404",
+  Error = "/500",
+}
 
 type LinkRoutes = {
-  [K in TLink]?: () => void;
+  [K in Routes]?: () => void;
 };
 
-export const guardLink = (link: unknown): link is TLink => {
-  return typeof link === "string" && pageLinks.includes(link as TLink);
+export const guardLink = (link: unknown): link is Routes => {
+  return typeof link === "string" && pageLinks.includes(link as Routes);
 };

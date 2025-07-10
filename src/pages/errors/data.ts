@@ -1,3 +1,4 @@
+import { Routes } from "../../core/Router/routes.d";
 import { IErrorPageData } from "./errors.d";
 
 export const errorData404: IErrorPageData = {
@@ -14,7 +15,7 @@ export const errorData404: IErrorPageData = {
   buttonData: {
     type: "button",
     __label: "Назад к чатам",
-    __link: "/chats",
+    __link: Routes.Chats,
   },
 };
 
@@ -32,6 +33,6 @@ export const errorData500: IErrorPageData = {
   buttonData: {
     type: "button",
     __label: "Назад к чатам",
-    __link: "/chats",
+    __link: Routes.Chats,
   },
 };

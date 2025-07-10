@@ -8,7 +8,7 @@ import {
   ComponentEvents,
 } from "../../core/Component/Component.d";
 
-export type TAuthPage = Extract<TLink, "/sign-in" | "/sign-up">;
+export type TAuthPage = Extract<Routes, "/sign-in" | "/sign-up">;
 
 export interface IAuthPageData extends ComponentConfigs {
   type: TAuthPage;

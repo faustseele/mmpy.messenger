@@ -19,6 +19,7 @@ import {
   SubheadingProps,
 } from "../components/subheading/Subheading.ts";
 import Router from "../core/Router/Router.ts";
+import { Routes } from "../core/Router/routes.d";
 import { TAuthPage } from "../pages/auth/auth.d";
 import { AuthPage } from "../pages/auth/AuthPage.ts";
 import { signInData, signUpData } from "../pages/auth/data.ts";
@@ -26,7 +27,6 @@ import { ChatPage } from "../pages/chat/ChatPage.ts";
 import { chatData } from "../pages/chat/data.ts";
 import { errorData404, errorData500 } from "../pages/errors/data.ts";
 import { ErrorPage } from "../pages/errors/ErrorPage.ts";
-import { TErrorPage } from "../pages/errors/errors.d";
 import { profileData } from "../pages/profile/data.ts";
 import { ProfilePage } from "../pages/profile/ProfilePage.ts";
 
@@ -89,10 +89,10 @@ export function createSubheading(props: SubheadingProps): Subheading {
   return new Subheading(props);
 }
 
-export function createErrorPage(type: TErrorPage, router: Router): ErrorPage {
+export function createErrorPage(type: Routes, router: Router): ErrorPage {
   let errorData = undefined;
-  if (type === "404") errorData = errorData404;
-  if (type === "500") errorData = errorData500;
+  if (type === Routes.NotFound) errorData = errorData404;
+  if (type === Routes.Error) errorData = errorData500;
 
   if (!errorData) {
     errorData = errorData404;

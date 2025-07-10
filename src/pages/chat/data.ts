@@ -1,5 +1,6 @@
 import participantAvatar from "../../../static/avatar.png";
 import sunsetImage from "../../../static/sunset.jpeg";
+import { Routes } from "../../core/Router/routes.d";
 import { IChatPageData } from "./chat.d";
 
 export const chatData: IChatPageData = {
@@ -43,7 +44,7 @@ export const chatData: IChatPageData = {
       type: "button",
       __modifier: "button",
       __label: "Удалить чат",
-      __link: "/404",
+      __link: Routes.NotFound,
       __isSilent: true,
     },
     events: {},

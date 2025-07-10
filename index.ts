@@ -1,4 +1,4 @@
-import { TLink } from "./src/core/Router/routes.d";
+import { Routes } from "./src/core/Router/routes.d";
 import Router from "./src/core/Router/Router.ts";
 
 export const router = new Router();
@@ -20,7 +20,7 @@ nav?.addEventListener("click", (e: Event) => {
   ) {
     const link = e.target.getAttribute("href");
     if (link) {
-      router.routeTo(link as TLink, e);
+      router.routeTo(link as Routes, e);
     }
   }
 });

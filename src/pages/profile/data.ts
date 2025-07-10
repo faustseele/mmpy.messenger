@@ -1,3 +1,4 @@
+import { Routes } from "../../core/Router/routes.d";
 import { IProfilePageData } from "./profile.d";
 
 export const profileData: IProfilePageData = {
@@ -52,7 +53,7 @@ export const profileData: IProfilePageData = {
     configs: {
       type: "button",
       __label: "Изменить данные",
-      __link: "/chats",
+      __link: Routes.Chats,
     },
     events: {},
   },
@@ -60,7 +61,7 @@ export const profileData: IProfilePageData = {
     configs: {
       type: "button",
       __label: "Изменить пароль",
-      __link: "/chats",
+      __link: Routes.Chats,
     },
     events: {},
   },
@@ -69,7 +70,7 @@ export const profileData: IProfilePageData = {
       type: "button",
       __label: "Выйти",
       __isSilent: true,
-      __link: "/sign-in",
+      __link: Routes.SignIn,
     },
     events: {},
   },

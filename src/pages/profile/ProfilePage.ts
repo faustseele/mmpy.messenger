@@ -2,6 +2,7 @@ import profileAvatar from "../../../static/profile-avatar.png";
 import { ComponentProps } from "../../core/Component/Component.d";
 import Component from "../../core/Component/Component.ts";
 import Router from "../../core/Router/Router.ts";
+import { Routes } from "../../core/Router/routes.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import { FormController } from "../auth/FormController.ts";
@@ -36,17 +37,17 @@ export class ProfilePage extends Component {
 
     buttonEditInfo.setProps({
       events: {
-        click: (e: Event) => formController.onFormSubmit(e, "/chats"),
+        click: (e: Event) => formController.onFormSubmit(e, Routes.Chats),
       },
     });
     buttonEditPassword.setProps({
       events: {
-        click: (e: Event) => formController.onFormSubmit(e, "/chats"),
+        click: (e: Event) => formController.onFormSubmit(e, Routes.Chats),
       },
     });
     buttonLogout.setProps({
       events: {
-        click: (e: Event) => router.routeTo("/sign-in", e),
+        click: (e: Event) => router.routeTo(Routes.SignIn, e),
       },
     });
     inputs.forEach((input) => {
@@ -58,7 +59,7 @@ export class ProfilePage extends Component {
     });
     heading_backToChats.setProps({
       events: {
-        click: (e: Event) => router.routeTo("/chats", e),
+        click: (e: Event) => router.routeTo(Routes.Chats, e),
       },
     });
 

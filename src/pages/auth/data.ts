@@ -1,3 +1,4 @@
+import { Routes } from "../../core/Router/routes.d";
 import { IAuthPageData } from "./auth.d";
 
 export const signUpData: IAuthPageData = {
@@ -48,7 +49,7 @@ export const signUpData: IAuthPageData = {
       type: "button",
       __label: "Я свой!",
       __isSilent: true,
-      __link: "/sign-in",
+      __link: Routes.SignIn,
     },
     events: { },
   },
@@ -86,7 +87,7 @@ export const signInData: IAuthPageData = {
       type: "button",
       __label: "Впервые?",
       __isSilent: true,
-      __link: "/sign-up",
+      __link: Routes.SignUp,
     },
     events: {},
   },
