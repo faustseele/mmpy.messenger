@@ -3,15 +3,10 @@ import { IHeadingData } from "../../components/heading/heading.d";
 import { IInputData } from "../../utils/input.d";
 import { ComponentConfigs } from "../../core/Component/Component.d";
 
-export interface IProfileContextData {
-  __name: string;
-}
-
 export interface IProfilePageData extends ComponentConfigs {
-  __name: string;
+  __profileName: string;
   headingData_backToChats: IHeadingData;
   headingData_profile: IHeadingData;
-  profileData: IProfileContextData;
   inputEditorData: IInputData[];
   buttonData_editInfo: {
     configs: IButtonData;

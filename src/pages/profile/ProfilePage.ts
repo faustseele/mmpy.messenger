@@ -74,8 +74,16 @@ export class ProfilePage extends Component {
       
       <main class="${css.profileContent}">
         <div class="${css.profileFace}">
-          <img alt="User's avatar" src="${profileAvatar}" />
-          <h2 class="${css.profileFace__name}">{{ name }}</h2>
+          
+          <label for="avatar-input" class="${css.avatarContainer}">
+            <img alt="User's avatar" src="${profileAvatar}" class="${css.avatarImage}" />
+            <div class="${css.avatarOverlay}">
+              <span class="${css.overlayText}">change avatar</span>
+            </div>
+          </label>
+          <input id="avatar-input" type="file" name="avatar" class="${css.avatarFileInput}" />
+
+          <h2 class="${css.profileFace__name}">{{ __profileName }}</h2>
         </div>
 
         <div class="${css.profileInputs}">

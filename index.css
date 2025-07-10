@@ -18,19 +18,19 @@
   --color-msg-in-bg: rgba(255, 255, 255, 0.06);
   --color-msg-out-bg: rgba(255, 255, 255, 0.14);
 
-  --font-family: "Montserrat", Helvetica, Arial, sans-serif;
-
-
-  --color-universal-br: var(--color-panel-lightest);
   --color-universal-br: var(--color-panel-lightest);
 
   --color-item-bg: rgba(255, 255, 255, 0.06);
+
+  --avatar-select-bg: rgba(0, 0, 0, 0.25);
 
   --color-btn-bg: rgba(127, 237, 69, 0.05);
   --color-btn-br: rgba(255, 255, 255, 0.1);
   --color-universal-br-active: rgba(255, 255, 255, 0.4);
 
   --transition: 0.2s ease-in-out;
+
+  --font-family: "Montserrat", Helvetica, Arial, sans-serif;
 }
 
 /* The actual persistent

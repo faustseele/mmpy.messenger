@@ -1,7 +1,7 @@
 import { IProfilePageData } from "./profile.d";
 
 export const profileData: IProfilePageData = {
-  __name: "Vanya",
+  __profileName: "Vanya",
   headingData_profile: {
     __text: "Профиль 👤",
   },
@@ -9,10 +9,6 @@ export const profileData: IProfilePageData = {
     __text: "⮘ Назад",
     __isClickable: true,
     __link: "/chats",
-  },
-
-  profileData: {
-    __name: "Vanya",
   },
   inputEditorData: [
     {
