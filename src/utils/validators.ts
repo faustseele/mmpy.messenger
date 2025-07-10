@@ -1,14 +1,16 @@
 import { TFieldNames } from "./input.d";
 
-/* 'value' is actually used */
+/** 'Ё' Char has U+0401, whereas 'А-Я' range includes
+ * symbols from U+0410 up to U+042F. Same thing for 'ё'!
+ * Eslint is wrongly complaining about unused vars */
 // eslint-disable-next-line no-unused-vars
 const getRegex: Record<TFieldNames, (value: string) => string> = {
   name: (value: string): string => {
-    const regex = /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/;
+    const regex = /^[A-ZА-ЯЁ][a-zA-Zа-яА-ЯЁё-]*$/;
     return regex.test(value) ? "" : "Странное имя.";
   },
   surname: (value: string): string => {
-    const regex = /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/;
+    const regex = /^[A-ZА-ЯЁ][a-zA-Zа-яА-ЯЁё-]*$/;
     return regex.test(value) ? "" : "Странная у вас фамилия.";
   },
   login: (value: string): string => {
@@ -30,7 +32,7 @@ const getRegex: Record<TFieldNames, (value: string) => string> = {
     return regex.test(value) ? "" : "Неправильный номер телефона.";
   },
   display_name: (value: string): string => {
-    const regex = /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/;
+    const regex = /^[A-ZА-ЯЁ][a-zA-Zа-яА-ЯЁё-]*$/;
     return regex.test(value) ? "" : "Странный ник.";
   },
   message: (value: string): string => {
