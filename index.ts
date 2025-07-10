@@ -1,5 +1,5 @@
-import { Routes } from "./src/core/Router/routes.d";
 import Router from "./src/core/Router/Router.ts";
+import { Routes } from "./src/core/Router/routes.d";
 
 export const router = new Router();
 
@@ -26,4 +26,4 @@ nav?.addEventListener("click", (e: Event) => {
 });
 
 /* Handling initial page load */
-router.routeTo("/profile", "initial route");
+router.routeTo(Routes.SignIn, "initial route");
