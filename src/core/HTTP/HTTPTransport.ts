@@ -1,44 +1,12 @@
-/* Enum is used: eslint is wrongly complaining about unused vars */;
-enum Method {
-  // eslint-disable-next-line no-unused-vars
-  GET = 'GET',
-  // eslint-disable-next-line no-unused-vars
-  POST = 'POST',
-  // eslint-disable-next-line no-unused-vars
-  PUT = 'PUT',
-  // eslint-disable-next-line no-unused-vars
-  DELETE = 'DELETE',
-}
-
-type TQueryData = Record<Method, string | number | boolean | Record<Method, unknown> | null>;
-
-type TOptions = {
-  method: Method;
-  headers?: Record<string, string>;
-  data?: unknown;
-  timeout?: number;
-  withCredentials?: boolean;
-};
-
-type TOptionsWithoutMethod = Omit<TOptions, 'method'>;
-
-
-function queryStringify(data: TQueryData): string {
-  if (typeof data !== 'object' || data === null) {
-    throw new Error('Data must be an object');
-  }
-
-  const params = Object.entries(data).map(([key, value]) => {
-    if (value === null || value === undefined) {
-      return '';
-    }
-    /* TODO: Add recursive handling for nested objects */
-    return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
-  }).filter(p => p !== ''); /* Remove empty parameters */
-
-  return params.length > 0 ? `?${params.join('&')}` : '';
-}
-
+import {
+  HTTPMethod,
+  HttpStatus,
+  Method,
+  TOptions,
+  TOptionsWithoutMethod,
+  TQueryData,
+} from "./HTTP.d";
+import { queryStringify } from "./utils.ts";
 
 /**
  * @class HTTPTransport
@@ -46,23 +14,27 @@ function queryStringify(data: TQueryData): string {
  * Incapsulates XMLHttpRequest and works with Promise.
  */
 export default class HTTPTransport {
+  /**
+   * Fabric method -> HTTP method
+   * @Response -> a type required during the http call
+   */
+  private createMethod(method: Method): HTTPMethod {
+    /* returns HTTP method */
+    return <Response>(url: string, options: TOptionsWithoutMethod = {}) => {
+      /* In case it's a GET request, adding a query string */
+      if (method === Method.GET && options.data) {
+        url += queryStringify(options.data as TQueryData);
+      }
 
-  public get = (url: string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
-    const urlWithQuery = options.data ? `${url}${queryStringify(options.data as TQueryData)}` : url;
-    return this._request(urlWithQuery, { ...options, method: Method.GET });
-  };
+      return this._request<Response>(url, { ...options, method });
+    };
+  }
 
-  public post = (url:string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
-    return this._request(url, { ...options, method: Method.POST });
-  };
-
-  public put = (url: string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
-    return this._request(url, { ...options, method: Method.PUT });
-  };
-
-  public delete = (url: string, options: TOptionsWithoutMethod = {}): Promise<unknown> => {
-    return this._request(url, { ...options, method: Method.DELETE });
-  };
+  /* The enum-type is enclosed inside createMethod */
+  public get: HTTPMethod = this.createMethod(Method.GET);
+  public post: HTTPMethod = this.createMethod(Method.POST);
+  public put: HTTPMethod = this.createMethod(Method.PUT);
+  public delete: HTTPMethod = this.createMethod(Method.DELETE);
 
   /**
    * @returns Promise, which is allowed with a typed response
@@ -70,32 +42,32 @@ export default class HTTPTransport {
    */
   private _request = <TResponse>(
     url: string,
-    options: TOptions & { method: Method },
+    options: TOptions,
   ): Promise<TResponse> => {
     const { method, data, headers = {}, withCredentials = true } = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, url);
-      
+
       /* JSON – preferred response type */
-      xhr.responseType = 'json'; 
+      xhr.responseType = "json";
 
       /* Handling headers */
       Object.entries(headers).forEach(([key, value]) => {
         xhr.setRequestHeader(key, value);
       });
-      
+
       /* If no Formdata, set Content-Type header */
       if (!(data instanceof FormData) && data) {
-         if (!headers['Content-Type']) {
-            xhr.setRequestHeader('Content-Type', 'application/json');
-         }
+        if (!headers["Content-Type"]) {
+          xhr.setRequestHeader("Content-Type", "application/json");
+        }
       }
 
       /* Catching the response */
       xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
+        if (xhr.status >= HttpStatus.Ok && xhr.status < HttpStatus.MultipleChoices) {
           /* xhr should be a JSON object here */
           resolve(xhr.response as TResponse);
         } else {
@@ -106,10 +78,10 @@ export default class HTTPTransport {
           });
         }
       };
-      
-      xhr.onabort = () => reject({ reason: 'Request aborted' });
-      xhr.onerror = () => reject({ reason: 'Network error' });
-      xhr.ontimeout = () => reject({ reason: 'Request timed out' });
+
+      xhr.onabort = () => reject({ reason: "Request aborted" });
+      xhr.onerror = () => reject({ reason: "Network error" });
+      xhr.ontimeout = () => reject({ reason: "Request timed out" });
 
       xhr.timeout = options.timeout || 5000;
       xhr.withCredentials = withCredentials;
@@ -117,11 +89,9 @@ export default class HTTPTransport {
       if (method === Method.GET || !data) {
         xhr.send();
       } else {
-        const body = (data instanceof FormData) ? data : JSON.stringify(data);
+        const body = data instanceof FormData ? data : JSON.stringify(data);
         xhr.send(body);
       }
     });
   };
 }
-
-
