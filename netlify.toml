@@ -7,4 +7,14 @@
 
 [build]
   publish = "dist"
-  
+
+# The `from = "/*"` redirect tells Netlify to redirect
+# all pages to the `to = "index.html"` file. Basically, this
+# is a 'rewrite' rule, not a 'redirect' one.
+# Le `status = 200` is deceiving Netlify into thinking
+# that it's a redirect, but it's a rewrite.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+ 
