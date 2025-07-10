@@ -6,8 +6,9 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "vite",
-    "start:fresh": "rm -rf node_modules/.vite && vite",
+    "start": "vite build && vite preview",
+    "start:fresh": "rm -rf node_modules/.vite && vite build && vite preview",
+    "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint ./src && tsc --noEmit && stylelint '**/*.css'"
