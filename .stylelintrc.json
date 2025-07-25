@@ -1,0 +1,4 @@
+{
+  "plugins": ["stylelint-selector-bem-pattern"],
+  "rules": {}
+}

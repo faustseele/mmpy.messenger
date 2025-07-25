@@ -1,7 +1,9 @@
 #### Project
 **Name**: middle.messenger.praktikum.yandex
-**Tech-Stack**: Vanilla JS, HandleBars, PostCSS & CSS-Modules
-
+**Tech-Stack**
+Runs on: Vanilla JS + HandleBars + XHR
+Styles: PostCSS + CSS-Modules
+Code Style by: Eslint (Standard), Stylelint
 
 #### Deployed at Netlify
 **The link**: https://dynamic-smakager-a6d4a4.netlify.app

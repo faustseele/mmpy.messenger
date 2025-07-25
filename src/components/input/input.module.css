@@ -4,7 +4,6 @@
 }
 
 .input {
-
   width: 100%;
   padding: 14px 8px 15px 8px;
 
@@ -26,17 +25,40 @@
   transition: 0.2s ease-in-out;
 }
 
-.input_profileEdit {
+.input_editor {
   text-align: right;
   font-style: italic;
+}
+
+
+.input_error::placeholder {
+  opacity: 0.4;
+}
+
+.errorLabel {
+  display: block;
+
+  position: absolute;
+  right: 4px;
+  bottom: 9px;
+
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 8px;
+  color: var(--color-alert);
+  text-align: right;
 }
 
 .input::placeholder {
   color: var(--color-content-darkest);
 }
 
-.input_profileEdit::placeholder {
+.input_editor::placeholder {
   color: var(--color-content-light);
+}
+
+.input_search {
+  border-bottom: none;
 }
 
 .input:hover {
