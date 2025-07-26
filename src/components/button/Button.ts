@@ -1,16 +1,16 @@
 import {
-  ComponentEvents,
+  IComponentEvents,
   ComponentProps,
-} from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+} from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
-import { IButtonData } from "./button.d";
+import { IButtonConfigs } from "./button.d";
 import css from "./button.module.css";
 
 export interface ButtonProps extends ComponentProps {
-  configs: IButtonData;
-  events?: ComponentEvents;
+  configs: IButtonConfigs;
+  events?: IComponentEvents;
 }
 
 export class Button extends Component {

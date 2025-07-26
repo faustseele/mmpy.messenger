@@ -1,20 +1,20 @@
-import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { Routes } from "../../core/Router/routes.d";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import pagesCss from "../pages.module.css";
-import { IChatPageData } from "./chat.d";
+import { IChatPageConfigs } from "./chat.d";
 import css from "./chat.module.css";
 import { createChildren } from "./utils.ts";
 
 export interface ChatPageProps extends ComponentProps {
-  configs: IChatPageData;
+  configs: IChatPageConfigs;
 }
 
 export class ChatPage extends Component {
-  constructor(props: ChatPageProps, router: Router) {
+  constructor(props: ChatPageProps) {
     const domService = new DOMService("div", {
       class: `${pagesCss.moduleWindow} ${css.moduleWindow_chat}`,
     });
@@ -27,13 +27,13 @@ export class ChatPage extends Component {
 
     children.deleteChatButton.setProps({
       events: {
-        click: (e: Event) => router.routeTo(Routes.SignIn, e),
+        click: () => Router.go(RouteLink.Chats),
       },
     });
 
     children.heading_goToProfile.setProps({
       events: {
-        click: (e: Event) => router.routeTo(Routes.Profile, e),
+        click: () => Router.go(RouteLink.Profile),
       },
     });
   }
@@ -77,7 +77,7 @@ export class ChatPage extends Component {
             {{{ messages }}}
           </div>
 
-          {{{ messageField }}}
+          {{{ messageFieldConfigs }}}
         </main>
       `;
   }

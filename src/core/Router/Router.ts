@@ -1,67 +1,95 @@
-import { Routes } from "./routes.d";
-import {
-  createAuthPage,
-  createChatPage,
-  createProfilePage,
-  createErrorPage,
-} from "../../utils/componentFactory.ts";
-import Component from "../Component/Component.ts";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Route, { IRoute, IRouteProps } from "./Route.ts";
+import { RouteLink } from "./router.d";
 
-export default class Router {
-  private currentPage: Component | null = null;
+/**
+ * @class Router is a @mediator singleton class that listens
+ *  to URL changes and calls the appropriate Route.
+ *  E.g: '/sign-up -> new Route -> new AuthPage(SignUp)'
+ * Mimics History API.
+ * Handles the API access for the Pages.
+ * @Singleton to ensure there is only one central routing.
+ * @Builder to allow chaining 'use()' calls.
+ */
 
-  constructor() {}
+class Router {
+  /** The single instance of the Router. */
+  private static __instance: Router;
 
-  /* Defining routes and the Components they should render. */
-  private _getPage(path: Routes) {
-    switch (path) {
-      case "/sign-up":
-        return createAuthPage(path, this);
-      case "/sign-in":
-        return createAuthPage(path, this);
-      case "/chats":
-        return createChatPage(this);
-      case "/profile":
-        return createProfilePage(this);
-      case "/404":
-        return createErrorPage(path, this);
-      case "/500":
-        return createErrorPage(path, this);
-      default:
-        return createErrorPage(Routes.NotFound, this);
+  /**
+   * History API object.
+   * Used for handling address bar without page reload.
+   * Used to add entries to the browser's history stack for navigation.
+   */
+  private _history: History = window.history;
+
+  /**
+   * A list of all registered routes in the application.
+   * IRoute is used due to contravariance
+   */
+  private _routes: IRoute[] = [];
+
+  /** The actual route. */
+  private _currentRoute: IRoute | null = null;
+
+  /* The query selector for the root DOM element. E.g. '#app' */
+  // private _rootQuery: string = "";
+
+  constructor() {
+    if (Router.__instance) return Router.__instance;
+
+    Router.__instance = this;
+  }
+
+  /* Is triggered when the URL changes. */
+  private _onRouteChange(pathname: RouteLink | string): void {
+    const route = this._routes.find((route) => route.pathname === pathname);
+
+    if (route) {
+      this._currentRoute?.leave();
+      this._currentRoute = route;
+      this._currentRoute.render();
+    } else {
+      console.error(`Route not found: ${pathname}`);
     }
   }
 
-  public routeTo(path: Routes, event: Event | "initial route") {
-    const app: HTMLElement | null = document.getElementById("app");
-    if (!app) {
-      console.error("App container not found!");
-      return;
-    }
+  /* Inits Router. Sets root query to existing Routes. */
+  public start(rootQuery: string): void {
+    // this._rootQuery = rootQuery;
+    this._routes.forEach((route) => (route.rootQuery = rootQuery));
 
-    /* Either its 'initial load' or there is Event */
-    if (!event && event !== "initial route") {
-      console.error("Event is not defined, nor it's initial load");
-      return;
-    }
+    /* Adding listener that's triggered
+      when the active history entry changes. */
+    window.onpopstate = () => this._onRouteChange(window.location.pathname);
 
-    /* Classical case: event is defined */
-    if (event instanceof Event) {
-      event.preventDefault();
-    }
+    /* Initial page load. */
+    this._onRouteChange(window.location.pathname);
+  }
 
-    /* Unmounting previous Page-Component */
-    if (this.currentPage) this.currentPage.componentDidUnmount();
+  /**
+   * Registers a new Route with the Router.
+   * @returns this for chaining
+   */
+  public use<P extends ComponentProps>(routeProps: IRouteProps<P>) {
+    const route = new Route(routeProps);
+    this._routes.push(route);
 
-    /* Creating the new page Component */
-    this.currentPage = this._getPage(path);
+    return this;
+  }
 
-    /* Clearing previous page content + appending the new one */
-    app.textContent = "";
-    const pageElement = this.currentPage.getElement();
-    if (pageElement) app.appendChild(pageElement);
+  public go(pathname: RouteLink): void {
+    this._history.pushState({}, "", pathname);
+    this._onRouteChange(pathname);
+  }
 
-    /* Updating history & URL */
-    window.history.pushState({ path }, "", path);
+  public back(): void {
+    this._history.back();
+  }
+
+  public forward(): void {
+    this._history.forward();
   }
 }
+
+export default new Router();

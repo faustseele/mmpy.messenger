@@ -1,38 +1,38 @@
-import { Routes } from "../../core/Router/routes.d";
-import { IErrorPageData } from "./errors.d";
+import { RouteLink } from "../../core/Router/router.d";
+import { IErrorPageConfigs } from "./errors.d";
 
-export const errorData404: IErrorPageData = {
+export const errorData404: IErrorPageConfigs = {
   __code: "404",
-  headingData: {
+  headingConfigs: {
     __text: "⛔ Ошибка ️404",
     __isDrama: true,
   },
-  subheadingData: {
+  subheadingConfigs: {
     __text: "🌑 Не туда попали",
     __isDrama: true,
   },
 
-  buttonData: {
+  buttonConfigs: {
     type: "button",
     __label: "Назад к чатам",
-    __link: Routes.Chats,
+    __link: RouteLink.Chats,
   },
 };
 
-export const errorData500: IErrorPageData = {
+export const errorData500: IErrorPageConfigs = {
   __code: "500",
-  headingData: {
+  headingConfigs: {
     __text: "🪜 Ошибка ️500",
     __isDrama: true,
   },
-  subheadingData: {
+  subheadingConfigs: {
     __text: "🔧 Мы уже фиксим",
     __isDrama: true,
   },
 
-  buttonData: {
+  buttonConfigs: {
     type: "button",
     __label: "Назад к чатам",
-    __link: Routes.Chats,
+    __link: RouteLink.Chats,
   },
 };

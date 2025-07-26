@@ -1,12 +1,12 @@
-import { Routes } from "../../core/Router/routes.d";
-import { IAuthPageData } from "./auth.d";
+import { RouteLink } from "../../core/Router/router.d";
+import { IAuthPageConfigs } from "./auth.d";
 
-export const signUpData: IAuthPageData = {
+export const signUpData: IAuthPageConfigs = {
   type: "/sign-up",
-  headingData: {
+  headingConfigs: {
     __text: "Регистрация 🎀",
   },
-  inputData: [
+  inputConfigs: [
     {
       id: "name",
       type: "text",
@@ -44,16 +44,16 @@ export const signUpData: IAuthPageData = {
       placeholder: "Номер телефона",
     },
   ],
-  buttonData_reroute: {
+  buttonProps_reroute: {
     configs: {
       type: "button",
       __label: "Я свой!",
       __isSilent: true,
-      __link: Routes.SignIn,
+      __link: RouteLink.SignIn,
     },
     events: { },
   },
-  buttonData_submit: {
+  buttonProps_submit: {
     configs: {
       type: "submit",
       __label: "Зарегистрироваться ✓",
@@ -63,12 +63,12 @@ export const signUpData: IAuthPageData = {
   },
 };
 
-export const signInData: IAuthPageData = {
+export const signInData: IAuthPageConfigs = {
   type: "/sign-in",
-  headingData: {
+  headingConfigs: {
     __text: "Вход 🚪",
   },
-  inputData: [
+  inputConfigs: [
     {
       id: "login",
       type: "text",
@@ -82,16 +82,16 @@ export const signInData: IAuthPageData = {
       placeholder: "Пароль",
     },
   ],
-  buttonData_reroute: {
+  buttonProps_reroute: {
     configs: {
       type: "button",
       __label: "Впервые?",
       __isSilent: true,
-      __link: Routes.SignUp,
+      __link: RouteLink.SignUp,
     },
     events: {},
   },
-  buttonData_submit: {
+  buttonProps_submit: {
     configs: {
       type: "submit",
       __label: "Авторизоваться ✓",

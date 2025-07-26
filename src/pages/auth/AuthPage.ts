@@ -1,32 +1,33 @@
-import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { Routes } from "../../core/Router/routes.d";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import cssPages from "../pages.module.css";
-import { IAuthPageData } from "./auth.d";
+import { IAuthPageConfigs } from "./auth.d";
 import css from "./auth.module.css";
 import { FormController } from "./FormController.ts";
 import { createChildren } from "./utils.ts";
 
 export interface AuthPageProps extends ComponentProps {
-  configs: IAuthPageData;
+  configs: IAuthPageConfigs;
 }
 
 export class AuthPage extends Component {
   public componentName = "AuthPage";
 
-  constructor(router: Router, props: AuthPageProps) {
+  constructor(props: AuthPageProps) {
     const domService = new DOMService("form", {
       class: cssPages.moduleWindow,
     });
     const fragmentService = new FragmentService();
 
     const { configs } = props;
+
     const children = createChildren(configs);
 
-    const formController = new FormController(router, children.inputs);
+    const formController = new FormController(children.inputs);
 
     super(
       {
@@ -35,7 +36,8 @@ export class AuthPage extends Component {
           /* Handling <form> onFormSubmit.
             Submit-button's event-listener is attached
             automatically through <form> 'submit' listener */
-          submit: (e: Event) => formController.onFormSubmit(e, Routes.Chats),
+          submit: (e: Event) =>
+            formController.onFormSubmit(e, RouteLink.Chats),
         },
       },
       children,
@@ -49,8 +51,10 @@ export class AuthPage extends Component {
     /* Setting event for the auth-reroute button */
     buttonReroute.setProps({
       events: {
-        click: (e: Event) =>
-          router.routeTo(configs.buttonData_reroute.configs.__link!, e),
+        click: () =>
+          Router.go(
+            configs.buttonProps_reroute.configs.__link ?? RouteLink.NotFound,
+          ),
       },
     });
 

@@ -1,6 +1,6 @@
-import { ComponentConfigs } from "../../core/Component/Component.d";
+import { IComponentConfigs } from "../../framework/Component/Component.d";
 
-export interface IHeadingData extends ComponentConfigs {
+export interface IHeadingConfigs extends IComponentConfigs {
   __text: string;
   __isClickable?: boolean;
   __isDrama?: boolean;

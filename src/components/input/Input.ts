@@ -1,13 +1,13 @@
-import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import { guardHTMLElement } from "../../utils/guards.ts";
-import { IInputData, TFieldNames } from "../../utils/input.d";
+import { IInputConfigs, TFieldNames } from "../../utils/input.d";
 import css from "./input.module.css";
 
 export interface InputProps extends ComponentProps {
-  configs: IInputData;
+  configs: IInputConfigs;
 }
 
 export class Input extends Component {

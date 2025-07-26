@@ -1,22 +1,19 @@
-import { IButtonData } from "../../components/button/button.d";
-import { ICatalogueItemData } from "../../components/catalogueItem/catalogueItem.d";
-import { IHeadingData } from "../../components/heading/heading.d";
-import { IMessageData } from "../../components/message/message.d";
-import { IMessageFieldData } from "../../components/messageField/messageField.d";
-import { ComponentConfigs, ComponentEvents } from "../../core/Component/Component.d";
+import { ButtonProps } from "../../components/button/Button.ts";
+import { ICatalogueItemConfigs } from "../../components/catalogueItem/catalogueItem.d";
+import { IHeadingConfigs } from "../../components/heading/heading.d";
+import { IMessageConfigs } from "../../components/message/message.d";
+import { IMessageFieldConfigs } from "../../components/messageFieldConfigs/messageFieldConfigs.d";
+import { IComponentConfigs } from "../../framework/Component/Component.d";
 
-export interface IChatPageData extends ComponentConfigs {
-  headingData_chats: IHeadingData;
-  headingData_goToProfile: IHeadingData;
+export interface IChatPageConfigs extends IComponentConfigs {
+  headingConfigs_chats: IHeadingConfigs;
+  headingConfigs_goToProfile: IHeadingConfigs;
   searchLabel: string;
-  catalogueItemsData: ICatalogueItemData[];
-  messageField: IMessageFieldData;
+  catalogueItemsConfigs: ICatalogueItemConfigs[];
+  messageFieldConfigs: IMessageFieldConfigs;
   chatData: IChatContextData;
-  buttonData_delete: { 
-    configs: IButtonData;
-    events: ComponentEvents;
-   };
-  messagesData: IMessageData[];
+  buttonProps_delete: ButtonProps;
+  messagesConfigs: IMessageConfigs[];
 }
 
 export interface IChatContextData {

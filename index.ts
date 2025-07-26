@@ -1,29 +1,49 @@
+import "./index.css";
+import { RouteLink } from "./src/core/Router/router.d";
 import Router from "./src/core/Router/Router.ts";
-import { Routes } from "./src/core/Router/routes.d";
+import { AuthPage } from "./src/pages/auth/AuthPage.ts";
+import { signInData, signUpData } from "./src/pages/auth/data.ts";
+import { ChatPage } from "./src/pages/chat/ChatPage.ts";
+import { chatData } from "./src/pages/chat/data.ts";
+import { errorData404, errorData500 } from "./src/pages/errors/data.ts";
+import { ErrorPage } from "./src/pages/errors/ErrorPage.ts";
+import { profileData } from "./src/pages/profile/data.ts";
+import { ProfilePage } from "./src/pages/profile/ProfilePage.ts";
 
-export const router = new Router();
-
-/* Handling Browser's ⬅️ / ➡️ buttons */
-window.addEventListener("popstate", (event) => {
-  const path = event.state?.path || "/sign-in";
-  router.routeTo(path, event);
-});
-
-/* Handling clicks on links */
-
-const nav = document.getElementsByTagName("nav")[0];
-nav?.addEventListener("click", (e: Event) => {
-  e.preventDefault();
-  if (
-    e.target instanceof HTMLAnchorElement &&
-    e.target.classList.contains("navButton")
-  ) {
-    const link = e.target.getAttribute("href");
-    if (link) {
-      router.routeTo(link as Routes, e);
-    }
-  }
-});
-
-/* Handling initial page load */
-router.routeTo(Routes.SignIn, "initial route");
+Router.use({
+  pathname: RouteLink.SignIn,
+  componentConstructor: AuthPage,
+  optionalProps: {
+    componentProps: { configs: signInData },
+  },
+}).use({
+  pathname: RouteLink.SignUp,
+  componentConstructor: AuthPage,
+  optionalProps: {
+    componentProps: { configs: signUpData },
+  },
+}).use({
+  pathname: RouteLink.Chats,
+  componentConstructor: ChatPage,
+  optionalProps: {
+    componentProps: { configs: chatData },
+  },
+}).use({
+  pathname: RouteLink.Profile,
+  componentConstructor: ProfilePage,
+  optionalProps: {
+    componentProps: { configs: profileData },
+  },
+}).use({
+  pathname: RouteLink.NotFound,
+  componentConstructor: ErrorPage,
+  optionalProps: {
+    componentProps: { configs: errorData404 },
+  },
+}).use({
+  pathname: RouteLink.Error,
+  componentConstructor: ErrorPage,
+  optionalProps: {
+    componentProps: { configs: errorData500 },
+  },
+}).start("#app");

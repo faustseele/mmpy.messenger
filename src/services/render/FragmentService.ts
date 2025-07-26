@@ -1,9 +1,9 @@
 import Handlebars from "handlebars";
 import {
-  ComponentChildren,
-  ComponentConfigs,
-} from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+  IComponentChildren,
+  IComponentConfigs,
+} from '../../framework/Component/Component.d';
+import Component from "../../framework/Component/Component.ts";
 
 /**
  * @FragmentService – Stateless feature-service.
@@ -28,8 +28,8 @@ export default class FragmentService {
    */
   public compile(
     sourceMarkup: string,
-    configs: ComponentConfigs,
-    childrenMap: ComponentChildren,
+    configs: IComponentConfigs,
+    childrenMap: IComponentChildren,
   ): DocumentFragment {
     const hasChildren = Object.keys(childrenMap).length > 0;
 
@@ -55,9 +55,9 @@ export default class FragmentService {
    * into a copy of the configs object for Handlebars to compile.
    */
   private _injectPlaceholders(
-    configs: ComponentConfigs,
-    childrenMap: ComponentChildren,
-  ): ComponentConfigs {
+    configs: IComponentConfigs,
+    childrenMap: IComponentChildren,
+  ): IComponentConfigs {
     Object.entries(childrenMap).forEach(([key, childrenGroup]) => {
       if (Array.isArray(childrenGroup)) {
         configs[key] = this._createMarkupForGroup(childrenGroup);
@@ -97,7 +97,7 @@ export default class FragmentService {
    */
   private _replacePlaceholders(
     fragment: DocumentFragment,
-    childrenMap: ComponentChildren,
+    childrenMap: IComponentChildren,
   ): void {
     Object.values(childrenMap).forEach((childrenGroup) => {
       if (Array.isArray(childrenGroup)) {

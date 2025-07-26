@@ -1,22 +1,22 @@
 import profileAvatar from "../../../static/profile-avatar.png";
-import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { Routes } from "../../core/Router/routes.d";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import { FormController } from "../auth/FormController.ts";
 import pagesCss from "../pages.module.css";
-import { IProfilePageData } from "./profile.d";
+import { IProfilePageConfigs } from "./profile.d";
 import css from "./profile.module.css";
 import { createChildren } from "./utils.ts";
 
 export interface ProfilePageProps extends ComponentProps {
-  configs: IProfilePageData;
+  configs: IProfilePageConfigs;
 }
 
 export class ProfilePage extends Component {
-  constructor(props: ProfilePageProps, router: Router) {
+  constructor(props: ProfilePageProps) {
     const domService = new DOMService("form", {
       class: `${pagesCss.moduleWindow} ${css.moduleWindow_profile}`,
     });
@@ -33,21 +33,21 @@ export class ProfilePage extends Component {
       buttonLogout,
     } = children;
 
-    const formController = new FormController(router, inputs);
+    const formController = new FormController(inputs);
 
     buttonEditInfo.setProps({
       events: {
-        click: (e: Event) => formController.onFormSubmit(e, Routes.Chats),
+        click: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
       },
     });
     buttonEditPassword.setProps({
       events: {
-        click: (e: Event) => formController.onFormSubmit(e, Routes.Chats),
+        click: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
       },
     });
     buttonLogout.setProps({
       events: {
-        click: (e: Event) => router.routeTo(Routes.SignIn, e),
+        click: () => Router.go(RouteLink.SignIn),
       },
     });
     inputs.forEach((input) => {
@@ -59,7 +59,7 @@ export class ProfilePage extends Component {
     });
     heading_backToChats.setProps({
       events: {
-        click: (e: Event) => router.routeTo(Routes.Chats, e),
+        click: () => Router.go(RouteLink.Chats),
       },
     });
 

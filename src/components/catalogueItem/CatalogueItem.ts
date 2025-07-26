@@ -1,13 +1,13 @@
-import Component from "../../core/Component/Component.ts";
+import Component from "../../framework/Component/Component.ts";
 import css from "./catalogueItem.module.css";
 import avatar from "../../../static/avatar.png";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
-import { ICatalogueItemData } from "./catalogueItem.d";
-import { ComponentProps } from "../../core/Component/Component.d";
+import { ICatalogueItemConfigs } from "./catalogueItem.d";
+import { ComponentProps } from "../../framework/Component/Component.d";
 
 export interface CatalogueItemProps extends ComponentProps {
-  configs: ICatalogueItemData;
+  configs: ICatalogueItemConfigs;
 }
 
 export class CatalogueItem extends Component {

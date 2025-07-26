@@ -1,12 +1,12 @@
-import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
-import { IHeadingData } from "./heading.d";
+import { IHeadingConfigs } from "./heading.d";
 import css from "./heading.module.css";
 
 export interface HeadingProps extends ComponentProps {
-  configs: IHeadingData;
+  configs: IHeadingConfigs;
 }
 
 export class Heading extends Component {

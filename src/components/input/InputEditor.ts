@@ -1,10 +1,10 @@
-import { ComponentProps } from "../../core/Component/Component.d";
-import { IInputData } from "../../utils/input.d";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import { IInputConfigs } from "../../utils/input.d";
 import css from "./input.module.css";
 import { Input } from "./Input.ts";
 
 export interface InputEditorProps extends ComponentProps {
-  configs: IInputData;
+  configs: IInputConfigs;
 }
 
 export class InputEditor extends Input {

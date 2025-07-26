@@ -1,8 +1,8 @@
 import { v4 as makeUUID } from "uuid";
 import type {
-  ComponentConfigs,
-  ComponentEvents,
-} from "../../../core/Component/Component.d";
+  IComponentConfigs,
+  IComponentEvents,
+} from "../../../framework/Component/Component.d";
 import { tagNames } from "./DOM.d";
 
 /**
@@ -17,11 +17,11 @@ export default class DOMService {
   public readonly id: string = makeUUID();
   public readonly tagName: tagNames;
 
-  private _configs: ComponentConfigs | null = null;
+  private _configs: IComponentConfigs | null = null;
 
   public element: HTMLElement | null = null;
 
-  constructor(tagName: tagNames, configs: ComponentConfigs) {
+  constructor(tagName: tagNames, configs: IComponentConfigs) {
     this.tagName = tagName;
     this._configs = configs;
   }
@@ -60,7 +60,7 @@ export default class DOMService {
     this.element.appendChild(fragment);
   }
 
-  public addListeners(events: ComponentEvents): void {
+  public addListeners(events: IComponentEvents): void {
     const element = this.getElement();
     if (!element) {
       console.error("Element is not defined");
@@ -72,7 +72,7 @@ export default class DOMService {
     });
   }
 
-  public removeListeners(events: ComponentEvents): void {
+  public removeListeners(events: IComponentEvents): void {
     const element = this.getElement();
     if (!element) return;
 

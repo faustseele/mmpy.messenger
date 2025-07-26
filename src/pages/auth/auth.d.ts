@@ -1,25 +1,19 @@
 /* eslint-disable no-unused-vars */
 /* ...params are used */
-import { IButtonData } from "../../components/button/button.d";
-import { IHeadingData } from "../../components/heading/heading.d";
-import { IInputData } from "../../utils/input.d";
+import { ButtonProps } from "../../components/button/Button.d";
+import { IHeadingConfigs } from "../../components/heading/heading.d";
+import { RouteLink } from "../../core/Router/router.d";
 import {
-  ComponentConfigs,
-  ComponentEvents,
-} from "../../core/Component/Component.d";
+  IComponentConfigs,
+} from "../../framework/Component/Component.d";
+import { IInputConfigs } from "../../utils/input.d";
 
-export type TAuthPage = Extract<Routes, "/sign-in" | "/sign-up">;
+export type TAuthRoutes = RouteLink.SignUp | RouteLink.SignIn;
 
-export interface IAuthPageData extends ComponentConfigs {
+export interface IAuthPageConfigs extends IComponentConfigs {
   type: TAuthPage;
-  headingData: IHeadingData;
-  inputData: IInputData[];
-  buttonData_submit: {
-    configs: IButtonData;
-    events: ComponentEvents;
-  };
-  buttonData_reroute: {
-    configs: IButtonData;
-    events: ComponentEvents;
-  };
+  headingConfigs: IHeadingConfigs;
+  inputConfigs: IInputConfigs[];
+  buttonProps_submit: ButtonProps;
+  buttonProps_reroute: ButtonProps;
 }

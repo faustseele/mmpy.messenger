@@ -10,17 +10,13 @@ import {
   InputEditorProps,
 } from "../components/input/InputEditor.ts";
 import { Message, MessageProps } from "../components/message/Message.ts";
-import {
-  MessageField,
-  MessageFieldProps,
-} from "../components/messageField/MessageField.ts";
+import { MessageField, MessageFieldProps } from "../components/messageField/MessageField.ts";
 import {
   Subheading,
   SubheadingProps,
 } from "../components/subheading/Subheading.ts";
-import Router from "../core/Router/Router.ts";
-import { Routes } from "../core/Router/routes.d";
-import { TAuthPage } from "../pages/auth/auth.d";
+import { RouteLink } from "../core/Router/router.d";
+import { TAuthRoutes } from "../pages/auth/auth.d";
 import { AuthPage } from "../pages/auth/AuthPage.ts";
 import { signInData, signUpData } from "../pages/auth/data.ts";
 import { ChatPage } from "../pages/chat/ChatPage.ts";
@@ -36,17 +32,17 @@ import { ProfilePage } from "../pages/profile/ProfilePage.ts";
  * TODO: Add a type-guard for the factory functions
  */
 
-export function createAuthPage(type: TAuthPage, router: Router): AuthPage {
+export function createAuthPage(type: TAuthRoutes): AuthPage {
   let authData = undefined;
-  if (type === "/sign-in") authData = signInData;
-  if (type === "/sign-up") authData = signUpData;
+  if (type === RouteLink.SignIn) authData = signInData;
+  if (type === RouteLink.SignUp) authData = signUpData;
 
   if (!authData) {
     console.error("Bad auth-page type", type);
     authData = signUpData;
   }
 
-  return new AuthPage(router, { configs: authData });
+  return new AuthPage({ configs: authData });
 }
 
 export function createButton(props: ButtonProps): Button {
@@ -69,12 +65,12 @@ export function createMessageField(props: MessageFieldProps): MessageField {
   return new MessageField(props);
 }
 
-export function createChatPage(router: Router): ChatPage {
-  return new ChatPage({ configs: chatData }, router);
+export function createChatPage(): ChatPage {
+  return new ChatPage({ configs: chatData });
 }
 
-export function createProfilePage(router: Router): ProfilePage {
-  return new ProfilePage({ configs: profileData }, router);
+export function createProfilePage(): ProfilePage {
+  return new ProfilePage({ configs: profileData });
 }
 
 export function createCatalogueItem(props: CatalogueItemProps): CatalogueItem {
@@ -89,15 +85,15 @@ export function createSubheading(props: SubheadingProps): Subheading {
   return new Subheading(props);
 }
 
-export function createErrorPage(type: Routes, router: Router): ErrorPage {
+export function createErrorPage(type: RouteLink): ErrorPage {
   let errorData = undefined;
-  if (type === Routes.NotFound) errorData = errorData404;
-  if (type === Routes.Error) errorData = errorData500;
+  if (type === RouteLink.NotFound) errorData = errorData404;
+  if (type === RouteLink.Error) errorData = errorData500;
 
   if (!errorData) {
     errorData = errorData404;
     console.error("Bad error-page type", type);
   }
 
-  return new ErrorPage({ configs: errorData }, router);
+  return new ErrorPage({ configs: errorData });
 }

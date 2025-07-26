@@ -1,4 +1,4 @@
-import { ComponentConfigs } from "../core/Component/Component.d";
+import { IComponentConfigs } from "../framework/Component/Component.d";
 
 export type TFieldNames =
   | "name"
@@ -11,7 +11,7 @@ export type TFieldNames =
   | "search"
   | "message";
 
-export interface IInputData extends ComponentConfigs {
+export interface IInputConfigs extends IComponentConfigs {
   __label: string;
   __isSearch?: boolean;
   __isError?: boolean;

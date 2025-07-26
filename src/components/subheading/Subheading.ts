@@ -1,12 +1,12 @@
-import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
-import { ISubheadingData } from "./subheading.d";
+import { ISubheadingConfigs } from "./subheading.d";
 import css from "./subheading.module.css";
 
 export interface SubheadingProps extends ComponentProps {
-  configs: ISubheadingData;
+  configs: ISubheadingConfigs;
 }
 
 export class Subheading extends Component {

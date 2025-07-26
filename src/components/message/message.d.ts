@@ -1,6 +1,6 @@
-import { ComponentConfigs } from "../../core/Component/Component.d";
+import { IComponentConfigs } from "../../framework/Component/Component.d";
 
-export interface IMessageData extends ComponentConfigs {
+export interface IMessageConfigs extends IComponentConfigs {
   __isOutgoing: boolean;
   __isIncoming: boolean;
   __isDateBubble: boolean;

@@ -1,7 +1,7 @@
 import { Input } from "../../components/input/Input.ts";
 import { InputEditor } from "../../components/input/InputEditor.ts";
 import Router from "../../core/Router/Router.ts";
-import { Routes } from "../../core/Router/routes.d";
+import { RouteLink } from "../../core/Router/router.d";
 import { validateInputField } from "../../utils/validators.ts";
 
 const logMessages = {
@@ -11,18 +11,16 @@ const logMessages = {
 
 export class FormController {
   private inputs: Input[] | InputEditor[];
-  private router: Router;
 
-  constructor(router: Router, inputs: Input[] | InputEditor[]) {
+  constructor(inputs: Input[] | InputEditor[]) {
     this.inputs = inputs;
-    this.router = router;
   }
 
   public onInputBlur = (input: Input): void => {
     this._handleFieldValidation(input);
   };
 
-  public onFormSubmit = (event: Event, link: Routes): void => {
+  public onFormSubmit = (event: Event, link: RouteLink): void => {
     event.preventDefault();
 
     const isFormValid = this._handleFormValidation();
@@ -30,7 +28,7 @@ export class FormController {
     if (isFormValid) {
       const formData = this._getFormData();
       console.log(logMessages.formIsValid, formData);
-      this.router.routeTo(link, event);
+      Router.go(link)
     } else {
       console.log(logMessages.formHasErrors);
       event.stopPropagation();

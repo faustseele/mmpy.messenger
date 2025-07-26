@@ -1,6 +1,6 @@
-import { ComponentConfigs } from "../../core/Component/Component.d";
+import { IComponentConfigs } from "../../framework/Component/Component.d";
 
-export interface IMessageFieldData extends ComponentConfigs {
+export interface IMessageFieldConfigs extends IComponentConfigs {
   id: string;
   type: "text" | "email" | "password" | "tel";
   placeholder?: string;

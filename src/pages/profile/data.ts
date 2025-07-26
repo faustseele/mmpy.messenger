@@ -1,17 +1,17 @@
-import { Routes } from "../../core/Router/routes.d";
-import { IProfilePageData } from "./profile.d";
+import { RouteLink } from "../../core/Router/router.d";
+import { IProfilePageConfigs } from "./profile.d";
 
-export const profileData: IProfilePageData = {
+export const profileData: IProfilePageConfigs = {
   __profileName: "Vanya",
-  headingData_profile: {
+  headingConfigs_profile: {
     __text: "Профиль 👤",
   },
-  headingData_backToChats: {
+  headingConfigs_backToChats: {
     __text: "⮘ Назад",
     __isClickable: true,
     __link: "/chats",
   },
-  inputEditorData: [
+  inputEditorConfigs: [
     {
       id: "email",
       type: "email",
@@ -49,28 +49,28 @@ export const profileData: IProfilePageData = {
       placeholder: "8905551234",
     },
   ],
-  buttonData_editInfo: {
+  buttonProps_editInfo: {
     configs: {
       type: "button",
       __label: "Изменить данные",
-      __link: Routes.Chats,
+      __link: RouteLink.Chats,
     },
     events: {},
   },
-  buttonData_editPassword: {
+  buttonProps_editPassword: {
     configs: {
       type: "button",
       __label: "Изменить пароль",
-      __link: Routes.Chats,
+      __link: RouteLink.Chats,
     },
     events: {},
   },
-  buttonData_signOut: {
+  buttonProps_signOut: {
     configs: {
       type: "button",
       __label: "Выйти",
       __isSilent: true,
-      __link: Routes.SignIn,
+      __link: RouteLink.SignIn,
     },
     events: {},
   },

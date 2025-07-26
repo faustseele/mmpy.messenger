@@ -1,21 +1,21 @@
 import participantAvatar from "../../../static/avatar.png";
 import sunsetImage from "../../../static/sunset.jpeg";
-import { Routes } from "../../core/Router/routes.d";
-import { IChatPageData } from "./chat.d";
+import { RouteLink } from "../../core/Router/router.d";
+import { IChatPageConfigs } from "./chat.d";
 
-export const chatData: IChatPageData = {
-  headingData_chats: {
+export const chatData: IChatPageConfigs = {
+  headingConfigs_chats: {
     __text: "Чаты 👥",
     __isClickable: false,
     __isDrama: false,
   },
-  headingData_goToProfile: {
+  headingConfigs_goToProfile: {
     __text: "Профиль ➛",
     __isClickable: true,
     __link: "/profile",
   },
   searchLabel: "Поиск",
-  catalogueItemsData: [
+  catalogueItemsConfigs: [
     {
       __title: "Андрей",
       __contentText: "Привет, я Андрей! Чат с Андреем для тестов",
@@ -29,7 +29,7 @@ export const chatData: IChatPageData = {
       __unreadCount: "1",
     },
   ],
-  messageField: {
+  messageFieldConfigs: {
     id: "message",
     __label: "Cообщение",
     placeholder: "Cообщение",
@@ -39,17 +39,17 @@ export const chatData: IChatPageData = {
     participantAvatar,
     __participantName: "Андрей",
   },
-  buttonData_delete: {
+  buttonProps_delete: {
     configs: {
       type: "button",
       __modifier: "button",
       __label: "Удалить чат",
-      __link: Routes.NotFound,
+      __link: RouteLink.NotFound,
       __isSilent: true,
     },
     events: {},
   },
-  messagesData: [
+  messagesConfigs: [
     {
       __isOutgoing: false,
       __isIncoming: true,

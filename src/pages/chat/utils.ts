@@ -6,23 +6,23 @@ import {
   createMessage,
   createMessageField,
 } from "../../utils/componentFactory.ts";
-import { IChatPageData } from "./chat.d";
+import { IChatPageConfigs } from "./chat.d";
 import css from "./chat.module.css";
 
-export const createChildren = (configs: IChatPageData) => {
+export const createChildren = (configs: IChatPageConfigs) => {
   const {
-    headingData_chats,
-    headingData_goToProfile,
-    buttonData_delete,
+    headingConfigs_chats,
+    headingConfigs_goToProfile,
+    buttonProps_delete,
     searchLabel,
-    catalogueItemsData,
-    messageField,
-    messagesData,
+    catalogueItemsConfigs,
+    messageFieldConfigs,
+    messagesConfigs,
   } = configs;
 
   const children = {
-    heading_chats: createHeading({ configs: headingData_chats }),
-    heading_goToProfile: createHeading({ configs: headingData_goToProfile }),
+    heading_chats: createHeading({ configs: headingConfigs_chats }),
+    heading_goToProfile: createHeading({ configs: headingConfigs_goToProfile }),
     searchInput: createInput({
       configs: {
         id: "search",
@@ -34,7 +34,7 @@ export const createChildren = (configs: IChatPageData) => {
       },
     }),
 
-    catalogueItems: catalogueItemsData.map((itemProps) =>
+    catalogueItems: catalogueItemsConfigs.map((itemProps) =>
       createCatalogueItem({
         configs: {
           __title: itemProps.__title,
@@ -44,8 +44,8 @@ export const createChildren = (configs: IChatPageData) => {
         },
       }),
     ),
-    deleteChatButton: createButton(buttonData_delete),
-    messages: messagesData.map((messageProps) =>
+    deleteChatButton: createButton(buttonProps_delete),
+    messages: messagesConfigs.map((messageProps) =>
       createMessage({
         configs: {
           __isOutgoing: messageProps.__isOutgoing,
@@ -57,12 +57,12 @@ export const createChildren = (configs: IChatPageData) => {
         },
       }),
     ),
-    messageField: createMessageField({
+    messageFieldConfigs: createMessageField({
       configs: {
-        id: messageField.id,
-        type: messageField.type,
-        placeholder: messageField.placeholder,
-        __label: messageField.__label,
+        id: messageFieldConfigs.id,
+        type: messageFieldConfigs.type,
+        placeholder: messageFieldConfigs.placeholder,
+        __label: messageFieldConfigs.__label,
       },
     }),
   };

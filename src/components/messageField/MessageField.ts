@@ -1,12 +1,12 @@
-import { ComponentProps } from "../../core/Component/Component.d";
-import Component from "../../core/Component/Component.ts";
+import { ComponentProps } from "../../framework/Component/Component.d";
+import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
-import { IMessageFieldData } from "./messageField.d";
+import { IMessageFieldConfigs } from "./messageField.d";
 import css from "./messageField.module.css";
 
 export interface MessageFieldProps extends ComponentProps {
-  configs: IMessageFieldData;
+  configs: IMessageFieldConfigs;
 }
 
 export class MessageField extends Component {

@@ -1,13 +1,13 @@
-import { IButtonData } from "../../components/button/button.d";
-import { IHeadingData } from "../../components/heading/heading.d";
-import { ISubheadingData } from "../../components/subheading/subheading.d";
-import { ComponentConfigs } from "../../core/Component/Component.d";
+import { IButtonConfigs } from "../../components/button/button.d";
+import { IHeadingConfigs } from "../../components/heading/heading.d";
+import { ISubheadingConfigs } from "../../components/subheading/subheading.d";
+import { IComponentConfigs } from "../../framework/Component/Component.d";
 
 export type TErrorPage = "404" | "500";
 
-export interface IErrorPageData extends ComponentConfigs {
+export interface IErrorPageConfigs extends IComponentConfigs {
   __code: TErrorPage;
-  headingData: IHeadingData;
-  subheadingData: ISubheadingData;
-  buttonData: IButtonData;
+  headingConfigs: IHeadingConfigs;
+  subheadingConfigs: ISubheadingConfigs;
+  buttonConfigs: IButtonConfigs;
 }

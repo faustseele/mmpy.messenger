@@ -1,6 +1,6 @@
-import { ComponentConfigs } from "../../core/Component/Component.d";
+import { IComponentConfigs } from "../../framework/Component/Component.d";
 
-export interface ICatalogueItemData extends ComponentConfigs {
+export interface ICatalogueItemConfigs extends IComponentConfigs {
   __title: string;
   __contentText: string;
   __date: string;

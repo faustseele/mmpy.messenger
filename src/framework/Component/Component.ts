@@ -2,11 +2,10 @@ import EventBus from "../../services/events/EventBus.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/FragmentService.ts";
 import type {
-  ComponentChildren,
-  ComponentConfigs,
-  ComponentEvents,
+  IComponentChildren,
+  IComponentEvents,
+  IComponentConfigs,
   ComponentProps,
-  ComponentPropsForCDU,
 } from "./Component.d";
 
 /** Abstract class for the Component
@@ -29,17 +28,19 @@ export default abstract class Component {
 
   public readonly id: string;
   public props: ComponentProps;
-  public configs: ComponentConfigs;
-  public childrenMap: ComponentChildren = {};
-  public events: ComponentEvents;
+  public configs: IComponentConfigs;
+  public childrenMap: IComponentChildren = {};
+  public events: IComponentEvents;
 
-  /* Is redefined in Component instantiations
-    to get a layout */
+  /**
+   * Returns the component's HTML structure as a string.
+   * Is redefined in Component instantiations to get a layout.
+   */
   public abstract getSourceMarkup(): string;
 
   constructor(
     props: ComponentProps,
-    childrenMap: ComponentChildren,
+    childrenMap: IComponentChildren,
 
     /* Dependencies modules */
     domService: DOMService,
@@ -92,8 +93,10 @@ export default abstract class Component {
     this.componentDidMount();
   }
 
-  /* This one is called by DOMService
-    after the Parent-Component is mounted */
+  /**
+   * This one is called by DOMService
+   * after the Parent-Component is added to the DOM (mounted).
+   */
   public componentDidMount(): void {
     /* Recusively mounting children on one nested level */
     Object.values(this.childrenMap).forEach((childrenGroup) => {
@@ -144,8 +147,11 @@ export default abstract class Component {
     this.domService.removeListeners(this.events);
   }
 
-  /* This one is called by Router on new Component-Page.
-    Propagates to childrenMap */
+  /**
+   * This one is called by Router on new Component-Page.
+   * Propagates to childrenMap.
+   * Called before the Component is removed from the DOM (unmounted).
+   */
   public componentDidUnmount(): void {
     this.eventBus.emit("flow:component-did-unmount");
 
@@ -162,7 +168,7 @@ export default abstract class Component {
   }
 
   /* Implementing Reactivity through Proxy. Emits 'CDU' */
-  private _proxifyConfigs<T extends ComponentConfigs>(configs: T): T {
+  private _proxifyConfigs<T extends IComponentConfigs>(configs: T): T {
     if (typeof configs !== "object" || !configs) {
       throw new Error(`Props must be an object, got ${typeof configs}`);
     }
@@ -170,11 +176,15 @@ export default abstract class Component {
     const proxiedProps = new Proxy(configs, {
       /**
        * Arrows are here to access EventBus
-       * @prop: PropertyKey is string | number | symbol
+       * @PropertyKey is string | number | symbol
        */
       set: (target: T, prop: PropertyKey, value: unknown) => {
-        /* Type Assertion for writing to configs (Generic T is read-only) */
-        (target as { [key: PropertyKey]: unknown })[prop] = value;
+        /* Ignoring 'set' if prop is a Symbol */
+        if (typeof prop === "symbol") {
+          console.warn(`Ignoring 'set' for Symbol ${prop.toString()}`);
+          return false;
+        }
+        (target as IComponentConfigs)[prop] = value;
 
         this.eventBus.emit("flow:component-did-update");
         return true;
@@ -192,11 +202,12 @@ export default abstract class Component {
     return proxiedProps;
   }
 
-  /* Invokes Proxy-setters.
-    New configs -> invoke Proxy-setters
-    New events -> invoke swap listeners
-    TODO: implement proxifed event */
-  public setProps(nextProps: ComponentPropsForCDU): void {
+  /** Invokes Proxy-setters.
+   * New configs -> invoke Proxy-setters
+   * New events -> invoke swap listeners
+   * @Partial is used in case IComponentConfigs in the props are not defined.
+   * TODO: implement proxifed event */
+  public setProps(nextProps: Partial<ComponentProps>): void {
     if (!nextProps) return;
 
     const hasConfigs = nextProps.configs !== undefined;
@@ -222,15 +233,19 @@ export default abstract class Component {
     Object.assign(this.props, nextProps);
   }
 
-  /* DOMService helper */
+  /**
+   * DOMService helper.
+   * Makes the Component visible
+   */
   public show(): void {
     const element = this.domService.getElement();
     if (!element) return;
 
-    element!.style.display = "block";
+    element!.style.display = "flex";
   }
 
-  /* DOMService helper */
+  /** DOMService helper
+   * Makes the Component invisible */
   public hide(): void {
     const element = this.domService.getElement();
     if (!element) return;
@@ -238,7 +253,10 @@ export default abstract class Component {
     element!.style.display = "none";
   }
 
-  /* DOMService helper */
+  /**
+   * DOMService helper
+   * Returns the root HTMLElement of the component.
+   */
   public getElement(): HTMLElement | null {
     return this.domService.getElement();
   }
