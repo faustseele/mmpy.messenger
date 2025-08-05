@@ -63,17 +63,3 @@ nav > a {
  font-size: 14px;
  color: var(--color-content-darkest);
 }
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    /* Setting the bg of inputs
-      to transparent on autofill */
-    -webkit-transition-delay: 999999s;
-    transition-delay: 999999s;
-    
-    /* Setting the text-color
-      of inputs on autofill */
-    -webkit-text-fill-color: var(--color-content-light) !important;
-}

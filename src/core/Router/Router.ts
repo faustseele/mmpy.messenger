@@ -1,6 +1,13 @@
-import { ComponentProps } from "../../framework/Component/Component.d";
-import Route, { IRoute, IRouteProps } from "./Route.ts";
-import { RouteLink } from "./router.d";
+import Component from "../../framework/Component/Component.ts";
+import {
+  IChildrenData,
+  IComponentAttributes,
+  IComponentConfigs,
+  IComponentData,
+  IComponentEvents,
+} from "../../framework/Component/Component.d";
+import { IRoute, IRouteConfigs, RouteLink } from "./router.d";
+import Route from "./Route.ts";
 
 /**
  * @class Router is a @mediator singleton class that listens
@@ -32,32 +39,35 @@ class Router {
   /** The actual route. */
   private _currentRoute: IRoute | null = null;
 
-  /* The query selector for the root DOM element. E.g. '#app' */
-  // private _rootQuery: string = "";
-
   constructor() {
     if (Router.__instance) return Router.__instance;
 
     Router.__instance = this;
   }
 
-  /* Is triggered when the URL changes. */
-  private _onRouteChange(pathname: RouteLink | string): void {
-    const route = this._routes.find((route) => route.pathname === pathname);
-
-    if (route) {
-      this._currentRoute?.leave();
-      this._currentRoute = route;
-      this._currentRoute.render();
-    } else {
-      console.error(`Route not found: ${pathname}`);
-    }
+  /**
+   * Registers a new Route with the Router.
+   * @returns this for chaining
+   */
+  public use<
+    C extends IComponentConfigs,
+    A extends IComponentAttributes,
+    E extends IComponentEvents,
+    CD extends IChildrenData,
+    ConcreteComponent extends Component<C, A, E, CD>,
+  >(
+    componentData: IComponentData<C, A, E, CD, ConcreteComponent>,
+    routeConfigs: IRouteConfigs,
+  ): this {
+    const route = new Route({ componentData, routeConfigs });
+    this._routes.push(route);
+    return this;
   }
 
   /* Inits Router. Sets root query to existing Routes. */
   public start(rootQuery: string): void {
     // this._rootQuery = rootQuery;
-    this._routes.forEach((route) => (route.rootQuery = rootQuery));
+    this._routes.forEach((route) => route.setRootQuery(rootQuery));
 
     /* Adding listener that's triggered
       when the active history entry changes. */
@@ -67,20 +77,22 @@ class Router {
     this._onRouteChange(window.location.pathname);
   }
 
-  /**
-   * Registers a new Route with the Router.
-   * @returns this for chaining
-   */
-  public use<P extends ComponentProps>(routeProps: IRouteProps<P>) {
-    const route = new Route(routeProps);
-    this._routes.push(route);
+  /* Is triggered when the URL changes. */
+  private _onRouteChange(path: RouteLink | string): void {
+    const route = this._routes.find((route) => route.path === path);
 
-    return this;
+    if (route) {
+      this._currentRoute?.leave();
+      this._currentRoute = route;
+      this._currentRoute!.render();
+    } else {
+      console.error(`Route not found: ${path}`);
+    }
   }
 
-  public go(pathname: RouteLink): void {
-    this._history.pushState({}, "", pathname);
-    this._onRouteChange(pathname);
+  public go(path: RouteLink): void {
+    this._history.pushState({}, "", path);
+    this._onRouteChange(path);
   }
 
   public back(): void {

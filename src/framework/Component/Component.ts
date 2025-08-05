@@ -1,12 +1,17 @@
 import EventBus from "../../services/events/EventBus.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { isChildrenList } from "../../utils/componentFactory.ts";
 import type {
-  IComponentChildren,
-  IComponentEvents,
-  IComponentConfigs,
   ComponentProps,
+  IChildrenData,
+  IChildrenMap,
+  IComponentAttributes,
+  IComponentConfigs,
+  IComponentData,
+  IComponentEvents,
 } from "./Component.d";
+import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
 
 /** Abstract class for the Component
  * Following the Separation of Concerns principle,
@@ -20,17 +25,40 @@ import type {
  * public -> EventBus -> private
  * */
 
-export default abstract class Component {
-  protected domService: DOMService;
-  protected fragmentService: FragmentService;
+export default abstract class Component<
+  /**
+   * Extensions are needed for polymorphic use
+   * E.g. IAuthConfigs
+   * */
+  C extends IComponentConfigs,
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+  CD extends IChildrenData,
+> {
+  protected domService: DOMService<C, E>;
+  protected fragmentService: FragmentService<C>;
 
+  private _configs: C;
+  private _attributes?: A;
+  private _events?: E;
+  private _childrenData?: CD;
+  private _childrenMap?: IChildrenMap;
   private eventBus: EventBus = new EventBus();
-
+  private _hasChildren(
+    childrenMap = this._childrenMap,
+  ): childrenMap is IChildrenMap {
+    return !!childrenMap && Object.keys(childrenMap).length > 0;
+  }
   public readonly id: string;
-  public props: ComponentProps;
-  public configs: IComponentConfigs;
-  public childrenMap: IComponentChildren = {};
-  public events: IComponentEvents;
+  public get configs(): C {
+    return this._configs;
+  }
+  public get element(): HTMLElement | null {
+    return this.domService.element;
+  }
+  public get childrenData(): CD | undefined {
+    return this._childrenData;
+  }
 
   /**
    * Returns the component's HTML structure as a string.
@@ -38,26 +66,20 @@ export default abstract class Component {
    */
   public abstract getSourceMarkup(): string;
 
-  constructor(
-    props: ComponentProps,
-    childrenMap: IComponentChildren,
-
-    /* Dependencies modules */
-    domService: DOMService,
-    fragmentService: FragmentService,
-  ) {
-    this.props = props;
-    const { configs = {}, events = {} } = props;
-    this.events = events;
-    this.childrenMap = childrenMap;
-
-    this.configs = this._proxifyConfigs(configs);
-
+  constructor({
+    deps: { domService, fragmentService },
+    data: { configs, events, attributes, childrenData, childrenMap },
+  }: ComponentProps<C, A, E, CD>) {
     this.domService = domService;
     this.fragmentService = fragmentService;
 
-    this.id = this.domService.id;
+    this._configs = proxifyConfigs(configs, this.eventBus);
+    this._attributes = proxifyAttributes(attributes ?? {}, this.eventBus) as A;
+    this._events = events;
+    this._childrenData = childrenData;
+    this._childrenMap = childrenMap;
 
+    this.id = this.domService.id;
     this._registerEventBusEvents();
     this._initComponent();
   }
@@ -98,14 +120,18 @@ export default abstract class Component {
    * after the Parent-Component is added to the DOM (mounted).
    */
   public componentDidMount(): void {
+    if (!this._hasChildren()) return;
+
     /* Recusively mounting children on one nested level */
-    Object.values(this.childrenMap).forEach((childrenGroup) => {
-      if (Array.isArray(childrenGroup)) {
-        childrenGroup.forEach((child) =>
+    Object.values(this._childrenMap!).forEach((childrenMapChunk) => {
+      if (isChildrenList(childrenMapChunk)) {
+        const childrenList = childrenMapChunk;
+        childrenList.list.forEach((child) =>
           child.eventBus.emit("flow:component-did-mount"),
         );
       } else {
-        childrenGroup.eventBus.emit("flow:component-did-mount");
+        const child = childrenMapChunk;
+        child.eventBus.emit("flow:component-did-mount");
       }
     });
   }
@@ -115,23 +141,27 @@ export default abstract class Component {
     /* Create the Component Element */
     this.domService.createElement();
 
-    /* Get the HTMLElement from DOMService */
-    const element = this.domService.getElement();
-    if (!element) return;
+    /* Checking if Element is created successfully */
+    if (!this.domService.element) return;
+
+    const markup = this.getSourceMarkup();
+    const deproxifiedConfigs = { ...this._configs };
 
     /* Get a compiled (innerHTML) DocumentFragment from FragmentService */
-    const innerFragment = this.fragmentService.compile(
-      this.getSourceMarkup(),
-      { ...this.configs } /* De-Proxy configs */,
-      this.childrenMap,
-    );
+    const innerFragment = this._hasChildren()
+      ? this.fragmentService.compileWithChildren(
+          markup,
+          deproxifiedConfigs,
+          this._childrenMap!,
+        )
+      : this.fragmentService.compile(markup, deproxifiedConfigs);
 
-    this.domService.removeListeners(this.events);
+    this.domService.removeListeners(this._events);
 
     /* DOMService renders: handles innerHTML and appendChild */
     this.domService.insertFragmentIntoElement(innerFragment);
 
-    this.domService.addListeners(this.events);
+    this.domService.addListeners(this._events);
   }
 
   /* Is redefined in concrete Components */
@@ -144,7 +174,7 @@ export default abstract class Component {
 
   /* Removes listeners */
   private _componentDidUnmount(): void {
-    this.domService.removeListeners(this.events);
+    this.domService.removeListeners(this._events);
   }
 
   /**
@@ -155,51 +185,20 @@ export default abstract class Component {
   public componentDidUnmount(): void {
     this.eventBus.emit("flow:component-did-unmount");
 
+    if (!this._hasChildren()) return;
+
     /* Recusively mounting children on one nested level */
-    Object.values(this.childrenMap).forEach((childrenGroup) => {
-      if (Array.isArray(childrenGroup)) {
-        childrenGroup.forEach((child) =>
+    Object.values(this._childrenMap!).forEach((childrenMapChunk) => {
+      if (isChildrenList(childrenMapChunk)) {
+        const childrenList = childrenMapChunk;
+        childrenList.list.forEach((child) =>
           child.eventBus.emit("flow:component-did-unmount"),
         );
       } else {
-        childrenGroup.eventBus.emit("flow:component-did-unmount");
+        const child = childrenMapChunk;
+        child.eventBus.emit("flow:component-did-unmount");
       }
     });
-  }
-
-  /* Implementing Reactivity through Proxy. Emits 'CDU' */
-  private _proxifyConfigs<T extends IComponentConfigs>(configs: T): T {
-    if (typeof configs !== "object" || !configs) {
-      throw new Error(`Props must be an object, got ${typeof configs}`);
-    }
-
-    const proxiedProps = new Proxy(configs, {
-      /**
-       * Arrows are here to access EventBus
-       * @PropertyKey is string | number | symbol
-       */
-      set: (target: T, prop: PropertyKey, value: unknown) => {
-        /* Ignoring 'set' if prop is a Symbol */
-        if (typeof prop === "symbol") {
-          console.warn(`Ignoring 'set' for Symbol ${prop.toString()}`);
-          return false;
-        }
-        (target as IComponentConfigs)[prop] = value;
-
-        this.eventBus.emit("flow:component-did-update");
-        return true;
-      },
-      deleteProperty: (target: T, prop: PropertyKey) => {
-        if (typeof prop === "string" && prop.startsWith("_")) return false;
-
-        delete (target as Record<PropertyKey, unknown>)[prop];
-        this.eventBus.emit("flow:component-did-update");
-
-        return true;
-      },
-    });
-
-    return proxiedProps;
   }
 
   /** Invokes Proxy-setters.
@@ -207,30 +206,37 @@ export default abstract class Component {
    * New events -> invoke swap listeners
    * @Partial is used in case IComponentConfigs in the props are not defined.
    * TODO: implement proxifed event */
-  public setProps(nextProps: Partial<ComponentProps>): void {
+  public setProps(nextProps: Partial<IComponentData<C, A, E, CD, this>>): void {
     if (!nextProps) return;
 
-    const hasConfigs = nextProps.configs !== undefined;
-    const hasEvents = nextProps.events !== undefined;
+    const hasConfigs = !!nextProps.configs;
+    const hasAttributes = !!nextProps.attributes;
+    const hasEvents = !!nextProps.events;
+    const hasChildrenMap = !!nextProps.childrenMap;
 
     if (hasConfigs) {
-      Object.assign(this.configs, nextProps.configs);
+      Object.assign(this._configs, nextProps.configs);
+    }
+
+    if (hasAttributes) {
+      Object.assign(this._attributes ?? {}, nextProps.attributes);
     }
 
     if (hasEvents) {
-      const newEvents = Object.assign(this.events, nextProps.events);
+      const newEvents = Object.assign(this._events ?? {}, nextProps.events);
 
       /* Hot-swap the listeners on the current DOM element */
       if (this.domService.element) {
-        this.domService.removeListeners(this.events);
+        this.domService.removeListeners(this._events);
         this.domService.addListeners(newEvents);
       }
 
-      this.events = newEvents;
+      this._events = newEvents;
     }
 
-    /* Also updatign the base props object */
-    Object.assign(this.props, nextProps);
+    if (hasChildrenMap) {
+      Object.assign(this._childrenMap ?? {}, nextProps.childrenData);
+    }
   }
 
   /**
@@ -238,7 +244,7 @@ export default abstract class Component {
    * Makes the Component visible
    */
   public show(): void {
-    const element = this.domService.getElement();
+    const element = this.domService.element;
     if (!element) return;
 
     element!.style.display = "flex";
@@ -247,17 +253,9 @@ export default abstract class Component {
   /** DOMService helper
    * Makes the Component invisible */
   public hide(): void {
-    const element = this.domService.getElement();
+    const element = this.domService.element;
     if (!element) return;
 
     element!.style.display = "none";
-  }
-
-  /**
-   * DOMService helper
-   * Returns the root HTMLElement of the component.
-   */
-  public getElement(): HTMLElement | null {
-    return this.domService.getElement();
   }
 }

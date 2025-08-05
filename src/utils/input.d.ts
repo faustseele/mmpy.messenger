@@ -1,4 +1,23 @@
-import { IComponentConfigs } from "../framework/Component/Component.d";
+import { IComponentData, IComponentFactory } from "../framework/Component/Component.d";
+
+export interface IInputData extends IComponentData {
+  configs: IInputConfigs;
+  componentFactory: IComponentFactory;
+  attributes: {
+    type: "text" | "email" | "password" | "tel";
+    id: TFieldNames;
+    placeholder: string;
+  };
+}
+
+interface IInputConfigs extends IComponentConfigs {
+  slotName: string;
+  tagName: "input";
+  label: string;
+  type: "text" | "email" | "password" | "tel";
+  isError?: boolean;
+  errorMessage?: string;
+}
 
 export type TFieldNames =
   | "name"
@@ -10,14 +29,3 @@ export type TFieldNames =
   | "display_name"
   | "search"
   | "message";
-
-export interface IInputConfigs extends IComponentConfigs {
-  __label: string;
-  __isSearch?: boolean;
-  __isError?: boolean;
-  __errorMessage?: string;
-  placeholder: string;
-  id: TFieldNames;
-  type: "text" | "email" | "password" | "tel";
-  class?: string;
-}

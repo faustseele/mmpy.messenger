@@ -1,7 +1,7 @@
 import { ComponentProps } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { IMessageFieldConfigs } from "./messageField.d";
 import css from "./messageField.module.css";
 

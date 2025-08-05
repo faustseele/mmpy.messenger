@@ -1,9 +1,9 @@
 import { v4 as makeUUID } from "uuid";
 import type {
-  IComponentConfigs,
+  IComponentAttributes,
   IComponentEvents,
 } from "../../../framework/Component/Component.d";
-import { tagNames } from "./DOM.d";
+import { TagNames } from "./DOM.d";
 
 /**
  * @DOMService ­– Owns the DOM-related logic.
@@ -13,79 +13,81 @@ import { tagNames } from "./DOM.d";
  * * Shares Dom-Elements
  */
 
-export default class DOMService {
+export default class DOMService<
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+> {
+  private readonly _tagName: TagNames;
+  private _attributes?: A = undefined;
+  private _element: HTMLElement | null = null;
+
   public readonly id: string = makeUUID();
-  public readonly tagName: tagNames;
+  public get element(): HTMLElement | null {
+    return this._element;
+  }
 
-  private _configs: IComponentConfigs | null = null;
-
-  public element: HTMLElement | null = null;
-
-  constructor(tagName: tagNames, configs: IComponentConfigs) {
-    this.tagName = tagName;
-    this._configs = configs;
+  constructor(tagName: TagNames, attributes?: A) {
+    this._tagName = tagName;
+    this._attributes = attributes;
   }
 
   public createElement() {
-    if (!this._configs) {
-      console.error("Cannot create Element: configs are null.");
-      return;
-    }
-
     /* Creating an empty Element
       e.g. 'div' -> rendered HTMLElement */
-    const newElement = document.createElement(this.tagName);
+    this._element = document.createElement(this._tagName);
+
+    /* In case attributes are passed */
+    if (this._attributes) {
+      this._element = this._addAttributes(this._element, this._attributes);
+    }
+  }
+
+  private _addAttributes(
+    element: HTMLElement,
+    attributes: IComponentAttributes,
+  ): HTMLElement {
+    element.setAttribute("data-id", this.id);
 
     /* Handling Elements attributes */
-    newElement.setAttribute("data-id", this.id);
-    Object.entries(this._configs).forEach(([key, value]) => {
-      if (key.startsWith("__")) return;
+    Object.entries(attributes).forEach(([key, value]) => {
+      /* Handling special '_class' field */
+      if (key === "_class") {
+        element.classList.add(...value.split(" "));
+        return;
+      }
 
-      newElement.setAttribute(key, String(value));
+      element.setAttribute(key, String(value));
     });
 
-    this.element = newElement;
+    return element;
   }
 
   public insertFragmentIntoElement(fragment: DocumentFragment): void {
-    if (!this.element) {
+    if (!this._element) {
       console.error("Cannot render: DOMService element is null.");
       return;
     }
 
-    this.element.textContent = "";
+    this._element.textContent = "";
 
     /* Child nodes of the DocumentFragment
       are moved into the Element */
-    this.element.appendChild(fragment);
+    this._element.appendChild(fragment);
   }
 
-  public addListeners(events: IComponentEvents): void {
-    const element = this.getElement();
-    if (!element) {
-      console.error("Element is not defined");
-      return;
-    }
+  public addListeners(events?: E): void {
+    if (!this._element || !events) return;
 
     Object.keys(events).forEach((eventName) => {
-      element!.addEventListener(eventName, events[eventName]);
+      this._element!.addEventListener(eventName, events[eventName]);
     });
   }
 
-  public removeListeners(events: IComponentEvents): void {
-    const element = this.getElement();
-    if (!element) return;
+  public removeListeners(events?: E): void {
+    if (!this._element || !events) return;
 
     Object.keys(events).forEach((eventName) => {
-      element.removeEventListener(eventName, events[eventName]);
+      this._element!.removeEventListener(eventName, events[eventName]);
     });
-  }
-
-  public getElement(): HTMLElement | null {
-    if (!this.element) {
-      console.error("Element is not defined");
-      return null;
-    }
-    return this.element;
   }
 }

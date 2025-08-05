@@ -1,76 +1,111 @@
 /* eslint-disable no-unused-vars */
 /* ...params are used */
+import { IPageConfigs } from "../../pages/page.d";
+import { TagNames } from "../../services/render/DOM/DOM.d";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import Component from "./Component.ts";
 
-/**
- * A generic constructor type for concrete Component implementation.
- * Expects to receive a props object during instantiation.
- * @Generic (T extends Component) is used to include
- * * inheritors of the Component to the T-definition.
- * @DefaultType 'Component' is used to avoid providing a specific type in <>.
- * * It's useful bc we only care that sth is a Component, but not of a certain specific type.
- */
-export type ComponentConstructor<P extends ComponentProps = ComponentProps> =
-  new (
-    props: P,
-    childrenMap: IComponentChildren,
-    domService: DOMService,
-    fragmentService: FragmentService,
-  ) => T;
+export type ConcreteComponent = Component<
+  IComponentConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  IChildrenData
+>;
 
 /* The shape of the props-object that every Component receives. */
 export interface ComponentProps<
-  P extends IComponentConfigs = IComponentConfigs,
+  C extends IComponentConfigs,
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+  CD extends IChildrenData,
 > {
-  configs: P;
-  events?: IComponentEvents;
+  deps: IComponentDeps;
+  data: IComponentData<C, A, E, CD, ConcreteComponent>;
+}
+
+/* Dependency Injection services */
+export interface IComponentDeps {
+  domService: DOMService;
+  fragmentService: FragmentService;
+}
+
+/* Data for a concrete Component instance */
+export interface IComponentData<
+  C extends IComponentConfigs,
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+  CD extends IChildrenData,
+  ConcreteComponent extends Component<C, A, E, CD>,
+> {
+  /* Non-attributes configurations, {{}} */
+  configs: C;
+  componentFactory: IComponentFactory<C, A, E, ConcreteComponent>;
+  attributes?: A;
+  events?: E;
+  childrenData?: CD;
+  childrenMap?: IChildrenMap;
 }
 
 /* Configuration data for a concrete Component instance */
 export interface IComponentConfigs {
-  class?: string;
-  [key: string]: unknown;
-  /* Non-attributes start with '__' */
-  __childrenMarkup?: string;
+  /* slotName resembles the hbs {{{html-escaping expressions}}} */
+  slotName: string;
+  tagName: TagNames;
+  type?: string;
+  pageConfigs?: IPageConfigs;
+}
+
+/* Attributes for root tag of a Component */
+export interface IComponentAttributes {
+  _class?: string;
+  type?: string;
+  style?: string;
 }
 
 /* Event handlers for a concrete Component instance */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type IComponentEvents = Record<string, (event: Event) => void>;
-/* export type IComponentEvents = Partial<
-  Record<BrowserEventKeys, (event: Event) => void>
->; */
 
-export type IComponentChildren = Record<string, Component[] | Component>;
+/**
+ * No extenstions here, because IChildrenData is general abstract Component
+ * For conctrete Components types, look at each childrenMap interfaces in the pages
+ */
 
-export type BrowserEventKeys =
-  // Form Events
-  | "submit"
-  | "reset"
-  | "change"
-  | "input"
+export type IChildrenData = Record<
+  string,
+  | IComponentData<
+      IComponentConfigs,
+      IComponentAttributes,
+      IComponentEvents,
+      ConcreteComponent
+    >
+  | IChildrenDataList
+>;
 
-  // Mouse Events
-  | "click"
-  | "dblclick"
-  | "mousedown"
-  | "mouseup"
-  | "mouseover"
-  | "mouseout"
-  | "mousemove"
-  | "contextmenu"
+export interface IChildrenDataList {
+  slotName: string;
+  list: IComponentData<C, A, E, ConcreteComponent>[];
+  componentFactory: IComponentFactory<C, A, E, ConcreteComponent>;
+}
 
-  // Keyboard Events
-  | "keydown"
-  | "keyup"
-  | "keypress"
+/**
+ * It's a proptery/state of the Component.
+ */
+export type IChildrenMap = Record<string, ConcreteComponent | IChildrenList>;
 
-  // Focus Events
-  | "focus"
-  | "blur"
+export interface IChildrenList {
+  slotName: string;
+  list: ConcreteComponent[];
+  componentFactory: IComponentFactory<
+    IComponentConfigs,
+    IComponentAttributes,
+    IComponentEvents,
+    ConcreteComponent
+  >;
+}
 
-  // Window & Document Events
-  | "load"
-  | "DOMContentLoaded"
-  | "resize"
-  | "scroll";
+export type IComponentFactory<
+  C extends IComponentConfigs,
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+  ConcreteComponent extends Component<C, A, E>,
+> = (data: IComponentData<C, A, E, ConcreteComponent>) => ConcreteComponent;

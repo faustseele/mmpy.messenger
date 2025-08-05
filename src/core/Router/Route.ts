@@ -1,12 +1,12 @@
 import {
-  IComponentChildren,
-  ComponentConstructor,
-  ComponentProps,
+  IComponentAttributes,
+  IComponentConfigs,
+  IComponentData,
+  IComponentEvents,
 } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
-import { RouteLink } from "./router.d";
+import { IPageConfigs } from "../../pages/page.d";
+import { IRoute, IRouteConfigs } from "./router.d";
 
 /**
  * @class Route Represents a single application route.
@@ -14,91 +14,84 @@ import { RouteLink } from "./router.d";
  * Can create & show/hide the Component.
  */
 
-/* The 'public contract' for any Route. E.g. _routes in Router */
-export interface IRoute {
-  pathname: string;
-  rootQuery: string;
-  /* Eslint doesn't get that 'pathname' is used */
-  // eslint-disable-next-line no-unused-vars
-  match(pathname: string): boolean;
-  leave(): void;
-  render(): void;
-}
-
-export interface IRouteProps<P extends ComponentProps> {
-  pathname: RouteLink;
-  componentConstructor: ComponentConstructor<P>;
-  optionalProps?: {
-    componentProps?: P;
-    childrenMap?: IComponentChildren;
-  };
+export interface RouteProps<
+  C extends IComponentConfigs,
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+  ConcreteComponent extends Component<C, A, E>,
+> {
+  componentData: IComponentData<C, A, E, ConcreteComponent>;
+  routeConfigs: IRouteConfigs;
 }
 
 /**
  * @implements IRoute for 'public contract' match
  */
-export default class Route<P extends ComponentProps> implements IRoute {
-  public pathname: string;
-  private _componentConstructor: ComponentConstructor<P>;
+export default class Route<
+  C extends IComponentConfigs,
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+  ConcreteComponent extends Component<C, A, E>,
+> implements IRoute
+{
+  private _path: string;
+  private _rootQuery: string = "";
+  private _componentData: IComponentData<C, A, E, ConcreteComponent>;
+  private _pageInstance: ConcreteComponent | null = null;
 
-  private _componentInstance: Component | null = null;
-  private _componentProps: P;
-  private _childrenMap: IComponentChildren;
-
-  public rootQuery: string = "";
-
-  constructor(routeProps: IRouteProps<P>) {
-    const { pathname, componentConstructor, optionalProps } = routeProps;
-    this.pathname = pathname;
-    this._componentConstructor = componentConstructor;
-
-    this._componentProps =
-      optionalProps?.componentProps || ({ configs: {} } as P);
-    this._childrenMap = optionalProps?.childrenMap || {};
+  public get path(): string {
+    return this._path;
+  }
+  public get pageConfigs(): IPageConfigs | object {
+    return this._componentData.configs.pageConfigs ?? {};
   }
 
-  public navigate(pathname: string) {
-    if (this.match(pathname)) {
-      this.pathname = pathname;
+  constructor({
+    componentData,
+    routeConfigs,
+  }: RouteProps<C, A, E, ConcreteComponent>) {
+    this._componentData = componentData;
+    this._path = routeConfigs.path;
+  }
+
+  public navigate(_path: string) {
+    if (this.match(_path)) {
+      this._path = _path;
       this.render();
     }
   }
 
   public leave() {
-    if (this._componentInstance) {
-      this._componentInstance.hide();
+    if (this._pageInstance) {
+      this._pageInstance.hide();
     }
   }
 
-  public match(pathname: string): boolean {
-    return this.pathname === pathname;
+  public match(_path: string): boolean {
+    return this._path === _path;
+  }
+
+  public setRootQuery(next: string) {
+    this._rootQuery = next;
   }
 
   public render() {
-    if (!this._componentInstance) {
-      const domService = new DOMService("article", {});
-      const fragmentService = new FragmentService();
-
-      this._componentInstance = new this._componentConstructor(
-        this._componentProps,
-        this._childrenMap,
-        domService,
-        fragmentService,
+    if (!this._pageInstance) {
+      this._pageInstance = this._componentData.componentFactory(
+        this._componentData,
       );
 
-      const root = document.querySelector(this.rootQuery);
-      if (!root) {
-        throw new Error(
-          `Root element not found with selector: ${this.rootQuery}`,
-        );
+      const root = document.querySelector(this._rootQuery);
+      const element = this._pageInstance!.element;
+
+      if (!root || !element) {
+        console.error("Root:", root, "Element:", element);
+        return;
       }
 
-      const element = this._componentInstance!.getElement();
-      if (element) {
-        root.append(element);
-      }
+      root.append(element);
     }
 
-    this._componentInstance!.show();
+    this._pageInstance!.show();
   }
 }

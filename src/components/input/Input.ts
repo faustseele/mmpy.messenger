@@ -1,35 +1,45 @@
-import { ComponentProps } from "../../framework/Component/Component.d";
+import {
+  ComponentProps,
+  IChildrenData,
+  IComponentAttributes,
+  IComponentData,
+  IComponentEvents,
+  IComponentFactory,
+} from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { guardHTMLElement } from "../../utils/guards.ts";
 import { IInputConfigs, TFieldNames } from "../../utils/input.d";
 import css from "./input.module.css";
 
-export interface InputProps extends ComponentProps {
-  configs: IInputConfigs;
-}
-
-export class Input extends Component {
+export class Input extends Component<
+  IInputConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  IChildrenData
+> {
   private input: HTMLInputElement | undefined = undefined;
   private errorLabel: HTMLElement | undefined = undefined;
 
-  constructor(props: InputProps) {
-    const { configs } = props;
+  constructor(
+    props: ComponentProps<
+      IInputConfigs,
+      IComponentAttributes,
+      IComponentEvents,
+      IChildrenData
+    >,
+  ) {
+    const { deps, data } = props;
 
-    const domService = new DOMService("div", {
-      class: `${css.inputWrap} ${configs.class || ""}`,
-    });
-    const fragmentService = new FragmentService();
+    super({ deps, data });
 
-    super(props, {}, domService, fragmentService);
-
-    this.input = this.getElement()?.querySelector("input") ?? undefined;
+    this.input = this.element?.querySelector("input") ?? undefined;
     this.errorLabel =
-      this.getElement()?.querySelector(`.${css.errorLabel}`) ?? undefined;
+      this.element?.querySelector(`.${css.errorLabel}`) ?? undefined;
   }
 
-  public getNameAndValue(): { name: TFieldNames | ""; value: string }{
+  public getNameAndValue(): { name: TFieldNames | ""; value: string } {
     if (!guardHTMLElement("Input.input", this.input)) {
       return { name: "", value: "" };
     }
@@ -70,8 +80,32 @@ export class Input extends Component {
           type="{{type}}"
           id="{{id}}"
           placeholder="{{placeholder}}"
+          autocomplete="on"
         />
         <span class="${css.errorLabel}"></span>
       `;
   }
 }
+type CF = IComponentFactory<
+  IInputConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  Input
+>;
+
+type D = IComponentData<
+  IInputConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  IChildrenData,
+  Input
+>;
+
+export const createInput: CF = (data: D): Input => {
+  const deps = {
+    domService: new DOMService(data.configs.tagName, data.attributes),
+    fragmentService: new FragmentService(),
+  };
+
+  return new Input({ deps, data });
+};

@@ -1,4 +1,4 @@
-import { IComponentChildren } from "../../framework/Component/Component.d";
+import { IChildrenData } from "../../framework/Component/Component.d";
 import {
   createButton,
   createHeading,
@@ -24,7 +24,7 @@ export const createChildren = (configs: IProfilePageConfigs) => {
     buttonEditInfo: createButton(buttonProps_editInfo),
     buttonEditPassword: createButton(buttonProps_editPassword),
     buttonLogout: createButton(buttonProps_signOut),
-  } satisfies IComponentChildren;
+  } satisfies IChildrenData;
 
   return children;
 };

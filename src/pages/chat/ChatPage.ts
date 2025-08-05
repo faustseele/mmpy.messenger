@@ -3,7 +3,7 @@ import Router from "../../core/Router/Router.ts";
 import { ComponentProps } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import pagesCss from "../pages.module.css";
 import { IChatPageConfigs } from "./chat.d";
 import css from "./chat.module.css";

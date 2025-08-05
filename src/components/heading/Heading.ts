@@ -1,30 +1,36 @@
-import { ComponentProps } from "../../framework/Component/Component.d";
+import {
+  ComponentProps,
+  IChildrenData,
+  IComponentAttributes,
+  IComponentData,
+  IComponentEvents,
+  IComponentFactory,
+} from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { ExtractComponentDataTypes } from "../../utils/generics.ts";
 import { IHeadingConfigs } from "./heading.d";
 import css from "./heading.module.css";
 
-export interface HeadingProps extends ComponentProps {
-  configs: IHeadingConfigs;
-}
+export class Heading extends Component<
+  IHeadingConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  IChildrenData
+> {
+  constructor(props: ComponentProps) {
+    const { deps, data } = props;
 
-export class Heading extends Component {
-  constructor(props: HeadingProps) {
-    const domService = new DOMService("h1", {
-      class: `${css.heading} ${props.configs.class || ""}`,
-    });
-    const fragmentService = new FragmentService();
-
-    super(props, {}, domService, fragmentService);
+    super({ deps, data });
   }
 
   public getSourceMarkup(): string {
     return /*html*/ `
-        {{#if __isClickable}}
+        {{#if isClickable}}
           <a class="${css.heading__text}
             ${css.heading__text_clickable}"">
-            {{__text}}
+            {{text}}
           </a>
 
         {{else}}
@@ -34,9 +40,23 @@ export class Heading extends Component {
               ${css.heading__text_drama}
             {{/if}}">
             
-            {{__text}}
+            {{text}}
           </p>
         {{/if}}
       `;
   }
 }
+
+/* Getting Data types for AuthPage */
+type D = ExtractComponentDataTypes<Heading>;
+
+export const createHeading: IComponentFactory<D[0], D[1], D[2], D[3]> = (
+  data: IComponentData<D[0], D[1], D[2], D[3]>,
+): D[3] => {
+  const deps = {
+    domService: new DOMService(data.configs.tagName, data.attributes),
+    fragmentService: new FragmentService(),
+  };
+
+  return new Heading({ deps, data });
+};

@@ -1,59 +1,71 @@
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { ComponentProps } from "../../framework/Component/Component.d";
+import {
+  ComponentProps,
+  IComponentAttributes,
+  IComponentData,
+  IComponentEvents,
+  IComponentFactory,
+} from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/FragmentService.ts";
-import cssPages from "../pages.module.css";
-import { IAuthPageConfigs } from "./auth.d";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { createChildren } from "../../utils/componentFactory.ts";
+import { IAuthChildrenData, IAuthChildrenMap, IAuthConfigs } from "./auth.d";
 import css from "./auth.module.css";
 import { FormController } from "./FormController.ts";
-import { createChildren } from "./utils.ts";
 
-export interface AuthPageProps extends ComponentProps {
-  configs: IAuthPageConfigs;
-}
+export class AuthPage extends Component<
+  IAuthConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  IAuthChildrenData
+> {
+  private footerModifier: string = "";
 
-export class AuthPage extends Component {
-  public componentName = "AuthPage";
+  constructor(
+    props: ComponentProps<
+      IAuthConfigs,
+      IComponentAttributes,
+      IComponentEvents,
+      IAuthChildrenData
+    >,
+  ) {
+    const { deps, data } = props;
 
-  constructor(props: AuthPageProps) {
-    const domService = new DOMService("form", {
-      class: cssPages.moduleWindow,
-    });
-    const fragmentService = new FragmentService();
+    if (!data.childrenData) {
+      console.error("AuthPage: Children are not defined");
+      return;
+    }
 
-    const { configs } = props;
+    const childrenMap = createChildren(data.childrenData);
 
-    const children = createChildren(configs);
+    const inputs = (childrenMap as IAuthChildrenMap).inputs.list;
 
-    const formController = new FormController(children.inputs);
+    const formController = new FormController(inputs);
 
-    super(
-      {
-        configs,
-        events: {
-          /* Handling <form> onFormSubmit.
-            Submit-button's event-listener is attached
-            automatically through <form> 'submit' listener */
-          submit: (e: Event) =>
-            formController.onFormSubmit(e, RouteLink.Chats),
-        },
-      },
-      children,
-      domService,
-      fragmentService,
-    );
+    data.childrenMap = childrenMap;
 
-    const buttonReroute = children.buttonReroute;
-    const inputs = children.inputs;
+    data.events = {
+      submit: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
+    };
 
+    super({ deps, data });
+
+    // const buttonReroute = children.buttonReroute as Button;
+
+    this.footerModifier =
+      data.configs.type === "/sign-up" ? css.authFooter_signUp : "";
+
+    /**
+     * TODO: move side-effects to componentDidMount */
     /* Setting event for the auth-reroute button */
-    buttonReroute.setProps({
+    (data.childrenMap as IAuthChildrenMap).buttonReroute.setProps({
       events: {
         click: () =>
           Router.go(
-            configs.buttonProps_reroute.configs.__link ?? RouteLink.NotFound,
+            (data.childrenMap as IAuthChildrenMap)!.buttonReroute.configs
+              .link ?? RouteLink.NotFound,
           ),
       },
     });
@@ -63,29 +75,52 @@ export class AuthPage extends Component {
       input.setProps({
         events: {
           focusout: () => formController.onInputBlur(input),
+          
         },
       });
     });
   }
 
   public getSourceMarkup(): string {
-    const footerModifier = this.configs.isSignUp ? css.authFooter_signUp : "";
-
     return /*html*/ `
         <header class="${css.authHeading}">
-          {{{ heading }}}
+          {{{ ${this.childrenData?.heading.configs.slotName} }}}
         </header>
 
         <main class="${css.authContent}">
           <div class="${css.inputsWrapper}">
-            {{{ inputs }}}
+            {{{ ${this.childrenData?.inputs.slotName} }}}
           </div>
         </main>
 
-        <footer class="${css.authFooter} ${footerModifier}">
-          {{{ buttonReroute }}}
-          {{{ buttonFormSubmit }}}
+        <footer class="${css.authFooter} ${this.footerModifier}">
+          {{{ ${this.childrenData?.buttonReroute.configs.slotName} }}}
+          {{{ ${this.childrenData?.buttonFormSubmit.configs.slotName} }}}
         </footer>
     `;
   }
 }
+
+type CF = IComponentFactory<
+  IAuthConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  AuthPage
+>;
+
+type D = IComponentData<
+  IAuthConfigs,
+  IComponentAttributes,
+  IComponentEvents,
+  IAuthChildrenData,
+  AuthPage
+>;
+
+export const createAuthPage: CF = (data: D): AuthPage => {
+  const deps = {
+    domService: new DOMService(data.configs.tagName, data.attributes),
+    fragmentService: new FragmentService(),
+  };
+
+  return new AuthPage({ deps, data });
+};

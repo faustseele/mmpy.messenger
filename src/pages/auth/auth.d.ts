@@ -1,19 +1,52 @@
-/* eslint-disable no-unused-vars */
-/* ...params are used */
-import { ButtonProps } from "../../components/button/Button.d";
-import { IHeadingConfigs } from "../../components/heading/heading.d";
-import { RouteLink } from "../../core/Router/router.d";
+import { Button } from "../../components/button/Button.ts";
+import { Heading } from "../../components/heading/Heading.ts";
+import { Input } from "../../components/input/Input.ts";
 import {
+  IChildrenData,
+  IChildrenMap,
   IComponentConfigs,
+  IComponentData,
+  IComponentFactory,
 } from "../../framework/Component/Component.d";
-import { IInputConfigs } from "../../utils/input.d";
+import { TAuthRoutes } from "./AuthPage.d";
 
 export type TAuthRoutes = RouteLink.SignUp | RouteLink.SignIn;
 
-export interface IAuthPageConfigs extends IComponentConfigs {
-  type: TAuthPage;
-  headingConfigs: IHeadingConfigs;
-  inputConfigs: IInputConfigs[];
-  buttonProps_submit: ButtonProps;
-  buttonProps_reroute: ButtonProps;
+export interface IAuthData<
+  IAuthConfigs,
+  A extends IComponentAttributes,
+  E extends IComponentEvents,
+> extends IComponentData<IAuthConfigs, A, E> {
+  configs: IAuthConfigs;
+  attributes: {
+    _class?: string;
+  };
+  childrenData: IChildrenData;
+  componentFactory: IComponentFactory<C, A, E, ConcreteComponent>;
+}
+
+export interface IAuthConfigs extends IComponentConfigs {
+  type: TAuthRoutes;
+}
+
+export interface IAuthChildrenMap extends IChildrenMap {
+  heading: Heading;
+  inputs: {
+    slotName: string;
+    list: Input[];
+    componentFactory: IComponentFactory<C, A, E, ConcreteComponent>;
+  };
+  buttonFormSubmit: Button;
+  buttonReroute: Button;
+}
+
+export interface IAuthChildrenData extends IChildrenData {
+  heading: IHeadingData;
+  inputs: {
+    slotName: string;
+    list: IInputData[];
+    componentFactory: IComponentFactory;
+  };
+  buttonReroute: IButtonData;
+  buttonFormSubmit: IButtonData;
 }

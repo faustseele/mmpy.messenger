@@ -1,8 +1,5 @@
 import type { TEvent, IMappedEvents, EventCallback } from "./EventBus.d";
 
-/* Eslint issue: '...params' are actually used, see 'emit' method */
-// eslint-disable-next-line no-unused-vars
-
 export default class EventBus {
   private listeners: IMappedEvents = {};
 
