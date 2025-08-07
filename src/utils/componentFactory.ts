@@ -1,54 +1,39 @@
 import {
-  ConcreteComponent,
-  IChildrenData,
-  IChildrenDataList,
-  IChildrenList,
-  IChildrenMap
+  BaseProps,
+  IChildren,
+  IChildrenData
 } from "../framework/Component/Component.d";
 
-export function createChildren(childrenData: IChildrenData): IChildrenMap {
-  if (!childrenData) {
-    throw new Error("Children are not defined", childrenData);
+export function createChildren (data: IChildrenData<BaseProps>): IChildren {
+  if (!data) {
+    throw new Error("childrenData are not defined", data);
   }
 
-  const childrenMap: IChildrenMap = {};
+  const children: IChildren = {};
 
-  Object.values(childrenData).forEach((childrenDataChunk) => {
-    /* IChildrenDataList has slotName & componentFactory suitable for all list-elements */
-    if (isChildrenDataList(childrenDataChunk)) {
-      const childrenList = childrenDataChunk;
-      const listFactory = childrenList.componentFactory;
-      const listKey = childrenList.slotName;
+  Object.values(data).forEach((dataChunk) => {
+    if (dataChunk.type === "list") {
+      const { listKey, childrenFactory, dataList } = dataChunk;
 
-      childrenMap[listKey] = {
-        slotName: listKey,
-        list: [],
-        componentFactory: listFactory,
+      children[listKey] = {
+        type: "list",
+        listKey,
+        children: dataList.map((childData) => childrenFactory(childData)),
+        childrenFactory,
       };
+    } else if (dataChunk.type === "single") {
+      const { data } = dataChunk;
+      const slotKey = data.configs.slotKey;
+      const childFactory = data.componentFactory;
 
-      childrenList.list.forEach((childData) => {
-        (childrenMap[listKey] as IChildrenDataList).list.push(
-          listFactory(childData),
-        );
-      });
+      children[slotKey] = {
+        type: "single",
+        child: childFactory(data),
+      };
     } else {
-      const childData = childrenDataChunk;
-      const childInstance = childData.componentFactory(childData);
-      childrenMap[childData.configs.slotName] = childInstance;
+      throw new Error("Wrong children data type", dataChunk);
     }
   });
 
-  return childrenMap;
-}
-
-export function isChildrenDataList(
-  value: ConcreteComponent | IChildrenDataList,
-): value is IChildrenDataList {
-  return "slotName" in value && typeof value.slotName === "string";
-}
-
-export function isChildrenList(
-  value: ConcreteComponent | IChildrenList,
-): value is IChildrenList {
-  return "slotName" in value && typeof value.slotName === "string";
+  return children;
 }

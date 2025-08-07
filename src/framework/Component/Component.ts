@@ -1,15 +1,11 @@
 import EventBus from "../../services/events/EventBus.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { isChildrenList } from "../../utils/componentFactory.ts";
 import type {
-  ComponentProps,
-  IChildrenData,
-  IChildrenMap,
-  IComponentAttributes,
-  IComponentConfigs,
+  BaseProps,
+  IChildren,
   IComponentData,
-  IComponentEvents,
+  IComponentDeps,
 } from "./Component.d";
 import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
 
@@ -25,39 +21,36 @@ import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
  * public -> EventBus -> private
  * */
 
-export default abstract class Component<
-  /**
-   * Extensions are needed for polymorphic use
-   * E.g. IAuthConfigs
-   * */
-  C extends IComponentConfigs,
-  A extends IComponentAttributes,
-  E extends IComponentEvents,
-  CD extends IChildrenData,
-> {
-  protected domService: DOMService<C, E>;
-  protected fragmentService: FragmentService<C>;
+export interface ComponentParams {
+  deps: IComponentDeps;
+  data: IComponentData;
+}
 
-  private _configs: C;
-  private _attributes?: A;
-  private _events?: E;
-  private _childrenData?: CD;
-  private _childrenMap?: IChildrenMap;
+export default abstract class Component<TProps extends BaseProps> {
+  protected domService: DOMService<TProps["configs"], TProps["events"]>;
+  protected fragmentService: FragmentService<TProps["configs"]>;
+
+  private _configs: TProps["configs"];
+  private _attributes?: TProps["attributes"];
+  private _events?: TProps["events"];
+  private _childrenData?: TProps["childrenData"];
+  private _children?: IChildren;
   private eventBus: EventBus = new EventBus();
-  private _hasChildren(
-    childrenMap = this._childrenMap,
-  ): childrenMap is IChildrenMap {
-    return !!childrenMap && Object.keys(childrenMap).length > 0;
+  private _hasChildren(children = this._children): children is IChildren {
+    return !!children && Object.keys(children).length > 0;
   }
   public readonly id: string;
-  public get configs(): C {
+  public get configs(): TProps["configs"] {
     return this._configs;
   }
   public get element(): HTMLElement | null {
     return this.domService.element;
   }
-  public get childrenData(): CD | undefined {
+  public get childrenData(): TProps["childrenData"] {
     return this._childrenData;
+  }
+  public get children(): IChildren | undefined {
+    return this._children;
   }
 
   /**
@@ -68,16 +61,19 @@ export default abstract class Component<
 
   constructor({
     deps: { domService, fragmentService },
-    data: { configs, events, attributes, childrenData, childrenMap },
-  }: ComponentProps<C, A, E, CD>) {
+    data: { configs, events, attributes, childrenData, children },
+  }: ComponentParams) {
     this.domService = domService;
     this.fragmentService = fragmentService;
 
     this._configs = proxifyConfigs(configs, this.eventBus);
-    this._attributes = proxifyAttributes(attributes ?? {}, this.eventBus) as A;
+    this._attributes = proxifyAttributes(
+      attributes ?? {},
+      this.eventBus,
+    ) as TProps["attributes"];
     this._events = events;
     this._childrenData = childrenData;
-    this._childrenMap = childrenMap;
+    this._children = children;
 
     this.id = this.domService.id;
     this._registerEventBusEvents();
@@ -110,7 +106,7 @@ export default abstract class Component<
     this.eventBus.emit("flow:component-did-mount");
   }
 
-  /* Informational. Propagates to childrenMap */
+  /* Informational. Propagates to children */
   private _componentDidMount(): void {
     this.componentDidMount();
   }
@@ -123,15 +119,15 @@ export default abstract class Component<
     if (!this._hasChildren()) return;
 
     /* Recusively mounting children on one nested level */
-    Object.values(this._childrenMap!).forEach((childrenMapChunk) => {
-      if (isChildrenList(childrenMapChunk)) {
-        const childrenList = childrenMapChunk;
-        childrenList.list.forEach((child) =>
+    Object.values(this._children!).forEach((childrenChunk) => {
+      if (childrenChunk.type === "list") {
+        childrenChunk.children.forEach((child) =>
           child.eventBus.emit("flow:component-did-mount"),
         );
+      } else if (childrenChunk.type === "single") {
+        childrenChunk.child.eventBus.emit("flow:component-did-mount");
       } else {
-        const child = childrenMapChunk;
-        child.eventBus.emit("flow:component-did-mount");
+        throw new Error("Wrong children type", childrenChunk);
       }
     });
   }
@@ -152,7 +148,7 @@ export default abstract class Component<
       ? this.fragmentService.compileWithChildren(
           markup,
           deproxifiedConfigs,
-          this._childrenMap!,
+          this._children!,
         )
       : this.fragmentService.compile(markup, deproxifiedConfigs);
 
@@ -179,7 +175,7 @@ export default abstract class Component<
 
   /**
    * This one is called by Router on new Component-Page.
-   * Propagates to childrenMap.
+   * Propagates to children.
    * Called before the Component is removed from the DOM (unmounted).
    */
   public componentDidUnmount(): void {
@@ -188,15 +184,16 @@ export default abstract class Component<
     if (!this._hasChildren()) return;
 
     /* Recusively mounting children on one nested level */
-    Object.values(this._childrenMap!).forEach((childrenMapChunk) => {
-      if (isChildrenList(childrenMapChunk)) {
-        const childrenList = childrenMapChunk;
-        childrenList.list.forEach((child) =>
+
+    Object.values(this._children!).forEach((childrenChunk) => {
+      if (childrenChunk.type === "list") {
+        childrenChunk.children.forEach((child) =>
           child.eventBus.emit("flow:component-did-unmount"),
         );
+      } else if (childrenChunk.type === "single") {
+        childrenChunk.child.eventBus.emit("flow:component-did-unmount");
       } else {
-        const child = childrenMapChunk;
-        child.eventBus.emit("flow:component-did-unmount");
+        throw new Error("Wrong children type", childrenChunk);
       }
     });
   }
@@ -206,13 +203,13 @@ export default abstract class Component<
    * New events -> invoke swap listeners
    * @Partial is used in case IComponentConfigs in the props are not defined.
    * TODO: implement proxifed event */
-  public setProps(nextProps: Partial<IComponentData<C, A, E, CD, this>>): void {
+  public setProps(nextProps: Partial<IComponentData>): void {
     if (!nextProps) return;
 
     const hasConfigs = !!nextProps.configs;
     const hasAttributes = !!nextProps.attributes;
     const hasEvents = !!nextProps.events;
-    const hasChildrenMap = !!nextProps.childrenMap;
+    const hasChildrenMap = !!nextProps.children;
 
     if (hasConfigs) {
       Object.assign(this._configs, nextProps.configs);
@@ -235,7 +232,7 @@ export default abstract class Component<
     }
 
     if (hasChildrenMap) {
-      Object.assign(this._childrenMap ?? {}, nextProps.childrenData);
+      Object.assign(this._children ?? {}, nextProps.children);
     }
   }
 

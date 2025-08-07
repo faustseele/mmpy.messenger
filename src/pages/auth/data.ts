@@ -1,52 +1,47 @@
 import cssBtn from "../../components/button/button.module.css";
-import cssHeading from "../../components/heading/heading.module.css";
-import cssInput from "../../components/input/input.module.css";
 import { createButton } from "../../components/button/Button.ts";
+import cssHeading from "../../components/heading/heading.module.css";
 import { createHeading } from "../../components/heading/Heading.ts";
+import cssInput from "../../components/input/input.module.css";
 import { createInput } from "../../components/input/Input.ts";
 import { RouteLink } from "../../core/Router/router.d";
-import {
-  IComponentAttributes,
-  IComponentEvents,
-  IComponentFactory,
-} from "../../framework/Component/Component.d";
 import cssPage from "../pages.module.css";
-import { IAuthChildrenData, IAuthConfigs, IAuthData } from "./auth.d";
-import { AuthPage, createAuthPage } from "./AuthPage.ts";
+import { IAuthChildrenData } from "./auth.d";
+import { AuthProps } from "./AuthPage.ts";
 
-function createAuthPageData(
-  configs: IAuthConfigs,
-  attributes: IComponentAttributes,
-  childrenData: IAuthChildrenData,
-  componentFactory: IComponentFactory<
-    IAuthConfigs,
-    IComponentAttributes,
-    IComponentEvents,
-    AuthPage
-  >,
-): IAuthData<IAuthConfigs, IComponentAttributes, IComponentEvents> {
-  return { configs, attributes, childrenData, componentFactory };
+function createAuthProps(
+  configs: AuthProps["configs"],
+  attributes: AuthProps["attributes"],
+  events: AuthProps["events"],
+  childrenData: AuthProps["childrenData"],
+): AuthProps {
+  return { configs, attributes, events, childrenData };
 }
 
 const signUpChildrenData: IAuthChildrenData = {
   heading: {
-    configs: {
-      slotName: "heading",
-      tagName: "h1",
-      type: "/sign-up",
-      text: "Регистрация 🎀",
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "heading",
+        tagName: "h1",
+        type: "/sign-up",
+        text: "Регистрация 🎀",
+      },
+      attributes: {
+        className: cssHeading.heading,
+      },
+      componentFactory: createHeading,
     },
-    attributes: {
-      _class: cssHeading.heading,
-    },
-    componentFactory: createHeading,
   },
   inputs: {
-    slotName: "inputs",
-    list: [
+    type: "list",
+    listKey: "inputs",
+    childrenFactory: createInput,
+    dataList: [
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Имя",
           type: "text",
@@ -57,13 +52,13 @@ const signUpChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "name",
         },
       },
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Фамилия",
           type: "text",
@@ -74,13 +69,13 @@ const signUpChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "surname",
         },
       },
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Логин",
           type: "text",
@@ -91,13 +86,13 @@ const signUpChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "login",
         },
       },
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Эл. почта",
           type: "email",
@@ -108,13 +103,13 @@ const signUpChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "email",
         },
       },
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Пароль",
           type: "password",
@@ -125,13 +120,13 @@ const signUpChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "password",
         },
       },
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Номер телефона",
           type: "tel",
@@ -142,63 +137,72 @@ const signUpChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "phone",
         },
       },
     ],
-    componentFactory: createInput,
   },
   buttonFormSubmit: {
-    configs: {
-      slotName: "buttonFormSubmit",
-      label: "Зарегистрироваться ✓",
-      tagName: "button",
-      type: "submit",
-      isSilent: false,
-    },
-    componentFactory: createButton,
-    attributes: {
-      type: "submit",
-      _class: `${cssBtn.button}`,
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "buttonFormSubmit",
+        label: "Зарегистрироваться ✓",
+        tagName: "button",
+        type: "submit", isSilent: false,
+      },
+      componentFactory: createButton,
+      attributes: {
+        type: "submit",
+        className: `${cssBtn.button}`,
+      },
     },
   },
   buttonReroute: {
-    configs: {
-      slotName: "buttonReroute",
-      label: "Я свой!",
-      tagName: "button",
-      type: "button",
-      isSilent: true,
-      link: RouteLink.SignIn,
-    },
-    componentFactory: createButton,
-    attributes: {
-      type: "button",
-      _class: `${cssBtn.button} ${cssBtn.button_silent}`,
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "buttonReroute",
+        label: "Я свой!",
+        tagName: "button",
+        type: "button",
+        isSilent: true,
+        link: RouteLink.SignIn,
+      },
+      componentFactory: createButton,
+      attributes: {
+        type: "button",
+        className: `${cssBtn.button} ${cssBtn.button_silent}`,
+      },
     },
   },
 };
 
 const signInChildrenData: IAuthChildrenData = {
   heading: {
-    configs: {
-      slotName: "heading",
-      tagName: "h1",
-      type: "/sign-in",
-      text: "Вход 🚪",
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "heading",
+        tagName: "h1",
+        type: "/sign-in",
+        text: "Вход 🚪",
+      },
+      attributes: {
+        className: cssHeading.heading,
+      },
+      componentFactory: createHeading,
     },
-    attributes: {
-      _class: cssHeading.heading,
-    },
-    componentFactory: createHeading,
   },
   inputs: {
-    slotName: "inputs",
-    list: [
+    type: "list",
+    listKey: "inputs",
+    childrenFactory: createInput,
+    dataList: [
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Логин",
           type: "text",
@@ -210,13 +214,13 @@ const signInChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "login",
         },
       },
       {
         configs: {
-          slotName: "input",
+          slotKey: "input",
           tagName: "label",
           label: "Пароль",
           type: "password",
@@ -228,68 +232,73 @@ const signInChildrenData: IAuthChildrenData = {
         },
         componentFactory: createInput,
         attributes: {
-          _class: cssInput.inputWrap,
+          className: cssInput.inputWrap,
           for: "password",
         },
       },
     ],
-    componentFactory: createInput,
   },
   buttonReroute: {
-    configs: {
-      slotName: "buttonReroute",
-      label: "Впервые?",
-      tagName: "button",
-      type: "button",
-      isSilent: true,
-      link: RouteLink.SignUp,
-    },
-    componentFactory: createButton,
-    attributes: {
-      type: "button",
-      _class: `${cssBtn.button} ${cssBtn.button_silent}`,
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "buttonReroute",
+        label: "Впервые?",
+        tagName: "button",
+        type: "button",
+        isSilent: true,
+        link: RouteLink.SignUp,
+      },
+      componentFactory: createButton,
+      attributes: {
+        type: "button",
+        className: `${cssBtn.button} ${cssBtn.button_silent}`,
+      },
     },
   },
   buttonFormSubmit: {
-    configs: {
-      slotName: "buttonFormSubmit",
-      label: "Авторизоваться ✓",
-      tagName: "button",
-      type: "submit",
-      isSilent: false,
-    },
-    componentFactory: createButton,
-    attributes: {
-      type: "submit",
-      _class: `${cssBtn.button}`,
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "buttonFormSubmit",
+        label: "Авторизоваться ✓",
+        tagName: "button",
+        type: "submit",
+        isSilent: false,
+      },
+      componentFactory: createButton,
+      attributes: {
+        type: "submit",
+        className: `${cssBtn.button}`,
+      },
     },
   },
 };
 
-export const signUpData = createAuthPageData(
+export const signUpData = createAuthProps(
   {
-    slotName: "authPage",
+    slotKey: "authPage",
     tagName: "form",
     type: "/sign-up",
   },
   {
-    _class: cssPage.moduleWindow,
+    className: cssPage.moduleWindow,
   },
+  {},
   signUpChildrenData,
-  createAuthPage,
 );
 
-export const signInData = createAuthPageData(
+export const signInData = createAuthProps(
   {
-    slotName: "authPage",
+    slotKey: "authPage",
     tagName: "form",
     type: "/sign-in",
   },
   {
-    _class: cssPage.moduleWindow,
+    className: cssPage.moduleWindow,
   },
+  {},
   signInChildrenData,
-  createAuthPage,
 );
 
 export const signUpRouteConfig = {

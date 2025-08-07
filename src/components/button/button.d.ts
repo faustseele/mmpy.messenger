@@ -13,7 +13,7 @@ export interface IButtonData extends IComponentData {
 }
 
 interface IButtonConfigs extends IComponentConfigs {
-  slotName: string;
+  slotKey: string;
   label: string;
   tagName: "button";
   type: "button" | "submit";

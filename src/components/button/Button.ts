@@ -1,23 +1,23 @@
 import {
-  ComponentProps,
-  IChildrenData,
+  BaseProps,
+  ComponentParams,
   IComponentData,
-  IComponentEvents,
   IComponentFactory,
 } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ExtractComponentDataTypes } from "../../utils/generics.ts";
 import { IButtonAttributes, IButtonConfigs } from "./button.d";
 
-export class Button extends Component<
-  IButtonConfigs,
-  IButtonAttributes,
-  IComponentEvents,
-  IChildrenData
-> {
-  constructor(props: ComponentProps) {
+export interface ButtonProps extends BaseProps {
+  configs: IButtonConfigs;
+  attributes?: IButtonAttributes;
+  events?: BaseProps["events"];
+  children?: BaseProps["children"];
+}
+
+export class Button extends Component<ButtonProps> {
+  constructor(props: ComponentParams<ButtonProps>) {
     const { data, deps } = props;
     super({ deps, data });
   }
@@ -29,12 +29,9 @@ export class Button extends Component<
   }
 }
 
-/* Getting Data types for AuthPage */
-type D = ExtractComponentDataTypes<Button>;
-
-export const createButton: IComponentFactory<D[0], D[1], D[2], D[3]> = (
-  data: IComponentData<D[0], D[1], D[2], D[3]>,
-): D[3] => {
+export const createButton: IComponentFactory<ButtonProps> = (
+  data: IComponentData<ButtonProps>,
+): Button => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),

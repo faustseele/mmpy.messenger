@@ -1,11 +1,5 @@
-import {
-  IComponentAttributes,
-  IComponentConfigs,
-  IComponentData,
-  IComponentEvents,
-} from "../../framework/Component/Component.d";
+import { BaseProps } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
-import { IPageConfigs } from "../../pages/page.d";
 import { IRoute, IRouteConfigs } from "./router.d";
 
 /**
@@ -14,43 +8,27 @@ import { IRoute, IRouteConfigs } from "./router.d";
  * Can create & show/hide the Component.
  */
 
-export interface RouteProps<
-  C extends IComponentConfigs,
-  A extends IComponentAttributes,
-  E extends IComponentEvents,
-  ConcreteComponent extends Component<C, A, E>,
-> {
-  componentData: IComponentData<C, A, E, ConcreteComponent>;
+export interface RouteProps {
   routeConfigs: IRouteConfigs;
+  pageFactory: () => Component<BaseProps>;
 }
 
 /**
  * @implements IRoute for 'public contract' match
  */
-export default class Route<
-  C extends IComponentConfigs,
-  A extends IComponentAttributes,
-  E extends IComponentEvents,
-  ConcreteComponent extends Component<C, A, E>,
-> implements IRoute
-{
+export default class Route implements IRoute {
   private _path: string;
   private _rootQuery: string = "";
-  private _componentData: IComponentData<C, A, E, ConcreteComponent>;
-  private _pageInstance: ConcreteComponent | null = null;
+  /* Factory args are passed in index.ts */
+  private _pageFactory: () => Component<BaseProps>;
+  private _pageInstance: Component<BaseProps> | null = null;
 
   public get path(): string {
     return this._path;
   }
-  public get pageConfigs(): IPageConfigs | object {
-    return this._componentData.configs.pageConfigs ?? {};
-  }
 
-  constructor({
-    componentData,
-    routeConfigs,
-  }: RouteProps<C, A, E, ConcreteComponent>) {
-    this._componentData = componentData;
+  constructor({ routeConfigs, pageFactory }: RouteProps) {
+    this._pageFactory = pageFactory;
     this._path = routeConfigs.path;
   }
 
@@ -77,9 +55,7 @@ export default class Route<
 
   public render() {
     if (!this._pageInstance) {
-      this._pageInstance = this._componentData.componentFactory(
-        this._componentData,
-      );
+      this._pageInstance = this._pageFactory();
 
       const root = document.querySelector(this._rootQuery);
       const element = this._pageInstance!.element;

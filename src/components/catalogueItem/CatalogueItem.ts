@@ -4,9 +4,9 @@ import avatar from "../../../static/avatar.png";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { ICatalogueItemConfigs } from "./catalogueItem.d";
-import { ComponentProps } from "../../framework/Component/Component.d";
+import { ComponentParams } from "../../framework/Component/Component.d";
 
-export interface CatalogueItemProps extends ComponentProps {
+export interface CatalogueItemProps extends ComponentParams {
   configs: ICatalogueItemConfigs;
 }
 

@@ -1,11 +1,11 @@
-import { ComponentProps } from "../../framework/Component/Component.d";
+import { ComponentParams } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { ISubheadingConfigs } from "./subheading.d";
 import css from "./subheading.module.css";
 
-export interface SubheadingProps extends ComponentProps {
+export interface SubheadingProps extends ComponentParams {
   configs: ISubheadingConfigs;
 }
 

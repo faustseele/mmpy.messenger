@@ -1,7 +1,7 @@
 import profileAvatar from "../../../static/profile-avatar.png";
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { ComponentProps } from "../../framework/Component/Component.d";
+import { ComponentParams } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
@@ -11,7 +11,7 @@ import { IProfilePageConfigs } from "./profile.d";
 import css from "./profile.module.css";
 import { createChildren } from "./utils.ts";
 
-export interface ProfilePageProps extends ComponentProps {
+export interface ProfilePageProps extends ComponentParams {
   configs: IProfilePageConfigs;
 }
 

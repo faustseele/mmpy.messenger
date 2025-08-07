@@ -1,12 +1,12 @@
-import { IComponentData } from "../../framework/Component/Component.d";
+import { IComponentConfigs, IComponentData } from "../../framework/Component/Component.d";
 
-export interface IHeadingData<>extends IComponentData {
+export interface IHeadingData extends IComponentData {
   configs: IHeadingConfigs;
   componentFactory: IComponentFactory;
 }
 
 interface IHeadingConfigs extends IComponentConfigs {
-  slotName: string;
+  slotKey: string;
   tagName: "h1" | "h2" | "h3";
   type: string;
   text: string;

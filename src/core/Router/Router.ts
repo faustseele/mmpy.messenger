@@ -1,13 +1,9 @@
-import Component from "../../framework/Component/Component.ts";
 import {
-  IChildrenData,
-  IComponentAttributes,
-  IComponentConfigs,
-  IComponentData,
-  IComponentEvents,
+  BaseProps
 } from "../../framework/Component/Component.d";
-import { IRoute, IRouteConfigs, RouteLink } from "./router.d";
+import Component from "../../framework/Component/Component.ts";
 import Route from "./Route.ts";
+import { IRoute, IRouteConfigs, RouteLink } from "./router.d";
 
 /**
  * @class Router is a @mediator singleton class that listens
@@ -49,17 +45,11 @@ class Router {
    * Registers a new Route with the Router.
    * @returns this for chaining
    */
-  public use<
-    C extends IComponentConfigs,
-    A extends IComponentAttributes,
-    E extends IComponentEvents,
-    CD extends IChildrenData,
-    ConcreteComponent extends Component<C, A, E, CD>,
-  >(
-    componentData: IComponentData<C, A, E, CD, ConcreteComponent>,
+  public use(
     routeConfigs: IRouteConfigs,
+    pageFactory: () => Component<BaseProps>,
   ): this {
-    const route = new Route({ componentData, routeConfigs });
+    const route = new Route({ routeConfigs, pageFactory });
     this._routes.push(route);
     return this;
   }

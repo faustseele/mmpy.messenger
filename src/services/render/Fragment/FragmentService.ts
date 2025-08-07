@@ -1,10 +1,10 @@
 import Handlebars from "handlebars";
 import {
-  ConcreteComponent,
-  IChildrenMap,
-  IComponentConfigs
+  BaseProps,
+  IChildren,
+  IComponentConfigs,
 } from "../../../framework/Component/Component.d";
-import { isChildrenList } from "../../../utils/componentFactory.ts";
+import Component from "../../../framework/Component/Component.ts";
 
 /**
  * @FragmentService – Stateless feature-service.
@@ -16,7 +16,7 @@ import { isChildrenList } from "../../../utils/componentFactory.ts";
  * @compiledSourceMarkup is a Handlebars-compiled HTML-string with placeholders
  * @parentElement & @childElement are ready-to-use HTML-Elements
  * Handled by DOMService
- * @childrenMap is a state with homogeneous children in each prop
+ * @children is a state with homogeneous children in each prop
  * @childrenList is an array of children with the same key
  */
 export default class FragmentService<C extends IComponentConfigs> {
@@ -34,10 +34,10 @@ export default class FragmentService<C extends IComponentConfigs> {
   public compileWithChildren(
     sourceMarkup: string,
     configs: C,
-    childrenMap: IChildrenMap,
+    children: IChildren,
   ): DocumentFragment {
     /* Creating <div id="random UUID"></div>.. placeholders for children */
-    const divPlaceholders = this._createDivPlaceholders(childrenMap);
+    const divPlaceholders = this._createDivPlaceholders(children);
 
     /**
      * Handling {{expressions-configs}} & {{{children-html expressions}}}
@@ -60,7 +60,7 @@ export default class FragmentService<C extends IComponentConfigs> {
     /* Swapping <div> children placeholders with corresponding Elements*/
     const fragmentWithElements = this._replacePlaceholdersInFragment(
       fragmentWithPlaceholders,
-      childrenMap,
+      children,
     );
 
     return fragmentWithElements;
@@ -70,29 +70,26 @@ export default class FragmentService<C extends IComponentConfigs> {
    * Generates an object with either one div-placeholder '<tag></tag>' by key
    * or a concatenated list of div-placeholders <tags> by key.
    */
-  private _createDivPlaceholders(
-    childrenMap: IChildrenMap,
-  ): Record<string, string> {
+  private _createDivPlaceholders(children: IChildren): Record<string, string> {
     const divPlaceholders: Record<string, string> = {};
 
-    Object.values(childrenMap).forEach((childrenMapChunk) => {
-      if (isChildrenList(childrenMapChunk)) {
-        const childrenList = childrenMapChunk;
-        const childrenListKey = childrenList.slotName;
+    Object.values(children).forEach((childrenChunk) => {
+      if (childrenChunk.type === "list") {
+        const { children, listKey } = childrenChunk;
 
-        const placeholdersList = childrenList.list.map(
+        const placeholdersList = children.map(
           (child) =>
             /* Setting placeholder for each child -> placeholdersList[] */
             `<div data-id="${child.id}"></div>`,
         );
 
         /* Concatenating placeholdersList[] into one string */
-        divPlaceholders[childrenListKey] = placeholdersList.join("");
+        divPlaceholders[listKey] = placeholdersList.join("");
       } else {
-        const child = childrenMapChunk;
-        const childKey = child.configs.slotName;
+        const { child } = childrenChunk;
+        const slotKey = child.configs.slotKey;
 
-        divPlaceholders[childKey] = `<div data-id="${child.id}"></div>`;
+        divPlaceholders[slotKey] = `<div data-id="${child.id}"></div>`;
       }
     });
 
@@ -112,21 +109,21 @@ export default class FragmentService<C extends IComponentConfigs> {
    */
   private _replacePlaceholdersInFragment(
     fragment: DocumentFragment,
-    childrenMap: IChildrenMap,
+    children: IChildren,
   ): DocumentFragment {
-    Object.values(childrenMap).forEach((childrenMapChunk) => {
-      if (isChildrenList(childrenMapChunk)) {
-        const childrenList = childrenMapChunk;
-        childrenList.list.forEach((child) => {
+    Object.values(children).forEach((childrenChunk) => {
+      if (childrenChunk.type === "list") {
+        const { children } = childrenChunk;
+        children.forEach((child) => {
           findAndReplace(child);
         });
       } else {
-        const child = childrenMapChunk;
+        const { child } = childrenChunk;
         findAndReplace(child);
       }
     });
 
-    function findAndReplace(child: ConcreteComponent) {
+    function findAndReplace(child: Component<BaseProps>) {
       const placeholder = fragment.querySelector(`[data-id="${child.id}"]`);
       const childElement = child.element;
 

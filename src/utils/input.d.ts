@@ -11,7 +11,7 @@ export interface IInputData extends IComponentData {
 }
 
 interface IInputConfigs extends IComponentConfigs {
-  slotName: string;
+  slotKey: string;
   tagName: "input";
   label: string;
   type: "text" | "email" | "password" | "tel";

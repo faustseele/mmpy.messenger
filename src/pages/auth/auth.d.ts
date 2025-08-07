@@ -1,52 +1,68 @@
 import { Button } from "../../components/button/Button.ts";
+import { IHeadingData } from "../../components/heading/heading.d";
 import { Heading } from "../../components/heading/Heading.ts";
 import { Input } from "../../components/input/Input.ts";
 import {
+  BaseProps,
+  IChildren,
   IChildrenData,
-  IChildrenMap,
   IComponentConfigs,
   IComponentData,
   IComponentFactory,
 } from "../../framework/Component/Component.d";
-import { TAuthRoutes } from "./AuthPage.d";
+import { AuthProps } from "./AuthPage.ts";
 
-export type TAuthRoutes = RouteLink.SignUp | RouteLink.SignIn;
-
-export interface IAuthData<
-  IAuthConfigs,
-  A extends IComponentAttributes,
-  E extends IComponentEvents,
-> extends IComponentData<IAuthConfigs, A, E> {
-  configs: IAuthConfigs;
-  attributes: {
-    _class?: string;
-  };
-  childrenData: IChildrenData;
-  componentFactory: IComponentFactory<C, A, E, ConcreteComponent>;
+export interface IAuthData extends IComponentData<BaseProps> {
+  configs: AuthProps["configs"];
+  attributes: AuthProps["attributes"];
+  events: AuthProps["events"];
+  childrenData: AuthProps["childrenData"];
+  children: IAuthChildren;
+  componentFactory: IComponentFactory<BaseProps>;
 }
 
 export interface IAuthConfigs extends IComponentConfigs {
-  type: TAuthRoutes;
+  type: RouteLink.SignUp | RouteLink.SignIn;
 }
 
-export interface IAuthChildrenMap extends IChildrenMap {
-  heading: Heading;
-  inputs: {
-    slotName: string;
-    list: Input[];
-    componentFactory: IComponentFactory<C, A, E, ConcreteComponent>;
+export interface IAuthChildrenData extends IChildrenData<AuthProps> {
+  heading: {
+    type: "single";
+    data: IHeadingData;
   };
-  buttonFormSubmit: Button;
-  buttonReroute: Button;
+  inputs: {
+    type: "list";
+    listKey: string;
+    childrenFactory: IComponentFactory<BaseProps>;
+    dataList: IInputData[];
+  };
+  buttonReroute: {
+    type: "single";
+    data: IButtonData;
+  };
+  buttonFormSubmit: {
+    type: "single";
+    data: IButtonData;
+  };
 }
 
-export interface IAuthChildrenData extends IChildrenData {
-  heading: IHeadingData;
-  inputs: {
-    slotName: string;
-    list: IInputData[];
-    componentFactory: IComponentFactory;
+export interface IAuthChildren extends IChildren {
+  heading: {
+    type: "single";
+    child: Heading;
   };
-  buttonReroute: IButtonData;
-  buttonFormSubmit: IButtonData;
+  inputs: {
+    type: "list";
+    listKey: string;
+    children: Input[];
+    childrenFactory: IComponentFactory<BaseProps>;
+  };
+  buttonFormSubmit: {
+    type: "single";
+    child: Button;
+  };
+  buttonReroute: {
+    type: "single";
+    child: Button;
+  };
 }

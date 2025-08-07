@@ -1,11 +1,11 @@
-import { ComponentProps } from "../../framework/Component/Component.d";
+import { ComponentParams } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { IMessageConfigs } from "./message.d";
 import css from "./message.module.css";
 
-export interface MessageProps extends ComponentProps {
+export interface MessageProps extends ComponentParams {
   configs: IMessageConfigs;
 }
 

@@ -1,4 +1,4 @@
-import { ComponentProps } from "../../framework/Component/Component.d";
+import { ComponentParams } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import Router from "../../core/Router/Router.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
@@ -12,7 +12,7 @@ import pagesCss from "../pages.module.css";
 import { IErrorPageConfigs } from "./errors.d";
 import css from "./errors.module.css";
 
-export interface ErrorPageProps extends ComponentProps {
+export interface ErrorPageProps extends ComponentParams {
   configs: IErrorPageConfigs;
 }
 

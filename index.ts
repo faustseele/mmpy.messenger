@@ -1,5 +1,6 @@
 import "./index.css";
 import Router from "./src/core/Router/Router.ts";
+import { createAuthPage } from "./src/pages/auth/AuthPage.ts";
 import {
   signInData,
   signInRouteConfig,
@@ -9,6 +10,9 @@ import {
 
 export const rootQuery = "#app";
 
-Router.use(signUpData, signUpRouteConfig).use(signInData, signInRouteConfig);
+Router.use(signUpRouteConfig, () => createAuthPage(signUpData)).use(
+  signInRouteConfig,
+  () => createAuthPage(signInData),
+);
 
 Router.start(rootQuery);

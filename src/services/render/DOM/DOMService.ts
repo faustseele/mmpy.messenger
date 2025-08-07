@@ -15,7 +15,7 @@ import { TagNames } from "./DOM.d";
 
 export default class DOMService<
   A extends IComponentAttributes,
-  E extends IComponentEvents,
+  E extends IComponentEvents | undefined,
 > {
   private readonly _tagName: TagNames;
   private _attributes?: A = undefined;
@@ -50,8 +50,8 @@ export default class DOMService<
 
     /* Handling Elements attributes */
     Object.entries(attributes).forEach(([key, value]) => {
-      /* Handling special '_class' field */
-      if (key === "_class") {
+      /* Handling special 'className' field */
+      if (key === "className") {
         element.classList.add(...value.split(" "));
         return;
       }

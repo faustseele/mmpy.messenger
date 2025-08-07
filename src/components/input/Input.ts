@@ -1,10 +1,8 @@
 import {
-  ComponentProps,
-  IChildrenData,
-  IComponentAttributes,
+  BaseProps,
+  ComponentParams,
   IComponentData,
-  IComponentEvents,
-  IComponentFactory,
+  IComponentFactory
 } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
@@ -13,23 +11,18 @@ import { guardHTMLElement } from "../../utils/guards.ts";
 import { IInputConfigs, TFieldNames } from "../../utils/input.d";
 import css from "./input.module.css";
 
-export class Input extends Component<
-  IInputConfigs,
-  IComponentAttributes,
-  IComponentEvents,
-  IChildrenData
-> {
+export interface InputProps extends BaseProps {
+  configs: IInputConfigs;
+  attributes?: BaseProps["attributes"];
+  events?: BaseProps["events"];
+  children?: BaseProps["children"];
+}
+
+export class Input extends Component<InputProps> {
   private input: HTMLInputElement | undefined = undefined;
   private errorLabel: HTMLElement | undefined = undefined;
 
-  constructor(
-    props: ComponentProps<
-      IInputConfigs,
-      IComponentAttributes,
-      IComponentEvents,
-      IChildrenData
-    >,
-  ) {
+  constructor(props: ComponentParams<InputProps>) {
     const { deps, data } = props;
 
     super({ deps, data });
@@ -86,22 +79,10 @@ export class Input extends Component<
       `;
   }
 }
-type CF = IComponentFactory<
-  IInputConfigs,
-  IComponentAttributes,
-  IComponentEvents,
-  Input
->;
 
-type D = IComponentData<
-  IInputConfigs,
-  IComponentAttributes,
-  IComponentEvents,
-  IChildrenData,
-  Input
->;
-
-export const createInput: CF = (data: D): Input => {
+export const createInput: IComponentFactory<InputProps> = (
+  data: IComponentData<InputProps>,
+): Input => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),

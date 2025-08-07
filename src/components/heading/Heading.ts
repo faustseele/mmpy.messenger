@@ -1,25 +1,17 @@
 import {
-  ComponentProps,
-  IChildrenData,
-  IComponentAttributes,
+  BaseProps,
+  ComponentParams,
   IComponentData,
-  IComponentEvents,
-  IComponentFactory,
+  IComponentFactory
 } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { ExtractComponentDataTypes } from "../../utils/generics.ts";
-import { IHeadingConfigs } from "./heading.d";
 import css from "./heading.module.css";
 
-export class Heading extends Component<
-  IHeadingConfigs,
-  IComponentAttributes,
-  IComponentEvents,
-  IChildrenData
-> {
-  constructor(props: ComponentProps) {
+export class Heading extends Component<BaseProps> {
+  constructor(props: ComponentParams) {
     const { deps, data } = props;
 
     super({ deps, data });

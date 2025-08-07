@@ -16,7 +16,6 @@ export interface IRoute {
   render(): void;
   /* Getters */
   readonly path: string;
-  readonly pageConfigs: IPageConfigs | object;
 }
 
 /* Eslint doesn't like the enums */

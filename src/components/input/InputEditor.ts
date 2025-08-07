@@ -1,9 +1,9 @@
-import { ComponentProps } from "../../framework/Component/Component.d";
+import { ComponentParams } from "../../framework/Component/Component.d";
 import { IInputConfigs } from "../../utils/input.d";
 import css from "./input.module.css";
 import { Input } from "./Input.ts";
 
-export interface InputEditorProps extends ComponentProps {
+export interface InputEditorProps extends ComponentParams {
   configs: IInputConfigs;
 }
 
