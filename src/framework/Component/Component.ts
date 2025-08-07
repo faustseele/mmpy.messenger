@@ -21,9 +21,9 @@ import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
  * public -> EventBus -> private
  * */
 
-export interface ComponentParams {
+export interface ComponentParams<TProps extends BaseProps = BaseProps> {
   deps: IComponentDeps;
-  data: IComponentData;
+  data: IComponentData<TProps>;
 }
 
 export default abstract class Component<TProps extends BaseProps> {
@@ -203,7 +203,9 @@ export default abstract class Component<TProps extends BaseProps> {
    * New events -> invoke swap listeners
    * @Partial is used in case IComponentConfigs in the props are not defined.
    * TODO: implement proxifed event */
-  public setProps(nextProps: Partial<IComponentData>): void {
+  public setProps(
+    nextProps: Partial<IComponentData>,
+  ): void {
     if (!nextProps) return;
 
     const hasConfigs = !!nextProps.configs;

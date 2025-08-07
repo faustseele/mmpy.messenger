@@ -1,8 +1,4 @@
-import {
-  BaseProps,
-  IChildren,
-  IChildrenData
-} from "../framework/Component/Component.d";
+import { BaseProps, IChildren, IChildrenData } from "../../framework/Component/Component.d";
 
 export function createChildren (data: IChildrenData<BaseProps>): IChildren {
   if (!data) {
@@ -13,11 +9,11 @@ export function createChildren (data: IChildrenData<BaseProps>): IChildren {
 
   Object.values(data).forEach((dataChunk) => {
     if (dataChunk.type === "list") {
-      const { listKey, childrenFactory, dataList } = dataChunk;
+      const { slotKey, childrenFactory, dataList } = dataChunk;
 
-      children[listKey] = {
+      children[slotKey] = {
         type: "list",
-        listKey,
+        slotKey,
         children: dataList.map((childData) => childrenFactory(childData)),
         childrenFactory,
       };

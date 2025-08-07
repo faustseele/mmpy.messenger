@@ -5,14 +5,14 @@ import Router from "../../core/Router/Router.ts";
 import {
   BaseProps,
   IComponentData,
-  IComponentFactory
 } from "../../framework/Component/Component.d";
 import Component, {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
+import { IComponentFactory } from "../../services/factory/factory.d";
+import { createChildren } from "../../services/factory/factory.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { createChildren } from "../../utils/componentFactory.ts";
 import { IAuthChildren, IAuthChildrenData, IAuthConfigs } from "./auth.d";
 import css from "./auth.module.css";
 import { FormController } from "./FormController.ts";
@@ -78,7 +78,7 @@ export class AuthPage extends Component<AuthProps> {
 
         <main class="${css.authContent}">
           <div class="${css.inputsWrapper}">
-            {{{ ${this.childrenData?.inputs.listKey} }}}
+            {{{ ${this.childrenData?.inputs.slotKey} }}}
           </div>
         </main>
 

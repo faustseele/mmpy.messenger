@@ -75,7 +75,7 @@ export default class FragmentService<C extends IComponentConfigs> {
 
     Object.values(children).forEach((childrenChunk) => {
       if (childrenChunk.type === "list") {
-        const { children, listKey } = childrenChunk;
+        const { children, slotKey } = childrenChunk;
 
         const placeholdersList = children.map(
           (child) =>
@@ -84,7 +84,7 @@ export default class FragmentService<C extends IComponentConfigs> {
         );
 
         /* Concatenating placeholdersList[] into one string */
-        divPlaceholders[listKey] = placeholdersList.join("");
+        divPlaceholders[slotKey] = placeholdersList.join("");
       } else {
         const { child } = childrenChunk;
         const slotKey = child.configs.slotKey;

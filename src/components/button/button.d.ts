@@ -1,21 +1,14 @@
 import { RouteLink } from "../../core/Router/router.d";
 import {
   IComponentAttributes,
-  IComponentConfigs,
-  IComponentData,
-  IComponentFactory,
+  IComponentConfigs
 } from "../../framework/Component/Component.d";
+import { TagNames } from "../../services/render/DOM/DOM.d";
 
-export interface IButtonData extends IComponentData {
-  configs: IButtonConfigs;
-  componentFactory: IComponentFactory;
-  attributes: IButtonAttributes
-}
-
-interface IButtonConfigs extends IComponentConfigs {
+export interface IButtonConfigs extends IComponentConfigs {
   slotKey: string;
   label: string;
-  tagName: "button";
+  tagName: Extract<TagNames, "button">;
   type: "button" | "submit";
   isSilent?: boolean;
   modifier?: string;

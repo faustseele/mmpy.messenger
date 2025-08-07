@@ -18,7 +18,11 @@ function createAuthProps(
   return { configs, attributes, events, childrenData };
 }
 
-const signUpChildrenData: IAuthChildrenData = {
+/**
+ * Todo: fix types here, get rid of casting
+ */
+
+const signUpChildrenData = {
   heading: {
     type: "single",
     data: {
@@ -36,7 +40,7 @@ const signUpChildrenData: IAuthChildrenData = {
   },
   inputs: {
     type: "list",
-    listKey: "inputs",
+    slotKey: "inputs",
     childrenFactory: createInput,
     dataList: [
       {
@@ -177,9 +181,9 @@ const signUpChildrenData: IAuthChildrenData = {
       },
     },
   },
-};
+} as IAuthChildrenData;
 
-const signInChildrenData: IAuthChildrenData = {
+const signInChildrenData = {
   heading: {
     type: "single",
     data: {
@@ -197,7 +201,7 @@ const signInChildrenData: IAuthChildrenData = {
   },
   inputs: {
     type: "list",
-    listKey: "inputs",
+    slotKey: "inputs",
     childrenFactory: createInput,
     dataList: [
       {
@@ -228,7 +232,6 @@ const signInChildrenData: IAuthChildrenData = {
           errorMessage: "",
           id: "password",
           placeholder: "Пароль",
-          name: "password",
         },
         componentFactory: createInput,
         attributes: {
@@ -273,7 +276,7 @@ const signInChildrenData: IAuthChildrenData = {
       },
     },
   },
-};
+} as IAuthChildrenData;
 
 export const signUpData = createAuthProps(
   {

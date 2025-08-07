@@ -1,21 +1,20 @@
 import {
   BaseProps,
-  ComponentParams,
   IComponentData,
-  IComponentFactory
 } from "../../framework/Component/Component.d";
-import Component from "../../framework/Component/Component.ts";
+import Component, { ComponentParams } from "../../framework/Component/Component.ts";
+import { IComponentFactory } from "../../services/factory/factory.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { guardHTMLElement } from "../../utils/guards.ts";
-import { IInputConfigs, TFieldNames } from "../../utils/input.d";
+import { IInputAttributes, IInputConfigs, TFieldNames } from "../../utils/input.d";
 import css from "./input.module.css";
 
 export interface InputProps extends BaseProps {
   configs: IInputConfigs;
-  attributes?: BaseProps["attributes"];
+  attributes?: IInputAttributes;
   events?: BaseProps["events"];
-  children?: BaseProps["children"];
+  childrenData?: BaseProps["childrenData"];
 }
 
 export class Input extends Component<InputProps> {

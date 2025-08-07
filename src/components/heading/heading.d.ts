@@ -1,13 +1,9 @@
-import { IComponentConfigs, IComponentData } from "../../framework/Component/Component.d";
+import { IComponentConfigs } from "../../framework/Component/Component.d";
+import { TagNames } from "../../services/render/DOM/DOM.d";
 
-export interface IHeadingData extends IComponentData {
-  configs: IHeadingConfigs;
-  componentFactory: IComponentFactory;
-}
-
-interface IHeadingConfigs extends IComponentConfigs {
+export interface IHeadingConfigs extends IComponentConfigs {
   slotKey: string;
-  tagName: "h1" | "h2" | "h3";
+  tagName: Extract<TagNames, "h1" | "h2" | "h3">
   type: string;
   text: string;
   isClickable?: boolean;

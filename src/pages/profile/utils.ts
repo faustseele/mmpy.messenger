@@ -3,7 +3,7 @@ import {
   createButton,
   createHeading,
   createInputEditor,
-} from "../../utils/componentFactory.ts";
+} from "../../services/factory/factory.ts";
 import { IProfilePageConfigs } from "./profile.d";
 
 export const createChildren = (configs: IProfilePageConfigs) => {

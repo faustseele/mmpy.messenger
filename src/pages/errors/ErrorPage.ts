@@ -7,7 +7,7 @@ import {
   createButton,
   createHeading,
   createSubheading,
-} from "../../utils/componentFactory.ts";
+} from "../../services/factory/factory.ts";
 import pagesCss from "../pages.module.css";
 import { IErrorPageConfigs } from "./errors.d";
 import css from "./errors.module.css";

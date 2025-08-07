@@ -1,16 +1,18 @@
-import {
-  BaseProps,
+import { BaseProps, IComponentData } from "../../framework/Component/Component.d";
+import Component, {
   ComponentParams,
-  IComponentData,
-  IComponentFactory
-} from "../../framework/Component/Component.d";
-import Component from "../../framework/Component/Component.ts";
+} from "../../framework/Component/Component.ts";
+import { IComponentFactory } from "../../services/factory/factory.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ExtractComponentDataTypes } from "../../utils/generics.ts";
+import { IHeadingConfigs } from "./heading.d";
 import css from "./heading.module.css";
 
-export class Heading extends Component<BaseProps> {
+export interface HeadingProps extends BaseProps {
+  configs: IHeadingConfigs;
+}
+
+export class Heading extends Component<HeadingProps> {
   constructor(props: ComponentParams) {
     const { deps, data } = props;
 
@@ -39,12 +41,9 @@ export class Heading extends Component<BaseProps> {
   }
 }
 
-/* Getting Data types for AuthPage */
-type D = ExtractComponentDataTypes<Heading>;
-
-export const createHeading: IComponentFactory<D[0], D[1], D[2], D[3]> = (
-  data: IComponentData<D[0], D[1], D[2], D[3]>,
-): D[3] => {
+export const createHeading: IComponentFactory<HeadingProps> = (
+  data: IComponentData<HeadingProps>,
+): Heading => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),
