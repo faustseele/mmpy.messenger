@@ -1,34 +1,29 @@
-import { ComponentParams } from "../../framework/Component/Component.d";
-import Component from "../../framework/Component/Component.ts";
+import { IComponentData } from "../../framework/Component/Component.d";
+import Component, { ComponentParams } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ISubheadingConfigs } from "./subheading.d";
-import css from "./subheading.module.css";
+import { IComponentFactory } from "../../utils/factory/factory.d";
+import { SubheadingProps } from "./subheading.d";
 
-export interface SubheadingProps extends ComponentParams {
-  configs: ISubheadingConfigs;
-}
-
-export class Subheading extends Component {
-  constructor(props: SubheadingProps) {
-    const subheadingClasses = [
-      css.subheading,
-      props.configs.__isDrama ? css.subheading_drama : "",
-      props.configs.class || "",
-    ]
-      .join(" ")
-      .trim();
-
-    const domService = new DOMService("h2", { class: subheadingClasses });
-    const fragmentService = new FragmentService();
-
-    /* Setting subheading to lowercase for better readability */
-    props.configs.__text = props.configs.__text.toLowerCase();
-
-    super(props, {}, domService, fragmentService);
+export class Subheading extends Component<SubheadingProps> {
+  constructor(props: ComponentParams<SubheadingProps>) {
+    super(props);
   }
 
   public getSourceMarkup(): string {
-    return `{{__text}}`;
+    return `{{text}}`;
   }
 }
+
+export const createSubheading: IComponentFactory<SubheadingProps> = (
+  data: IComponentData<SubheadingProps>,
+): Subheading => {
+  data.configs.text = data.configs.text.toLowerCase();
+
+  const deps = {
+    domService: new DOMService(data.configs.tagName, data.attributes),
+    fragmentService: new FragmentService(),
+  };
+  
+  return new Subheading({ deps, data });
+};

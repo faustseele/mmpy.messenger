@@ -43,6 +43,9 @@ export default abstract class Component<TProps extends BaseProps> {
   public get configs(): TProps["configs"] {
     return this._configs;
   }
+  public get attributes(): TProps["attributes"] {
+    return this._attributes;
+  }
   public get element(): HTMLElement | null {
     return this.domService.element;
   }

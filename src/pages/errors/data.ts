@@ -1,38 +1,132 @@
+import cssBtn from "../../components/button/button.module.css";
+import { createButton } from "../../components/button/Button.ts";
+import { createHeading } from "../../components/heading/Heading.ts";
+import cssSubheading from "../../components/subheading/subheading.module.css";
+import { createSubheading } from "../../components/subheading/Subheading.ts";
 import { RouteLink } from "../../core/Router/router.d";
-import { IErrorPageConfigs } from "./errors.d";
+import { IChildrenData } from "../../framework/Component/Children.d";
+import { BaseProps } from "../../framework/Component/Component.d";
+import pagesCss from "../pages.module.css";
+import { ErrorChildrenDataPropsMap, IErrorPageConfigs } from "./errors.d";
+import cssErr from "./errors.module.css";
 
-export const errorData404: IErrorPageConfigs = {
-  __code: "404",
-  headingConfigs: {
-    __text: "⛔ Ошибка ️404",
-    __isDrama: true,
-  },
-  subheadingConfigs: {
-    __text: "🌑 Не туда попали",
-    __isDrama: true,
-  },
+interface ErrorPageProps extends BaseProps {
+  configs: IErrorPageConfigs;
+  childrenData?: IChildrenData<ErrorChildrenDataPropsMap>;
+}
 
-  buttonConfigs: {
-    type: "button",
-    __label: "Назад к чатам",
-    __link: RouteLink.Chats,
+export const errorPage404Data: ErrorPageProps = {
+  configs: {
+    slotKey: "errorPage",
+    tagName: "div",
+    code: "404",
+  },
+  attributes: {
+    className: `${pagesCss.moduleWindow} ${cssErr.moduleWindow_errors}`,
+  },
+  childrenData: {
+    heading: {
+      type: "single",
+      data: {
+        configs: {
+          slotKey: "heading",
+          tagName: "h1",
+          text: "⛔ Ошибка 404",
+          isDrama: true,
+        },
+        componentFactory: createHeading,
+      },
+    },
+    subheading: {
+      type: "single",
+      data: {
+        configs: {
+          slotKey: "subheading",
+          tagName: "h2",
+          text: "🌑 Не туда попали",
+        },
+        attributes: {
+          className: `${cssSubheading.subheading} ${cssSubheading.subheading_drama}`,
+        },
+        componentFactory: createSubheading,
+      },
+    },
+    button: {
+      type: "single",
+      data: {
+        configs: {
+          slotKey: "button",
+          tagName: "button",
+          label: "Назад к чатам",
+          type: "button",
+          link: RouteLink.Chats,
+        },
+        attributes: { className: cssBtn.button },
+        componentFactory: createButton,
+      },
+    },
   },
 };
 
-export const errorData500: IErrorPageConfigs = {
-  __code: "500",
-  headingConfigs: {
-    __text: "🪜 Ошибка ️500",
-    __isDrama: true,
+export const errorPage500Data: ErrorPageProps = {
+  configs: {
+    slotKey: "errorPage",
+    tagName: "div",
+    code: "500",
   },
-  subheadingConfigs: {
-    __text: "🔧 Мы уже фиксим",
-    __isDrama: true,
+  attributes: {
+    className: `${pagesCss.moduleWindow} ${cssErr.moduleWindow_errors}`,
   },
+  childrenData: {
+    heading: {
+      type: "single",
+      data: {
+        configs: {
+          slotKey: "heading",
+          tagName: "h1",
+          text: "🪜 Ошибка 500",
+          isDrama: true,
+        },
+        componentFactory: createHeading,
+      },
+    },
+    subheading: {
+      type: "single",
+      data: {
+        configs: {
+          slotKey: "subheading",
+          tagName: "h2",
+          text: "🔧 Мы уже фиксим",
+        },
+        attributes: {
+          className: `${cssSubheading.subheading} ${cssSubheading.subheading_drama}`,
+        },
+        componentFactory: createSubheading,
+      },
+    },
+    button: {
+      type: "single",
+      data: {
+        configs: {
+          slotKey: "button",
+          tagName: "button",
+          label: "Назад к чатам",
+          type: "button",
+          link: RouteLink.Chats,
+        },
+        attributes: { className: cssBtn.button },
+        componentFactory: createButton,
+      },
+    },
+  },
+};
 
-  buttonConfigs: {
-    type: "button",
-    __label: "Назад к чатам",
-    __link: RouteLink.Chats,
-  },
+export const error404RouteConfig = {
+  path: RouteLink.NotFound,
+  rootQuery: "#app",
+};
+
+export const error500RouteConfig = {
+  path: RouteLink.Error,
+  rootQuery: "#app",
 };

@@ -26,7 +26,7 @@ export class Heading extends Component<HeadingProps> {
         {{else}}
         
           <p class="${css.heading__text}
-            {{#if __isDrama}}
+            {{#if isDrama}}
               ${css.heading__text_drama}
             {{/if}}">
             
