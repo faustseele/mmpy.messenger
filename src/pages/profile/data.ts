@@ -1,77 +1,187 @@
+import profileAvatar from "../../../static/profile-avatar.png";
+import cssBtn from "../../components/button/button.module.css";
+import { createButton } from "../../components/button/Button.ts";
+import { createHeading } from "../../components/heading/Heading.ts";
+import { createInput } from "../../components/input/Input.ts";
+import { createInputEditor } from "../../components/input/InputEditor.ts";
 import { RouteLink } from "../../core/Router/router.d";
-import { IProfilePageConfigs } from "./profile.d";
+import { IChildrenData } from "../../framework/Component/Children.d";
+import { BaseProps } from "../../framework/Component/Component.d";
+import cssPages from "../pages.module.css";
+import { IProfilePageConfigs, ProfileChildrenDataPropsMap } from "./profile.d";
+import cssProfile from "./profile.module.css";
+import cssInput from "../../components/input/input.module.css";
+import cssHeading from "../../components/heading/heading.module.css";
 
-export const profileData: IProfilePageConfigs = {
-  __profileName: "Vanya",
-  headingConfigs_profile: {
-    __text: "Профиль 👤",
+interface ProfilePageProps extends BaseProps {
+  configs: IProfilePageConfigs;
+  childrenData?: IChildrenData<ProfileChildrenDataPropsMap>;
+}
+
+const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
+  heading_profile: {
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "heading_profile",
+        tagName: "h1",
+        text: "Профиль 👤",
+      },
+      attributes: { className: cssHeading.heading },
+      componentFactory: createHeading,
+    },
   },
-  headingConfigs_backToChats: {
-    __text: "⮘ Назад",
-    __isClickable: true,
-    __link: "/chats",
+  heading_backToChats: {
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "heading_backToChats",
+        tagName: "h1",
+        text: "⮘ Назад",
+        isClickable: true,
+        link: RouteLink.Chats,
+      },
+      attributes: { className: cssHeading.heading },
+      componentFactory: createHeading,
+    },
   },
-  inputEditorConfigs: [
-    {
-      id: "email",
-      type: "email",
-      __label: "Эл. почта",
-      placeholder: "pochta@yandex.ru",
-    },
-    {
-      id: "name",
-      type: "text",
-      __label: "Имя",
-      placeholder: "Иван",
-    },
-    {
-      id: "surname",
-      type: "text",
-      __label: "Фамилия",
-      placeholder: "Иванов",
-    },
-    {
-      id: "login",
-      type: "text",
-      __label: "Логин",
-      placeholder: "ivanov",
-    },
-    {
-      id: "display_name",
-      type: "text",
-      __label: "Имя в чате",
-      placeholder: "Vanya",
-    },
-    {
-      id: "phone",
-      type: "tel",
-      __label: "Номер телефона",
-      placeholder: "8905551234",
-    },
-  ],
-  buttonProps_editInfo: {
-    configs: {
-      type: "button",
-      __label: "Изменить данные",
-      __link: RouteLink.Chats,
-    },
-    events: {},
+  inputEditors: {
+    type: "list",
+    slotKey: "inputEditors",
+    childrenFactory: createInputEditor,
+    dataList: [
+      {
+        configs: {
+          slotKey: "input",
+          tagName: "label",
+          id: "email",
+          type: "email",
+          label: "Эл. почта",
+          placeholder: "pochta@yandex.ru",
+        },
+        attributes: { className: cssInput.inputEditLabel },
+        componentFactory: createInput,
+      },
+      {
+        configs: {
+          slotKey: "input",
+          tagName: "label",
+          id: "name",
+          type: "text",
+          label: "Имя",
+          placeholder: "Иван",
+        },
+        attributes: { className: cssInput.inputEditLabel },
+        componentFactory: createInput,
+      },
+      {
+        configs: {
+          slotKey: "input",
+          tagName: "label",
+          id: "surname",
+          type: "text",
+          label: "Фамилия",
+          placeholder: "Иванов",
+        },
+        attributes: { className: cssInput.inputEditLabel },
+        componentFactory: createInput,
+      },
+      {
+        configs: {
+          slotKey: "input",
+          tagName: "label",
+          id: "login",
+          type: "text",
+          label: "Логин",
+          placeholder: "ivanov",
+        },
+        attributes: { className: cssInput.inputEditLabel },
+        componentFactory: createInput,
+      },
+      {
+        configs: {
+          slotKey: "input",
+          tagName: "label",
+          id: "display_name",
+          type: "text",
+          label: "Имя в чате",
+          placeholder: "Vanya",
+        },
+        attributes: { className: cssInput.inputEditLabel },
+        componentFactory: createInput,
+      },
+      {
+        configs: {
+          slotKey: "input",
+          tagName: "label",
+          id: "phone",
+          type: "tel",
+          label: "Номер телефона",
+          placeholder: "8905551234",
+        },
+        attributes: { className: cssInput.inputEditLabel },
+        componentFactory: createInput,
+      },
+    ],
   },
-  buttonProps_editPassword: {
-    configs: {
-      type: "button",
-      __label: "Изменить пароль",
-      __link: RouteLink.Chats,
+  buttonEditInfo: {
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "buttonEditInfo",
+        tagName: "button",
+        label: "Изменить данные",
+        type: "submit",
+      },
+      attributes: { className: cssBtn.button, type: "submit" },
+      componentFactory: createButton,
     },
-    events: {},
   },
-  buttonProps_signOut: {
-    configs: {
-      type: "button",
-      __label: "Выйти",
-      __isSilent: true,
-      __link: RouteLink.SignIn,
+  buttonEditPassword: {
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "buttonEditPassword",
+        tagName: "button",
+        label: "Изменить пароль",
+        type: "button",
+      },
+      attributes: { className: cssBtn.button },
+      componentFactory: createButton,
     },
-    events: {},
   },
+  buttonLogout: {
+    type: "single",
+    data: {
+      configs: {
+        slotKey: "buttonLogout",
+        tagName: "button",
+        label: "Выйти",
+        type: "button",
+        isSilent: true,
+      },
+      attributes: {
+        className: `${cssBtn.button} ${cssBtn.button_silent}`,
+      },
+      componentFactory: createButton,
+    },
+  },
+};
+
+export const profilePageData: ProfilePageProps = {
+  configs: {
+    slotKey: "profilePage",
+    tagName: "form",
+    profileName: "Vanya",
+    profileAvatar: profileAvatar,
+  },
+  attributes: {
+    className: `${cssPages.moduleWindow} ${cssProfile.moduleWindow_profile}`,
+  },
+  childrenData: profileChildrenData,
+};
+
+export const profilePageRouteConfig = {
+  path: RouteLink.Profile,
+  rootQuery: "#app",
 };

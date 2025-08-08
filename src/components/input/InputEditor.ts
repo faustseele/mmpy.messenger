@@ -1,28 +1,42 @@
-import { ComponentParams } from "../../framework/Component/Component.d";
-import { IInputConfigs } from "../../utils/input.d";
+import { IComponentData } from "../../framework/Component/Component.d";
+import { ComponentParams } from "../../framework/Component/Component.ts";
+import DOMService from "../../services/render/DOM/DOMService.ts";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { IComponentFactory } from "../../utils/factory/factory.d";
+import { Input, InputProps } from "./Input.ts"; // 👈 Import the base class and its props
 import css from "./input.module.css";
-import { Input } from "./Input.ts";
-
-export interface InputEditorProps extends ComponentParams {
-  configs: IInputConfigs;
-}
 
 export class InputEditor extends Input {
-  constructor(props: InputEditorProps) {
+  constructor(props: ComponentParams<InputProps>) {
     super(props);
   }
 
   public getSourceMarkup(): string {
     return /*html*/ `
-        <input
-          class="${css.input} ${css.input_editor}"
-          name="{{id}}"
-          type="{{type}}"
-          id="{{id}}"
-          placeholder="{{placeholder}}"
-        />
-        <label class="${css.inputEditLabel}" for="{{id}}">{{__label}}</label>
-        <span class="${css.errorLabel}"></span>
-      `;
+    <span class="${css.labelSpan}">
+      {{label}}
+    </span>
+      <input
+        class="${css.input} ${css.input_editor}"
+        name="{{id}}"
+        type="{{type}}"
+        id="{{id}}"
+        placeholder="{{placeholder}}"
+        value="{{value}}"
+        autocomplete="on"
+      />
+      <span class="${css.errorLabel}"></span>
+    `;
   }
 }
+
+export const createInputEditor: IComponentFactory<InputProps> = (
+  data: IComponentData<InputProps>,
+): InputEditor => {
+  const deps = {
+    domService: new DOMService(data.configs.tagName, data.attributes),
+    fragmentService: new FragmentService(),
+  };
+
+  return new InputEditor({ deps, data });
+};

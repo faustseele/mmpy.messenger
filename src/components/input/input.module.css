@@ -12,14 +12,25 @@
     -webkit-text-fill-color: var(--color-content-light) !important;
 }
 
-.inputWrap {
-  position: relative;
+.inputEditLabel {
   width: 100%;
+  position: relative;
+}
+
+.labelSpan {
+  position: absolute;
+  left: 8px;
+  top: 15px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+  color: var(--color-content-darkest);
 }
 
 .input {
   width: 100%;
-  padding: 14px 8px 15px 8px;
+  padding: 14px 10px 15px 10px;
 
   display: flex;
   text-align: center;
@@ -82,16 +93,4 @@
 .input:focus {
   outline: none;
   border-color: var(--color-acc);
-}
-
-.inputEditLabel {
-  position: absolute;
-  top: 14px;
-  left: 8px;
-
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 15px;
-  letter-spacing: 0.02em;
-  color: var(--color-content-darkest);
 }
