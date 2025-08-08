@@ -3,7 +3,7 @@ import {
   IComponentData,
 } from "../../framework/Component/Component.d";
 import Component, { ComponentParams } from "../../framework/Component/Component.ts";
-import { IComponentFactory } from "../../services/factory/factory.d";
+import { IComponentFactory } from "../../utils/factory/factory.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { IButtonAttributes, IButtonConfigs } from "./button.d";

@@ -1,57 +1,25 @@
-import { Button } from "../../components/button/Button.ts";
+import { Button, ButtonProps } from "../../components/button/Button.ts";
 import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
 import { Input, InputProps } from "../../components/input/Input.ts";
+import { ChildrenPropsMap } from "../../framework/Component/Children.d";
 import {
-  BaseProps,
-  IChildren,
-  IChildrenData,
-  IComponentConfigs,
-  IComponentData,
-  IComponentFactory
+  IComponentConfigs
 } from "../../framework/Component/Component.d";
 
 export interface IAuthConfigs extends IComponentConfigs {
   type: RouteLink.SignUp | RouteLink.SignIn;
 }
 
-export interface IAuthChildrenData extends IChildrenData { 
-  heading: {
-    type: "single";
-    data: IComponentData<HeadingProps>;
-  };
-  inputs: {
-    type: "list";
-    slotKey: "inputs";
-    childrenFactory: IComponentFactory<BaseProps>;
-    dataList: IComponentData<InputProps>[]
-  };
-  buttonReroute: {
-    type: "single";
-    data: IComponentData<ButtonProps>;
-  };
-  buttonFormSubmit: {
-    type: "single";
-    data: IComponentData<ButtonProps>;
-  };
-};
+export interface AuthChildrenDataPropsMap extends ChildrenPropsMap {
+  heading: HeadingProps;
+  inputs: InputProps;
+  buttonReroute: ButtonProps;
+  buttonFormSubmit: ButtonProps;
+}
 
-export interface IAuthChildren extends IChildren {
-  heading: {
-    type: "single";
-    child: Heading;
-  };
-  inputs: {
-    type: "list";
-    slotKey: string;
-    children: Input[];
-    childrenFactory: IComponentFactory<BaseProps>;
-  };
-  buttonFormSubmit: {
-    type: "single";
-    child: Button;
-  };
-  buttonReroute: {
-    type: "single";
-    child: Button;
-  };
+export interface AuthChildrenPropsMap extends ChildrenPropsMap {
+  heading: Heading;
+  inputs: Input;
+  buttonReroute: Button;
+  buttonFormSubmit: Button;
 }

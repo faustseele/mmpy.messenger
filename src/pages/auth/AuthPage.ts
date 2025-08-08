@@ -2,6 +2,7 @@ import { Button } from "../../components/button/Button.ts";
 import { Input } from "../../components/input/Input.ts";
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
+import { IChildrenData } from "../../framework/Component/Children.d";
 import {
   BaseProps,
   IComponentData,
@@ -9,11 +10,17 @@ import {
 import Component, {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
-import { IComponentFactory } from "../../services/factory/factory.d";
-import { createChildren } from "../../services/factory/factory.ts";
+import {
+  getChildFromMap,
+  getChildrenDataFromMap,
+  getChildrenFromMap,
+  getChildSlotKey,
+} from "../../framework/Component/utils.ts";
+import { IComponentFactory } from "../../utils/factory/factory.d";
+import { createChildren } from "../../utils/factory/factory.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IAuthChildren, IAuthChildrenData, IAuthConfigs } from "./auth.d";
+import { AuthChildrenDataPropsMap, IAuthConfigs } from "./auth.d";
 import css from "./auth.module.css";
 import { FormController } from "./FormController.ts";
 
@@ -21,7 +28,7 @@ export interface AuthProps extends BaseProps {
   configs: IAuthConfigs;
   attributes?: BaseProps["attributes"];
   events?: BaseProps["events"];
-  childrenData?: IAuthChildrenData;
+  childrenData?: IChildrenData<AuthChildrenDataPropsMap>;
 }
 
 export class AuthPage extends Component<AuthProps> {
@@ -39,11 +46,22 @@ export class AuthPage extends Component<AuthProps> {
   public componentDidMount(): void {
     super.componentDidMount();
 
-    const children = this.children as IAuthChildren;
-    const formController = new FormController(children.inputs.children);
+    const inputs = getChildrenFromMap(this.children!, "inputs");
+    const buttonReroute = getChildFromMap(this.children!, "buttonReroute");
 
-    this._setRerouteEvent(children.buttonReroute.child);
-    this._setInputsEvents(children.inputs.children, formController);
+    const formController = new FormController(inputs);
+
+    this._setRerouteEvent(buttonReroute);
+    this._setInputsEvents(inputs, formController);
+    this._setSubmitEvent(formController);
+  }
+
+  private _setSubmitEvent(formController: FormController): void {
+    this.setProps({
+      events: {
+        submit: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
+      },
+    });
   }
 
   /* Setting event for the auth-reroute button */
@@ -71,36 +89,47 @@ export class AuthPage extends Component<AuthProps> {
   }
 
   public getSourceMarkup(): string {
+    const headingSlotKey = getChildSlotKey(this.childrenData!, "heading");
+    const inputsSlotKey = getChildSlotKey(this.childrenData!, "inputs");
+    const buttonRerouteSlotKey = getChildSlotKey(
+      this.childrenData!,
+      "buttonReroute",
+    );
+    const buttonFormSubmitSlotKey = getChildSlotKey(
+      this.childrenData!,
+      "buttonFormSubmit",
+    );
+
     return /*html*/ `
         <header class="${css.authHeading}">
-          {{{ ${this.childrenData?.heading.data.configs.slotKey} }}}
+          {{{ ${headingSlotKey} }}}
         </header>
 
         <main class="${css.authContent}">
           <div class="${css.inputsWrapper}">
-            {{{ ${this.childrenData?.inputs.slotKey} }}}
+            {{{ ${inputsSlotKey} }}}
           </div>
         </main>
 
         <footer class="${css.authFooter} ${this.footerModifier}">
-          {{{ ${this.childrenData?.buttonReroute.data.configs.slotKey} }}}
-          {{{ ${this.childrenData?.buttonFormSubmit.data.configs.slotKey} }}}
+          {{{ ${buttonRerouteSlotKey} }}}
+          {{{ ${buttonFormSubmitSlotKey} }}}
         </footer>
     `;
   }
 }
 
 export const createAuthPage: IComponentFactory<AuthProps> = (
-  data: IComponentData
+  data: IComponentData,
 ): AuthPage => {
   if (!data.childrenData) {
     throw new Error("AuthPage: ChildrenData are not defined");
   }
 
-  const {childrenData} = data;
+  const { childrenData } = data;
 
-  const children = createChildren(childrenData) as IAuthChildren;
-  const inputs = children.inputs.children;
+  const children = createChildren(childrenData);
+  const inputs = getChildrenDataFromMap(childrenData, "inputs");
   const formController = new FormController(inputs);
 
   const deps = {

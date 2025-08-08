@@ -5,8 +5,9 @@ import { createHeading } from "../../components/heading/Heading.ts";
 import cssInput from "../../components/input/input.module.css";
 import { createInput } from "../../components/input/Input.ts";
 import { RouteLink } from "../../core/Router/router.d";
+import { IChildrenData } from "../../framework/Component/Children.d";
 import cssPage from "../pages.module.css";
-import { IAuthChildrenData } from "./auth.d";
+import { AuthChildrenDataPropsMap } from "./auth.d";
 import { AuthProps } from "./AuthPage.ts";
 
 function createAuthProps(
@@ -18,11 +19,7 @@ function createAuthProps(
   return { configs, attributes, events, childrenData };
 }
 
-/**
- * Todo: fix types here, get rid of casting
- */
-
-const signUpChildrenData = {
+const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
   heading: {
     type: "single",
     data: {
@@ -181,9 +178,9 @@ const signUpChildrenData = {
       },
     },
   },
-} as IAuthChildrenData;
+}
 
-const signInChildrenData = {
+const signInChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
   heading: {
     type: "single",
     data: {
@@ -228,6 +225,7 @@ const signInChildrenData = {
           tagName: "label",
           label: "Пароль",
           type: "password",
+          name: "password",
           isError: false,
           errorMessage: "",
           id: "password",
@@ -276,7 +274,7 @@ const signInChildrenData = {
       },
     },
   },
-} as IAuthChildrenData;
+};
 
 export const signUpData = createAuthProps(
   {

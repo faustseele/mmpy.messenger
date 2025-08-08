@@ -1,4 +1,5 @@
 import EventBus from "../../services/events/EventBus.ts";
+import { ChildrenPropsMap, IChildren, IChildrenData } from "./Children.d";
 import { IComponentAttributes, IComponentConfigs } from "./Component.d";
 
 /* Implementing Reactivity through Proxy. Emits 'CDU' */
@@ -70,3 +71,52 @@ export function proxifyAttributes<A extends IComponentAttributes>(
 /**
  * Todo: implement proxifed event
  */
+
+export function getChildSlotKey(
+  data: IChildrenData<ChildrenPropsMap>,
+  key: keyof IChildrenData<ChildrenPropsMap>,
+): string {
+  return data[key].type === "list"
+    ? data[key].slotKey
+    : data[key].data.configs.slotKey;
+}
+
+export function getChildrenDataFromMap<
+  Map extends ChildrenPropsMap = ChildrenPropsMap,
+>(data: IChildrenData<Map>, key: keyof IChildrenData<Map>): Map[keyof Map][] {
+  if (data[key].type === "single") {
+    console.error("getChildrenDataFromMap: Single children are not supported");
+    return {} as Map[keyof Map];
+  }
+  return data[key].dataList;
+}
+
+export function getChildDataFromMap<
+  Map extends ChildrenPropsMap = ChildrenPropsMap,
+>(data: IChildrenData<Map>, key: keyof IChildrenData<Map>): Map[keyof Map] {
+  if (data[key].type === "list") {
+    console.error("getChildDataFromMap: List children are not supported");
+    return {} as Map[keyof Map];
+  }
+  return data[key].data;
+}
+
+export function getChildrenFromMap<
+  Map extends ChildrenPropsMap = ChildrenPropsMap,
+>(map: IChildren<Map>, key: keyof IChildren<Map>): Map[keyof Map][] {
+  if (map[key].type === "single") {
+    console.error("getChildrenFromMap: Single children are not supported");
+    return {} as Map[keyof Map][];
+  }
+  return map[key].children;
+}
+
+export function getChildFromMap<
+  Map extends ChildrenPropsMap = ChildrenPropsMap,
+>(map: IChildren<Map>, key: keyof IChildren<Map>): Map[keyof Map] {
+  if (map[key].type === "list") {
+    console.error("getChildFromMap: List children are not supported");
+    return {} as Map[keyof Map];
+  }
+  return map[key].child;
+}

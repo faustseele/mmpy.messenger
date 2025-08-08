@@ -2,10 +2,10 @@
 /* ...params are used */
 import { RouteLink } from "../../core/Router/router.d";
 import { IPageConfigs } from "../../pages/page.d";
-import { IComponentFactory } from "../../services/factory/factory.d";
+import { IComponentFactory } from "../../utils/factory/factory.d";
 import { TagNames } from "../../services/render/DOM/DOM.d";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import Component from "./Component.ts";
+import { IChildren, IChildrenData } from "./Children.d";
 
 /**
  * Defines the fundamental public contract for a Component's properties.
@@ -55,40 +55,3 @@ export interface IComponentAttributes {
 
 /* Event handlers for a concrete Component instance */
 export type IComponentEvents = Record<string, (event: Event) => void>;
-
-/**
- * No extenstions here, because IChildrenData is general abstract Component
- * For conctrete Components types, look at each children interfaces in the pages
- */
-
-export type IChildrenData = Record<
-  string,
-  /* IComponentData<BaseProps> Represents the data for ANY valid component. */
-  | { type: "single"; data: IComponentData<BaseProps> }
-  | {
-      type: "list";
-      slotKey: string;
-      dataList: readonly IComponentData<BaseProps>[];
-      childrenFactory: IComponentFactory<BaseProps>;
-    }
->;
-
-/**
- * It's a proptery/state of the Component.
- */
-export type IChildren = Record<
-  string,
-  | { type: "single"; child: Component<BaseProps> }
-  | {
-      type: "list";
-      slotKey: string;
-      children: Component<BaseProps>[];
-      childrenFactory: IComponentFactory<BaseProps>;
-    }
->;
-
-export interface IChildrenList {
-  slotKey: string;
-  list: Component<BaseProps>[];
-  componentFactory: IComponentFactory<BaseProps>;
-}

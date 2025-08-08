@@ -5,7 +5,7 @@ import {
   createInput,
   createMessage,
   createMessageField,
-} from "../../services/factory/factory.ts";
+} from "../../utils/factory/factory.ts";
 import { IChatPageConfigs } from "./chat.d";
 import css from "./chat.module.css";
 

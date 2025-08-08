@@ -1,10 +1,10 @@
 import Handlebars from "handlebars";
 import {
   BaseProps,
-  IChildren,
   IComponentConfigs,
 } from "../../../framework/Component/Component.d";
 import Component from "../../../framework/Component/Component.ts";
+import { IChildren } from "../../../framework/Component/Children.d";
 
 /**
  * @FragmentService – Stateless feature-service.

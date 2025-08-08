@@ -8,6 +8,7 @@ export interface IInputConfigs extends IComponentConfigs {
   label: string;
   type: "text" | "email" | "password" | "tel";
   isError?: boolean;
+  name: TFieldNames;
   id: TFieldNames;
   errorMessage?: string;
   placeholder: string;

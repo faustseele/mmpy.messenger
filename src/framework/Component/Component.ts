@@ -1,9 +1,9 @@
 import EventBus from "../../services/events/EventBus.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { IChildren } from "./Children.d";
 import type {
   BaseProps,
-  IChildren,
   IComponentData,
   IComponentDeps,
 } from "./Component.d";
