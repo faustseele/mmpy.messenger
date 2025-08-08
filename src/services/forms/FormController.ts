@@ -52,6 +52,9 @@ export class FormController {
   /* Validates a single input component
     and shows/hides its error. */
   private _handleFieldValidation(input: Input | InputEditor): boolean {
+    if (!input) {
+      console.error("FormController: Input is not defined");  
+    }
     const { name, value } = input.getNameAndValue();
     const errorMessage = validateInputField(name, value);
 

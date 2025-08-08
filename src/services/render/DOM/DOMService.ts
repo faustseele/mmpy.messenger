@@ -50,6 +50,8 @@ export default class DOMService<
 
     /* Handling Elements attributes */
     Object.entries(attributes).forEach(([key, value]) => {
+      if (!value) return;
+
       /* Handling special 'className' field */
       if (key === "className") {
         element.classList.add(...value.split(" "));

@@ -12,17 +12,16 @@ import Component, {
 } from "../../framework/Component/Component.ts";
 import {
   getChildFromMap,
-  getChildrenDataFromMap,
   getChildrenFromMap,
   getChildSlotKey,
 } from "../../framework/Component/utils.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
-import { createChildren } from "../../utils/factory/factory.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { IComponentFactory } from "../../utils/factory/factory.d";
+import { createChildren } from "../../utils/factory/factory.ts";
 import { AuthChildrenDataPropsMap, IAuthConfigs } from "./auth.d";
 import css from "./auth.module.css";
-import { FormController } from "./FormController.ts";
+import { FormController } from "../../services/forms/FormController.ts";
 
 export interface AuthProps extends BaseProps {
   configs: IAuthConfigs;
@@ -129,21 +128,17 @@ export const createAuthPage: IComponentFactory<AuthProps> = (
   const { childrenData } = data;
 
   const children = createChildren(childrenData);
-  const inputs = getChildrenDataFromMap(childrenData, "inputs");
-  const formController = new FormController(inputs);
 
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),
   };
 
-  const preparedData = {
-    ...data,
-    children,
-    events: {
-      submit: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
+  return new AuthPage({
+    deps,
+    data: {
+      ...data,
+      children,
     },
-  };
-
-  return new AuthPage({ deps, data: preparedData });
+  });
 };

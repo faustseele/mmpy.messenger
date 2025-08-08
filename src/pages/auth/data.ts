@@ -151,7 +151,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         slotKey: "buttonFormSubmit",
         label: "Зарегистрироваться ✓",
         tagName: "button",
-        type: "submit", isSilent: false,
+        type: "submit",
       },
       componentFactory: createButton,
       attributes: {
@@ -168,7 +168,6 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         label: "Я свой!",
         tagName: "button",
         type: "button",
-        isSilent: true,
         link: RouteLink.SignIn,
       },
       componentFactory: createButton,
@@ -178,7 +177,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
       },
     },
   },
-}
+};
 
 const signInChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
   heading: {
@@ -247,7 +246,6 @@ const signInChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         label: "Впервые?",
         tagName: "button",
         type: "button",
-        isSilent: true,
         link: RouteLink.SignUp,
       },
       componentFactory: createButton,
@@ -265,7 +263,6 @@ const signInChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         label: "Авторизоваться ✓",
         tagName: "button",
         type: "submit",
-        isSilent: false,
       },
       componentFactory: createButton,
       attributes: {

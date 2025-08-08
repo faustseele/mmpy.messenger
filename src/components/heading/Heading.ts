@@ -1,16 +1,12 @@
-import { BaseProps, IComponentData } from "../../framework/Component/Component.d";
+import { IComponentData } from "../../framework/Component/Component.d";
 import Component, {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IHeadingConfigs } from "./heading.d";
+import { IComponentFactory } from "../../utils/factory/factory.d";
+import { HeadingProps } from "./heading.d";
 import css from "./heading.module.css";
-
-export interface HeadingProps extends BaseProps {
-  configs: IHeadingConfigs;
-}
 
 export class Heading extends Component<HeadingProps> {
   constructor(props: ComponentParams) {

@@ -1,12 +1,20 @@
-import { IComponentConfigs } from "../../framework/Component/Component.d";
+import {
+  BaseProps,
+  IComponentConfigs,
+} from "../../framework/Component/Component.d";
+import { TagNames } from "../../services/render/DOM/DOM.d";
+
+export type MessageType = "incoming" | "outgoing" | "date";
+
+export interface MessageProps extends BaseProps {
+  configs: IMessageConfigs;
+  attributes?: BaseProps['attributes'];
+}
 
 export interface IMessageConfigs extends IComponentConfigs {
-  __isOutgoing: boolean;
-  __isIncoming: boolean;
-  __isDateBubble: boolean;
-  __text?: string;
-  /* This will be used in an `src` attribute */
-  __image?: string;
-  __date: string;
-  class?: string;
+  tagName: Extract<TagNames, "article" | "div">;
+  type: MessageType;
+  date: string;
+  text?: string;
+  image?: string;
 }

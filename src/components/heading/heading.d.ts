@@ -1,5 +1,10 @@
-import { IComponentConfigs } from "../../framework/Component/Component.d";
+import { IComponentAttributes, IComponentConfigs } from "../../framework/Component/Component.d";
 import { TagNames } from "../../services/render/DOM/DOM.d";
+
+export interface HeadingProps extends BaseProps {
+  configs: IHeadingConfigs;
+  attributes: IHeadingAttributes;
+}
 
 export interface IHeadingConfigs extends IComponentConfigs {
   slotKey: string;
@@ -9,4 +14,8 @@ export interface IHeadingConfigs extends IComponentConfigs {
   isClickable?: boolean;
   isDrama?: boolean;
   link?: Routes;
+}
+
+interface IHeadingAttributes extends IComponentAttributes {
+  className: string;
 }

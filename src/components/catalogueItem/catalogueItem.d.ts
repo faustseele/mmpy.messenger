@@ -1,9 +1,19 @@
-import { IComponentConfigs } from "../../framework/Component/Component.d";
+import {
+  BaseProps,
+  IComponentConfigs,
+} from "../../framework/Component/Component.d";
+import { TagNames } from "../../services/render/DOM/DOM.d";
+
+export interface CatalogueItemProps extends BaseProps {
+  configs: ICatalogueItemConfigs;
+  attributes?: BaseProps["attributes"];
+}
 
 export interface ICatalogueItemConfigs extends IComponentConfigs {
-  __title: string;
-  __contentText: string;
-  __date: string;
-  __unreadCount: string;
-  class?: string;
+  tagName: Extract<TagNames, "article" | "li">;
+  title: string;
+  contentText: string;
+  date: string;
+  unreadCount: string;
+  avatar: string;
 }

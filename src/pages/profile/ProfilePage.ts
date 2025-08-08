@@ -5,7 +5,7 @@ import { ComponentParams } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { FormController } from "../auth/FormController.ts";
+import { FormController } from "../../services/forms/FormController.ts";
 import pagesCss from "../pages.module.css";
 import { IProfilePageConfigs } from "./profile.d";
 import css from "./profile.module.css";

@@ -1,7 +1,7 @@
 import EventBus from "../../services/events/EventBus.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IChildren } from "./Children.d";
+import { ChildrenPropsMap, IChildren } from "./Children.d";
 import type {
   BaseProps,
   IComponentData,
@@ -34,7 +34,7 @@ export default abstract class Component<TProps extends BaseProps> {
   private _attributes?: TProps["attributes"];
   private _events?: TProps["events"];
   private _childrenData?: TProps["childrenData"];
-  private _children?: IChildren;
+  private _children?: IChildren<ChildrenPropsMap>;
   private eventBus: EventBus = new EventBus();
   private _hasChildren(children = this._children): children is IChildren {
     return !!children && Object.keys(children).length > 0;

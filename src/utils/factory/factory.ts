@@ -1,6 +1,6 @@
-import { BaseProps, IChildren, IChildrenData } from "../../framework/Component/Component.d";
+import { IChildrenData, IChildren, ChildrenPropsMap } from "../../framework/Component/Children.d";
 
-export function createChildren (data: IChildrenData<BaseProps>): IChildren {
+export function createChildren (data: IChildrenData<ChildrenPropsMap>): IChildren<ChildrenPropsMap> {
   if (!data) {
     throw new Error("childrenData are not defined", data);
   }

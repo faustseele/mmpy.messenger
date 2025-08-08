@@ -1,19 +1,11 @@
 import {
-  BaseProps,
-  IComponentData,
+  IComponentData
 } from "../../framework/Component/Component.d";
 import Component, { ComponentParams } from "../../framework/Component/Component.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IButtonAttributes, IButtonConfigs } from "./button.d";
-
-export interface ButtonProps extends BaseProps {
-  configs: IButtonConfigs;
-  attributes?: IButtonAttributes;
-  events?: BaseProps["events"];
-  childrenData?: BaseProps["childrenData"];
-} 
+import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ButtonProps } from "./button.d";
 
 export class Button extends Component<ButtonProps> {
   constructor(props: ComponentParams<ButtonProps>) {
