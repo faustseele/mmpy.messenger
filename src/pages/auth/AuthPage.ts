@@ -18,7 +18,7 @@ import {
 import { FormController } from "../../services/forms/FormController.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { IPageFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
 import { Page } from "../Page.ts";
 import { AuthChildrenDataPropsMap, IAuthConfigs } from "./auth.d";
@@ -119,7 +119,7 @@ export class AuthPage extends Page<AuthProps> {
   }
 }
 
-export const createAuthPage: IComponentFactory<AuthProps> = (
+export const createAuthPage: IPageFactory<AuthProps> = (
   data: IComponentData,
 ): AuthPage => {
   if (!data.childrenData) {

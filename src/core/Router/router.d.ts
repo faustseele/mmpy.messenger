@@ -36,5 +36,5 @@ export const guardLink = (link: unknown): link is RouteLink => {
 export interface IRouteConfigs {
   path: string;
   rootQuery: string;
-  params?: Record<string, string>;
+  params: Record<string, string>;
 }

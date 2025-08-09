@@ -1,5 +1,5 @@
 import { BaseProps } from "../../framework/Component/Component.d";
-import Component from "../../framework/Component/Component.ts";
+import { Page } from "../../pages/Page.ts";
 import { IRoute, IRouteConfigs } from "./router.d";
 import { matchPath } from "./utils.ts";
 
@@ -9,27 +9,31 @@ import { matchPath } from "./utils.ts";
  * Can create & show/hide the Component.
  */
 
-export interface RouteProps {
+export interface RouteProps<TProps extends BaseProps> {
   routeConfigs: IRouteConfigs;
-  pageFactory: () => Component<BaseProps>;
+  pageFactory: () => Page<TProps>;
 }
 
 /**
  * @implements IRoute for 'public contract' match
  */
-export default class Route implements IRoute {
+export default class Route<TProps extends BaseProps> implements IRoute {
   private _rootQuery: string = "";
   private _routeConfigs: IRouteConfigs;
   /* Factory args are passed in index.ts */
-  private _pageFactory: () => Component<BaseProps>;
-  private _pageInstance: Component<BaseProps> | null = null;
+  private _pageFactory: () => Page<TProps>;
+  private _pageInstance: Page<TProps> | null = null;
 
   public get path(): string {
     return this._routeConfigs.path;
   }
 
-  constructor({ routeConfigs, pageFactory }: RouteProps) {
-    this._routeConfigs = routeConfigs;
+  constructor({ routeConfigs, pageFactory }: RouteProps<TProps>) {
+    this._routeConfigs = routeConfigs ?? {
+      path: "",
+      rootQuery: "",
+      params: {},
+    };
     this._pageFactory = pageFactory;
   }
 
@@ -56,6 +60,8 @@ export default class Route implements IRoute {
   public render() {
     if (!this._pageInstance) {
       this._pageInstance = this._pageFactory();
+
+      this._pageInstance.setPageParams(this._routeConfigs.params);
 
       const root = document.querySelector(this._rootQuery);
       const element = this._pageInstance!.element;

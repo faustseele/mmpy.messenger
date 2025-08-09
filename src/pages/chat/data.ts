@@ -266,4 +266,5 @@ export const chatPageData: ChatPageProps = {
 export const chatPageRouteConfig = {
   path: RouteLink.Chats,
   rootQuery: "#app",
+  params: {},
 };

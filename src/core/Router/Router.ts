@@ -1,5 +1,5 @@
 import { BaseProps } from "../../framework/Component/Component.d";
-import Component from "../../framework/Component/Component.ts";
+import { Page } from "../../pages/Page.ts";
 import Route from "./Route.ts";
 import { IRoute, IRouteConfigs, RouteLink } from "./router.d";
 import { extractParams, matchPath } from "./utils.ts";
@@ -46,7 +46,7 @@ class Router {
    */
   public use(
     routeConfigs: IRouteConfigs,
-    pageFactory: () => Component<BaseProps>,
+    pageFactory: () => Page<BaseProps>,
   ): this {
     const route = new Route({ routeConfigs, pageFactory });
     this._routes.push(route);

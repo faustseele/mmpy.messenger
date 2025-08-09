@@ -1,7 +1,7 @@
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
 import { IComponentData } from "../../framework/Component/Component.d";
-import Component, {
+import {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
 import {
@@ -10,12 +10,13 @@ import {
 } from "../../framework/Component/utils.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { IPageFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
+import { Page } from "../Page.ts";
 import { ErrorPageProps } from "./errors.d";
 import css from "./errors.module.css";
 
-export class ErrorPage extends Component<ErrorPageProps> {
+export class ErrorPage extends Page<ErrorPageProps> {
   constructor(props: ComponentParams<ErrorPageProps>) {
     super(props);
   }
@@ -51,7 +52,7 @@ export class ErrorPage extends Component<ErrorPageProps> {
   }
 }
 
-export const createErrorPage: IComponentFactory<ErrorPageProps> = (
+export const createErrorPage: IPageFactory<ErrorPageProps> = (
   data: IComponentData<ErrorPageProps>,
 ): ErrorPage => {
   if (!data.childrenData) {

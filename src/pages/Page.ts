@@ -4,20 +4,21 @@ import Component, {
 import { BaseProps } from "../framework/Component/Component.d";
 
 export class Page<TProps extends BaseProps> extends Component<TProps> {
-  private _pageParams: Record<string, string>;
+  public pageParams: Record<string, string>;
 
   constructor(props: ComponentParams) {
     super(props);
 
-    this._pageParams = {};
-    console.log(this._pageParams);
+    this.pageParams = {};
+    console.log(this.pageParams);
   }
 
   public setPageParams(params: Record<string, string>): void {
-    this._pageParams = params;
+    this.pageParams = params;
   }
 
   public getSourceMarkup(): string {
+    /* Reassigned in concrete Page Components */
     return /*html*/ ``;
   }
 }

@@ -1,7 +1,7 @@
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
 import { IComponentData } from "../../framework/Component/Component.d";
-import Component, {
+import {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
 import {
@@ -12,13 +12,14 @@ import {
 import { FormController } from "../../services/forms/FormController.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { IPageFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
+import { Page } from "../Page.ts";
 
 import { ProfilePageProps } from "./profile.d";
 import css from "./profile.module.css";
 
-export class ProfilePage extends Component<ProfilePageProps> {
+export class ProfilePage extends Page<ProfilePageProps> {
   constructor(props: ComponentParams<ProfilePageProps>) {
     super(props);
   }
@@ -108,7 +109,7 @@ export class ProfilePage extends Component<ProfilePageProps> {
 }
 
 // The factory function, which follows the established pattern
-export const createProfilePage: IComponentFactory<ProfilePageProps> = (
+export const createProfilePage: IPageFactory<ProfilePageProps> = (
   data: IComponentData<ProfilePageProps>,
 ): ProfilePage => {
   if (!data.childrenData) {

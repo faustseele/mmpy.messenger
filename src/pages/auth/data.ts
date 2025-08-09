@@ -11,8 +11,8 @@ import { AuthChildrenDataPropsMap } from "./auth.d";
 import { AuthProps } from "./AuthPage.ts";
 
 /**
- * Todo: 
- * Make the attributes more dev-friendly. 
+ * Todo:
+ * Make the attributes more dev-friendly.
  * - less attributes -- classes should be predetermined in ConreteComponents
  * - themes (like isDrama) over attributes
  */
@@ -309,9 +309,11 @@ export const signInData = createAuthProps(
 export const signUpRouteConfig = {
   path: RouteLink.SignUp,
   rootQuery: "#app",
+  params: {},
 };
 
 export const signInRouteConfig = {
   path: RouteLink.SignIn,
   rootQuery: "#app",
+  params: {},
 };

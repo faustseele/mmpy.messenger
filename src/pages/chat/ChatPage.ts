@@ -1,30 +1,31 @@
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
+import { IChildrenData } from "../../framework/Component/Children.d";
 import {
   BaseProps,
   IComponentData,
 } from "../../framework/Component/Component.d";
-import Component, {
+import {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
 import {
   getChildFromMap,
   getChildSlotKey,
 } from "../../framework/Component/utils.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
-import { createChildren } from "../../utils/factory/factory.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { IPageFactory } from "../../utils/factory/factory.d";
+import { createChildren } from "../../utils/factory/factory.ts";
+import { Page } from "../Page.ts";
 import { ChatChildrenDataPropsMap, IChatPageConfigs } from "./chat.d";
 import css from "./chat.module.css";
-import { IChildrenData } from "../../framework/Component/Children.d";
 
 interface ChatPageProps extends BaseProps {
   configs: IChatPageConfigs;
   childrenData?: IChildrenData<ChatChildrenDataPropsMap>;
 }
 
-export class ChatPage extends Component<ChatPageProps> {
+export class ChatPage extends Page<ChatPageProps> {
   constructor(props: ComponentParams<ChatPageProps>) {
     super(props);
   }
@@ -96,7 +97,7 @@ export class ChatPage extends Component<ChatPageProps> {
   }
 }
 
-export const createChatPage: IComponentFactory<ChatPageProps> = (
+export const createChatPage: IPageFactory<ChatPageProps> = (
   data: IComponentData<ChatPageProps>,
 ): ChatPage => {
   if (!data.childrenData) {

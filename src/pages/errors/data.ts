@@ -124,9 +124,11 @@ export const errorPage500Data: ErrorPageProps = {
 export const error404RouteConfig = {
   path: RouteLink.NotFound,
   rootQuery: "#app",
+  params: {},
 };
 
 export const error500RouteConfig = {
   path: RouteLink.Error,
   rootQuery: "#app",
+  params: {},
 };
