@@ -37,7 +37,7 @@ export class ChatPage extends Component<ChatPageProps> {
 
     profileLink.setProps({
       events: {
-        click: () => Router.go(RouteLink.Profile),
+        click: () => Router.go(RouteLink.Settings),
       },
     });
 

@@ -1,9 +1,8 @@
-import {
-  BaseProps
-} from "../../framework/Component/Component.d";
+import { BaseProps } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import Route from "./Route.ts";
 import { IRoute, IRouteConfigs, RouteLink } from "./router.d";
+import { extractParams, matchPath } from "./utils.ts";
 
 /**
  * @class Router is a @mediator singleton class that listens
@@ -69,9 +68,12 @@ class Router {
 
   /* Is triggered when the URL changes. */
   private _onRouteChange(path: RouteLink | string): void {
-    const route = this._routes.find((route) => route.path === path);
+    const route = this._routes.find((route) => matchPath(path, route.path));
 
     if (route) {
+      const params = extractParams(path, route.path);
+      route.setRouteConfigs({ params });
+
       this._currentRoute?.leave();
       this._currentRoute = route;
       this._currentRoute!.render();

@@ -10,6 +10,13 @@ import cssPage from "../pages.module.css";
 import { AuthChildrenDataPropsMap } from "./auth.d";
 import { AuthProps } from "./AuthPage.ts";
 
+/**
+ * Todo: 
+ * Make the attributes more dev-friendly. 
+ * - less attributes -- classes should be predetermined in ConreteComponents
+ * - themes (like isDrama) over attributes
+ */
+
 function createAuthProps(
   configs: AuthProps["configs"],
   attributes: AuthProps["attributes"],
@@ -26,7 +33,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
       configs: {
         slotKey: "heading",
         tagName: "h1",
-        type: "/sign-up",
+        type: "/",
         text: "Регистрация 🎀",
       },
       attributes: {
@@ -277,7 +284,7 @@ export const signUpData = createAuthProps(
   {
     slotKey: "authPage",
     tagName: "form",
-    type: "/sign-up",
+    type: "/",
   },
   {
     className: cssPage.moduleWindow,

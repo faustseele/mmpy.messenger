@@ -1,6 +1,7 @@
 import { BaseProps } from "../../framework/Component/Component.d";
 import Component from "../../framework/Component/Component.ts";
 import { IRoute, IRouteConfigs } from "./router.d";
+import { matchPath } from "./utils.ts";
 
 /**
  * @class Route Represents a single application route.
@@ -17,24 +18,23 @@ export interface RouteProps {
  * @implements IRoute for 'public contract' match
  */
 export default class Route implements IRoute {
-  private _path: string;
   private _rootQuery: string = "";
+  private _routeConfigs: IRouteConfigs;
   /* Factory args are passed in index.ts */
   private _pageFactory: () => Component<BaseProps>;
   private _pageInstance: Component<BaseProps> | null = null;
 
   public get path(): string {
-    return this._path;
+    return this._routeConfigs.path;
   }
 
   constructor({ routeConfigs, pageFactory }: RouteProps) {
+    this._routeConfigs = routeConfigs;
     this._pageFactory = pageFactory;
-    this._path = routeConfigs.path;
   }
 
-  public navigate(_path: string) {
-    if (this.match(_path)) {
-      this._path = _path;
+  public navigate(path: string) {
+    if (matchPath(this._routeConfigs.path, path)) {
       this.render();
     }
   }
@@ -45,12 +45,12 @@ export default class Route implements IRoute {
     }
   }
 
-  public match(_path: string): boolean {
-    return this._path === _path;
-  }
-
   public setRootQuery(next: string) {
     this._rootQuery = next;
+  }
+
+  public setRouteConfigs(nextConfigs: Partial<IRouteConfigs>): void {
+    Object.assign(this._routeConfigs, nextConfigs);
   }
 
   public render() {

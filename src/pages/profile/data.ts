@@ -182,6 +182,6 @@ export const profilePageData: ProfilePageProps = {
 };
 
 export const profilePageRouteConfig = {
-  path: RouteLink.Profile,
+  path: RouteLink.Settings,
   rootQuery: "#app",
 };

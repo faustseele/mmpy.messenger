@@ -7,11 +7,11 @@
  * Covariance in a win for the array: subtypes Route<Specific> are assignable to supertype array IRoute[]
  */
 export interface IRoute {
-  /* Eslint doesn't get that 'path' is used */
-  // eslint-disable-next-line no-unused-vars
-  match(path: string): boolean;
+  /* Eslint doesn't get that params are used */
   // eslint-disable-next-line no-unused-vars
   setRootQuery(next: string): void;
+  // eslint-disable-next-line no-unused-vars
+  setRouteConfigs(nextConfigs: Partial<IRouteConfigs>): void;
   leave(): void;
   render(): void;
   /* Getters */
@@ -21,10 +21,10 @@ export interface IRoute {
 /* Eslint doesn't like the enums */
 /* eslint-disable no-unused-vars */
 export enum RouteLink {
-  SignUp = "/sign-up",
+  SignUp = "/",
   SignIn = "/sign-in",
-  Chats = "/chats",
-  Profile = "/profile",
+  Chats = "/messenger",
+  Settings = "/settings",
   NotFound = "/404",
   Error = "/500",
 }
@@ -36,4 +36,5 @@ export const guardLink = (link: unknown): link is RouteLink => {
 export interface IRouteConfigs {
   path: string;
   rootQuery: string;
+  params?: Record<string, string>;
 }

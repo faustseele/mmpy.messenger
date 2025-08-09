@@ -7,7 +7,7 @@ import {
   BaseProps,
   IComponentData,
 } from "../../framework/Component/Component.d";
-import Component, {
+import {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
 import {
@@ -15,13 +15,14 @@ import {
   getChildrenFromMap,
   getChildSlotKey,
 } from "../../framework/Component/utils.ts";
+import { FormController } from "../../services/forms/FormController.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { IComponentFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
+import { Page } from "../Page.ts";
 import { AuthChildrenDataPropsMap, IAuthConfigs } from "./auth.d";
 import css from "./auth.module.css";
-import { FormController } from "../../services/forms/FormController.ts";
 
 export interface AuthProps extends BaseProps {
   configs: IAuthConfigs;
@@ -30,7 +31,7 @@ export interface AuthProps extends BaseProps {
   childrenData?: IChildrenData<AuthChildrenDataPropsMap>;
 }
 
-export class AuthPage extends Component<AuthProps> {
+export class AuthPage extends Page<AuthProps> {
   private footerModifier: string = "";
 
   constructor(props: ComponentParams) {
@@ -39,7 +40,7 @@ export class AuthPage extends Component<AuthProps> {
     super({ deps, data });
 
     this.footerModifier =
-      data.configs.type === "/sign-up" ? css.authFooter_signUp : "";
+      data.configs.type === "/" ? css.authFooter_signUp : "";
   }
 
   public componentDidMount(): void {

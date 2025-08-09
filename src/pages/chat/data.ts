@@ -154,7 +154,7 @@ const chatChildrenData: IChildrenData<ChatChildrenDataPropsMap> = {
         slotKey: "heading_goToProfile",
         tagName: "h1",
         text: "Профиль ➛",
-        link: RouteLink.Profile,
+        link: RouteLink.Settings,
       },
       attributes: {
         className: `${cssHeading.heading} ${cssHeading.heading__text_clickable}`,
