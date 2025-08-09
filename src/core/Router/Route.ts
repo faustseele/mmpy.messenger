@@ -1,6 +1,6 @@
 import { BaseProps } from "../../framework/Component/Component.d";
 import { Page } from "../../pages/Page.ts";
-import { IRoute, IRouteConfigs } from "./router.d";
+import { IRoute, IRouteConfigs, TAuthStatus } from "./router.d";
 import { matchPath } from "./utils.ts";
 
 /**
@@ -27,6 +27,9 @@ export default class Route<TProps extends BaseProps> implements IRoute {
   public get path(): string {
     return this._routeConfigs.path;
   }
+  public get authStatus(): TAuthStatus {
+    return this._routeConfigs.authStatus;
+  }
 
   constructor({ routeConfigs, pageFactory }: RouteProps<TProps>) {
     this._routeConfigs = routeConfigs ?? {
@@ -45,7 +48,10 @@ export default class Route<TProps extends BaseProps> implements IRoute {
 
   public leave() {
     if (this._pageInstance) {
-      this._pageInstance.hide();
+      this._pageInstance.componentDidUnmount();
+      this._pageInstance.element?.remove();
+      /* Nullifing the instance to ensure it's recreated on next visit */
+      this._pageInstance = null;
     }
   }
 
@@ -70,6 +76,9 @@ export default class Route<TProps extends BaseProps> implements IRoute {
         console.error("Root:", root, "Element:", element);
         return;
       }
+
+      /* Ensuring the root is clean before appending the new Page */
+      root.innerHTML = "";
 
       root.append(element);
     }

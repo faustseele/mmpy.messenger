@@ -3,7 +3,7 @@ import { createButton } from "../../components/button/Button.ts";
 import { createHeading } from "../../components/heading/Heading.ts";
 import cssSubheading from "../../components/subheading/subheading.module.css";
 import { createSubheading } from "../../components/subheading/Subheading.ts";
-import { RouteLink } from "../../core/Router/router.d";
+import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
 import { IChildrenData } from "../../framework/Component/Children.d";
 import { BaseProps } from "../../framework/Component/Component.d";
 import pagesCss from "../pages.module.css";
@@ -121,14 +121,16 @@ export const errorPage500Data: ErrorPageProps = {
   },
 };
 
-export const error404RouteConfig = {
+export const error404RouteConfig: IRouteConfigs = {
   path: RouteLink.NotFound,
   rootQuery: "#app",
+  authStatus: "any",
   params: {},
 };
 
-export const error500RouteConfig = {
+export const error500RouteConfig: IRouteConfigs = {
   path: RouteLink.Error,
   rootQuery: "#app",
+  authStatus: "any",
   params: {},
 };

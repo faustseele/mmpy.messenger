@@ -9,7 +9,7 @@ import { MessageProps } from "../../components/message/message.d";
 import { createMessage } from "../../components/message/Message.ts";
 import messageFieldCss from "../../components/messageField/messageField.module.css";
 import { createMessageField } from "../../components/messageField/MessageField.ts";
-import { RouteLink } from "../../core/Router/router.d";
+import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
 import { IChildrenData } from "../../framework/Component/Children.d";
 import { IComponentData } from "../../framework/Component/Component.d";
 import { IComponentFactory } from "../../utils/factory/factory.d";
@@ -243,7 +243,7 @@ const chatChildrenData: IChildrenData<ChatChildrenDataPropsMap> = {
         type: "text",
       },
       attributes: {
-        className: messageFieldCss.inputWrap,
+        className: messageFieldCss.inputLabelWrap,
       },
       componentFactory: createMessageField,
     },
@@ -263,8 +263,9 @@ export const chatPageData: ChatPageProps = {
   childrenData: chatChildrenData,
 };
 
-export const chatPageRouteConfig = {
+export const chatPageRouteConfig: IRouteConfigs = {
   path: RouteLink.Chats,
   rootQuery: "#app",
+  authStatus: 'protected',
   params: {},
 };

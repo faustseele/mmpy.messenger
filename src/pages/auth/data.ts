@@ -4,7 +4,7 @@ import cssHeading from "../../components/heading/heading.module.css";
 import { createHeading } from "../../components/heading/Heading.ts";
 import cssInput from "../../components/input/input.module.css";
 import { createInput } from "../../components/input/Input.ts";
-import { RouteLink } from "../../core/Router/router.d";
+import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
 import { IChildrenData } from "../../framework/Component/Children.d";
 import cssPage from "../pages.module.css";
 import { AuthChildrenDataPropsMap } from "./auth.d";
@@ -60,7 +60,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "name",
         },
       },
@@ -77,7 +77,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "surname",
         },
       },
@@ -94,7 +94,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "login",
         },
       },
@@ -111,7 +111,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "email",
         },
       },
@@ -128,7 +128,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "password",
         },
       },
@@ -145,7 +145,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "phone",
         },
       },
@@ -221,7 +221,7 @@ const signInChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "login",
         },
       },
@@ -239,7 +239,7 @@ const signInChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
         },
         componentFactory: createInput,
         attributes: {
-          className: cssInput.inputWrap,
+          className: cssInput.inputLabelWrap,
           for: "password",
         },
       },
@@ -306,14 +306,16 @@ export const signInData = createAuthProps(
   signInChildrenData,
 );
 
-export const signUpRouteConfig = {
+export const signUpRouteConfig: IRouteConfigs = {
   path: RouteLink.SignUp,
   rootQuery: "#app",
+  authStatus: "guest",
   params: {},
 };
 
-export const signInRouteConfig = {
+export const signInRouteConfig: IRouteConfigs = {
   path: RouteLink.SignIn,
   rootQuery: "#app",
+  authStatus: "guest",
   params: {},
 };

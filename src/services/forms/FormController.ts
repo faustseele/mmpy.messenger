@@ -1,5 +1,6 @@
 import { Input } from "../../components/input/Input.ts";
 import { InputEditor } from "../../components/input/InputEditor.ts";
+import AuthController from "../../controllers/AuthController.ts";
 import Router from "../../core/Router/Router.ts";
 import { RouteLink } from "../../core/Router/router.d";
 import { validateInputField } from "../../utils/validators.ts";
@@ -28,6 +29,7 @@ export class FormController {
     if (isFormValid) {
       const formData = this._getFormData();
       console.log(logMessages.formIsValid, formData);
+      AuthController.setLoginStatus(true)
       Router.go(link)
     } else {
       console.log(logMessages.formHasErrors);

@@ -1,17 +1,17 @@
 import profileAvatar from "../../../static/profile-avatar.png";
 import cssBtn from "../../components/button/button.module.css";
 import { createButton } from "../../components/button/Button.ts";
+import cssHeading from "../../components/heading/heading.module.css";
 import { createHeading } from "../../components/heading/Heading.ts";
+import cssInput from "../../components/input/input.module.css";
 import { createInput } from "../../components/input/Input.ts";
 import { createInputEditor } from "../../components/input/InputEditor.ts";
-import { RouteLink } from "../../core/Router/router.d";
+import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
 import { IChildrenData } from "../../framework/Component/Children.d";
 import { BaseProps } from "../../framework/Component/Component.d";
 import cssPages from "../pages.module.css";
 import { IProfilePageConfigs, ProfileChildrenDataPropsMap } from "./profile.d";
 import cssProfile from "./profile.module.css";
-import cssInput from "../../components/input/input.module.css";
-import cssHeading from "../../components/heading/heading.module.css";
 
 interface ProfilePageProps extends BaseProps {
   configs: IProfilePageConfigs;
@@ -59,7 +59,7 @@ const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
           label: "Эл. почта",
           placeholder: "pochta@yandex.ru",
         },
-        attributes: { className: cssInput.inputEditLabel },
+        attributes: { className: cssInput.inputLabelWrap },
         componentFactory: createInput,
       },
       {
@@ -71,7 +71,7 @@ const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
           label: "Имя",
           placeholder: "Иван",
         },
-        attributes: { className: cssInput.inputEditLabel },
+        attributes: { className: cssInput.inputLabelWrap },
         componentFactory: createInput,
       },
       {
@@ -83,7 +83,7 @@ const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
           label: "Фамилия",
           placeholder: "Иванов",
         },
-        attributes: { className: cssInput.inputEditLabel },
+        attributes: { className: cssInput.inputLabelWrap },
         componentFactory: createInput,
       },
       {
@@ -95,7 +95,7 @@ const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
           label: "Логин",
           placeholder: "ivanov",
         },
-        attributes: { className: cssInput.inputEditLabel },
+        attributes: { className: cssInput.inputLabelWrap },
         componentFactory: createInput,
       },
       {
@@ -107,7 +107,7 @@ const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
           label: "Имя в чате",
           placeholder: "Vanya",
         },
-        attributes: { className: cssInput.inputEditLabel },
+        attributes: { className: cssInput.inputLabelWrap },
         componentFactory: createInput,
       },
       {
@@ -119,7 +119,7 @@ const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
           label: "Номер телефона",
           placeholder: "8905551234",
         },
-        attributes: { className: cssInput.inputEditLabel },
+        attributes: { className: cssInput.inputLabelWrap },
         componentFactory: createInput,
       },
     ],
@@ -181,8 +181,9 @@ export const profilePageData: ProfilePageProps = {
   childrenData: profileChildrenData,
 };
 
-export const profilePageRouteConfig = {
+export const profilePageRouteConfig: IRouteConfigs = {
   path: RouteLink.Settings,
   rootQuery: "#app",
+  authStatus: "protected",
   params: {},
 };

@@ -1,3 +1,4 @@
+import AuthController from "../../controllers/AuthController.ts";
 import { BaseProps } from "../../framework/Component/Component.d";
 import { Page } from "../../pages/Page.ts";
 import Route from "./Route.ts";
@@ -60,7 +61,25 @@ class Router {
 
     /* Adding listener that's triggered
       when the active history entry changes. */
-    window.onpopstate = () => this._onRouteChange(window.location.pathname);
+    window.onpopstate = () => {
+      this._onRouteChange(window.location.pathname);
+    };
+
+    /* Handling the nav-<a> links */
+    document.addEventListener("click", (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const navLink = target.closest("nav a");
+
+      if (navLink) {
+        e.preventDefault();
+
+        const path = navLink.getAttribute("href");
+
+        if (path) {
+          this.go(path as RouteLink);
+        }
+      }
+    });
 
     /* Initial page load. */
     this._onRouteChange(window.location.pathname);
@@ -70,16 +89,30 @@ class Router {
   private _onRouteChange(path: RouteLink | string): void {
     const route = this._routes.find((route) => matchPath(path, route.path));
 
-    if (route) {
-      const params = extractParams(path, route.path);
-      route.setRouteConfigs({ params });
+    const isUserLoggedIn = AuthController.isLoggedIn();
 
-      this._currentRoute?.leave();
-      this._currentRoute = route;
-      this._currentRoute!.render();
-    } else {
-      console.error(`Route not found: ${path}`);
+    if (!route) {
+      this.go(RouteLink.NotFound);
+      return;
     }
+
+    if (!isUserLoggedIn && route.authStatus === "protected") {
+      this.go(RouteLink.SignIn);
+      return;
+    }
+
+    if (isUserLoggedIn && route.authStatus === "guest") {
+      /* If a guest-only route is accessed by a user, redirect to ChatsPage */
+      this.go(RouteLink.Chats);
+      return;
+    }
+
+    const params = extractParams(path, route.path);
+    route.setRouteConfigs({ params });
+
+    this._currentRoute?.leave();
+    this._currentRoute = route;
+    this._currentRoute!.render();
   }
 
   public go(path: RouteLink): void {

@@ -1,9 +1,8 @@
+import AuthController from "../../controllers/AuthController.ts";
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
 import { IComponentData } from "../../framework/Component/Component.d";
-import {
-  ComponentParams,
-} from "../../framework/Component/Component.ts";
+import { ComponentParams } from "../../framework/Component/Component.ts";
 import {
   getChildFromMap,
   getChildrenFromMap,
@@ -55,7 +54,12 @@ export class ProfilePage extends Page<ProfilePageProps> {
     });
 
     buttonLogout.setProps({
-      events: { click: () => Router.go(RouteLink.SignIn) },
+      events: {
+        click: () => {
+          AuthController.setLoginStatus(false);
+          Router.go(RouteLink.SignIn);
+        },
+      },
     });
 
     inputs.forEach((input) => {
@@ -71,7 +75,7 @@ export class ProfilePage extends Page<ProfilePageProps> {
     const headingBackKey = getChildSlotKey(cd, "heading_backToChats");
     const inputsEditorsKey = getChildSlotKey(cd, "inputEditors");
     const buttonEditInfoKey = getChildSlotKey(cd, "buttonEditInfo");
-    const buttonEditPassKey = getChildSlotKey(cd, "buttonEditPassword");    
+    const buttonEditPassKey = getChildSlotKey(cd, "buttonEditPassword");
     const buttonLogoutKey = getChildSlotKey(cd, "buttonLogout");
 
     return /*html*/ `

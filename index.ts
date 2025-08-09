@@ -7,28 +7,28 @@ import {
   signUpData,
   signUpRouteConfig,
 } from "./src/pages/auth/data.ts";
-import { chatPageRouteConfig, chatPageData } from "./src/pages/chat/data.ts";
 import { createChatPage } from "./src/pages/chat/ChatPage.ts";
+import { chatPageData, chatPageRouteConfig } from "./src/pages/chat/data.ts";
 import {
-  profilePageRouteConfig,
-  profilePageData,
-} from "./src/pages/profile/data.ts";
-import { createProfilePage } from "./src/pages/profile/ProfilePage.ts";
-import {
-  errorPage404Data,
-  errorPage500Data,
   error404RouteConfig,
   error500RouteConfig,
+  errorPage404Data,
+  errorPage500Data,
 } from "./src/pages/errors/data.ts";
 import { createErrorPage } from "./src/pages/errors/ErrorPage.ts";
+import {
+  profilePageData,
+  profilePageRouteConfig,
+} from "./src/pages/profile/data.ts";
+import { createProfilePage } from "./src/pages/profile/ProfilePage.ts";
 
 export const rootQuery = "#app";
 
 Router
   /* SignIn route */
-  .use(signInRouteConfig, () => createAuthPage(signUpData))
+  .use(signInRouteConfig, () => createAuthPage(signInData),)
   /* SignUp route */
-  .use(signUpRouteConfig, () => createAuthPage(signInData))
+  .use(signUpRouteConfig, () => createAuthPage(signUpData))
   /* Chats route */
   .use(chatPageRouteConfig, () => createChatPage(chatPageData))
   /* Profile route */

@@ -16,13 +16,23 @@ export interface IRoute {
   render(): void;
   /* Getters */
   readonly path: string;
+  readonly authStatus: TAuthStatus;
+}
+
+export type TAuthStatus = 'protected' | 'guest' | 'any';
+
+export interface IRouteConfigs {
+  path: string;
+  rootQuery: string;
+  authStatus: TAuthStatus; 
+  params: Record<string, string>;
 }
 
 /* Eslint doesn't like the enums */
 /* eslint-disable no-unused-vars */
 export enum RouteLink {
-  SignUp = "/",
-  SignIn = "/sign-in",
+  SignIn = "/",
+  SignUp = "/sign-up",
   Chats = "/messenger",
   Settings = "/settings",
   NotFound = "/404",
@@ -32,9 +42,3 @@ export enum RouteLink {
 export const guardLink = (link: unknown): link is RouteLink => {
   return typeof link === "string" && pageLinks.includes(link as RouteLink);
 };
-
-export interface IRouteConfigs {
-  path: string;
-  rootQuery: string;
-  params: Record<string, string>;
-}

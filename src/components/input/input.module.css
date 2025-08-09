@@ -12,7 +12,7 @@
     -webkit-text-fill-color: var(--color-content-light) !important;
 }
 
-.inputEditLabel {
+.inputLabelWrap {
   width: 100%;
   position: relative;
 }
