@@ -7,21 +7,19 @@ import {
   BaseProps,
   IComponentData,
 } from "../../framework/Component/Component.d";
-import {
-  ComponentParams,
-} from "../../framework/Component/Component.ts";
+import { ComponentParams } from "../../framework/Component/Component.ts";
 import {
   getChildFromMap,
   getChildrenFromMap,
   getChildSlotKey,
 } from "../../framework/Component/utils.ts";
-import { FormController } from "../../services/forms/FormController.ts";
+import FormValidator from "../../services/forms/FormValidator.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { IPageFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
 import { Page } from "../Page.ts";
-import { AuthChildrenDataPropsMap, IAuthConfigs } from "./auth.d";
+import { AuthChildrenDataPropsMap, AuthType, IAuthConfigs } from "./auth.d";
 import css from "./auth.module.css";
 
 export interface AuthProps extends BaseProps {
@@ -33,14 +31,16 @@ export interface AuthProps extends BaseProps {
 
 export class AuthPage extends Page<AuthProps> {
   private footerModifier: string = "";
+  private authType: AuthType;
 
   constructor(props: ComponentParams) {
     const { deps, data } = props;
 
     super({ deps, data });
 
+    this.authType = data.configs.type as AuthType;
     this.footerModifier =
-      data.configs.type === "/" ? css.authFooter_signUp : "";
+      this.authType === "sign-up" ? css.authFooter_signUp : "";
   }
 
   public componentDidMount(): void {
@@ -49,17 +49,18 @@ export class AuthPage extends Page<AuthProps> {
     const inputs = getChildrenFromMap(this.children!, "inputs");
     const buttonReroute = getChildFromMap(this.children!, "buttonReroute");
 
-    const formController = new FormController(inputs);
+    const formValidator = new FormValidator(inputs);
 
     this._setRerouteEvent(buttonReroute);
-    this._setInputsEvents(inputs, formController);
-    this._setSubmitEvent(formController);
+    this._setInputsEvents(inputs, formValidator);
+    this._setSubmitEvent(formValidator);
   }
 
-  private _setSubmitEvent(formController: FormController): void {
+  private _setSubmitEvent(formValidator: FormValidator): void {
     this.setProps({
       events: {
-        submit: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
+        submit: (e: Event) =>
+          formValidator.onFormSubmit(e, RouteLink.Chats, this.authType),
       },
     });
   }
@@ -77,12 +78,12 @@ export class AuthPage extends Page<AuthProps> {
   /* Setting blur-events for the input fields */
   private _setInputsEvents(
     inputs: Input[],
-    formController: FormController,
+    formValidator: FormValidator,
   ): void {
     inputs.forEach((input) => {
       input.setProps({
         events: {
-          focusout: () => formController.onInputBlur(input),
+          focusout: () => formValidator.onInputBlur(input),
         },
       });
     });

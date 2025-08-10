@@ -14,6 +14,13 @@ import { queryStringify } from "./utils.ts";
  * Incapsulates XMLHttpRequest and works with Promise.
  */
 export default class HTTPTransport {
+  protected static API_URL = "https://ya-praktikum.tech/api/v2";
+  protected endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
   /**
    * Fabric method -> HTTP method
    * @Response -> a type required during the http call
@@ -41,14 +48,17 @@ export default class HTTPTransport {
    * or rejects with an error.
    */
   private _request = <TResponse>(
-    url: string,
+    /* E.g. 'sign-up' */
+    relativePath: string,
     options: TOptions,
   ): Promise<TResponse> => {
     const { method, data, headers = {}, withCredentials = true } = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open(method, url);
+
+      const fullUrl = HTTPTransport.API_URL + this.endpoint + relativePath;
+      xhr.open(method, fullUrl);
 
       /* JSON – preferred response type */
       xhr.responseType = "json";
@@ -67,7 +77,10 @@ export default class HTTPTransport {
 
       /* Catching the response */
       xhr.onload = () => {
-        if (xhr.status >= HttpStatus.Ok && xhr.status < HttpStatus.MultipleChoices) {
+        if (
+          xhr.status >= HttpStatus.Ok &&
+          xhr.status < HttpStatus.MultipleChoices
+        ) {
           /* xhr should be a JSON object here */
           resolve(xhr.response as TResponse);
         } else {

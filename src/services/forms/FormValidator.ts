@@ -1,8 +1,12 @@
 import { Input } from "../../components/input/Input.ts";
 import { InputEditor } from "../../components/input/InputEditor.ts";
-import AuthController from "../../controllers/AuthController.ts";
+import AuthController from "../../controllers/Auth/AuthController.ts";
+import AuthStateController from "../../controllers/Auth/AuthStateController.ts";
+import UserController from "../../controllers/UserController.ts";
 import Router from "../../core/Router/Router.ts";
 import { RouteLink } from "../../core/Router/router.d";
+import { AuthType } from "../../pages/auth/auth.d";
+import { TFieldNames } from "../../utils/input.d";
 import { validateInputField } from "../../utils/validators.ts";
 
 const logMessages = {
@@ -10,7 +14,7 @@ const logMessages = {
   formHasErrors: "❌ Hey! Form has errors.. Please correct them. 👆",
 };
 
-export class FormController {
+export default class FormValidator {
   private inputs: Input[] | InputEditor[];
 
   constructor(inputs: Input[] | InputEditor[]) {
@@ -21,7 +25,11 @@ export class FormController {
     this._handleFieldValidation(input);
   };
 
-  public onFormSubmit = (event: Event, link: RouteLink): void => {
+  public onFormSubmit = async (
+    event: Event,
+    link: RouteLink,
+    submitType: AuthType | "change-info" | "change-password",
+  ): Promise<void> => {
     event.preventDefault();
 
     const isFormValid = this._handleFormValidation();
@@ -29,8 +37,36 @@ export class FormController {
     if (isFormValid) {
       const formData = this._getFormData();
       console.log(logMessages.formIsValid, formData);
-      AuthController.setLoginStatus(true)
-      Router.go(link)
+      AuthStateController.setLoginStatus(true);
+
+      if (submitType === "sign-in") {
+        await AuthController.signin({
+          login: formData.login,
+          password: formData.password,
+        });
+        return;
+      } else if (submitType === "sign-up") {
+        await AuthController.signup({
+          first_name: formData.name,
+          second_name: formData.surname,
+          login: formData.login,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+        });
+      } else if (submitType === "change-info") {
+        await UserController.updateProfile({
+          first_name: formData.name,
+          second_name: formData.surname,
+          login: formData.login,
+          email: formData.email,
+          phone: formData.phone,
+        });
+      } else if (submitType === "change-password") {
+        console.warn("Not implemented");
+      }
+      Router.go(link);
+      return;
     } else {
       console.log(logMessages.formHasErrors);
       event.stopPropagation();
@@ -55,7 +91,7 @@ export class FormController {
     and shows/hides its error. */
   private _handleFieldValidation(input: Input | InputEditor): boolean {
     if (!input) {
-      console.error("FormController: Input is not defined");  
+      console.error("FormValidator: Input is not defined");
     }
     const { name, value } = input.getNameAndValue();
     const errorMessage = validateInputField(name, value);
@@ -71,7 +107,7 @@ export class FormController {
   }
 
   /* Collects data from all inputs into a single object. */
-  private _getFormData(): Record<string, string> {
+  private _getFormData(): Record<TFieldNames, string> {
     const formData: Record<string, string> = {};
 
     this.inputs.forEach((input) => {

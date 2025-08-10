@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* ...params are used */
-import { RouteLink } from "../../core/Router/router.d";
 import { IPageConfigs } from "../../pages/page.d";
-import { IComponentFactory } from "../../utils/factory/factory.d";
 import { TagNames } from "../../services/render/DOM/DOM.d";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { IComponentFactory } from "../../utils/factory/factory.d";
 import { ChildrenPropsMap, IChildren, IChildrenData } from "./Children.d";
 
 /**
@@ -43,7 +42,7 @@ export interface IComponentConfigs {
   /* slotKey resembles the hbs {{{html-escaping expressions}}} */
   slotKey: string;
   tagName: TagNames;
-  type?: string | RouteLink;
+  type?: string;
   pageConfigs?: IPageConfigs;
 }
 

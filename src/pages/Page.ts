@@ -10,7 +10,6 @@ export class Page<TProps extends BaseProps> extends Component<TProps> {
     super(props);
 
     this.pageParams = {};
-    console.log(this.pageParams);
   }
 
   public setPageParams(params: Record<string, string>): void {

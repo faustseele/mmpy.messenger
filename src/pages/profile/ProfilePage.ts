@@ -1,4 +1,4 @@
-import AuthController from "../../controllers/AuthController.ts";
+import AuthController from "../../controllers/Auth/AuthController.ts";
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
 import { IComponentData } from "../../framework/Component/Component.d";
@@ -8,7 +8,7 @@ import {
   getChildrenFromMap,
   getChildSlotKey,
 } from "../../framework/Component/utils.ts";
-import { FormController } from "../../services/forms/FormController.ts";
+import FormValidator from "../../services/forms/FormValidator.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { IPageFactory } from "../../utils/factory/factory.d";
@@ -35,7 +35,7 @@ export class ProfilePage extends Page<ProfilePageProps> {
     );
     const buttonLogout = getChildFromMap(this.children!, "buttonLogout");
 
-    const formController = new FormController(inputs);
+    const formValidator = new FormValidator(inputs);
 
     headingBack.setProps({
       events: { click: () => Router.go(RouteLink.Chats) },
@@ -43,28 +43,28 @@ export class ProfilePage extends Page<ProfilePageProps> {
 
     buttonEditInfo.setProps({
       events: {
-        click: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
+        click: (e: Event) => formValidator.onFormSubmit(e, RouteLink.Settings, "change-info"),
       },
     });
 
     buttonEditPass.setProps({
       events: {
-        click: (e: Event) => formController.onFormSubmit(e, RouteLink.Chats),
+        click: (e: Event) => formValidator.onFormSubmit(e, RouteLink.Settings, "change-password"),
       },
     });
 
     buttonLogout.setProps({
       events: {
-        click: () => {
-          AuthController.setLoginStatus(false);
-          Router.go(RouteLink.SignIn);
+        click: async (event: Event) => {
+          event.preventDefault();
+          await AuthController.logout();
         },
       },
     });
 
     inputs.forEach((input) => {
       input.setProps({
-        events: { focusout: () => formController.onInputBlur(input) },
+        events: { focusout: () => formValidator.onInputBlur(input) },
       });
     });
   }

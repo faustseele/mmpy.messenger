@@ -6,8 +6,10 @@ import {
   IComponentConfigs
 } from "../../framework/Component/Component.d";
 
+export type AuthType = "sign-up" | "sign-in";
+
 export interface IAuthConfigs extends IComponentConfigs {
-  type: RouteLink.SignUp | RouteLink.SignIn;
+  type: AuthType;
 }
 
 export interface AuthChildrenDataPropsMap extends ChildrenPropsMap {

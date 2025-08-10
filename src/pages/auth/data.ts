@@ -284,7 +284,7 @@ export const signUpData = createAuthProps(
   {
     slotKey: "authPage",
     tagName: "form",
-    type: "/",
+    type: "sign-up",
   },
   {
     className: cssPage.moduleWindow,
@@ -297,7 +297,7 @@ export const signInData = createAuthProps(
   {
     slotKey: "authPage",
     tagName: "form",
-    type: "/sign-in",
+    type: "sign-in",
   },
   {
     className: cssPage.moduleWindow,

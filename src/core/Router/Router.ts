@@ -1,4 +1,4 @@
-import AuthController from "../../controllers/AuthController.ts";
+import AuthStateController from "../../controllers/Auth/AuthStateController.ts";
 import { BaseProps } from "../../framework/Component/Component.d";
 import { Page } from "../../pages/Page.ts";
 import Route from "./Route.ts";
@@ -89,7 +89,7 @@ class Router {
   private _onRouteChange(path: RouteLink | string): void {
     const route = this._routes.find((route) => matchPath(path, route.path));
 
-    const isUserLoggedIn = AuthController.isLoggedIn();
+    const isUserLoggedIn = AuthStateController.isLoggedIn();
 
     if (!route) {
       this.go(RouteLink.NotFound);
@@ -97,13 +97,14 @@ class Router {
     }
 
     if (!isUserLoggedIn && route.authStatus === "protected") {
-      this.go(RouteLink.SignIn);
+      /* If user is not logged in and trying to access a protected route, leave the current route */
+      console.warn("Protected route accessed by a guest");
       return;
     }
 
     if (isUserLoggedIn && route.authStatus === "guest") {
-      /* If a guest-only route is accessed by a user, redirect to ChatsPage */
-      this.go(RouteLink.Chats);
+      /* If a guest-only route is accessed by a user, leave the current route */
+      console.warn("Guest-only route accessed by a user");
       return;
     }
 
