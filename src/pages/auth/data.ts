@@ -4,8 +4,8 @@ import cssHeading from "../../components/heading/heading.module.css";
 import { createHeading } from "../../components/heading/Heading.ts";
 import cssInput from "../../components/input/input.module.css";
 import { createInput } from "../../components/input/Input.ts";
-import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
-import { IChildrenData } from "../../framework/Component/Children.d";
+import { RouteConfigs, RouteLink } from "../../core/Router/router.d";
+import { ChildrenData } from "../../framework/Component/children";
 import cssPage from "../pages.module.css";
 import { AuthChildrenDataPropsMap } from "./auth.d";
 import { AuthProps } from "./AuthPage.ts";
@@ -26,7 +26,7 @@ function createAuthProps(
   return { configs, attributes, events, childrenData };
 }
 
-const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
+const signUpChildrenData: ChildrenData<AuthChildrenDataPropsMap> = {
   heading: {
     type: "single",
     data: {
@@ -186,7 +186,7 @@ const signUpChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
   },
 };
 
-const signInChildrenData: IChildrenData<AuthChildrenDataPropsMap> = {
+const signInChildrenData: ChildrenData<AuthChildrenDataPropsMap> = {
   heading: {
     type: "single",
     data: {
@@ -306,14 +306,14 @@ export const signInData = createAuthProps(
   signInChildrenData,
 );
 
-export const signUpRouteConfig: IRouteConfigs = {
+export const signUpRouteConfig: RouteConfigs = {
   path: RouteLink.SignUp,
   rootQuery: "#app",
   authStatus: "guest",
   params: {},
 };
 
-export const signInRouteConfig: IRouteConfigs = {
+export const signInRouteConfig: RouteConfigs = {
   path: RouteLink.SignIn,
   rootQuery: "#app",
   authStatus: "guest",

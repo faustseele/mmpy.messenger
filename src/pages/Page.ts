@@ -1,7 +1,7 @@
 import Component, {
   ComponentParams,
 } from "../framework/Component/Component.ts";
-import { BaseProps } from "../framework/Component/Component.d";
+import { BaseProps } from "../framework/Component/component";
 
 export class Page<TProps extends BaseProps> extends Component<TProps> {
   public pageParams: Record<string, string>;

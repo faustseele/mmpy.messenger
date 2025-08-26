@@ -1,15 +1,23 @@
 import { Button, ButtonProps } from "../../components/button/Button.ts";
 import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
-import { InputEditor, InputEditorProps } from "../../components/input/InputEditor.ts";
-import { ChildrenPropsMap } from "../../framework/Component/Children.d";
-import { BaseProps, IComponentConfigs } from "../../framework/Component/Component.d";
+import {
+  InputEditor,
+  InputEditorProps,
+} from "../../components/input/InputEditor.ts";
+import { UserResponse } from "../../framework/API/api.d";
+import { ChildrenPropsMap } from "../../framework/Component/children.d";
+import {
+  BaseProps,
+  ComponentConfigs,
+} from "../../framework/Component/component.d";
 
 export interface ProfilePageProps extends BaseProps {
-  configs: IProfilePageConfigs;
-  childrenData?: IChildrenData<ProfileChildrenDataPropsMap>;
+  configs: ProfilePageConfigs;
+  childrenData?: ChildrenData<ProfileChildrenDataPropsMap>;
+  storeProps: UserResponse;
 }
 
-export interface IProfilePageConfigs extends IComponentConfigs {
+export interface ProfilePageConfigs extends ComponentConfigs {
   profileName: string;
   profileAvatar: string;
 }

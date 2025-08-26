@@ -1,9 +1,9 @@
 import EventBus from "../../services/events/EventBus.ts";
-import { ChildrenPropsMap, IChildren, IChildrenData } from "./Children.d";
-import { IComponentAttributes, IComponentConfigs } from "./Component.d";
+import { ChildrenPropsMap, Children, ChildrenData } from "./children";
+import { ComponentAttributes, ComponentConfigs } from "./component";
 
 /* Implementing Reactivity through Proxy. Emits 'CDU' */
-export function proxifyConfigs<C extends IComponentConfigs>(
+export function proxifyConfigs<C extends ComponentConfigs>(
   configs: C,
   eventBus: EventBus,
 ): C {
@@ -22,7 +22,7 @@ export function proxifyConfigs<C extends IComponentConfigs>(
       eventBus.emit("flow:component-did-update");
       return true;
     },
-    deleteProperty: (target: C, prop: keyof IComponentConfigs) => {
+    deleteProperty: (target: C, prop: keyof ComponentConfigs) => {
       if (typeof prop === "string" && prop.startsWith("_")) return false;
 
       delete (target as Record<PropertyKey, unknown>)[prop];
@@ -36,7 +36,7 @@ export function proxifyConfigs<C extends IComponentConfigs>(
 }
 
 /* Implementing Reactivity through Proxy. Emits 'CDU' */
-export function proxifyAttributes<A extends IComponentAttributes>(
+export function proxifyAttributes<A extends ComponentAttributes>(
   attributes: A,
   eventBus: EventBus,
 ): A {
@@ -55,7 +55,7 @@ export function proxifyAttributes<A extends IComponentAttributes>(
       eventBus.emit("flow:component-did-update");
       return true;
     },
-    deleteProperty: (target: A, prop: keyof IComponentAttributes) => {
+    deleteProperty: (target: A, prop: keyof ComponentAttributes) => {
       if (typeof prop === "string" && prop.startsWith("_")) return false;
 
       delete (target as Record<PropertyKey, unknown>)[prop];
@@ -73,8 +73,8 @@ export function proxifyAttributes<A extends IComponentAttributes>(
  */
 
 export function getChildSlotKey(
-  data: IChildrenData<ChildrenPropsMap>,
-  key: keyof IChildrenData<ChildrenPropsMap>,
+  data: ChildrenData<ChildrenPropsMap>,
+  key: keyof ChildrenData<ChildrenPropsMap>,
 ): string {
   return data[key].type === "list"
     ? data[key].slotKey
@@ -83,7 +83,7 @@ export function getChildSlotKey(
 
 export function getChildrenDataFromMap<
   Map extends ChildrenPropsMap = ChildrenPropsMap,
->(data: IChildrenData<Map>, key: keyof IChildrenData<Map>): Map[keyof Map][] {
+>(data: ChildrenData<Map>, key: keyof ChildrenData<Map>): Map[keyof Map][] {
   if (data[key].type === "single") {
     console.error("getChildrenDataFromMap: Single children are not supported");
     return {} as Map[keyof Map];
@@ -93,7 +93,7 @@ export function getChildrenDataFromMap<
 
 export function getChildDataFromMap<
   Map extends ChildrenPropsMap = ChildrenPropsMap,
->(data: IChildrenData<Map>, key: keyof IChildrenData<Map>): Map[keyof Map] {
+>(data: ChildrenData<Map>, key: keyof ChildrenData<Map>): Map[keyof Map] {
   if (data[key].type === "list") {
     console.error("getChildDataFromMap: List children are not supported");
     return {} as Map[keyof Map];
@@ -103,7 +103,7 @@ export function getChildDataFromMap<
 
 export function getChildrenFromMap<
   Map extends ChildrenPropsMap = ChildrenPropsMap,
->(map: IChildren<Map>, key: keyof IChildren<Map>): Map[keyof Map][] {
+>(map: Children<Map>, key: keyof Children<Map>): Map[keyof Map][] {
   if (map[key].type === "single") {
     console.error("getChildrenFromMap: Single children are not supported");
     return {} as Map[keyof Map][];
@@ -113,7 +113,7 @@ export function getChildrenFromMap<
 
 export function getChildFromMap<
   Map extends ChildrenPropsMap = ChildrenPropsMap,
->(map: IChildren<Map>, key: keyof IChildren<Map>): Map[keyof Map] {
+>(map: Children<Map>, key: keyof Children<Map>): Map[keyof Map] {
   if (map[key].type === "list") {
     console.error("getChildFromMap: List children are not supported");
     return {} as Map[keyof Map];

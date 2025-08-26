@@ -1,12 +1,11 @@
 import { Input } from "../../components/input/Input.ts";
 import { InputEditor } from "../../components/input/InputEditor.ts";
-import AuthController from "../../controllers/Auth/AuthController.ts";
-import AuthStateController from "../../controllers/Auth/AuthStateController.ts";
+import AuthController from "../../controllers/AuthController.ts";
 import UserController from "../../controllers/UserController.ts";
 import Router from "../../core/Router/Router.ts";
 import { RouteLink } from "../../core/Router/router.d";
 import { AuthType } from "../../pages/auth/auth.d";
-import { TFieldNames } from "../../utils/input.d";
+import { FieldType } from "../../utils/input.d";
 import { validateInputField } from "../../utils/validators.ts";
 
 const logMessages = {
@@ -37,7 +36,6 @@ export default class FormValidator {
     if (isFormValid) {
       const formData = this._getFormData();
       console.log(logMessages.formIsValid, formData);
-      AuthStateController.setLoginStatus(true);
 
       if (submitType === "sign-in") {
         await AuthController.signin({
@@ -107,7 +105,7 @@ export default class FormValidator {
   }
 
   /* Collects data from all inputs into a single object. */
-  private _getFormData(): Record<TFieldNames, string> {
+  private _getFormData(): Record<FieldType, string> {
     const formData: Record<string, string> = {};
 
     this.inputs.forEach((input) => {

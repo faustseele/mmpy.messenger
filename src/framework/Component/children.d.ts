@@ -1,4 +1,4 @@
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 
 /**
  * A public contract for a roster (e.g AuthChildrenPropsMap)
@@ -12,13 +12,13 @@ export type IChildrenData<Map extends ChildrenPropsMap = ChildrenPropsMap> = {
   [PropsKey in keyof Map]:
     | {
         type: "single";
-        data: IComponentData<Map[PropsKey]>;
+        data: ComponentData<Map[PropsKey]>;
       }
     | {
         type: "list";
         slotKey: K & string;
-        dataList: IComponentData<Map[PropsKey]>[];
-        childrenFactory: IComponentFactory<Map[PropsKey]>;
+        dataList: ComponentData<Map[PropsKey]>[];
+        childrenFactory: ComponentFactory<Map[PropsKey]>;
       };
 };
 
@@ -32,6 +32,6 @@ export type IChildren<Map extends ChildrenPropsMap = ChildrenPropsMap> = {
         type: "list";
         slotKey: string;
         children: Map[ComponentKey][];
-        childrenFactory: IComponentFactory<BaseProps>;
+        childrenFactory: ComponentFactory<BaseProps>;
       };
 };

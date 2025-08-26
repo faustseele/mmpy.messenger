@@ -1,8 +1,9 @@
-import AuthStateController from "../../controllers/Auth/AuthStateController.ts";
-import { BaseProps } from "../../framework/Component/Component.d";
+import AuthController from "../../controllers/AuthController.ts";
+import { BaseProps } from "../../framework/Component/component.d";
 import { Page } from "../../pages/Page.ts";
+import Store from "../Store/Store.ts";
 import Route from "./Route.ts";
-import { IRoute, IRouteConfigs, RouteLink } from "./router.d";
+import { IRoute, RouteConfigs, RouteLink } from "./router.d";
 import { extractParams, matchPath } from "./utils.ts";
 
 /**
@@ -28,7 +29,7 @@ class Router {
 
   /**
    * A list of all registered routes in the application.
-   * IRoute is used due to contravariance
+   * Route is used due to contravariance
    */
   private _routes: IRoute[] = [];
 
@@ -46,7 +47,7 @@ class Router {
    * @returns this for chaining
    */
   public use(
-    routeConfigs: IRouteConfigs,
+    routeConfigs: RouteConfigs,
     pageFactory: () => Page<BaseProps>,
   ): this {
     const route = new Route({ routeConfigs, pageFactory });
@@ -55,8 +56,14 @@ class Router {
   }
 
   /* Inits Router. Sets root query to existing Routes. */
-  public start(rootQuery: string): void {
-    // this._rootQuery = rootQuery;
+  public async start(rootQuery: string): Promise<void> {
+    try {
+      /* Await this so the store is populated before we check routes */
+      await AuthController.fetchUser();
+    } catch (_) {
+      console.error("Failed to fetch user on startup");
+    }
+
     this._routes.forEach((route) => route.setRootQuery(rootQuery));
 
     /* Adding listener that's triggered
@@ -89,7 +96,7 @@ class Router {
   private _onRouteChange(path: RouteLink | string): void {
     const route = this._routes.find((route) => matchPath(path, route.path));
 
-    const isUserLoggedIn = AuthStateController.isLoggedIn();
+    const isUserLoggedIn = Store.getState().isLoggedIn;
 
     if (!route) {
       this.go(RouteLink.NotFound);

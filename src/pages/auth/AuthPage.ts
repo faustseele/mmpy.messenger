@@ -2,11 +2,11 @@ import { Button } from "../../components/button/Button.ts";
 import { Input } from "../../components/input/Input.ts";
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { IChildrenData } from "../../framework/Component/Children.d";
+import { ChildrenData } from "../../framework/Component/children";
 import {
   BaseProps,
-  IComponentData,
-} from "../../framework/Component/Component.d";
+  ComponentData,
+} from "../../framework/Component/component";
 import { ComponentParams } from "../../framework/Component/Component.ts";
 import {
   getChildFromMap,
@@ -16,17 +16,17 @@ import {
 import FormValidator from "../../services/forms/FormValidator.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IPageFactory } from "../../utils/factory/factory.d";
+import { PageFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
 import { Page } from "../Page.ts";
-import { AuthChildrenDataPropsMap, AuthType, IAuthConfigs } from "./auth.d";
+import { AuthChildrenDataPropsMap, AuthType, AuthConfigs } from "./auth.d";
 import css from "./auth.module.css";
 
 export interface AuthProps extends BaseProps {
-  configs: IAuthConfigs;
+  configs: AuthConfigs;
   attributes?: BaseProps["attributes"];
   events?: BaseProps["events"];
-  childrenData?: IChildrenData<AuthChildrenDataPropsMap>;
+  childrenData?: ChildrenData<AuthChildrenDataPropsMap>;
 }
 
 export class AuthPage extends Page<AuthProps> {
@@ -120,8 +120,8 @@ export class AuthPage extends Page<AuthProps> {
   }
 }
 
-export const createAuthPage: IPageFactory<AuthProps> = (
-  data: IComponentData,
+export const createAuthPage: PageFactory<AuthProps> = (
+  data: ComponentData,
 ): AuthPage => {
   if (!data.childrenData) {
     throw new Error("AuthPage: ChildrenData are not defined");

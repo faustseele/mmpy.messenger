@@ -1,26 +1,26 @@
-import { IComponentAttributes, IComponentConfigs } from "../framework/Component/Component.d";
-import { TagNames } from "../services/render/DOM/DOM.d";
+import { ComponentAttributes, ComponentConfigs } from "../framework/Component/component.d";
+import { TagNameType } from "../services/render/DOM/dom.d";
 
 /* Configurations are used for <input> tag inside <label>-wrapper */ 
-export interface IInputConfigs extends IComponentConfigs {
+export interface InputConfigs extends ComponentConfigs {
   slotKey: string;
-  tagName: Extract<TagNames, "label">
+  tagName: Extract<TagNameType, "label">
   label: string;
   type: "text" | "email" | "password" | "tel";
   isError?: boolean;
-  name: TFieldNames;
-  id: TFieldNames;
+  name: FieldType;
+  id: FieldType;
   errorMessage?: string;
   placeholder: string;
 }
 
 /* Attributes are used for <label> wrapper-tag */
-export interface IInputAttributes extends IComponentAttributes {
+export interface InputAttributes extends ComponentAttributes {
   className: string;
-  for: TFieldNames;
+  for: FieldType;
 }
 
-export type TFieldNames =
+export type FieldType =
   | "name"
   | "surname"
   | "login"

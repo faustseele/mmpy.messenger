@@ -3,16 +3,16 @@ import { createButton } from "../../components/button/Button.ts";
 import { createHeading } from "../../components/heading/Heading.ts";
 import cssSubheading from "../../components/subheading/subheading.module.css";
 import { createSubheading } from "../../components/subheading/Subheading.ts";
-import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
-import { IChildrenData } from "../../framework/Component/Children.d";
-import { BaseProps } from "../../framework/Component/Component.d";
+import { RouteConfigs, RouteLink } from "../../core/Router/router.d";
+import { ChildrenData } from "../../framework/Component/children";
+import { BaseProps } from "../../framework/Component/component";
 import pagesCss from "../pages.module.css";
-import { ErrorChildrenDataPropsMap, IErrorPageConfigs } from "./errors.d";
+import { ErrorChildrenDataPropsMap, ErrorPageConfigs } from "./errors.d";
 import cssErr from "./errors.module.css";
 
 interface ErrorPageProps extends BaseProps {
-  configs: IErrorPageConfigs;
-  childrenData?: IChildrenData<ErrorChildrenDataPropsMap>;
+  configs: ErrorPageConfigs;
+  childrenData?: ChildrenData<ErrorChildrenDataPropsMap>;
 }
 
 export const errorPage404Data: ErrorPageProps = {
@@ -121,14 +121,14 @@ export const errorPage500Data: ErrorPageProps = {
   },
 };
 
-export const error404RouteConfig: IRouteConfigs = {
+export const error404RouteConfig: RouteConfigs = {
   path: RouteLink.NotFound,
   rootQuery: "#app",
   authStatus: "any",
   params: {},
 };
 
-export const error500RouteConfig: IRouteConfigs = {
+export const error500RouteConfig: RouteConfigs = {
   path: RouteLink.Error,
   rootQuery: "#app",
   authStatus: "any",

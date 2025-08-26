@@ -1,6 +1,6 @@
-import { BaseProps } from "../../framework/Component/Component.d";
+import { BaseProps } from "../../framework/Component/component.d";
 import { Page } from "../../pages/Page.ts";
-import { IRoute, IRouteConfigs, TAuthStatus } from "./router.d";
+import { IRoute, RouteConfigs, AuthStateType } from "./router.d";
 import { matchPath } from "./utils.ts";
 
 /**
@@ -10,16 +10,16 @@ import { matchPath } from "./utils.ts";
  */
 
 export interface RouteProps<TProps extends BaseProps> {
-  routeConfigs: IRouteConfigs;
+  routeConfigs: RouteConfigs;
   pageFactory: () => Page<TProps>;
 }
 
 /**
- * @implements IRoute for 'public contract' match
+ * @implements Route for 'public contract' match
  */
 export default class Route<TProps extends BaseProps> implements IRoute {
   private _rootQuery: string = "";
-  private _routeConfigs: IRouteConfigs;
+  private _routeConfigs: RouteConfigs;
   /* Factory args are passed in index.ts */
   private _pageFactory: () => Page<TProps>;
   private _pageInstance: Page<TProps> | null = null;
@@ -27,7 +27,7 @@ export default class Route<TProps extends BaseProps> implements IRoute {
   public get path(): string {
     return this._routeConfigs.path;
   }
-  public get authStatus(): TAuthStatus {
+  public get authStatus(): AuthStateType {
     return this._routeConfigs.authStatus;
   }
 
@@ -59,7 +59,7 @@ export default class Route<TProps extends BaseProps> implements IRoute {
     this._rootQuery = next;
   }
 
-  public setRouteConfigs(nextConfigs: Partial<IRouteConfigs>): void {
+  public setRouteConfigs(nextConfigs: Partial<RouteConfigs>): void {
     Object.assign(this._routeConfigs, nextConfigs);
   }
 

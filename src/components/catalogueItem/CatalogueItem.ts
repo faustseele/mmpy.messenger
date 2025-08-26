@@ -1,8 +1,8 @@
-import { IComponentData } from "../../framework/Component/Component.d";
+import { ComponentData } from "../../framework/Component/component";
 import Component, { ComponentParams } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 import { CatalogueItemProps } from "./catalogueItem.d";
 import css from "./catalogueItem.module.css";
 
@@ -30,8 +30,8 @@ export class CatalogueItem extends Component<CatalogueItemProps> {
   }
 }
 
-export const createCatalogueItem: IComponentFactory<CatalogueItemProps> = (
-  data: IComponentData<CatalogueItemProps>,
+export const createCatalogueItem: ComponentFactory<CatalogueItemProps> = (
+  data: ComponentData<CatalogueItemProps>,
 ): CatalogueItem => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),

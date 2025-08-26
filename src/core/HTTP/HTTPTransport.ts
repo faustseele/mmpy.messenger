@@ -1,11 +1,10 @@
 import {
-  HTTPMethod,
+  HttpMethod,
+  HttpOptions,
+  HttpOptionsNoMethod,
   HttpStatus,
-  Method,
-  TOptions,
-  TOptionsWithoutMethod,
-  TQueryData,
-} from "./HTTP.d";
+  QueryDataType,
+} from "./http.d";
 import { queryStringify } from "./utils.ts";
 
 /**
@@ -17,6 +16,12 @@ export default class HTTPTransport {
   protected static API_URL = "https://ya-praktikum.tech/api/v2";
   protected endpoint: string;
 
+  /* The enum-type is enclosed inside createMethod */
+  public get: HttpMethod = this.createMethod(HttpMethod.GET);
+  public post: HttpMethod = this.createMethod(HttpMethod.POST);
+  public put: HttpMethod = this.createMethod(HttpMethod.PUT);
+  public delete: HttpMethod = this.createMethod(HttpMethod.DELETE);
+
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
@@ -25,33 +30,27 @@ export default class HTTPTransport {
    * Fabric method -> HTTP method
    * @Response -> a type required during the http call
    */
-  private createMethod(method: Method): HTTPMethod {
+  private createMethod(method: HttpMethod): HttpMethod {
     /* returns HTTP method */
-    return <Response>(url: string, options: TOptionsWithoutMethod = {}) => {
+    return <Response>(url: string, options: HttpOptionsNoMethod = {}) => {
       /* In case it's a GET request, adding a query string */
-      if (method === Method.GET && options.data) {
-        url += queryStringify(options.data as TQueryData);
+      if (method === HttpMethod.GET && options.data) {
+        url += queryStringify(options.data as QueryDataType);
       }
 
       return this._request<Response>(url, { ...options, method });
     };
   }
 
-  /* The enum-type is enclosed inside createMethod */
-  public get: HTTPMethod = this.createMethod(Method.GET);
-  public post: HTTPMethod = this.createMethod(Method.POST);
-  public put: HTTPMethod = this.createMethod(Method.PUT);
-  public delete: HTTPMethod = this.createMethod(Method.DELETE);
-
   /**
    * @returns Promise, which is allowed with a typed response
    * or rejects with an error.
    */
-  private _request = <TResponse>(
+  private _request = <ResponseType>(
     /* E.g. 'sign-up' */
     relativePath: string,
-    options: TOptions,
-  ): Promise<TResponse> => {
+    options: HttpOptions,
+  ): Promise<ResponseType> => {
     const { method, data, headers = {}, withCredentials = true } = options;
 
     return new Promise((resolve, reject) => {
@@ -82,7 +81,7 @@ export default class HTTPTransport {
           xhr.status < HttpStatus.MultipleChoices
         ) {
           /* xhr should be a JSON object here */
-          resolve(xhr.response as TResponse);
+          resolve(xhr.response as ResponseType);
         } else {
           reject({
             status: xhr.status,
@@ -99,7 +98,7 @@ export default class HTTPTransport {
       xhr.timeout = options.timeout || 5000;
       xhr.withCredentials = withCredentials;
 
-      if (method === Method.GET || !data) {
+      if (method === HttpMethod.GET || !data) {
         xhr.send();
       } else {
         const body = data instanceof FormData ? data : JSON.stringify(data);

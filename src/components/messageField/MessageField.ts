@@ -1,8 +1,8 @@
-import { IComponentData } from "../../framework/Component/Component.d";
+import { ComponentData } from "../../framework/Component/component";
 import Component, { ComponentParams } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 import { MessageFieldProps } from "./messageField.d";
 import css from "./messageField.module.css";
 
@@ -27,8 +27,8 @@ export class MessageField extends Component<MessageFieldProps> {
   }
 }
 
-export const createMessageField: IComponentFactory<MessageFieldProps> = (
-  data: IComponentData<MessageFieldProps>,
+export const createMessageField: ComponentFactory<MessageFieldProps> = (
+  data: ComponentData<MessageFieldProps>,
 ): MessageField => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),

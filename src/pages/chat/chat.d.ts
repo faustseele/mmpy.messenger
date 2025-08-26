@@ -4,15 +4,15 @@ import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
 import { Input, InputProps } from "../../components/input/Input.ts";
 import { Message, MessageProps } from "../../components/message/Message.ts";
 import { MessageField, MessageFieldProps } from "../../components/messageField/MessageField.ts";
-import { ChildrenPropsMap } from "../../framework/Component/Children.d";
-import { BaseProps, IComponentConfigs } from "../../framework/Component/Component.d";
+import { ChildrenPropsMap } from "../../framework/Component/children.d";
+import { BaseProps, ComponentConfigs } from "../../framework/Component/component.d";
 
 interface ChatPageProps extends BaseProps {
-  configs: IChatPageConfigs;
-  childrenData?: IChildrenData<ChatChildrenDataPropsMap>;
+  configs: ChatPageConfigs;
+  childrenData?: ChildrenData<ChatChildrenDataPropsMap>;
 }
 
-export interface IChatPageConfigs extends IComponentConfigs {
+export interface ChatPageConfigs extends ComponentConfigs {
   participantAvatar: string;
   participantName: string;
 }

@@ -1,9 +1,9 @@
 import { v4 as makeUUID } from "uuid";
 import type {
-  IComponentAttributes,
-  IComponentEvents,
-} from "../../../framework/Component/Component.d";
-import { TagNames } from "./DOM.d";
+  ComponentAttributes,
+  ComponentEvents,
+} from "../../../framework/Component/component";
+import { TagNameType } from "./dom";
 
 /**
  * @DOMService ­– Owns the DOM-related logic.
@@ -14,10 +14,10 @@ import { TagNames } from "./DOM.d";
  */
 
 export default class DOMService<
-  A extends IComponentAttributes,
-  E extends IComponentEvents | undefined,
+  A extends ComponentAttributes,
+  E extends ComponentEvents | undefined,
 > {
-  private readonly _tagName: TagNames;
+  private readonly _tagName: TagNameType;
   private _attributes?: A = undefined;
   private _element: HTMLElement | null = null;
 
@@ -26,7 +26,7 @@ export default class DOMService<
     return this._element;
   }
 
-  constructor(tagName: TagNames, attributes?: A) {
+  constructor(tagName: TagNameType, attributes?: A) {
     this._tagName = tagName;
     this._attributes = attributes;
   }
@@ -44,7 +44,7 @@ export default class DOMService<
 
   private _addAttributes(
     element: HTMLElement,
-    attributes: IComponentAttributes,
+    attributes: ComponentAttributes,
   ): HTMLElement {
     element.setAttribute("data-id", this.id);
 

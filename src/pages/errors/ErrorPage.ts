@@ -1,6 +1,6 @@
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { IComponentData } from "../../framework/Component/Component.d";
+import { ComponentData } from "../../framework/Component/component";
 import {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
@@ -10,7 +10,7 @@ import {
 } from "../../framework/Component/utils.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IPageFactory } from "../../utils/factory/factory.d";
+import { PageFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
 import { Page } from "../Page.ts";
 import { ErrorPageProps } from "./errors.d";
@@ -52,8 +52,8 @@ export class ErrorPage extends Page<ErrorPageProps> {
   }
 }
 
-export const createErrorPage: IPageFactory<ErrorPageProps> = (
-  data: IComponentData<ErrorPageProps>,
+export const createErrorPage: PageFactory<ErrorPageProps> = (
+  data: ComponentData<ErrorPageProps>,
 ): ErrorPage => {
   if (!data.childrenData) {
     throw new Error("ErrorPage: ChildrenData are not defined");

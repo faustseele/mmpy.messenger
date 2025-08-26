@@ -1,26 +1,26 @@
 import { RouteLink } from "../../core/Router/router.d";
 import {
-  IComponentAttributes,
-  IComponentConfigs
-} from "../../framework/Component/Component.d";
-import { TagNames } from "../../services/render/DOM/DOM.d";
+  ComponentAttributes,
+  ComponentConfigs
+} from "../../framework/Component/component.d";
+import { TagNameType } from "../../services/render/DOM/dom.d";
 
 export interface ButtonProps extends BaseProps {
-  configs: IButtonConfigs;
-  attributes?: IButtonAttributes;
+  configs: ButtonConfigs;
+  attributes?: ButtonAttributes;
   events?: BaseProps["events"];
   childrenData?: BaseProps["childrenData"];
 } 
 
-export interface IButtonConfigs extends IComponentConfigs {
+export interface ButtonConfigs extends ComponentConfigs {
   slotKey: string;
   label: string;
-  tagName: Extract<TagNames, "button">;
+  tagName: Extract<TagNameType, "button">;
   type: "button" | "submit";
   modifier?: string;
   link?: RouteLink;
 }
 
-export interface IButtonAttributes extends IComponentAttributes {
+export interface ButtonAttributes extends ComponentAttributes {
   type: "button" | "submit";
 }

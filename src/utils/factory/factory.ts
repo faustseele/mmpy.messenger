@@ -1,11 +1,11 @@
-import { IChildrenData, IChildren, ChildrenPropsMap } from "../../framework/Component/Children.d";
+import { ChildrenData, Children, ChildrenPropsMap } from "../../framework/Component/children";
 
-export function createChildren (data: IChildrenData<ChildrenPropsMap>): IChildren<ChildrenPropsMap> {
+export function createChildren (data: ChildrenData<ChildrenPropsMap>): Children<ChildrenPropsMap> {
   if (!data) {
     throw new Error("childrenData are not defined", data);
   }
 
-  const children: IChildren = {};
+  const children: Children = {};
 
   Object.values(data).forEach((dataChunk) => {
     if (dataChunk.type === "list") {

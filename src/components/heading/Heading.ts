@@ -1,10 +1,10 @@
-import { IComponentData } from "../../framework/Component/Component.d";
+import { ComponentData } from "../../framework/Component/component";
 import Component, {
   ComponentParams,
 } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 import { HeadingProps } from "./heading.d";
 import css from "./heading.module.css";
 
@@ -37,8 +37,8 @@ export class Heading extends Component<HeadingProps> {
   }
 }
 
-export const createHeading: IComponentFactory<HeadingProps> = (
-  data: IComponentData<HeadingProps>,
+export const createHeading: ComponentFactory<HeadingProps> = (
+  data: ComponentData<HeadingProps>,
 ): Heading => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),

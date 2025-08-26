@@ -1,8 +1,8 @@
-import { IComponentData } from "../../framework/Component/Component.d";
+import { ComponentData } from "../../framework/Component/component";
 import Component, { ComponentParams } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 import { SubheadingProps } from "./subheading.d";
 
 export class Subheading extends Component<SubheadingProps> {
@@ -15,8 +15,8 @@ export class Subheading extends Component<SubheadingProps> {
   }
 }
 
-export const createSubheading: IComponentFactory<SubheadingProps> = (
-  data: IComponentData<SubheadingProps>,
+export const createSubheading: ComponentFactory<SubheadingProps> = (
+  data: ComponentData<SubheadingProps>,
 ): Subheading => {
   data.configs.text = data.configs.text.toLowerCase();
 

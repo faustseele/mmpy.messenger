@@ -1,15 +1,15 @@
 import {
   BaseProps,
-  IComponentConfigs,
-} from "../../framework/Component/Component.d";
-import { TagNames } from "../../services/render/DOM/DOM.d";
+  ComponentConfigs,
+} from "../../framework/Component/component.d";
+import { TagNameType } from "../../services/render/DOM/dom.d";
 
-export interface ISubheadingConfigs extends IComponentConfigs {
-  tagName: Extract<TagNames, "h2" | "h3" | "h4" | "h5" | "h6">;
+export interface SubheadingConfigs extends ComponentConfigs {
+  tagName: Extract<TagNameType, "h2" | "h3" | "h4" | "h5" | "h6">;
   text: string;
 }
 
 export interface SubheadingProps extends BaseProps {
-  configs: ISubheadingConfigs;
+  configs: SubheadingConfigs;
   attributes?: BaseProps['attributes'];
 }

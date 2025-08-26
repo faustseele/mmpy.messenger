@@ -1,12 +1,13 @@
 import EventBus from "../../services/events/EventBus.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ChildrenPropsMap, IChildren } from "./Children.d";
+import { ChildrenPropsMap, Children } from "./children.d";
 import type {
   BaseProps,
-  IComponentData,
-  IComponentDeps,
-} from "./Component.d";
+  ComponentEventBusEvents,
+  ComponentData,
+  ComponentDeps,
+} from "./component";
 import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
 
 /** Abstract class for the Component
@@ -22,8 +23,8 @@ import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
  * */
 
 export interface ComponentParams<TProps extends BaseProps = BaseProps> {
-  deps: IComponentDeps;
-  data: IComponentData<TProps>;
+  deps: ComponentDeps;
+  data: ComponentData<TProps>;
 }
 
 export default abstract class Component<TProps extends BaseProps> {
@@ -34,9 +35,9 @@ export default abstract class Component<TProps extends BaseProps> {
   private _attributes?: TProps["attributes"];
   private _events?: TProps["events"];
   private _childrenData?: TProps["childrenData"];
-  private _children?: IChildren<ChildrenPropsMap>;
-  private eventBus: EventBus = new EventBus();
-  private _hasChildren(children = this._children): children is IChildren {
+  private _children?: Children<ChildrenPropsMap>;
+  private eventBus: EventBus<ComponentEventBusEvents> = new EventBus();
+  private _hasChildren(children = this._children): children is Children {
     return !!children && Object.keys(children).length > 0;
   }
   public readonly id: string;
@@ -52,7 +53,7 @@ export default abstract class Component<TProps extends BaseProps> {
   public get childrenData(): TProps["childrenData"] {
     return this._childrenData;
   }
-  public get children(): IChildren | undefined {
+  public get children(): Children | undefined {
     return this._children;
   }
 
@@ -60,7 +61,9 @@ export default abstract class Component<TProps extends BaseProps> {
    * Returns the component's HTML structure as a string.
    * Is redefined in Component instantiations to get a layout.
    */
-  public abstract getSourceMarkup(): string;
+  public getSourceMarkup(): string {
+    return ``;
+  }
 
   constructor({
     deps: { domService, fragmentService },
@@ -204,11 +207,9 @@ export default abstract class Component<TProps extends BaseProps> {
   /** Invokes Proxy-setters.
    * New configs -> invoke Proxy-setters
    * New events -> invoke swap listeners
-   * @Partial is used in case IComponentConfigs in the props are not defined.
+   * @Partial is used in case ComponentConfigs in the props are not defined.
    * TODO: implement proxifed event */
-  public setProps(
-    nextProps: Partial<IComponentData>,
-  ): void {
+  public setProps(nextProps: Partial<ComponentData>): void {
     if (!nextProps) return;
 
     const hasConfigs = !!nextProps.configs;

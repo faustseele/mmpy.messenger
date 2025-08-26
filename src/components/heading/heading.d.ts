@@ -1,14 +1,14 @@
-import { IComponentAttributes, IComponentConfigs } from "../../framework/Component/Component.d";
-import { TagNames } from "../../services/render/DOM/DOM.d";
+import { ComponentAttributes, ComponentConfigs } from "../../framework/Component/component.d";
+import { TagNameType } from "../../services/render/DOM/dom.d";
 
 export interface HeadingProps extends BaseProps {
-  configs: IHeadingConfigs;
-  attributes: IHeadingAttributes;
+  configs: HeadingConfigs;
+  attributes: HeadingAttributes;
 }
 
-export interface IHeadingConfigs extends IComponentConfigs {
+export interface HeadingConfigs extends ComponentConfigs {
   slotKey: string;
-  tagName: Extract<TagNames, "h1" | "h2" | "h3">
+  tagName: Extract<TagNameType, "h1" | "h2" | "h3">
   type: string;
   text: string;
   isClickable?: boolean;
@@ -16,6 +16,6 @@ export interface IHeadingConfigs extends IComponentConfigs {
   link?: Routes;
 }
 
-interface IHeadingAttributes extends IComponentAttributes {
+interface HeadingAttributes extends ComponentAttributes {
   className: string;
 }

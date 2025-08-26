@@ -1,10 +1,10 @@
-import { TFieldNames } from "./input.d";
+import { FieldType } from "./input.d";
 
 /** 'Ё' Char has U+0401, whereas 'А-Я' range includes
  * symbols from U+0410 up to U+042F. Same thing for 'ё'!
  * Eslint is wrongly complaining about unused vars */
 // eslint-disable-next-line no-unused-vars
-const getRegex: Record<TFieldNames, (value: string) => string> = {
+const getRegex: Record<FieldType, (value: string) => string> = {
   name: (value: string): string => {
     const regex = /^[A-ZА-ЯЁ][a-zA-Zа-яА-ЯЁё-]*$/;
     return regex.test(value) ? "" : "Странное имя.";
@@ -50,7 +50,7 @@ const getRegex: Record<TFieldNames, (value: string) => string> = {
  * @returns An empty string if valid, or an error message string if invalid.
  */
 export function validateInputField(
-  fieldName: TFieldNames | '',
+  fieldName: FieldType | '',
   value?: string,
 ): string {
   if (!fieldName) return "";

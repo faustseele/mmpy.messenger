@@ -1,12 +1,12 @@
-import { IChildrenData } from "../../framework/Component/Component.d";
+import { ChildrenData } from "../../framework/Component/component";
 import {
   createButton,
   createHeading,
   createInputEditor,
 } from "../../utils/factory/factory.ts";
-import { IProfilePageConfigs } from "./profile.d";
+import { ProfilePageConfigs } from "./profile.d";
 
-export const createChildren = (configs: IProfilePageConfigs) => {
+export const createChildren = (configs: ProfilePageConfigs) => {
   const {
     headingConfigs_profile,
     headingConfigs_backToChats,
@@ -24,7 +24,7 @@ export const createChildren = (configs: IProfilePageConfigs) => {
     buttonEditInfo: createButton(buttonProps_editInfo),
     buttonEditPassword: createButton(buttonProps_editPassword),
     buttonLogout: createButton(buttonProps_signOut),
-  } satisfies IChildrenData;
+  } satisfies ChildrenData;
 
   return children;
 };

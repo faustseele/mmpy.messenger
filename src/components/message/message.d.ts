@@ -1,18 +1,18 @@
 import {
   BaseProps,
-  IComponentConfigs,
-} from "../../framework/Component/Component.d";
-import { TagNames } from "../../services/render/DOM/DOM.d";
+  ComponentConfigs,
+} from "../../framework/Component/component.d";
+import { TagNameType } from "../../services/render/DOM/dom.d";
 
 export type MessageType = "incoming" | "outgoing" | "date";
 
 export interface MessageProps extends BaseProps {
-  configs: IMessageConfigs;
+  configs: MessageConfigs;
   attributes?: BaseProps['attributes'];
 }
 
-export interface IMessageConfigs extends IComponentConfigs {
-  tagName: Extract<TagNames, "article" | "div">;
+export interface MessageConfigs extends ComponentConfigs {
+  tagName: Extract<TagNameType, "article" | "div">;
   type: MessageType;
   date: string;
   text?: string;

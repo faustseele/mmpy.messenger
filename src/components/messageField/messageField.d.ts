@@ -1,8 +1,8 @@
-import { BaseProps, IComponentConfigs } from "../../framework/Component/Component.d";
-import { TagNames } from "../../services/render/DOM/DOM.d";
+import { BaseProps, ComponentConfigs } from "../../framework/Component/component.d";
+import { TagNameType } from "../../services/render/DOM/dom.d";
 
-export interface IMessageFieldConfigs extends IComponentConfigs {
-  tagName: Extract<TagNames, "form">;
+export interface MessageFieldConfigs extends ComponentConfigs {
+  tagName: Extract<TagNameType, "form">;
   id: string;
   type: "text";
   placeholder?: string;
@@ -10,6 +10,6 @@ export interface IMessageFieldConfigs extends IComponentConfigs {
 }
 
 export interface MessageFieldProps extends BaseProps {
-  configs: IMessageFieldConfigs;
+  configs: MessageFieldConfigs;
   attributes?: BaseProps["attributes"];
 }

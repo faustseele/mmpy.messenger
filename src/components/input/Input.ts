@@ -1,18 +1,18 @@
 import {
   BaseProps,
-  IComponentData,
-} from "../../framework/Component/Component.d";
+  ComponentData,
+} from "../../framework/Component/component";
 import Component, { ComponentParams } from "../../framework/Component/Component.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { guardHTMLElement } from "../../utils/guards.ts";
-import { IInputAttributes, IInputConfigs, TFieldNames } from "../../utils/input.d";
+import { InputAttributes, InputConfigs, FieldType } from "../../utils/input.d";
 import css from "./input.module.css";
 
 export interface InputProps extends BaseProps {
-  configs: IInputConfigs;
-  attributes?: IInputAttributes;
+  configs: InputConfigs;
+  attributes?: InputAttributes;
   events?: BaseProps["events"];
   childrenData?: BaseProps["childrenData"];
 }
@@ -31,12 +31,12 @@ export class Input extends Component<InputProps> {
       this.element?.querySelector(`.${css.errorLabel}`) ?? undefined;
   }
 
-  public getNameAndValue(): { name: TFieldNames | ""; value: string } {
+  public getNameAndValue(): { name: FieldType | ""; value: string } {
     if (!guardHTMLElement("Input.input", this.input)) {
       return { name: "", value: "" };
     }
 
-    return { name: this.input.name as TFieldNames, value: this.input.value };
+    return { name: this.input.name as FieldType, value: this.input.value };
   }
 
   public showError(message: string): void {
@@ -79,8 +79,8 @@ export class Input extends Component<InputProps> {
   }
 }
 
-export const createInput: IComponentFactory<InputProps> = (
-  data: IComponentData<InputProps>,
+export const createInput: ComponentFactory<InputProps> = (
+  data: ComponentData<InputProps>,
 ): Input => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),

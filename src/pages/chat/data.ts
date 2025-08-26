@@ -9,10 +9,10 @@ import { MessageProps } from "../../components/message/message.d";
 import { createMessage } from "../../components/message/Message.ts";
 import messageFieldCss from "../../components/messageField/messageField.module.css";
 import { createMessageField } from "../../components/messageField/MessageField.ts";
-import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
-import { IChildrenData } from "../../framework/Component/Children.d";
-import { IComponentData } from "../../framework/Component/Component.d";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { RouteConfigs, RouteLink } from "../../core/Router/router.d";
+import { ChildrenData } from "../../framework/Component/children";
+import { ComponentData } from "../../framework/Component/component";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 import cssPages from "../pages.module.css";
 import { ChatChildrenDataPropsMap, ChatPageProps } from "./chat.d";
 import cssChat from "./chat.module.css";
@@ -22,8 +22,8 @@ import cssBtn from "../../components/button/button.module.css";
 const messages: {
   type: "list";
   slotKey: string;
-  dataList: IComponentData<MessageProps>[];
-  childrenFactory: IComponentFactory<MessageProps>;
+  dataList: ComponentData<MessageProps>[];
+  childrenFactory: ComponentFactory<MessageProps>;
 } = {
   type: "list",
   slotKey: "messages",
@@ -132,7 +132,7 @@ const messages: {
   ],
 };
 
-const chatChildrenData: IChildrenData<ChatChildrenDataPropsMap> = {
+const chatChildrenData: ChildrenData<ChatChildrenDataPropsMap> = {
   heading_chats: {
     type: "single",
     data: {
@@ -263,7 +263,7 @@ export const chatPageData: ChatPageProps = {
   childrenData: chatChildrenData,
 };
 
-export const chatPageRouteConfig: IRouteConfigs = {
+export const chatPageRouteConfig: RouteConfigs = {
   path: RouteLink.Chats,
   rootQuery: "#app",
   authStatus: 'protected',

@@ -1,19 +1,19 @@
 import { Button, ButtonProps } from "../../components/button/Button.ts";
 import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
 import { Subheading, SubheadingProps } from "../../components/subheading/Subheading.ts";
-import { ChildrenPropsMap } from "../../framework/Component/Children.d.ts";
-import { BaseProps } from "../../framework/Component/Component.d";
-import { IComponentConfigs } from "../../framework/Component/Component.d";
+import { ChildrenPropsMap } from "../../framework/Component/children.d";
+import { BaseProps } from "../../framework/Component/component.d";
+import { ComponentConfigs } from "../../framework/Component/component.d";
 
-export type TErrorPageCode = "404" | "500";
+export type ErrorCodeType = "404" | "500";
 
 export interface ErrorPageProps extends BaseProps {
-  configs: IErrorPageConfigs;
-  childrenData?: IChildrenData<ErrorChildrenDataPropsMap>;
+  configs: ErrorPageConfigs;
+  childrenData?: ChildrenData<ErrorChildrenDataPropsMap>;
 }
 
-export interface IErrorPageConfigs extends IComponentConfigs {
-  code: TErrorPageCode;
+export interface ErrorPageConfigs extends ComponentConfigs {
+  code: ErrorCodeType;
 }
 
 export interface ErrorChildrenDataPropsMap extends ChildrenPropsMap {

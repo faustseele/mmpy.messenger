@@ -2,29 +2,29 @@
  * The 'public contract' for any Route
  * Ensures generic heterogeneity in arrays, e.g. _routes in Router. Homogenious generics wouldn't need this
  * Defines the invariant API (common methods/properties) without generics, acting as a supertype
- * Class Route<...> implements IRoute makes every Route instance assignable to IRoute
+ * Class Route<...> implements Route makes every Route instance assignable to Route
  * Avoids unnecessary casting: polymorphism
- * Covariance in a win for the array: subtypes Route<Specific> are assignable to supertype array IRoute[]
+ * Covariance in a win for the array: subtypes Route<Specific> are assignable to supertype array Route[]
  */
 export interface IRoute {
   /* Eslint doesn't get that params are used */
   // eslint-disable-next-line no-unused-vars
   setRootQuery(next: string): void;
   // eslint-disable-next-line no-unused-vars
-  setRouteConfigs(nextConfigs: Partial<IRouteConfigs>): void;
+  setRouteConfigs(nextConfigs: Partial<RouteConfigs>): void;
   leave(): void;
   render(): void;
   /* Getters */
   readonly path: string;
-  readonly authStatus: TAuthStatus;
+  readonly authStatus: AuthStateType;
 }
 
-export type TAuthStatus = 'protected' | 'guest' | 'any';
+export type AuthStateType = 'protected' | 'guest' | 'any';
 
-export interface IRouteConfigs {
+export interface RouteConfigs {
   path: string;
   rootQuery: string;
-  authStatus: TAuthStatus; 
+  authStatus: AuthStateType; 
   params: Record<string, string>;
 }
 

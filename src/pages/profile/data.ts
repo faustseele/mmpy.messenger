@@ -6,19 +6,19 @@ import { createHeading } from "../../components/heading/Heading.ts";
 import cssInput from "../../components/input/input.module.css";
 import { createInput } from "../../components/input/Input.ts";
 import { createInputEditor } from "../../components/input/InputEditor.ts";
-import { IRouteConfigs, RouteLink } from "../../core/Router/router.d";
-import { IChildrenData } from "../../framework/Component/Children.d";
-import { BaseProps } from "../../framework/Component/Component.d";
+import { RouteConfigs, RouteLink } from "../../core/Router/router.d";
+import { ChildrenData } from "../../framework/Component/children";
+import { BaseProps } from "../../framework/Component/component";
 import cssPages from "../pages.module.css";
-import { IProfilePageConfigs, ProfileChildrenDataPropsMap } from "./profile.d";
+import { ProfilePageConfigs, ProfileChildrenDataPropsMap } from "./profile.d";
 import cssProfile from "./profile.module.css";
 
 interface ProfilePageProps extends BaseProps {
-  configs: IProfilePageConfigs;
-  childrenData?: IChildrenData<ProfileChildrenDataPropsMap>;
+  configs: ProfilePageConfigs;
+  childrenData?: ChildrenData<ProfileChildrenDataPropsMap>;
 }
 
-const profileChildrenData: IChildrenData<ProfileChildrenDataPropsMap> = {
+const profileChildrenData: ChildrenData<ProfileChildrenDataPropsMap> = {
   heading_profile: {
     type: "single",
     data: {
@@ -181,7 +181,7 @@ export const profilePageData: ProfilePageProps = {
   childrenData: profileChildrenData,
 };
 
-export const profilePageRouteConfig: IRouteConfigs = {
+export const profilePageRouteConfig: RouteConfigs = {
   path: RouteLink.Settings,
   rootQuery: "#app",
   authStatus: "protected",

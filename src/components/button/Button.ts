@@ -1,10 +1,10 @@
 import {
-  IComponentData
-} from "../../framework/Component/Component.d";
+  ComponentData
+} from "../../framework/Component/component";
 import Component, { ComponentParams } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IComponentFactory } from "../../utils/factory/factory.d";
+import { ComponentFactory } from "../../utils/factory/factory.d";
 import { ButtonProps } from "./button.d";
 
 export class Button extends Component<ButtonProps> {
@@ -20,8 +20,8 @@ export class Button extends Component<ButtonProps> {
   }
 }
 
-export const createButton: IComponentFactory<ButtonProps> = (
-  data: IComponentData<ButtonProps>,
+export const createButton: ComponentFactory<ButtonProps> = (
+  data: ComponentData<ButtonProps>,
 ): Button => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),

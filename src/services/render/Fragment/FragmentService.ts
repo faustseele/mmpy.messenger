@@ -1,10 +1,10 @@
 import Handlebars from "handlebars";
 import {
   BaseProps,
-  IComponentConfigs,
-} from "../../../framework/Component/Component.d";
+  ComponentConfigs,
+} from "../../../framework/Component/component";
 import Component from "../../../framework/Component/Component.ts";
-import { IChildren } from "../../../framework/Component/Children.d";
+import { Children } from "../../../framework/Component/children";
 
 /**
  * @FragmentService – Stateless feature-service.
@@ -19,7 +19,7 @@ import { IChildren } from "../../../framework/Component/Children.d";
  * @children is a state with homogeneous children in each prop
  * @childrenList is an array of children with the same key
  */
-export default class FragmentService<C extends IComponentConfigs> {
+export default class FragmentService<C extends ComponentConfigs> {
   /**
    * @returns DocumentFragment
    * DocumentFragment is an off-DOM lightweight container.
@@ -34,7 +34,7 @@ export default class FragmentService<C extends IComponentConfigs> {
   public compileWithChildren(
     sourceMarkup: string,
     configs: C,
-    children: IChildren,
+    children: Children,
   ): DocumentFragment {
     /* Creating <div id="random UUID"></div>.. placeholders for children */
     const divPlaceholders = this._createDivPlaceholders(children);
@@ -70,7 +70,7 @@ export default class FragmentService<C extends IComponentConfigs> {
    * Generates an object with either one div-placeholder '<tag></tag>' by key
    * or a concatenated list of div-placeholders <tags> by key.
    */
-  private _createDivPlaceholders(children: IChildren): Record<string, string> {
+  private _createDivPlaceholders(children: Children): Record<string, string> {
     const divPlaceholders: Record<string, string> = {};
 
     Object.values(children).forEach((childrenChunk) => {
@@ -109,7 +109,7 @@ export default class FragmentService<C extends IComponentConfigs> {
    */
   private _replacePlaceholdersInFragment(
     fragment: DocumentFragment,
-    children: IChildren,
+    children: Children,
   ): DocumentFragment {
     Object.values(children).forEach((childrenChunk) => {
       if (childrenChunk.type === "list") {

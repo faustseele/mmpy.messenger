@@ -1,7 +1,9 @@
-import AuthController from "../../controllers/Auth/AuthController.ts";
+import AuthController from "../../controllers/AuthController.ts";
 import { RouteLink } from "../../core/Router/router.d";
 import Router from "../../core/Router/Router.ts";
-import { IComponentData } from "../../framework/Component/Component.d";
+import { connect } from "../../core/Store/connect.ts";
+import { AppState } from "../../core/Store/Store.ts";
+import { ComponentData } from "../../framework/Component/component.d";
 import { ComponentParams } from "../../framework/Component/Component.ts";
 import {
   getChildFromMap,
@@ -11,16 +13,21 @@ import {
 import FormValidator from "../../services/forms/FormValidator.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { IPageFactory } from "../../utils/factory/factory.d";
+import { PageFactory } from "../../utils/factory/factory.d";
 import { createChildren } from "../../utils/factory/factory.ts";
 import { Page } from "../Page.ts";
 
 import { ProfilePageProps } from "./profile.d";
 import css from "./profile.module.css";
 
+const mapStateToProps = (state: AppState) => ({
+  user: state.user,
+});
+
 export class ProfilePage extends Page<ProfilePageProps> {
   constructor(props: ComponentParams<ProfilePageProps>) {
     super(props);
+    console.log(props);
   }
 
   public componentDidMount(): void {
@@ -43,13 +50,15 @@ export class ProfilePage extends Page<ProfilePageProps> {
 
     buttonEditInfo.setProps({
       events: {
-        click: (e: Event) => formValidator.onFormSubmit(e, RouteLink.Settings, "change-info"),
+        click: (e: Event) =>
+          formValidator.onFormSubmit(e, RouteLink.Settings, "change-info"),
       },
     });
 
     buttonEditPass.setProps({
       events: {
-        click: (e: Event) => formValidator.onFormSubmit(e, RouteLink.Settings, "change-password"),
+        click: (e: Event) =>
+          formValidator.onFormSubmit(e, RouteLink.Settings, "change-password"),
       },
     });
 
@@ -112,9 +121,8 @@ export class ProfilePage extends Page<ProfilePageProps> {
   }
 }
 
-// The factory function, which follows the established pattern
-export const createProfilePage: IPageFactory<ProfilePageProps> = (
-  data: IComponentData<ProfilePageProps>,
+export const createProfilePage: PageFactory<ProfilePageProps> = (
+  data: ComponentData<ProfilePageProps>,
 ): ProfilePage => {
   if (!data.childrenData) {
     throw new Error("ProfilePage: ChildrenData are not defined");
@@ -127,5 +135,11 @@ export const createProfilePage: IPageFactory<ProfilePageProps> = (
   };
 
   const preparedData = { ...data, children };
-  return new ProfilePage({ deps, data: preparedData });
+
+  const ConnectedProfilePage = connect(mapStateToProps)(ProfilePage);
+
+  return new ConnectedProfilePage({
+    deps,
+    data: preparedData,
+  }) as ProfilePage;
 };
