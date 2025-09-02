@@ -1,0 +1,39 @@
+import { ComponentData } from "../../framework/Component/component";
+import Component, { ComponentParams } from "../../framework/Component/Component.ts";
+import DOMService from "../../services/render/DOM/DOMService.ts";
+import FragmentService from "../../services/render/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../utils/factory/factory.d";
+import { MessageFieldProps } from "../model/types.ts";
+import css from "./messageField.module.css";
+
+export class MessageField extends Component<MessageFieldProps> {
+  constructor(props: ComponentParams<MessageFieldProps>) {
+    super(props);
+  }
+
+  public getSourceMarkup(): string {
+    return /*html*/ `
+      <button type="button" class="${css.inputButton} ${css.attachButton}" aria-label="Attach file"></button>
+      <input
+        class="${css.input}"
+        name="{{id}}"
+        type="{{type}}"
+        id="{{id}}"
+        placeholder="{{placeholder}}"
+        aria-label="{{label}}"
+      />
+      <button type="submit" class="${css.inputButton} ${css.sendButton}" aria-label="Send message"></button>
+    `;
+  }
+}
+
+export const createMessageField: ComponentFactory<MessageFieldProps> = (
+  data: ComponentData<MessageFieldProps>,
+): MessageField => {
+  const deps = {
+    domService: new DOMService(data.configs.tagName, data.attributes),
+    fragmentService: new FragmentService(),
+  };
+
+  return new MessageField({ deps, data });
+};

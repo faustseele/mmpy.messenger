@@ -1,26 +1,21 @@
 import "./index.css";
-import Router from "./src/core/Router/Router.ts";
-import { createAuthPage } from "./src/pages/auth/AuthPage.ts";
-import {
-  signInData,
-  signInRouteConfig,
-  signUpData,
-  signUpRouteConfig,
-} from "./src/pages/auth/data.ts";
-import { createChatPage } from "./src/pages/chat/ChatPage.ts";
-import { chatPageData, chatPageRouteConfig } from "./src/pages/chat/data.ts";
+import Router from "./src/app/providers/router/Router.ts";
+import { createAuthPage } from "./src/pages/auth/ui/AuthPage.ts";
+import { createChatPage } from "./src/pages/chat/ui/ChatPage.ts";
+import { createErrorPage } from "./src/pages/errors/ui/ErrorPage.ts";
+import { createProfilePage } from "./src/pages/profile/ui/ProfilePage.ts";
+import { signInData, signInRouteConfig, signUpData, signUpRouteConfig } from "./src/shared/config/mocks/auth.ts";
+import { chatPageData, chatPageRouteConfig } from "./src/shared/config/mocks/chat.ts";
 import {
   error404RouteConfig,
   error500RouteConfig,
   errorPage404Data,
   errorPage500Data,
-} from "./src/pages/errors/data.ts";
-import { createErrorPage } from "./src/pages/errors/ErrorPage.ts";
+} from "./src/shared/config/mocks/errors.ts";
 import {
   profilePageData,
   profilePageRouteConfig,
-} from "./src/pages/profile/data.ts";
-import { createProfilePage } from "./src/pages/profile/ProfilePage.ts";
+} from "./src/shared/config/mocks/profile.ts";
 
 export const rootQuery = "#app";
 
