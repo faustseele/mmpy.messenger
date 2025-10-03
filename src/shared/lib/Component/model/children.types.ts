@@ -22,7 +22,7 @@ export type ChildrenMap = {
  * Contract that folds children-blueprints into
  * a parent-level registry (Page per se)
  */
-export type ChildrenSchema<Map extends ChildrenMap> = {
+export type ChildrenSchema<Map extends ChildrenMap = ChildrenMap> = {
   singles: {
     [K in keyof Map["singles"]]: ChildBlueprint<
       Map["singles"][K]["props"],
@@ -61,8 +61,8 @@ export type ChildrenBlueprint<
 };
 
 export type ChildrenInstances<
-  Map extends ChildrenMap,
   TSchema extends ChildrenSchema<Map>,
+  Map extends ChildrenMap = ChildrenMap,
 > = {
   singles: {
     [K in keyof TSchema["singles"]]: TSchema["singles"][K]["instance"];
