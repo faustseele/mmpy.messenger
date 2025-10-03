@@ -1,27 +1,24 @@
-import {
-  BaseProps,
-  ComponentData,
-} from "../../../framework/Component/component";
-import Component, { ComponentParams } from "../../../framework/Component/Component.ts";
-import { ComponentFactory } from "../../../utils/factory/factory";
-import DOMService from "../../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../../services/render/Fragment/FragmentService.ts";
-import { guardHTMLElement } from "../../../lib/helpers/guards.ts";
-import { InputAttributes, InputConfigs, FieldType } from "../../../utils/input";
+import { BaseProps } from "../../lib/Component/model/base.types.ts";
+import Component from "../../lib/Component/model/Component.ts";
+import { ComponentData, ComponentProps } from "../../lib/Component/model/types.ts";
+import DOMService from "../../lib/DOM/DOMService.ts";
+import FragmentService from "../../lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
+import { guardHTMLElement } from "../../lib/helpers/html/guards.ts";
+import { FieldType, InputAttributes, InputConfigs } from "../../lib/helpers/input/types.ts";
 import css from "./input.module.css";
 
 export interface InputProps extends BaseProps {
   configs: InputConfigs;
   attributes?: InputAttributes;
   events?: BaseProps["events"];
-  childrenData?: BaseProps["childrenData"];
 }
 
 export class Input extends Component<InputProps> {
   private input: HTMLInputElement | undefined = undefined;
   private errorLabel: HTMLElement | undefined = undefined;
 
-  constructor(props: ComponentParams<InputProps>) {
+  constructor(props: ComponentProps<InputProps>) {
     const { deps, data } = props;
 
     super({ deps, data });

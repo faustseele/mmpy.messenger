@@ -1,12 +1,15 @@
-import Component, {
-  ComponentParams,
-} from "../framework/Component/Component.ts";
-import { BaseProps } from "../framework/Component/component";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { ChildrenSchema } from "../../../shared/lib/Component/model/children.types.ts";
+import Component from "../../../shared/lib/Component/model/Component.ts";
+import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 
-export class Page<TProps extends BaseProps> extends Component<TProps> {
+export class Page<
+  TProps extends BaseProps,
+  TSchema extends ChildrenSchema,
+> extends Component<TProps, TSchema> {
   public pageParams: Record<string, string>;
 
-  constructor(props: ComponentParams) {
+  constructor(props: ComponentProps<TProps, TSchema>) {
     super(props);
 
     this.pageParams = {};

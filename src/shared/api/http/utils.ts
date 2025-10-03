@@ -1,4 +1,4 @@
-import { QueryDataType } from "./types";
+import { QueryDataType } from "./types.ts";
 
 export function queryStringify(data: QueryDataType): string {
   if (typeof data !== 'object' || data === null) {
@@ -10,7 +10,7 @@ export function queryStringify(data: QueryDataType): string {
       return '';
     }
     /* TODO: Add recursive handling for nested objects */
-    return `${encodeURComponent(key)}=${encodeURComponent(String(value))}`;
+    return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
   }).filter(p => p !== ''); /* Remove empty parameters */
 
   return params.length > 0 ? `?${params.join('&')}` : '';

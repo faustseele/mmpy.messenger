@@ -1,5 +1,7 @@
-import { ComponentAttributes, ComponentConfigs } from "../../../../framework/Component/component";
-import { TagNameType } from "../../../../services/render/DOM/dom";
+import { RouteLink } from "../../../app/providers/router/types.ts";
+import { BaseProps } from "../../lib/Component/model/base.types.ts";
+import { ComponentAttributes, ComponentConfigs } from "../../lib/Component/model/types.ts";
+import { TagNameType } from "../../lib/DOM/types.ts";
 
 export interface HeadingProps extends BaseProps {
   configs: HeadingConfigs;
@@ -13,7 +15,7 @@ export interface HeadingConfigs extends ComponentConfigs {
   text: string;
   isClickable?: boolean;
   isDrama?: boolean;
-  link?: Routes;
+  link?: RouteLink;
 }
 
 interface HeadingAttributes extends ComponentAttributes {

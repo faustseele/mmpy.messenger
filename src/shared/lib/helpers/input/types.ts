@@ -1,5 +1,5 @@
-import { ComponentAttributes, ComponentConfigs } from "../framework/Component/component.d";
-import { TagNameType } from "../services/render/DOM/dom.d";
+import { ComponentConfigs, ComponentAttributes } from "../../Component/model/types.ts";
+import { TagNameType } from "../../DOM/types.ts";
 
 /* Configurations are used for <input> tag inside <label>-wrapper */ 
 export interface InputConfigs extends ComponentConfigs {

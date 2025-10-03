@@ -1,13 +1,13 @@
-import { ComponentData } from "../../../framework/Component/component";
-import { ComponentParams } from "../../../framework/Component/Component.ts";
-import DOMService from "../../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../../services/render/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../utils/factory/factory";
-import { Input, InputProps } from "./Input.ts"; // 👈 Import the base class and its props
+import { ComponentProps } from "../../../shared/lib/Component/model/Component.ts";
+import { ComponentData } from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
+import { Input, InputProps } from "../../../shared/ui/Input/Input.ts";
 import css from "./input.module.css";
 
 export class InputEditor extends Input {
-  constructor(props: ComponentParams<InputProps>) {
+  constructor(props: ComponentProps<InputProps>) {
     super(props);
   }
 

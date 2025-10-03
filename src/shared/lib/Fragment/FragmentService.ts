@@ -1,10 +1,11 @@
 import Handlebars from "handlebars";
+import { BaseProps } from "../Component/model/base.types.ts";
 import {
-  BaseProps,
-  ComponentConfigs,
-} from "../../../framework/Component/component";
-import Component from "../../../framework/Component/Component.ts";
-import { Children } from "../../../framework/Component/children";
+  ChildrenSchema,
+  CombinedChildrenInstances
+} from "../Component/model/children.types.ts";
+import Component from "../Component/model/Component.ts";
+import { ComponentConfigs } from "../Component/model/types.ts";
 
 /**
  * @FragmentService – Stateless feature-service.
@@ -34,7 +35,7 @@ export default class FragmentService<C extends ComponentConfigs> {
   public compileWithChildren(
     sourceMarkup: string,
     configs: C,
-    children: Children,
+    children: CombinedChildrenInstances<BaseProps>,
   ): DocumentFragment {
     /* Creating <div id="random UUID"></div>.. placeholders for children */
     const divPlaceholders = this._createDivPlaceholders(children);
@@ -70,26 +71,22 @@ export default class FragmentService<C extends ComponentConfigs> {
    * Generates an object with either one div-placeholder '<tag></tag>' by key
    * or a concatenated list of div-placeholders <tags> by key.
    */
-  private _createDivPlaceholders(children: Children): Record<string, string> {
+  private _createDivPlaceholders(
+    children: CombinedChildrenInstances<BaseProps>,
+  ): Record<string, string> {
     const divPlaceholders: Record<string, string> = {};
 
-    Object.values(children).forEach((childrenChunk) => {
-      if (childrenChunk.type === "list") {
-        const { children, slotKey } = childrenChunk;
-
-        const placeholdersList = children.map(
+    Object.entries(children).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        const placeholdersList = value.map(
           (child) =>
             /* Setting placeholder for each child -> placeholdersList[] */
             `<div data-id="${child.id}"></div>`,
         );
-
         /* Concatenating placeholdersList[] into one string */
-        divPlaceholders[slotKey] = placeholdersList.join("");
+        divPlaceholders[key] = placeholdersList.join("");
       } else {
-        const { child } = childrenChunk;
-        const slotKey = child.configs.slotKey;
-
-        divPlaceholders[slotKey] = `<div data-id="${child.id}"></div>`;
+        divPlaceholders[key] = `<div data-id="${value.id}"></div>`;
       }
     });
 
@@ -109,21 +106,23 @@ export default class FragmentService<C extends ComponentConfigs> {
    */
   private _replacePlaceholdersInFragment(
     fragment: DocumentFragment,
-    children: Children,
+    children: CombinedChildrenInstances<BaseProps>,
   ): DocumentFragment {
-    Object.values(children).forEach((childrenChunk) => {
-      if (childrenChunk.type === "list") {
-        const { children } = childrenChunk;
+    Object.values(children).forEach((value) => {
+      if (Array.isArray(value)) {
+        const children = value;
+
         children.forEach((child) => {
           findAndReplace(child);
         });
       } else {
-        const { child } = childrenChunk;
+        const child = value;
+
         findAndReplace(child);
       }
     });
 
-    function findAndReplace(child: Component<BaseProps>) {
+    function findAndReplace(child: Component<BaseProps, ChildrenSchema>) {
       const placeholder = fragment.querySelector(`[data-id="${child.id}"]`);
       const childElement = child.element;
 

@@ -1,14 +1,16 @@
+import { ChildBlueprint } from "../../lib/Component/model/children.types.ts";
+import Component from "../../lib/Component/model/Component.ts";
 import {
-  ComponentData
-} from "../../../framework/Component/component.d";
-import Component, { ComponentParams } from "../../../framework/Component/Component.ts";
-import DOMService from "../../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../../services/render/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../utils/factory/factory.ts";
-import { ButtonProps } from "../model/types.ts";
+  ComponentInit,
+  ComponentProps
+} from "../../lib/Component/model/types.ts";
+import DOMService from "../../lib/DOM/DOMService.ts";
+import FragmentService from "../../lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
+import { ButtonProps } from "./types.ts";
 
 export class Button extends Component<ButtonProps> {
-  constructor(props: ComponentParams<ButtonProps>) {
+  constructor(props: ComponentProps<ButtonProps>) {
     const { data, deps } = props;
     super({ deps, data });
   }
@@ -21,7 +23,7 @@ export class Button extends Component<ButtonProps> {
 }
 
 export const createButton: ComponentFactory<ButtonProps> = (
-  data: ComponentData<ButtonProps>,
+  data: ComponentInit<ButtonProps>
 ): Button => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
@@ -30,3 +32,5 @@ export const createButton: ComponentFactory<ButtonProps> = (
 
   return new Button({ deps, data });
 };
+
+export type ButtonChild = ChildBlueprint<ButtonProps>;

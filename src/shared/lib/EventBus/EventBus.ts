@@ -1,6 +1,4 @@
-import type {
-  EventCallback
-} from "../../../services/events/eventBus";
+import { EventCallback } from "./types.ts";
 
 /**
  * <TEvents extends string> is used to make the Events generics

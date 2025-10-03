@@ -1,9 +1,6 @@
 import { v4 as makeUUID } from "uuid";
-import type {
-  ComponentAttributes,
-  ComponentEvents,
-} from "../../../framework/Component/component";
-import { TagNameType } from "../dom";
+import { ComponentAttributes, ComponentEvents } from "../Component/model/types.ts";
+import { TagNameType } from "./types.ts";
 
 /**
  * @DOMService ­– Owns the DOM-related logic.
@@ -14,7 +11,7 @@ import { TagNameType } from "../dom";
  */
 
 export default class DOMService<
-  A extends ComponentAttributes,
+  A extends ComponentAttributes | undefined,
   E extends ComponentEvents | undefined,
 > {
   private readonly _tagName: TagNameType;

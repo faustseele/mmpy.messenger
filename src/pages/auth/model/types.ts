@@ -1,27 +1,40 @@
-import { Button, ButtonProps } from "../../components/button/Button.ts";
-import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
-import { Input, InputProps } from "../../components/input/Input.ts";
-import { ChildrenPropsMap } from "../../framework/Component/children.d";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
 import {
-  ComponentConfigs
-} from "../../framework/Component/component.d";
+  ChildrenMap,
+  ChildrenSchema,
+} from "../../../shared/lib/Component/model/children.types.ts";
+import Component from "../../../shared/lib/Component/model/Component.ts";
+import { TagNameType } from "../../../shared/lib/DOM/types.ts";
+import { HeadingProps } from "../../../shared/ui/Heading/types.ts";
 
-export type AuthType = "sign-up" | "sign-in";
-
-export interface AuthConfigs extends ComponentConfigs {
-  type: AuthType;
+export interface AuthProps extends BaseProps {
+  configs: {
+    tagName: Extract<TagNameType, "form">;
+    type: "sign-up" | "sign-in";
+  };
 }
 
-export interface AuthChildrenDataPropsMap extends ChildrenPropsMap {
-  heading: HeadingProps;
-  inputs: InputProps;
-  buttonReroute: ButtonProps;
-  buttonFormSubmit: ButtonProps;
+export interface AuthMap extends ChildrenMap {
+  singles: {
+    heading: {
+      props: HeadingProps;
+      component: Component<HeadingProps>;
+    };
+    /*     buttonFormSubmit: {
+      props: ButtonProps;
+      component: Button;
+    };
+    buttonReroute: {
+      props: ButtonProps;
+      component: Button;
+    };
+  };
+  lists: {
+    inputs: {
+      props: InputProps;
+      component: Input[];
+    }; */
+  };
 }
 
-export interface AuthChildrenPropsMap extends ChildrenPropsMap {
-  heading: Heading;
-  inputs: Input;
-  buttonReroute: Button;
-  buttonFormSubmit: Button;
-}
+export type AuthSchema = ChildrenSchema<AuthMap>;

@@ -1,8 +1,7 @@
-import { UserResponse } from "../../../../entities/user/model/types.ts";
-import EventBus from "../../../../shared/lib/EventBus/EventBus.ts";
-import { StoreEventBusEvents } from "../types.ts";
+import { UserResponse } from "../../../entities/user/model/types.ts";
+import EventBus from "../../../shared/lib/EventBus/EventBus.ts";
+import { StoreEventBusEvents } from "./types.ts";
 import { set } from "./utils.ts";
-
 
 export interface AppState {
   isLoggedIn: boolean;
@@ -10,7 +9,6 @@ export interface AppState {
 }
 
 class Store extends EventBus<StoreEventBusEvents> {
-
   private static __instance: Store;
 
   private constructor() {
@@ -36,7 +34,7 @@ class Store extends EventBus<StoreEventBusEvents> {
   public set(path: string, value: unknown) {
     set(this.state, path, value);
     // Pass the new state to the subscribers
-    this.emit('updated', this.getState());
+    this.emit("updated", this.getState());
   }
 }
 

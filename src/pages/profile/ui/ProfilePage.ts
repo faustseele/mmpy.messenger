@@ -1,20 +1,12 @@
-import AuthService from "../../../controllers/AuthService.ts";
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import Router from "../../../app/providers/router/Router.ts";
-import { connect } from "../../core/Store/connect.ts";
-import { AppState } from "../../core/Store/Store.ts";
-import { ComponentData } from "../../framework/Component/component.d";
-import { ComponentParams } from "../../framework/Component/Component.ts";
-import {
-  getChildFromMap,
-  getChildrenFromMap,
-  getChildSlotKey,
-} from "../../framework/Component/utils.ts";
+import { RouteLink } from "../../../app/providers/router/types.ts";
+import { connect } from "../../../app/providers/store/connect.ts";
+import { AppState } from "../../../app/providers/store/Store.ts";
+import AuthService from "../../../features/auth/by-credentials/model/AuthService.ts";
+import { ComponentData, ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { PageFactory } from "../../utils/factory/factory.d";
-import { createChildren } from "../../utils/factory/factory.ts";
 import { Page } from "../../page/ui/Page.ts";
 
 import { ProfilePageProps } from "../model/types.ts";
@@ -25,7 +17,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 export class ProfilePage extends Page<ProfilePageProps> {
-  constructor(props: ComponentParams<ProfilePageProps>) {
+  constructor(props: ComponentProps<ProfilePageProps, >) {
     super(props);
     console.log(props);
   }

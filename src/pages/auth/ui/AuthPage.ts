@@ -1,53 +1,41 @@
-import { Button } from "../../components/button/Button.ts";
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import Router from "../../../app/providers/router/Router.ts";
-import { ChildrenData } from "../../framework/Component/children";
+import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
-  BaseProps,
   ComponentData,
-} from "../../framework/Component/component";
-import { ComponentParams } from "../../framework/Component/Component.ts";
-import {
-  getChildFromMap,
-  getChildrenFromMap,
-  getChildSlotKey,
-} from "../../framework/Component/utils.ts";
+  ComponentProps,
+} from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
+import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { PageFactory } from "../../utils/factory/factory.d";
-import { createChildren } from "../../utils/factory/factory.ts";
+import { Button } from "../../../shared/ui/Button/Button.ts";
+import { Input } from "../../../shared/ui/Input/Input.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { AuthChildrenDataPropsMap, AuthType, AuthConfigs } from "../model/types.ts";
+import { AuthMap, AuthProps, AuthSchema } from "../model/types.ts";
 import css from "./auth.module.css";
-import { Input } from "../../../shared/ui/Input/model/Input.ts";
 
-export interface AuthProps extends BaseProps {
-  configs: AuthConfigs;
-  attributes?: BaseProps["attributes"];
-  events?: BaseProps["events"];
-  childrenData?: ChildrenData<AuthChildrenDataPropsMap>;
-}
-
-export class AuthPage extends Page<AuthProps> {
+export class AuthPage extends Page<AuthProps, AuthSchema> {
   private footerModifier: string = "";
-  private authType: AuthType;
 
-  constructor(props: ComponentParams) {
+  constructor(props: ComponentProps<AuthProps, AuthSchema>) {
     const { deps, data } = props;
 
     super({ deps, data });
 
-    this.authType = data.configs.type as AuthType;
     this.footerModifier =
-      this.authType === "sign-up" ? css.authFooter_signUp : "";
+      data.configs.type === "sign-up" ? css.authFooter_signUp : "";
   }
 
   public componentDidMount(): void {
     super.componentDidMount();
 
-    const inputs = getChildrenFromMap(this.children!, "inputs");
-    const buttonReroute = getChildFromMap(this.children!, "buttonReroute");
+    if (!this.children) {
+      throw new Error("children is not defined");
+    }
+
+    const { inputs, buttonReroute } = this.children;
+
 
     const formValidator = new FormValidator(inputs);
 
@@ -120,16 +108,16 @@ export class AuthPage extends Page<AuthProps> {
   }
 }
 
-export const createAuthPage: PageFactory<AuthProps> = (
-  data: ComponentData,
-): AuthPage => {
-  if (!data.childrenData) {
-    throw new Error("AuthPage: ChildrenData are not defined");
+export const createAuthPage: ComponentFactory<
+  AuthProps,
+  AuthMap,
+  AuthSchema
+> = (data: ComponentData<AuthProps, AuthSchema>): AuthPage => {
+  if (!data.childrenSchema) {
+    throw new Error("childrenSchema is not defined");
   }
 
-  const { childrenData } = data;
-
-  const children = createChildren(childrenData);
+  const children = buildChildren(data.childrenSchema);
 
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
@@ -140,7 +128,7 @@ export const createAuthPage: PageFactory<AuthProps> = (
     deps,
     data: {
       ...data,
-      children,
+      ...children,
     },
   });
 };

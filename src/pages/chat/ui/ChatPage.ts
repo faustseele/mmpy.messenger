@@ -6,7 +6,7 @@ import {
   ComponentData,
 } from "../../framework/Component/component";
 import {
-  ComponentParams,
+  ComponentProps,
 } from "../../framework/Component/Component.ts";
 import {
   getChildFromMap,
@@ -26,7 +26,7 @@ interface ChatPageProps extends BaseProps {
 }
 
 export class ChatPage extends Page<ChatPageProps> {
-  constructor(props: ComponentParams<ChatPageProps>) {
+  constructor(props: ComponentProps<ChatPageProps>) {
     super(props);
   }
 

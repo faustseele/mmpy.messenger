@@ -1,20 +1,15 @@
-import { Button, ButtonProps } from "../../components/button/Button.ts";
-import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
-import {
-  InputEditor,
-  InputEditorProps,
-} from "../../components/input/InputEditor.ts";
-import { UserResponse } from "../../../entities/user/model/types.ts";
-import { ChildrenPropsMap } from "../../framework/Component/children.d";
-import {
-  BaseProps,
-  ComponentConfigs,
-} from "../../framework/Component/component.d";
+import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { ChildrenSchema } from "../../../shared/lib/Component/model/children.types.ts";
+import { ComponentConfigs } from "../../../shared/lib/Component/model/types.ts";
+import { Button, createButton } from "../../../shared/ui/Button/Button.ts";
+import { ButtonProps } from "../../../shared/ui/Button/types.ts";
+import { createHeading, Heading } from "../../../shared/ui/Heading/Heading.ts";
+import { HeadingProps } from "../../../shared/ui/Heading/types.ts";
+import { InputProps } from "../../../shared/ui/Input/Input.ts";
+
 
 export interface ProfilePageProps extends BaseProps {
-  configs: ProfilePageConfigs;
-  childrenData?: ChildrenData<ProfileChildrenDataPropsMap>;
-  storeProps: UserResponse;
 }
 
 export interface ProfilePageConfigs extends ComponentConfigs {
@@ -22,16 +17,25 @@ export interface ProfilePageConfigs extends ComponentConfigs {
   profileAvatar: string;
 }
 
-export interface ProfileChildrenDataPropsMap extends ChildrenPropsMap {
-  heading_profile: HeadingProps;
-  heading_backToChats: HeadingProps;
-  inputEditors: InputEditorProps;
-  buttonEditInfo: ButtonProps;
-  buttonEditPassword: ButtonProps;
-  buttonLogout: ButtonProps;
+type ProfileChildrenSchema = ChildrenSchema<ProfileChildrenProps>;
+
+
+export type ProfileChildrenProps =  {
+  headingProps_profile: HeadingProps;
+  headingProps_backToChats: HeadingProps;
+  inputsProps: InputProps;
+  buttonProps_editInfo: ButtonProps;
+  buttonProps_editPassword: ButtonProps;
+  buttonProps_signOut: ButtonProps;
 }
 
-export interface ProfileChildrenPropsMap extends ChildrenPropsMap {
+
+const profileSchema: ProfileChildrenSchema = {
+
+}
+
+
+export interface ProfileChildrenMap extends ChildrenMap {
   heading_profile: Heading;
   heading_backToChats: Heading;
   inputsEditors: InputEditor;

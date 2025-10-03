@@ -1,23 +1,23 @@
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import Router from "../../../app/providers/router/Router.ts";
-import { ComponentData } from "../../framework/Component/component";
-import {
-  ComponentParams,
-} from "../../framework/Component/Component.ts";
+import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
   getChildFromMap,
   getChildSlotKey,
-} from "../../framework/Component/utils.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { PageFactory } from "../../utils/factory/factory.d";
-import { createChildren } from "../../utils/factory/factory.ts";
+} from "../../../shared/lib/Component/lib/utils.ts";
+import {
+  ComponentData,
+  ComponentProps,
+} from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { createChildren } from "../../../shared/lib/helpers/factory/functions.ts";
+import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { Page } from "../../page/ui/Page.ts";
 import { ErrorPageProps } from "../model/types.ts";
 import css from "./errors.module.css";
 
 export class ErrorPage extends Page<ErrorPageProps> {
-  constructor(props: ComponentParams<ErrorPageProps>) {
+  constructor(props: ComponentProps<ErrorPageProps>) {
     super(props);
   }
 
@@ -25,6 +25,7 @@ export class ErrorPage extends Page<ErrorPageProps> {
     super.componentDidMount();
 
     const button = getChildFromMap(this.children!, "button");
+
     const link = button.configs.link ?? RouteLink.Chats;
 
     button.setProps({

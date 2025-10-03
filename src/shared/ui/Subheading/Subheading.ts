@@ -1,12 +1,15 @@
-import { ComponentData } from "../../../framework/Component/component";
-import Component, { ComponentParams } from "../../../framework/Component/Component.ts";
-import DOMService from "../../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../../services/render/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../utils/factory/factory";
+import Component from "../../lib/Component/model/Component.ts";
+import {
+  ComponentData,
+  ComponentProps,
+} from "../../lib/Component/model/types.ts";
+import DOMService from "../../lib/DOM/DOMService.ts";
+import FragmentService from "../../lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import { SubheadingProps } from "./types.ts";
 
 export class Subheading extends Component<SubheadingProps> {
-  constructor(props: ComponentParams<SubheadingProps>) {
+  constructor(props: ComponentProps<SubheadingProps>) {
     super(props);
   }
 
@@ -24,6 +27,6 @@ export const createSubheading: ComponentFactory<SubheadingProps> = (
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),
   };
-  
+
   return new Subheading({ deps, data });
 };

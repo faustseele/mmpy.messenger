@@ -4,7 +4,7 @@ import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
 import { Input, InputProps } from "../../components/input/Input.ts";
 import { MessageBubble, MessageProps } from "../../../entities/message-bubble/ui/MessageBubble.ts";
 import { MessageField, MessageFieldProps } from "../../../features/send-message/ui/MessageField.ts";
-import { ChildrenPropsMap } from "../../framework/Component/children.d";
+import { ChildrenDataMap } from "../../framework/Component/children.d";
 import { BaseProps, ComponentConfigs } from "../../framework/Component/component.d";
 
 interface ChatPageProps extends BaseProps {
@@ -17,7 +17,7 @@ export interface ChatPageConfigs extends ComponentConfigs {
   participantName: string;
 }
 
-export interface ChatChildrenDataPropsMap extends ChildrenPropsMap {
+export interface ChatChildrenDataPropsMap extends ChildrenDataMap {
   heading_chats: HeadingProps;
   heading_goToProfile: HeadingProps;
   searchInput: InputProps;
@@ -27,7 +27,7 @@ export interface ChatChildrenDataPropsMap extends ChildrenPropsMap {
   messageField: MessageFieldProps;
 }
 
-export interface ChatChildrenPropsMap extends ChildrenPropsMap {
+export interface ChatChildrenPropsMap extends ChildrenDataMap {
   heading_chats: Heading;
   heading_goToProfile: Heading;
   searchInput: Input;

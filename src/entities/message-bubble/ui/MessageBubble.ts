@@ -1,6 +1,6 @@
 import { ComponentData } from "../../framework/Component/component.ts";
 import Component, {
-  ComponentParams,
+  ComponentProps,
 } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
@@ -9,7 +9,7 @@ import { MessageProps } from "../model/types.ts";
 import css from "./message.module.css";
 
 export class MessageBubble extends Component<MessageProps> {
-  constructor(props: ComponentParams<MessageProps>) {
+  constructor(props: ComponentProps<MessageProps>) {
     super(props);
   }
 

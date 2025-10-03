@@ -1,13 +1,16 @@
-import { ComponentData } from "../../framework/Component/component";
-import Component, { ComponentParams } from "../../framework/Component/Component.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../utils/factory/factory.d";
+import Component from "../../../shared/lib/Component/model/Component.ts";
+import {
+  ComponentProps,
+  ComponentData,
+} from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { GoToChatProps } from "../model/types.ts";
 import css from "./goToChat.module.css";
 
 export class GoToChat extends Component<GoToChatProps> {
-  constructor(props: ComponentParams<GoToChatProps>) {
+  constructor(props: ComponentProps<GoToChatProps>) {
     super(props);
   }
 

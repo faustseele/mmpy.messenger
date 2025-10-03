@@ -1,29 +1,26 @@
-import { Button, ButtonProps } from "../../components/button/Button.ts";
-import { Heading, HeadingProps } from "../../components/heading/Heading.ts";
-import { Subheading, SubheadingProps } from "../../components/subheading/Subheading.ts";
-import { ChildrenPropsMap } from "../../framework/Component/children.d";
-import { BaseProps } from "../../framework/Component/component.d";
-import { ComponentConfigs } from "../../framework/Component/component.d";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import {
+  Children,
+  ChildrenData,
+} from "../../../shared/lib/Component/model/children.types.ts";
+import { ComponentConfigs } from "../../../shared/lib/Component/model/types.ts";
 
 export type ErrorCodeType = "404" | "500";
 
+export type ErrorPageChildrenKeys =
+  | "heading_profile"
+  | "heading_back"
+  | "inputs"
+  | "button_editInfo"
+  | "button_editPassword"
+  | "button_logout";
+
 export interface ErrorPageProps extends BaseProps {
   configs: ErrorPageConfigs;
-  childrenData?: ChildrenData<ErrorChildrenDataPropsMap>;
+  childrenData?: ChildrenData<ErrorPageChildrenKeys>;
+  children?: Children<ErrorPageChildrenKeys>;
 }
 
 export interface ErrorPageConfigs extends ComponentConfigs {
   code: ErrorCodeType;
-}
-
-export interface ErrorChildrenDataPropsMap extends ChildrenPropsMap {
-  heading: HeadingProps;
-  subheading: SubheadingProps;
-  button: ButtonProps;
-}
-
-export interface ErrorChildrenPropsMap extends ChildrenPropsMap {
-    heading: Heading;
-    subheading: Subheading;
-    button: Button;
 }

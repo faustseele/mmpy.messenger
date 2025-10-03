@@ -1,18 +1,11 @@
-import {
-  BaseProps,
-  ComponentParams,
-} from "../../framework/Component/component.d";
-import Component from "../../framework/Component/Component.ts";
-import { Page } from "../../pages/Page.ts";
+import { BaseProps } from "../../Component/model/base.types.ts";
+import { ChildrenSchema } from "../../Component/model/children.types.ts";
+import Component from "../../Component/model/Component.ts";
+import { ComponentData } from "../../Component/model/types.ts";
 
-export type ComponentFactory<TProps extends BaseProps = BaseProps> = (
-  /* data is used */
-  // eslint-disable-next-line no-unused-vars
-  data: ComponentParams<TProps>,
-) => Component<TProps>;
-
-export type PageFactory<TProps extends BaseProps = BaseProps> = (
-  /* data is used */
-  // eslint-disable-next-line no-unused-vars
-  data: ComponentParams<TProps>,
-) => Page<TProps>;
+export type ComponentFactory<
+  TProps extends BaseProps,
+  /* Def for childless components */
+  TComponent extends Component<TProps>,
+  TSchema extends ChildrenSchema = ChildrenSchema,
+> = (data: ComponentData<TProps, TSchema>) => TComponent;

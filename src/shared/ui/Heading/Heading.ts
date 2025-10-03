@@ -1,15 +1,13 @@
-import { ComponentData } from "../../../../framework/Component/component";
-import Component, {
-  ComponentParams,
-} from "../../../../framework/Component/Component.ts";
-import DOMService from "../../../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../../../services/render/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../../utils/factory/factory";
-import { HeadingProps } from "./types.ts";
+import Component from "../../lib/Component/model/Component.ts";
+import { ComponentData, ComponentProps } from "../../lib/Component/model/types.ts";
+import DOMService from "../../lib/DOM/DOMService.ts";
+import FragmentService from "../../lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import css from "./heading.module.css";
+import { HeadingProps } from "./types.ts";
 
 export class Heading extends Component<HeadingProps> {
-  constructor(props: ComponentParams) {
+  constructor(props: ComponentProps<HeadingProps>) {
     const { deps, data } = props;
 
     super({ deps, data });

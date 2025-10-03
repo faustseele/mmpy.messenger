@@ -1,17 +1,13 @@
-import profileAvatar from "../../../static/profile-avatar.png";
-import cssBtn from "../../components/button/button.module.css";
-import { createButton } from "../../components/button/Button.ts";
-import cssHeading from "../../components/heading/heading.module.css";
-import { createHeading } from "../../components/heading/Heading.ts";
-import cssInput from "../../components/input/input.module.css";
-import { createInput } from "../../components/input/Input.ts";
-import { createInputEditor } from "../../components/input/InputEditor.ts";
-import { RouteConfigs, RouteLink } from "../../../app/providers/router/types.ts";
-import { ChildrenData } from "../../framework/Component/children";
-import { BaseProps } from "../../framework/Component/component";
 import cssPages from "../pages.module.css";
 import { ProfilePageConfigs, ProfileChildrenDataPropsMap } from "../../../pages/profile/model/types.ts";
 import cssProfile from "./profile.module.css";
+import { RouteLink, RouteConfigs } from "../../../app/providers/router/types.ts";
+import { createInputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
+import { ChildrenData } from "../../lib/Component/model/children.types.ts";
+import { BaseProps } from "../../lib/Component/model/types.ts";
+import { createButton } from "../../ui/Button/Button.ts";
+import { createHeading } from "../../ui/Heading/Heading.ts";
+import { createInput } from "../../ui/Input/Input.ts";
 
 interface ProfilePageProps extends BaseProps {
   configs: ProfilePageConfigs;

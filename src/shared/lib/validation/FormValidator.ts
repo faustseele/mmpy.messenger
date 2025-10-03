@@ -1,11 +1,11 @@
-import { Input } from "../../components/input/Input.ts";
-import { InputEditor } from "../../components/input/InputEditor.ts";
-import AuthService from "../../controllers/AuthService.ts";
+import Router from "../../../app/providers/router/Router.ts";
+import { RouteLink } from "../../../app/providers/router/types.ts";
+import AuthService from "../../../features/auth/by-credentials/model/AuthService.ts";
 import UserService from "../../../features/edit-profile/model/UserService.ts";
-import Router from "../../app/providers/router/Router.ts";
-import { RouteLink } from "../../app/providers/router/types.ts";
+import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
 import { AuthType } from "../../../pages/auth/model/types.ts";
-import { FieldType } from "../../utils/input.d";
+import { Input } from "../../ui/Input/Input.ts";
+import { FieldType } from "../helpers/input/types.ts";
 import { validateInputField } from "./utils.ts";
 
 const logMessages = {

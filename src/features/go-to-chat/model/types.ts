@@ -1,8 +1,6 @@
-import {
-  BaseProps,
-  ComponentConfigs,
-} from "../../framework/Component/component.d";
-import { TagNameType } from "../../services/render/DOM/dom.d";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { ComponentConfigs } from "../../../shared/lib/Component/model/types.ts";
+import { TagNameType } from "../../../shared/lib/DOM/types.ts";
 
 export interface GoToChatProps extends BaseProps {
   configs: GoToChatConfigs;

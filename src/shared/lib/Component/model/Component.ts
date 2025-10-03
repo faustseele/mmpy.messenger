@@ -1,15 +1,3 @@
-import EventBus from "../../shared/lib/EventBus/EventBus.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ChildrenPropsMap, Children } from "./children.types.ts";
-import type {
-  BaseProps,
-  ComponentEventBusEvents,
-  ComponentData,
-  ComponentDeps,
-} from "./types.ts";
-import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
-
 /** Abstract class for the Component
  * Following the Separation of Concerns principle,
  * Two Dependencies are injected into the Component:
@@ -22,24 +10,35 @@ import { proxifyAttributes, proxifyConfigs } from "./utils.ts";
  * public -> EventBus -> private
  * */
 
-export interface ComponentParams<TProps extends BaseProps = BaseProps> {
-  deps: ComponentDeps;
-  data: ComponentData<TProps>;
-}
+import DOMService from "../../DOM/DOMService.ts";
+import EventBus from "../../EventBus/EventBus.ts";
+import FragmentService from "../../Fragment/FragmentService.ts";
+import { proxifyAttributes, proxifyConfigs } from "../lib/utils.ts";
+import { BaseProps } from "./base.types.ts";
+import {
+  ChildrenInstances,
+  ChildrenSchema,
+  CombinedChildrenInstances,
+} from "./children.types.ts";
+import {
+  ComponentData,
+  ComponentEventBusEvents,
+  ComponentProps,
+} from "./types.ts";
 
-export default abstract class Component<TProps extends BaseProps> {
-  protected domService: DOMService<TProps["configs"], TProps["events"]>;
+export default abstract class Component<
+  TProps extends BaseProps,
+  TSchema extends ChildrenSchema = ChildrenSchema,
+> {
+  protected domService: DOMService<TProps["attributes"], TProps["events"]>;
   protected fragmentService: FragmentService<TProps["configs"]>;
 
   private _configs: TProps["configs"];
   private _attributes?: TProps["attributes"];
   private _events?: TProps["events"];
-  private _childrenData?: TProps["childrenData"];
-  private _children?: Children<ChildrenPropsMap>;
+  private _childrenSchema?: TSchema;
+  private _childrenInstances?: ChildrenInstances<TSchema>;
   private eventBus: EventBus<ComponentEventBusEvents> = new EventBus();
-  private _hasChildren(children = this._children): children is Children {
-    return !!children && Object.keys(children).length > 0;
-  }
   public readonly id: string;
   public get configs(): TProps["configs"] {
     return this._configs;
@@ -50,11 +49,13 @@ export default abstract class Component<TProps extends BaseProps> {
   public get element(): HTMLElement | null {
     return this.domService.element;
   }
-  public get childrenData(): TProps["childrenData"] {
-    return this._childrenData;
+  public get childrenInit(): TSchema | undefined {
+    return this._childrenSchema;
   }
-  public get children(): Children | undefined {
-    return this._children;
+  public get childrenCombined(): CombinedChildrenInstances<TProps> | undefined {
+    const singles = this._childrenInstances?.singles ?? {};
+    const lists = this._childrenInstances?.lists ?? {};
+    return { ...singles, ...lists } as CombinedChildrenInstances<TProps>;
   }
 
   /**
@@ -67,8 +68,8 @@ export default abstract class Component<TProps extends BaseProps> {
 
   constructor({
     deps: { domService, fragmentService },
-    data: { configs, events, attributes, childrenData, children },
-  }: ComponentParams) {
+    data: { configs, events, attributes, childrenSchema, childrenInstances },
+  }: ComponentProps<TProps, TSchema>) {
     this.domService = domService;
     this.fragmentService = fragmentService;
 
@@ -78,8 +79,8 @@ export default abstract class Component<TProps extends BaseProps> {
       this.eventBus,
     ) as TProps["attributes"];
     this._events = events;
-    this._childrenData = childrenData;
-    this._children = children;
+    this._childrenSchema = childrenSchema;
+    this._childrenInstances = childrenInstances;
 
     this.id = this.domService.id;
     this._registerEventBusEvents();
@@ -112,7 +113,7 @@ export default abstract class Component<TProps extends BaseProps> {
     this.eventBus.emit("flow:component-did-mount");
   }
 
-  /* Informational. Propagates to children */
+  /* Informational. Propagates to childrenCombined */
   private _componentDidMount(): void {
     this.componentDidMount();
   }
@@ -122,18 +123,16 @@ export default abstract class Component<TProps extends BaseProps> {
    * after the Parent-Component is added to the DOM (mounted).
    */
   public componentDidMount(): void {
-    if (!this._hasChildren()) return;
+    if (!this.childrenCombined) return;
 
-    /* Recusively mounting children on one nested level */
-    Object.values(this._children!).forEach((childrenChunk) => {
-      if (childrenChunk.type === "list") {
-        childrenChunk.children.forEach((child) =>
+    /* Recusively mounting childrenCombined on one nested level */
+    Object.values(this.childrenCombined).forEach((value) => {
+      if (Array.isArray(value)) {
+        value.forEach((child) =>
           child.eventBus.emit("flow:component-did-mount"),
         );
-      } else if (childrenChunk.type === "single") {
-        childrenChunk.child.eventBus.emit("flow:component-did-mount");
       } else {
-        throw new Error("Wrong children type", childrenChunk);
+        value.eventBus.emit("flow:component-did-mount");
       }
     });
   }
@@ -150,11 +149,11 @@ export default abstract class Component<TProps extends BaseProps> {
     const deproxifiedConfigs = { ...this._configs };
 
     /* Get a compiled (innerHTML) DocumentFragment from FragmentService */
-    const innerFragment = this._hasChildren()
+    const innerFragment = this.childrenCombined
       ? this.fragmentService.compileWithChildren(
           markup,
           deproxifiedConfigs,
-          this._children!,
+          this.childrenCombined!,
         )
       : this.fragmentService.compile(markup, deproxifiedConfigs);
 
@@ -181,25 +180,23 @@ export default abstract class Component<TProps extends BaseProps> {
 
   /**
    * This one is called by Router on new Component-Page.
-   * Propagates to children.
+   * Propagates to childrenCombined.
    * Called before the Component is removed from the DOM (unmounted).
    */
   public componentDidUnmount(): void {
     this.eventBus.emit("flow:component-did-unmount");
 
-    if (!this._hasChildren()) return;
+    if (!this.childrenCombined) return;
 
-    /* Recusively mounting children on one nested level */
+    /* Recusively mounting childrenCombined on one nested level */
 
-    Object.values(this._children!).forEach((childrenChunk) => {
-      if (childrenChunk.type === "list") {
-        childrenChunk.children.forEach((child) =>
+    Object.values(this.childrenCombined).forEach((value) => {
+      if (Array.isArray(value)) {
+        value.forEach((child) =>
           child.eventBus.emit("flow:component-did-unmount"),
         );
-      } else if (childrenChunk.type === "single") {
-        childrenChunk.child.eventBus.emit("flow:component-did-unmount");
       } else {
-        throw new Error("Wrong children type", childrenChunk);
+        value.eventBus.emit("flow:component-did-unmount");
       }
     });
   }
@@ -209,13 +206,13 @@ export default abstract class Component<TProps extends BaseProps> {
    * New events -> invoke swap listeners
    * @Partial is used in case ComponentConfigs in the props are not defined.
    * TODO: implement proxifed event */
-  public setProps(nextProps: Partial<ComponentData>): void {
+  public setProps(nextProps: Partial<ComponentData<TProps>>): void {
     if (!nextProps) return;
 
     const hasConfigs = !!nextProps.configs;
     const hasAttributes = !!nextProps.attributes;
     const hasEvents = !!nextProps.events;
-    const hasChildrenMap = !!nextProps.children;
+    const hasChildrenInstances = !!nextProps.childrenInstances;
 
     if (hasConfigs) {
       Object.assign(this._configs, nextProps.configs);
@@ -237,8 +234,8 @@ export default abstract class Component<TProps extends BaseProps> {
       this._events = newEvents;
     }
 
-    if (hasChildrenMap) {
-      Object.assign(this._children ?? {}, nextProps.children);
+    if (hasChildrenInstances) {
+      Object.assign(this._childrenInstances ?? {}, nextProps.childrenInstances);
     }
   }
 

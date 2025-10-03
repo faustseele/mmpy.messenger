@@ -1,5 +1,5 @@
 import { ComponentData } from "../../framework/Component/component";
-import Component, { ComponentParams } from "../../framework/Component/Component.ts";
+import Component, { ComponentProps } from "../../framework/Component/Component.ts";
 import DOMService from "../../services/render/DOM/DOMService.ts";
 import FragmentService from "../../services/render/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../utils/factory/factory.d";
@@ -7,7 +7,7 @@ import { MessageFieldProps } from "../model/types.ts";
 import css from "./messageField.module.css";
 
 export class MessageField extends Component<MessageFieldProps> {
-  constructor(props: ComponentParams<MessageFieldProps>) {
+  constructor(props: ComponentProps<MessageFieldProps>) {
     super(props);
   }
 

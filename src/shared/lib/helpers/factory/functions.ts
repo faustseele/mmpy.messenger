@@ -1,35 +1,43 @@
-import { ChildrenData, Children, ChildrenPropsMap } from "../../framework/Component/children";
+import {
+  ChildrenInstances,
+  ChildrenSchema,
+} from "../../Component/model/children.types.ts";
 
-export function createChildren (data: ChildrenData<ChildrenPropsMap>): Children<ChildrenPropsMap> {
-  if (!data) {
-    throw new Error("childrenData are not defined", data);
+export function buildChildren<TSchema extends ChildrenSchema>(
+  childrenSchema: TSchema,
+): ChildrenInstances<TSchema> {
+  if (!childrenSchema) {
+    throw new Error("childrenSchema is not defined");
   }
 
-  const children: Children = {};
+  const result = {
+    singles: {},
+    lists: {},
+  } as ChildrenInstances<TSchema>;
 
-  Object.values(data).forEach((dataChunk) => {
-    if (dataChunk.type === "list") {
-      const { slotKey, childrenFactory, dataList } = dataChunk;
-
-      children[slotKey] = {
-        type: "list",
-        slotKey,
-        children: dataList.map((childData) => childrenFactory(childData)),
-        childrenFactory,
-      };
-    } else if (dataChunk.type === "single") {
-      const { data } = dataChunk;
-      const slotKey = data.configs.slotKey;
-      const childFactory = data.componentFactory;
-
-      children[slotKey] = {
-        type: "single",
-        child: childFactory(data),
-      };
-    } else {
-      throw new Error("Wrong children data type", dataChunk);
+  function buildSingles(singles: TSchema["singles"]): void {
+    for (const key of Object.keys(singles)) {
+      const { init, factory } = singles[key];
+      const child = factory(init);
+      result.singles[key as keyof TSchema["singles"]] = child;
     }
-  });
+  }
 
-  return children;
+  function buildLists(lists: TSchema["lists"]): void {
+    for (const key of Object.keys(lists)) {
+      const { init, factory } = lists[key];
+      const childList = init.map((childInit) => factory(childInit));
+      result.lists[key as keyof TSchema["lists"]] = childList;
+    }
+  }
+
+  if (Object.keys(childrenSchema.singles).length) {
+    buildSingles(childrenSchema.singles);
+  }
+
+  if (Object.keys(childrenSchema.lists).length) {
+    buildLists(childrenSchema.lists);
+  }
+
+  return result;
 }

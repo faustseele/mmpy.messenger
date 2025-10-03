@@ -1,8 +1,9 @@
-import { FieldType } from "../../../utils/input";
+import { FieldType } from "../helpers/input/types.ts";
 
 /** 'Ё' Char has U+0401, whereas 'А-Я' range includes
  * symbols from U+0410 up to U+042F. Same thing for 'ё'!
  * Eslint is wrongly complaining about unused vars */
+
 // eslint-disable-next-line no-unused-vars
 const getRegex: Record<FieldType, (value: string) => string> = {
   name: (value: string): string => {

@@ -1,5 +1,6 @@
-import { BaseProps } from "../../../shared/lib/Component/model/component";
-import Component, { ComponentParams } from "../../../shared/lib/Component/model/Component.ts";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import Component from "../../../shared/lib/Component/model/Component.ts";
+import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import Store, { AppState } from "./Store.ts";
 import { isEqual } from "./utils.ts";
 
@@ -10,10 +11,10 @@ export function connect(mapStateToProps: MapStateToProps) {
     ComponentClass: typeof Component<TProps>,
   ) {
     return class extends ComponentClass {
-      constructor(params: ComponentParams<TProps>) {
+      constructor(params: ComponentProps<TProps>) {
         let state = mapStateToProps(Store.getState());
 
-        params.data.storeProps = state;
+        params.data = state;
 
         super(params);
 

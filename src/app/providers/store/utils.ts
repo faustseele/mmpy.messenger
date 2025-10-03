@@ -1,4 +1,4 @@
-import { Indexed, PlainObject } from "./types";
+import { Indexed, PlainObject } from "./types.ts";
 
 /* A helper function to merge objects, which `set` will use */
 function merge(lhs: Indexed, rhs: Indexed): Indexed {
