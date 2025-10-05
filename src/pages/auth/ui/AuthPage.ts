@@ -7,7 +7,7 @@ import {
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
-import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
+import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Input } from "../../../shared/ui/Input/Input.ts";
@@ -15,10 +15,10 @@ import { Page } from "../../page/ui/Page.ts";
 import { AuthMap, AuthProps, AuthSchema } from "../model/types.ts";
 import css from "./auth.module.css";
 
-export class AuthPage extends Page<AuthProps, AuthSchema> {
+export class AuthPage extends Page<AuthProps, AuthMap, AuthSchema> {
   private footerModifier: string = "";
 
-  constructor(props: ComponentProps<AuthProps, AuthSchema>) {
+  constructor(props: ComponentProps<AuthProps, AuthMap, AuthSchema>) {
     const { deps, data } = props;
 
     super({ deps, data });
@@ -30,12 +30,12 @@ export class AuthPage extends Page<AuthProps, AuthSchema> {
   public componentDidMount(): void {
     super.componentDidMount();
 
-    if (!this.children) {
-      throw new Error("children is not defined");
+    if (!this.childrenInstances) {
+      throw new Error("childrenInstances is not defined");
     }
 
-    const { inputs, buttonReroute } = this.children;
-
+    const { inputs } = this.childrenInstances.lists;
+    const { buttonReroute } = this.childrenInstances.singles;
 
     const formValidator = new FormValidator(inputs);
 
@@ -48,7 +48,7 @@ export class AuthPage extends Page<AuthProps, AuthSchema> {
     this.setProps({
       events: {
         submit: (e: Event) =>
-          formValidator.onFormSubmit(e, RouteLink.Chats, this.authType),
+          formValidator.onFormSubmit(e, RouteLink.Chats, this.configs.type),
       },
     });
   }
@@ -78,46 +78,36 @@ export class AuthPage extends Page<AuthProps, AuthSchema> {
   }
 
   public getSourceMarkup(): string {
-    const headingSlotKey = getChildSlotKey(this.childrenData!, "heading");
-    const inputsSlotKey = getChildSlotKey(this.childrenData!, "inputs");
-    const buttonRerouteSlotKey = getChildSlotKey(
-      this.childrenData!,
-      "buttonReroute",
-    );
-    const buttonFormSubmitSlotKey = getChildSlotKey(
-      this.childrenData!,
-      "buttonFormSubmit",
-    );
-
     return /*html*/ `
         <header class="${css.authHeading}">
-          {{{ ${headingSlotKey} }}}
+          {{{ heading }}}
         </header>
 
         <main class="${css.authContent}">
           <div class="${css.inputsWrapper}">
-            {{{ ${inputsSlotKey} }}}
+            {{{ inputs }}}
           </div>
         </main>
 
         <footer class="${css.authFooter} ${this.footerModifier}">
-          {{{ ${buttonRerouteSlotKey} }}}
-          {{{ ${buttonFormSubmitSlotKey} }}}
+          {{{ buttonReroute }}}
+          {{{ buttonFormSubmit }}}
         </footer>
     `;
   }
 }
 
-export const createAuthPage: ComponentFactory<
+export const createAuthPage: PageFactory<
   AuthProps,
+  AuthPage,
   AuthMap,
   AuthSchema
-> = (data: ComponentData<AuthProps, AuthSchema>): AuthPage => {
+> = (data: ComponentData<AuthProps, AuthMap, AuthSchema>): AuthPage => {
   if (!data.childrenSchema) {
     throw new Error("childrenSchema is not defined");
   }
 
-  const children = buildChildren(data.childrenSchema);
+  const childrenInstances = buildChildren<AuthMap, AuthSchema>(data.childrenSchema);
 
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
@@ -128,7 +118,7 @@ export const createAuthPage: ComponentFactory<
     deps,
     data: {
       ...data,
-      ...children,
+      childrenInstances,
     },
   });
 };

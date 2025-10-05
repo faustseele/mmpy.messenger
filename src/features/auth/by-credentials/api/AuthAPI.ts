@@ -1,6 +1,6 @@
-import HTTPTransport from "../../../core/HTTP/HTTPTransport.ts";
 import { SignInRequest, SignUpRequest, UserResponse } from "../../../../entities/user/model/types.ts";
 import { BaseAPI } from "../../../../shared/api/BaseAPI.ts";
+import HTTPTransport from "../../../../shared/api/http/HTTPTransport.ts";
 
 const authAPIInstance = new HTTPTransport("/auth");
 

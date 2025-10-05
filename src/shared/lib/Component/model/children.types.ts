@@ -48,7 +48,7 @@ export type ChildBlueprint<
   init: ComponentInit<TProps>;
   factory: ComponentFactory<TProps, TComponent>;
   /* Instances collection of a Component */
-  instance: TComponent;
+  instanceType: TComponent;
 };
 export type ChildrenBlueprint<
   TProps extends BaseProps,
@@ -57,21 +57,24 @@ export type ChildrenBlueprint<
   init: ComponentInit<TProps>[];
   factory: ComponentFactory<TProps, TComponent>;
   /* Instances collection of a Component */
-  instance: TComponent[];
+  instanceType: TComponent[];
 };
 
 export type ChildrenInstances<
-  TSchema extends ChildrenSchema<Map>,
   Map extends ChildrenMap = ChildrenMap,
+  TSchema extends ChildrenSchema<Map> = ChildrenSchema<Map>,
 > = {
   singles: {
-    [K in keyof TSchema["singles"]]: TSchema["singles"][K]["instance"];
+    [K in keyof TSchema["singles"]]: TSchema["singles"][K]["instanceType"];
   };
   lists: {
-    [K in keyof TSchema["lists"]]: TSchema["lists"][K]["instance"];
+    [K in keyof TSchema["lists"]]: TSchema["lists"][K]["instanceType"];
   };
 };
 
-export type CombinedChildrenInstances<TProps extends BaseProps> = {
-  [key: string]: Component<TProps> | Component<TProps>[];
+export type CombinedChildrenInstances<
+  TProps extends BaseProps,
+  TMap extends ChildrenMap,
+> = {
+  [key: string]: Component<TProps, TMap> | Component<TProps, TMap>[];
 };

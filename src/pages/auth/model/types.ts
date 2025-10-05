@@ -10,10 +10,12 @@ import { ButtonProps } from "../../../shared/ui/Button/types.ts";
 import { HeadingProps } from "../../../shared/ui/Heading/types.ts";
 import { Input, InputProps } from "../../../shared/ui/Input/Input.ts";
 
+export type AuthType = "sign-up" | "sign-in";
+
 export interface AuthProps extends BaseProps {
   configs: {
     tagName: Extract<TagNameType, "form">;
-    type: "sign-up" | "sign-in";
+    type: AuthType;
   };
 }
 

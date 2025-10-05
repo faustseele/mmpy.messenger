@@ -17,6 +17,7 @@ import { proxifyAttributes, proxifyConfigs } from "../lib/utils.ts";
 import { BaseProps } from "./base.types.ts";
 import {
   ChildrenInstances,
+  ChildrenMap,
   ChildrenSchema,
   CombinedChildrenInstances,
 } from "./children.types.ts";
@@ -28,7 +29,8 @@ import {
 
 export default abstract class Component<
   TProps extends BaseProps,
-  TSchema extends ChildrenSchema = ChildrenSchema,
+  TMap extends ChildrenMap = ChildrenMap,
+  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
 > {
   protected domService: DOMService<TProps["attributes"], TProps["events"]>;
   protected fragmentService: FragmentService<TProps["configs"]>;
@@ -37,7 +39,7 @@ export default abstract class Component<
   private _attributes?: TProps["attributes"];
   private _events?: TProps["events"];
   private _childrenSchema?: TSchema;
-  private _childrenInstances?: ChildrenInstances<TSchema>;
+  private _childrenInstances?: ChildrenInstances<TMap, TSchema>;
   private eventBus: EventBus<ComponentEventBusEvents> = new EventBus();
   public readonly id: string;
   public get configs(): TProps["configs"] {
@@ -49,13 +51,18 @@ export default abstract class Component<
   public get element(): HTMLElement | null {
     return this.domService.element;
   }
-  public get childrenInit(): TSchema | undefined {
+  public get childrenSchema(): TSchema | undefined {
     return this._childrenSchema;
   }
-  public get childrenCombined(): CombinedChildrenInstances<TProps> | undefined {
+  public get childrenInstances(): ChildrenInstances<TMap, TSchema> | undefined {
+    return this._childrenInstances;
+  }
+  public get childrenCombined():
+    | CombinedChildrenInstances<TProps, TMap>
+    | undefined {
     const singles = this._childrenInstances?.singles ?? {};
     const lists = this._childrenInstances?.lists ?? {};
-    return { ...singles, ...lists } as CombinedChildrenInstances<TProps>;
+    return { ...singles, ...lists } as CombinedChildrenInstances<TProps, TMap>;
   }
 
   /**
@@ -69,15 +76,12 @@ export default abstract class Component<
   constructor({
     deps: { domService, fragmentService },
     data: { configs, events, attributes, childrenSchema, childrenInstances },
-  }: ComponentProps<TProps, TSchema>) {
+  }: ComponentProps<TProps, TMap, TSchema>) {
     this.domService = domService;
     this.fragmentService = fragmentService;
 
     this._configs = proxifyConfigs(configs, this.eventBus);
-    this._attributes = proxifyAttributes(
-      attributes ?? {},
-      this.eventBus,
-    ) as TProps["attributes"];
+    this._attributes = proxifyAttributes(attributes ?? {}, this.eventBus);
     this._events = events;
     this._childrenSchema = childrenSchema;
     this._childrenInstances = childrenInstances;

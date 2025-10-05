@@ -1,5 +1,6 @@
 import {
   HttpMethod,
+  HttpMethodType,
   HttpOptions,
   HttpOptionsNoMethod,
   HttpStatus,
@@ -17,10 +18,10 @@ export default class HTTPTransport {
   protected endpoint: string;
 
   /* The enum-type is enclosed inside createMethod */
-  public get: HttpMethod = this.createMethod(HttpMethod.GET);
-  public post: HttpMethod = this.createMethod(HttpMethod.POST);
-  public put: HttpMethod = this.createMethod(HttpMethod.PUT);
-  public delete: HttpMethod = this.createMethod(HttpMethod.DELETE);
+  public get: HttpMethodType = this.createMethod(HttpMethod.GET);
+  public post: HttpMethodType = this.createMethod(HttpMethod.POST);
+  public put: HttpMethodType = this.createMethod(HttpMethod.PUT);
+  public delete: HttpMethodType = this.createMethod(HttpMethod.DELETE);
 
   constructor(endpoint: string) {
     this.endpoint = endpoint;
@@ -30,7 +31,7 @@ export default class HTTPTransport {
    * Fabric method -> HTTP method
    * @Response -> a type required during the http call
    */
-  private createMethod(method: HttpMethod): HttpMethod {
+  private createMethod(method: HttpMethod): HttpMethodType {
     /* returns HTTP method */
     return <Response>(url: string, options: HttpOptionsNoMethod = {}) => {
       /* In case it's a GET request, adding a query string */

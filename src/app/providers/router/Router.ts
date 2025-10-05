@@ -1,7 +1,11 @@
-import AuthService from "../../../controllers/AuthService.ts";
-import { BaseProps } from "../../framework/Component/component.d";
+import AuthService from "../../../features/auth/by-credentials/model/AuthService.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
-import Store from "../Store/Store.ts";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import {
+  ChildrenMap,
+  ChildrenSchema,
+} from "../../../shared/lib/Component/model/children.types.ts";
+import Store from "../store/Store.ts";
 import Route from "./Route.ts";
 import { IRoute, RouteConfigs, RouteLink } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";
@@ -46,10 +50,12 @@ class Router {
    * Registers a new Route with the Router.
    * @returns this for chaining
    */
-  public use(
-    routeConfigs: RouteConfigs,
-    pageFactory: () => Page<BaseProps>,
-  ): this {
+  public use<
+    TProps extends BaseProps,
+    TMap extends ChildrenMap = ChildrenMap,
+    TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
+    TPage extends Page<TProps, TMap, TSchema> = Page<TProps, TMap, TSchema>,
+  >(routeConfigs: RouteConfigs, pageFactory: () => TPage): this {
     const route = new Route({ routeConfigs, pageFactory });
     this._routes.push(route);
     return this;
@@ -59,7 +65,7 @@ class Router {
   public async start(rootQuery: string): Promise<void> {
     try {
       /* Await this so the store is populated before we check routes */
-      await AuthService.fetchUser();
+      // await AuthService.fetchUser();
     } catch (_) {
       console.error("Failed to fetch user on startup");
     }

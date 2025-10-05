@@ -6,14 +6,19 @@ import DOMService from "../../DOM/DOMService.ts";
 import { TagNameType } from "../../DOM/types.ts";
 import FragmentService from "../../Fragment/FragmentService.ts";
 import { BaseProps } from "./base.types.ts";
-import { ChildrenInstances, ChildrenSchema } from "./children.types.ts";
+import {
+  ChildrenInstances,
+  ChildrenMap,
+  ChildrenSchema,
+} from "./children.types.ts";
 
 export interface ComponentProps<
   TProps extends BaseProps,
-  TSchema extends ChildrenSchema = ChildrenSchema,
+  TMap extends ChildrenMap = ChildrenMap,
+  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
 > {
   deps: ComponentDeps;
-  data: ComponentData<TProps, TSchema>;
+  data: ComponentData<TProps, TMap, TSchema>;
 }
 
 /* Dependency Injection services */
@@ -29,8 +34,9 @@ export interface ComponentDeps {
 export type ComponentData<
   TProps extends BaseProps,
   /* Def for childless components */
-  TSchema extends ChildrenSchema = ChildrenSchema,
-> = ComponentInit<TProps> & Children<TSchema>;
+  TMap extends ChildrenMap = ChildrenMap,
+  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
+> = ComponentInit<TProps> & Children<TMap, TSchema>;
 
 /* The minimal payload for every Component initialization */
 export interface ComponentInit<TProps extends BaseProps> {
@@ -39,9 +45,12 @@ export interface ComponentInit<TProps extends BaseProps> {
   events?: TProps["events"];
 }
 
-export interface Children<TSchema extends ChildrenSchema> {
+export interface Children<
+  TMap extends ChildrenMap,
+  TSchema extends ChildrenSchema<TMap>,
+> {
   childrenSchema?: TSchema;
-  childrenInstances?: ChildrenInstances<TSchema>;
+  childrenInstances?: ChildrenInstances<TMap, TSchema>;
 }
 
 /* Configuration data for a concrete Component instance */

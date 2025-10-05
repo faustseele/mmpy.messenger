@@ -1,11 +1,13 @@
 import {
   ChildrenInstances,
+  ChildrenMap,
   ChildrenSchema,
 } from "../../Component/model/children.types.ts";
 
-export function buildChildren<TSchema extends ChildrenSchema>(
-  childrenSchema: TSchema,
-): ChildrenInstances<TSchema> {
+export function buildChildren<
+  TMap extends ChildrenMap,
+  TSchema extends ChildrenSchema<TMap>,
+>(childrenSchema: TSchema): ChildrenInstances<TMap, TSchema> {
   if (!childrenSchema) {
     throw new Error("childrenSchema is not defined");
   }
@@ -13,7 +15,7 @@ export function buildChildren<TSchema extends ChildrenSchema>(
   const result = {
     singles: {},
     lists: {},
-  } as ChildrenInstances<TSchema>;
+  } as ChildrenInstances<TMap, TSchema>;
 
   function buildSingles(singles: TSchema["singles"]): void {
     for (const key of Object.keys(singles)) {
