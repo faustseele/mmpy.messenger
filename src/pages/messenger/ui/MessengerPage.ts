@@ -1,4 +1,5 @@
 import Router from "../../../app/providers/router/Router.ts";
+import css from "./messenger.module.css";
 import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
   ComponentData,
@@ -9,22 +10,21 @@ import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { ChatMap, ChatProps, ChatSchema } from "../model/types.ts";
-import css from "./chat.module.css";
+import { MessengerMap, MessengerProps, MessengerSchema } from "../model/types.ts";
 
-export class ChatPage extends Page<ChatProps, ChatMap, ChatSchema> {
-  constructor(props: ComponentProps<ChatProps, ChatMap, ChatSchema>) {
+export class MessengerPage extends Page<MessengerProps, MessengerMap, MessengerSchema> {
+  constructor(props: ComponentProps<MessengerProps, MessengerMap, MessengerSchema>) {
     super(props);
   }
 
   public componentDidMount(): void {
     super.componentDidMount();
 
-    const headingToProfile =
-      this.childrenInstances!.singles.heading_goToProfile;
+    const headingToSettings =
+      this.childrenInstances!.singles.heading_goToSettings;
     const deleteButton = this.childrenInstances!.singles.deleteChatButton;
 
-    headingToProfile?.setProps({
+    headingToSettings?.setProps({
       events: {
         click: () => Router.go(RouteLink.Settings),
       },
@@ -47,7 +47,7 @@ export class ChatPage extends Page<ChatProps, ChatMap, ChatSchema> {
         <header class="${css.catalogue__head}">
           <div class="${css.catalogue__headings}">
             {{{ heading_chats }}}
-            {{{ heading_goToProfile }}}
+            {{{ heading_goToSettings }}}
           </div>
           {{{ searchInput }}}
         </header>
@@ -76,17 +76,17 @@ export class ChatPage extends Page<ChatProps, ChatMap, ChatSchema> {
   }
 }
 
-export const createChatPage: PageFactory<
-  ChatProps,
-  ChatPage,
-  ChatMap,
-  ChatSchema
-> = (data: ComponentData<ChatProps, ChatMap, ChatSchema>): ChatPage => {
+export const createMessengerPage: PageFactory<
+  MessengerProps,
+  MessengerPage,
+  MessengerMap,
+  MessengerSchema
+> = (data: ComponentData<MessengerProps, MessengerMap, MessengerSchema>): MessengerPage => {
   if (!data.childrenSchema) {
-    throw new Error("ChatPage: childrenSchema is not defined");
+    throw new Error("MessengerPage: childrenSchema is not defined");
   }
 
-  const childrenInstances = buildChildren<ChatMap, ChatSchema>(
+  const childrenInstances = buildChildren<MessengerMap, MessengerSchema>(
     data.childrenSchema,
   );
 
@@ -95,7 +95,7 @@ export const createChatPage: PageFactory<
     fragmentService: new FragmentService(),
   };
 
-  return new ChatPage({
+  return new MessengerPage({
     deps,
     data: {
       ...data,

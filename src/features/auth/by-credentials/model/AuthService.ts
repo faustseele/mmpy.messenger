@@ -16,7 +16,7 @@ class AuthService {
       Store.set("isLoggedIn", true);
 
       console.log(resSignup, user, Store.getState());
-      Router.go(RouteLink.Chats);
+      Router.go(RouteLink.Messenger);
     } catch (e) {
       console.error("Signup failed:", e);
     }
@@ -30,7 +30,7 @@ class AuthService {
       Store.set("isLoggedIn", true);
 
       console.log(resSignin, user, Store.getState());
-      Router.go(RouteLink.Chats);
+      Router.go(RouteLink.Messenger);
     } catch (e) {
       console.error("Signin failed:", e);
     }

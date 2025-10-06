@@ -9,10 +9,10 @@ import {
 } from "../../lib/Component/model/types.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import {
-  ProfileMap,
-  ProfileProps,
-  ProfileSchema,
-} from "../../../pages/profile/model/types.ts";
+  SettingsMap,
+  SettingsProps,
+  SettingsSchema,
+} from "../../../pages/settings/model/types.ts";
 import { FieldType } from "../../lib/helpers/input/types.ts";
 import {
   InputEditor,
@@ -27,7 +27,7 @@ import cssBtn from "../../ui/Button/button.module.css";
 import cssHeading from "../../ui/Heading/heading.module.css";
 import cssInput from "../../ui/Input/input.module.css";
 import cssPage from "../../../pages/page/ui/page.module.css";
-import cssProfile from "../../../pages/profile/ui/profile.module.css";
+import cssSettings from "../../../pages/settings/ui/settings.module.css";
 
 /* Component init helpers */
 type HeadingInit = ComponentInit<HeadingProps>;
@@ -88,7 +88,7 @@ const makeInputEditorInit = (
   },
 });
 
-const profileInputsInit: InputInit[] = [
+const settingsInputsInit: InputInit[] = [
   makeInputEditorInit("email", "Эл. почта", "pochta@yandex.ru", "email"),
   makeInputEditorInit("name", "Имя", "Иван", "text"),
   makeInputEditorInit("surname", "Фамилия", "Иванов", "text"),
@@ -97,7 +97,7 @@ const profileInputsInit: InputInit[] = [
   makeInputEditorInit("phone", "Номер телефона", "+7 905 551-23-45", "tel"),
 ];
 
-const profileSchema: ProfileSchema = {
+const profileSchema: SettingsSchema = {
   singles: {
     heading_profile: {
       init: makeHeadingInit(
@@ -118,7 +118,7 @@ const profileSchema: ProfileSchema = {
           type: "profile-back",
           text: "⮘ Назад",
           isClickable: true,
-          link: RouteLink.Chats,
+          link: RouteLink.Messenger,
         },
         `${cssHeading.heading} ${cssHeading.heading__text_clickable}`,
       ),
@@ -164,7 +164,7 @@ const profileSchema: ProfileSchema = {
   },
   lists: {
     inputsEditors: {
-      init: profileInputsInit,
+      init: settingsInputsInit,
       factory: inputEditorFactory,
       instanceType: inputEditorListInstance,
     },
@@ -172,9 +172,9 @@ const profileSchema: ProfileSchema = {
 };
 
 export const profilePageData: ComponentData<
-  ProfileProps,
-  ProfileMap,
-  ProfileSchema
+  SettingsProps,
+  SettingsMap,
+  SettingsSchema
 > = {
   configs: {
     tagName: "div",
@@ -182,7 +182,7 @@ export const profilePageData: ComponentData<
     profileAvatar,
   },
   attributes: {
-    className: `${cssPage.moduleWindow} ${cssProfile.moduleWindow_profile}`,
+    className: `${cssPage.moduleWindow} ${cssSettings.moduleWindow_profile}`,
   },
   childrenSchema: profileSchema,
 };

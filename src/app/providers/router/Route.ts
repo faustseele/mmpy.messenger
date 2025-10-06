@@ -4,7 +4,7 @@ import {
   ChildrenMap,
   ChildrenSchema,
 } from "../../../shared/lib/Component/model/children.types.ts";
-import { AuthStateType, IRoute, RouteConfigs } from "./types.ts";
+import { AuthStateType, RouteContract, RouteConfigs } from "./types.ts";
 import { matchPath } from "./utils.ts";
 
 /**
@@ -29,7 +29,7 @@ export default class Route<
   TProps extends BaseProps,
   TMap extends ChildrenMap = ChildrenMap,
   TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
-> implements IRoute
+> implements RouteContract
 {
   private _rootQuery: string = "";
   private _routeConfigs: RouteConfigs;

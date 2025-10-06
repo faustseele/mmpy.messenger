@@ -1,14 +1,4 @@
 import "./src/app/styles/index.css";
-import {
-  chatPageData,
-  chatPageRouteConfig,
-} from "./src/shared/config/mocks/chat.ts";
-import {
-  ChatMap,
-  ChatProps,
-  ChatSchema,
-} from "./src/pages/chat/model/types.ts";
-import { createChatPage } from "./src/pages/chat/ui/ChatPage.ts";
 import Router from "./src/app/providers/router/Router.ts";
 import {
   AuthMap,
@@ -17,11 +7,11 @@ import {
 } from "./src/pages/auth/model/types.ts";
 import { createAuthPage } from "./src/pages/auth/ui/AuthPage.ts";
 import {
-  ProfileMap,
-  ProfileProps,
-  ProfileSchema,
-} from "./src/pages/profile/model/types.ts";
-import { createProfilePage } from "./src/pages/profile/ui/ProfilePage.ts";
+  SettingsMap,
+  SettingsProps,
+  SettingsSchema,
+} from "./src/pages/settings/model/types.ts";
+import { createSettingsPage } from "./src/pages/settings/ui/SettingsPage.ts";
 import {
   signInData,
   signInRouteConfig,
@@ -44,6 +34,16 @@ import {
   ErrorSchema,
 } from "./src/pages/errors/model/types.ts";
 import { createErrorPage } from "./src/pages/errors/ui/ErrorPage.ts";
+import { createMessengerPage } from "./src/pages/messenger/ui/MessengerPage.ts";
+import {
+  chatPageData,
+  chatPageRouteConfig,
+} from "./src/shared/config/mocks/chat.ts";
+import {
+  MessengerMap,
+  MessengerProps,
+  MessengerSchema,
+} from "./src/pages/messenger/model/types.ts";
 
 export const rootQuery = "#app";
 
@@ -56,13 +56,13 @@ Router
   .use<AuthProps, AuthMap, AuthSchema>(signUpRouteConfig, () =>
     createAuthPage(signUpData),
   )
-  /* Chats route */
-  .use<ChatProps, ChatMap, ChatSchema>(chatPageRouteConfig, () =>
-    createChatPage(chatPageData),
+  /* Messenger route */
+  .use<MessengerProps, MessengerMap, MessengerSchema>(chatPageRouteConfig, () =>
+    createMessengerPage(chatPageData),
   )
-  /* Profile route */
-  .use<ProfileProps, ProfileMap, ProfileSchema>(profilePageRouteConfig, () =>
-    createProfilePage(profilePageData),
+  /* Settings route */
+  .use<SettingsProps, SettingsMap, SettingsSchema>(profilePageRouteConfig, () =>
+    createSettingsPage(profilePageData),
   )
   /* NotFound route */
   .use<ErrorProps, ErrorMap, ErrorSchema>(error404RouteConfig, () =>

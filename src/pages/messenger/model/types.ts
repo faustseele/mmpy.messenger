@@ -16,7 +16,7 @@ import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { HeadingProps } from "../../../shared/ui/Heading/types.ts";
 import { Input, InputProps } from "../../../shared/ui/Input/Input.ts";
 
-export interface ChatProps extends BaseProps {
+export interface MessengerProps extends BaseProps {
   configs: {
     tagName: Extract<TagNameType, "div">;
     participantAvatar: string;
@@ -24,13 +24,13 @@ export interface ChatProps extends BaseProps {
   };
 }
 
-export interface ChatMap extends ChildrenMap {
+export interface MessengerMap extends ChildrenMap {
   singles: {
     heading_chats: {
       props: HeadingProps;
       instanceType: Heading;
     };
-    heading_goToProfile: {
+    heading_goToSettings: {
       props: HeadingProps;
       instanceType: Heading;
     };
@@ -59,4 +59,4 @@ export interface ChatMap extends ChildrenMap {
   };
 }
 
-export type ChatSchema = ChildrenSchema<ChatMap>;
+export type MessengerSchema = ChildrenSchema<MessengerMap>;

@@ -26,7 +26,7 @@ export class ErrorPage extends Page<ErrorProps, ErrorMap, ErrorSchema> {
 
     const backBtn = this.childrenInstances.singles.button_back;
 
-    const link = backBtn.configs.link ?? RouteLink.Chats;
+    const link = backBtn.configs.link ?? RouteLink.Messenger;
 
     backBtn.setProps({
       events: {

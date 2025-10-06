@@ -11,11 +11,11 @@ import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts"
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { ProfileMap, ProfileProps, ProfileSchema } from "../model/types.ts";
-import css from "./profile.module.css";
+import { SettingsMap, SettingsProps, SettingsSchema } from "../model/types.ts";
+import css from "./settings.module.css";
 
-export class ProfilePage extends Page<ProfileProps, ProfileMap, ProfileSchema> {
-  constructor(props: ComponentProps<ProfileProps, ProfileMap, ProfileSchema>) {
+export class SettingsPage extends Page<SettingsProps, SettingsMap, SettingsSchema> {
+  constructor(props: ComponentProps<SettingsProps, SettingsMap, SettingsSchema>) {
     super(props);
     console.log(props);
   }
@@ -25,7 +25,7 @@ export class ProfilePage extends Page<ProfileProps, ProfileMap, ProfileSchema> {
 
     if (!Object.keys(this.childrenInstances?.singles ?? 0).length) {
       console.error(
-        "ProfilePage: Children are not defined",
+        "SettingsPage: Children are not defined",
         this.childrenInstances,
       );
       return;
@@ -42,7 +42,7 @@ export class ProfilePage extends Page<ProfileProps, ProfileMap, ProfileSchema> {
     const formValidator = new FormValidator(inputs);
 
     headingBack.setProps({
-      events: { click: () => Router.go(RouteLink.Chats) },
+      events: { click: () => Router.go(RouteLink.Messenger) },
     });
 
     buttonEditInfo.setProps({
@@ -83,8 +83,8 @@ export class ProfilePage extends Page<ProfileProps, ProfileMap, ProfileSchema> {
 
       </header>
       
-      <main class="${css.profileContent}">
-        <div class="${css.profileFace}">
+      <main class="${css.settingsContent}">
+        <div class="${css.settingsFace}">
           <label for="avatar-input" class="${css.avatarContainer}">
             <img alt="User's avatar" src="{{ profileAvatar }}" class="${css.avatarImage}" />
             <div class="${css.avatarOverlay}">
@@ -92,17 +92,17 @@ export class ProfilePage extends Page<ProfileProps, ProfileMap, ProfileSchema> {
             </div>
           </label>
           <input id="avatar-input" type="file" name="avatar" class="${css.avatarFileInput}" />
-          <h2 class="${css.profileFace__name}">{{ profileName }}</h2>
+          <h2 class="${css.settingsFace__name}">{{ profileName }}</h2>
         </div>
 
-        <div class="${css.profileInputs}">
-          <div class="${css.profileInputs__list}">
+        <div class="${css.settingsInputs}">
+          <div class="${css.settingsInputs__list}">
             {{{ inputsEditors }}}
           </div>
         </div>
       </main>
 
-      <footer class="${css.profileFooter}">
+      <footer class="${css.settingsFooter}">
         {{{ buttonEditInfo }}}
         {{{ buttonEditPassword }}}
         {{{ buttonLogout }}}
@@ -111,19 +111,19 @@ export class ProfilePage extends Page<ProfileProps, ProfileMap, ProfileSchema> {
   }
 }
 
-export const createProfilePage: PageFactory<
-  ProfileProps,
-  ProfilePage,
-  ProfileMap,
-  ProfileSchema
+export const createSettingsPage: PageFactory<
+  SettingsProps,
+  SettingsPage,
+  SettingsMap,
+  SettingsSchema
 > = (
-  data: ComponentData<ProfileProps, ProfileMap, ProfileSchema>,
-): ProfilePage => {
+  data: ComponentData<SettingsProps, SettingsMap, SettingsSchema>,
+): SettingsPage => {
   if (!data.childrenSchema) {
-    throw new Error("ProfilePage: ChildrenScheme is not defined");
+    throw new Error("SettingsPage: ChildrenScheme is not defined");
   }
 
-  const childrenInstances = buildChildren<ProfileMap, ProfileSchema>(
+  const childrenInstances = buildChildren<SettingsMap, SettingsSchema>(
     data.childrenSchema,
   );
 
@@ -132,7 +132,7 @@ export const createProfilePage: PageFactory<
     fragmentService: new FragmentService(),
   };
 
-  return new ProfilePage({
+  return new SettingsPage({
     deps,
     data: { ...data, childrenInstances },
   });

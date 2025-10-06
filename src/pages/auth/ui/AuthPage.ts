@@ -48,7 +48,7 @@ export class AuthPage extends Page<AuthProps, AuthMap, AuthSchema> {
     this.setProps({
       events: {
         submit: (e: Event) =>
-          formValidator.onFormSubmit(e, RouteLink.Chats, this.configs.type),
+          formValidator.onFormSubmit(e, RouteLink.Messenger, this.configs.type),
       },
     });
   }

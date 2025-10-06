@@ -114,14 +114,14 @@ export const errorPage404Data = buildErrorData(
   "404",
   "⛔ Ошибка 404",
   "🌑 Не туда попали",
-  RouteLink.Chats,
+  RouteLink.Messenger,
 );
 
 export const errorPage500Data = buildErrorData(
   "500",
   "🪜 Ошибка 500",
   "🔧 Мы уже фиксим",
-  RouteLink.Chats,
+  RouteLink.Messenger,
 );
 
 export const error404RouteConfig: RouteConfigs = {

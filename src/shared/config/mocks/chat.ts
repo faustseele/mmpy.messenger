@@ -1,3 +1,5 @@
+import participantAvatar from "../../../../static/avatar.png";
+import sunsetImage from "../../../../static/sunset.jpeg";
 import {
   RouteConfigs,
   RouteLink,
@@ -20,14 +22,12 @@ import {
   createMessageField,
 } from "../../../features/send-message/ui/MessageField.ts";
 import {
-  ChatMap,
-  ChatProps,
-  ChatSchema,
-} from "../../../pages/chat/model/types.ts";
+  MessengerMap,
+  MessengerProps,
+  MessengerSchema,
+} from "../../../pages/messenger/model/types.ts";
+import cssChat from "../../../pages/messenger/ui/messenger.module.css";
 import cssPage from "../../../pages/page/ui/page.module.css";
-import cssChat from "../../../pages/chat/ui/chat.module.css";
-import participantAvatar from "../../../../static/avatar.png";
-import sunsetImage from "../../../../static/sunset.jpeg";
 import {
   ComponentData,
   ComponentInit,
@@ -210,7 +210,7 @@ const chatCatalogueInit: GoToChatInit[] = [
   ),
 ];
 
-const chatSchema: ChatSchema = {
+const chatSchema: MessengerSchema = {
   singles: {
     heading_chats: {
       init: makeHeadingInit(
@@ -224,7 +224,7 @@ const chatSchema: ChatSchema = {
       factory: createHeading,
       instanceType: headingInstance,
     },
-    heading_goToProfile: {
+    heading_goToSettings: {
       init: makeHeadingInit(
         {
           tagName: "h1",
@@ -297,20 +297,20 @@ const chatSchema: ChatSchema = {
   },
 };
 
-export const chatPageData: ComponentData<ChatProps, ChatMap, ChatSchema> = {
+export const chatPageData: ComponentData<MessengerProps, MessengerMap, MessengerSchema> = {
   configs: {
     tagName: "div",
     participantAvatar,
     participantName: "Андрей",
   },
   attributes: {
-    className: `${cssPage.moduleWindow} ${cssChat.moduleWindow_chat}`,
+    className: `${cssPage.moduleWindow} ${cssChat.moduleWindow_messenger}`,
   },
   childrenSchema: chatSchema,
 };
 
 export const chatPageRouteConfig: RouteConfigs = {
-  path: RouteLink.Chats,
+  path: RouteLink.Messenger,
   rootQuery: "#app",
   authStatus: "protected",
   params: {},

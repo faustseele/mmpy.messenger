@@ -6,11 +6,9 @@
  * Avoids unnecessary casting: polymorphism
  * Covariance in a win for the array: subtypes Route<Specific> are assignable to supertype array Route[]
  */
-export interface IRoute {
+export interface RouteContract {
   /* Eslint doesn't get that params are used */
-  // eslint-disable-next-line no-unused-vars
   setRootQuery(next: string): void;
-  // eslint-disable-next-line no-unused-vars
   setRouteConfigs(nextConfigs: Partial<RouteConfigs>): void;
   leave(): void;
   render(): void;
@@ -19,26 +17,21 @@ export interface IRoute {
   readonly authStatus: AuthStateType;
 }
 
-export type AuthStateType = 'protected' | 'guest' | 'any';
+export type AuthStateType = "protected" | "guest" | "any";
 
 export interface RouteConfigs {
   path: string;
   rootQuery: string;
-  authStatus: AuthStateType; 
+  authStatus: AuthStateType;
   params: Record<string, string>;
 }
 
 /* Eslint doesn't like the enums */
-/* eslint-disable no-unused-vars */
 export enum RouteLink {
   SignIn = "/",
   SignUp = "/sign-up",
-  Chats = "/messenger",
+  Messenger = "/messenger",
   Settings = "/settings",
   NotFound = "/404",
   Error = "/500",
 }
-
-export const guardLink = (link: unknown): link is RouteLink => {
-  return typeof link === "string" && pageLinks.includes(link as RouteLink);
-};

@@ -5,7 +5,7 @@ import {
   ChildrenSchema,
 } from "../../../shared/lib/Component/model/children.types.ts";
 import Route from "./Route.ts";
-import { IRoute, RouteConfigs, RouteLink } from "./types.ts";
+import { RouteContract, RouteConfigs, RouteLink } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";
 
 /**
@@ -33,10 +33,10 @@ class Router {
    * A list of all registered routes in the application.
    * Route is used due to contravariance
    */
-  private _routes: IRoute[] = [];
+  private _routes: RouteContract[] = [];
 
   /** The actual route. */
-  private _currentRoute: IRoute | null = null;
+  private _currentRoute: RouteContract | null = null;
 
   constructor() {
     if (Router.__instance) return Router.__instance;

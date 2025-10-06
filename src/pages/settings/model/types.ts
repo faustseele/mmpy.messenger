@@ -1,4 +1,4 @@
-import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
+import { InputEditor } from "../../../features/edit-settings/ui/InputEditor.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
 import { ChildrenMap, ChildrenSchema } from "../../../shared/lib/Component/model/children.types.ts";
 import { TagNameType } from "../../../shared/lib/DOM/types.ts";
@@ -8,7 +8,7 @@ import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { HeadingProps } from "../../../shared/ui/Heading/types.ts";
 import { InputProps } from "../../../shared/ui/Input/Input.ts";
 
-export interface ProfileProps extends BaseProps {
+export interface SettingsProps extends BaseProps {
   configs: {
     tagName: Extract<TagNameType, "div">;
     profileName: string;
@@ -16,7 +16,7 @@ export interface ProfileProps extends BaseProps {
   };
 }
 
-export interface ProfileMap extends ChildrenMap {
+export interface SettingsMap extends ChildrenMap {
   singles: {
     heading_profile: {
       props: HeadingProps;
@@ -47,5 +47,5 @@ export interface ProfileMap extends ChildrenMap {
   };
 }
 
-export type ProfileSchema = ChildrenSchema<ProfileMap>;
+export type SettingsSchema = ChildrenSchema<SettingsMap>;
 
