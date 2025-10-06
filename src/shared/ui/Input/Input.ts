@@ -5,7 +5,7 @@ import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import { guardHTMLElement } from "../../lib/helpers/html/guards.ts";
-import { FieldType, InputAttributes, InputConfigs } from "../../lib/helpers/input/types.ts";
+import { FieldType, InputAttributes, InputConfigs } from "./types.ts";
 import css from "./input.module.css";
 
 export interface InputProps extends BaseProps {
@@ -64,7 +64,7 @@ export class Input extends Component<InputProps> {
   public getSourceMarkup(): string {
     return /*html*/ `
         <input
-          class="${css.input} {{#if __isSearch}}${css.input_search} {{/if}}"
+          class="${css.input} {{#if isSearch}}${css.input_search} {{/if}}"
           name="{{id}}"
           type="{{type}}"
           id="{{id}}"

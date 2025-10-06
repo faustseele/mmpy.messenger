@@ -33,7 +33,6 @@ export class MessengerPage extends Page<MessengerProps, MessengerMap, MessengerS
     deleteButton?.setProps({
       events: {
         click: () => {
-          console.log("Chat deletion initiated.");
           /* Reroute of deletion */
           Router.go(RouteLink.NotFound);
         },

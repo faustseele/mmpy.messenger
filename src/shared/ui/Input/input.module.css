@@ -85,6 +85,7 @@
 
 .input_search {
   border-bottom: none;
+  text-align: start;
 }
 
 .input:hover {

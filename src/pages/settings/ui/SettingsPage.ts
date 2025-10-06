@@ -17,7 +17,6 @@ import css from "./settings.module.css";
 export class SettingsPage extends Page<SettingsProps, SettingsMap, SettingsSchema> {
   constructor(props: ComponentProps<SettingsProps, SettingsMap, SettingsSchema>) {
     super(props);
-    console.log(props);
   }
 
   public componentDidMount(): void {

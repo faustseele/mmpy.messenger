@@ -3,7 +3,7 @@ import {
   ComponentData,
   ComponentInit,
 } from "../../lib/Component/model/types.ts";
-import { FieldType } from "../../lib/helpers/input/types.ts";
+import { FieldType } from "../../ui/Input/types.ts";
 import {
   AuthMap,
   AuthProps,

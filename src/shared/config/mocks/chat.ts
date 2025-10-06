@@ -245,6 +245,7 @@ const chatSchema: MessengerSchema = {
           label: "Поиск",
           type: "text",
           isError: false,
+          isSearch: true,
           name: "search",
           id: "search",
           errorMessage: "",

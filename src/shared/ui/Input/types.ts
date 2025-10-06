@@ -1,5 +1,5 @@
-import { ComponentConfigs, ComponentAttributes } from "../../Component/model/types.ts";
-import { TagNameType } from "../../DOM/types.ts";
+import { ComponentConfigs, ComponentAttributes } from "../../lib/Component/model/types.ts";
+import { TagNameType } from "../../lib/DOM/types.ts";
 
 /* Configurations are used for <input> tag inside <label>-wrapper */ 
 export interface InputConfigs extends ComponentConfigs {
@@ -7,6 +7,7 @@ export interface InputConfigs extends ComponentConfigs {
   label: string;
   type: "text" | "email" | "password" | "tel";
   isError?: boolean;
+  isSearch?: boolean;
   name: FieldType;
   id: FieldType;
   errorMessage?: string;

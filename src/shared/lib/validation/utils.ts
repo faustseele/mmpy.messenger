@@ -1,4 +1,4 @@
-import { FieldType } from "../helpers/input/types.ts";
+import { FieldType } from "../../ui/Input/types.ts";
 
 /** 'Ё' Char has U+0401, whereas 'А-Я' range includes
  * symbols from U+0410 up to U+042F. Same thing for 'ё'!
