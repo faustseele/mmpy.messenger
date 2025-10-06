@@ -3,10 +3,10 @@ import {
   ChildrenMap,
   ChildrenSchema,
 } from "../../../shared/lib/Component/model/children.types.ts";
-import Component from "../../../shared/lib/Component/model/Component.ts";
 import { TagNameType } from "../../../shared/lib/DOM/types.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { ButtonProps } from "../../../shared/ui/Button/types.ts";
+import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { HeadingProps } from "../../../shared/ui/Heading/types.ts";
 import { Input, InputProps } from "../../../shared/ui/Input/Input.ts";
 
@@ -23,21 +23,21 @@ export interface AuthMap extends ChildrenMap {
   singles: {
     heading: {
       props: HeadingProps;
-      component: Component<HeadingProps>;
+      instanceType: Heading;
     };
     buttonFormSubmit: {
       props: ButtonProps;
-      component: Button;
+      instanceType: Button;
     };
     buttonReroute: {
       props: ButtonProps;
-      component: Button;
+      instanceType: Button;
     };
   };
   lists: {
     inputs: {
       props: InputProps;
-      component: Input[];
+      instanceType: Input[];
     };
   };
 }

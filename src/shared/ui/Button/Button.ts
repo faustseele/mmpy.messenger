@@ -1,7 +1,6 @@
-import { ChildBlueprint } from "../../lib/Component/model/children.types.ts";
 import Component from "../../lib/Component/model/Component.ts";
 import {
-  ComponentInit,
+  ComponentData,
   ComponentProps
 } from "../../lib/Component/model/types.ts";
 import DOMService from "../../lib/DOM/DOMService.ts";
@@ -22,8 +21,8 @@ export class Button extends Component<ButtonProps> {
   }
 }
 
-export const createButton: ComponentFactory<ButtonProps> = (
-  data: ComponentInit<ButtonProps>
+export const createButton: ComponentFactory<ButtonProps, Button> = (
+  data: ComponentData<ButtonProps>,
 ): Button => {
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
@@ -32,5 +31,3 @@ export const createButton: ComponentFactory<ButtonProps> = (
 
   return new Button({ deps, data });
 };
-
-export type ButtonChild = ChildBlueprint<ButtonProps>;

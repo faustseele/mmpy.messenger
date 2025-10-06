@@ -1,10 +1,9 @@
-import { ComponentProps } from "../../../shared/lib/Component/model/Component.ts";
-import { ComponentData } from "../../../shared/lib/Component/model/types.ts";
+import { ComponentData, ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { Input, InputProps } from "../../../shared/ui/Input/Input.ts";
-import css from "./input.module.css";
+import css from "../../../shared/ui/Input/input.module.css";
 
 export class InputEditor extends Input {
   constructor(props: ComponentProps<InputProps>) {
@@ -30,7 +29,7 @@ export class InputEditor extends Input {
   }
 }
 
-export const createInputEditor: ComponentFactory<InputProps> = (
+export const createInputEditor: ComponentFactory<InputProps, Input> = (
   data: ComponentData<InputProps>,
 ): InputEditor => {
   const deps = {

@@ -17,7 +17,7 @@ import { Input, InputProps, createInput } from "../../ui/Input/Input.ts";
 import cssBtn from "../../ui/Button/button.module.css";
 import cssHeading from "../../ui/Heading/heading.module.css";
 import cssInput from "../../ui/Input/input.module.css";
-import cssPage from "../../../pages/page/ui/pages.module.css";
+import cssPage from "../../../pages/page/ui/page.module.css";
 
 type HeadingInit = ComponentInit<HeadingProps>;
 type ButtonInit = ComponentInit<ButtonProps>;
@@ -58,7 +58,6 @@ const makeInputInit = (
   placeholder = label,
 ): InputInit => ({
   configs: {
-    slotKey: "input",
     tagName: "label",
     label,
     type,
@@ -77,7 +76,7 @@ const signUpInputsInit: InputInit[] = [
   makeInputInit("login", "Логин", "text"),
   makeInputInit("email", "Эл. почта", "email"),
   makeInputInit("password", "Пароль", "password"),
-  makeInputInit("phone", "Телефон", "tel", "+7 (999) 000-00-00"),
+  makeInputInit("phone", "Телефон", "tel", "Номер телефона"),
 ];
 
 const signInInputsInit: InputInit[] = [
@@ -89,32 +88,29 @@ const signUpSchema: AuthSchema = {
   singles: {
     heading: {
       init: copyHeadingInit({
-        slotKey: "heading",
         tagName: "h1",
         type: "auth/sign-up",
-        text: "Регистрация",
+        text: "Регистрация 🎀",
       }),
       factory: createHeading,
-      instance: emptyHeadingInstance,
+      instanceType: emptyHeadingInstance,
     },
     buttonFormSubmit: {
       init: copyButtonInit(
         {
-          slotKey: "buttonFormSubmit",
-          label: "Создать аккаунт",
+          label: "Зарегистрироваться ✓",
           tagName: "button",
           type: "submit",
         },
         cssBtn.button,
       ),
       factory: createButton,
-      instance: emptyButtonInstance,
+      instanceType: emptyButtonInstance,
     },
     buttonReroute: {
       init: copyButtonInit(
         {
-          slotKey: "buttonReroute",
-          label: "Уже есть аккаунт?",
+          label: "Я свой!",
           tagName: "button",
           type: "button",
           link: RouteLink.SignIn,
@@ -122,14 +118,14 @@ const signUpSchema: AuthSchema = {
         `${cssBtn.button} ${cssBtn.button_silent}`,
       ),
       factory: createButton,
-      instance: emptyButtonInstance,
+      instanceType: emptyButtonInstance,
     },
   },
   lists: {
     inputs: {
       init: signUpInputsInit,
       factory: createInput,
-      instance: [] as Input[],
+      instanceType: [] as Input[],
     },
   },
 };
@@ -138,32 +134,29 @@ const signInSchema: AuthSchema = {
   singles: {
     heading: {
       init: copyHeadingInit({
-        slotKey: "heading",
         tagName: "h1",
         type: "auth/sign-in",
-        text: "Вход",
+        text: "Вход 🚪",
       }),
       factory: createHeading,
-      instance: emptyHeadingInstance,
+      instanceType: emptyHeadingInstance,
     },
     buttonFormSubmit: {
       init: copyButtonInit(
         {
-          slotKey: "buttonFormSubmit",
-          label: "Войти",
+          label: "Войти ✓",
           tagName: "button",
           type: "submit",
         },
         cssBtn.button,
       ),
       factory: createButton,
-      instance: emptyButtonInstance,
+      instanceType: emptyButtonInstance,
     },
     buttonReroute: {
       init: copyButtonInit(
         {
-          slotKey: "buttonReroute",
-          label: "Создать аккаунт",
+          label: "Впервые?",
           tagName: "button",
           type: "button",
           link: RouteLink.SignUp,
@@ -171,14 +164,14 @@ const signInSchema: AuthSchema = {
         `${cssBtn.button} ${cssBtn.button_silent}`,
       ),
       factory: createButton,
-      instance: emptyButtonInstance,
+      instanceType: emptyButtonInstance,
     },
   },
   lists: {
     inputs: {
       init: signInInputsInit,
       factory: createInput,
-      instance: [] as Input[],
+      instanceType: [] as Input[],
     },
   },
 };

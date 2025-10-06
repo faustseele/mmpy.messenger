@@ -1,34 +1,34 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
-  getChildFromMap,
-  getChildSlotKey,
-} from "../../../shared/lib/Component/lib/utils.ts";
-import {
   ComponentData,
   ComponentProps,
 } from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { createChildren } from "../../../shared/lib/helpers/factory/functions.ts";
+import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { ErrorPageProps } from "../model/types.ts";
+import { ErrorMap, ErrorProps, ErrorSchema } from "../model/types.ts";
 import css from "./errors.module.css";
 
-export class ErrorPage extends Page<ErrorPageProps> {
-  constructor(props: ComponentProps<ErrorPageProps>) {
+export class ErrorPage extends Page<ErrorProps, ErrorMap, ErrorSchema> {
+  constructor(props: ComponentProps<ErrorProps, ErrorMap, ErrorSchema>) {
     super(props);
   }
 
   public componentDidMount(): void {
     super.componentDidMount();
 
-    const button = getChildFromMap(this.children!, "button");
+    if (!this.childrenInstances) {
+      throw new Error("childrenInstances is not defined");
+    }
 
-    const link = button.configs.link ?? RouteLink.Chats;
+    const backBtn = this.childrenInstances.singles.button_back;
 
-    button.setProps({
+    const link = backBtn.configs.link ?? RouteLink.Chats;
+
+    backBtn.setProps({
       events: {
         click: () => Router.go(link),
       },
@@ -36,36 +36,37 @@ export class ErrorPage extends Page<ErrorPageProps> {
   }
 
   public getSourceMarkup(): string {
-    const headingKey = getChildSlotKey(this.childrenData!, "heading");
-    const subheadingKey = getChildSlotKey(this.childrenData!, "subheading");
-    const buttonKey = getChildSlotKey(this.childrenData!, "button");
-
     return /*html*/ `
       <header class="${css.errorsHeadings}">
-        {{{ ${headingKey} }}}
-        {{{ ${subheadingKey} }}}
+        {{{ heading }}}
+        {{{ subheading }}}
       </header>
       
       <main>
-        {{{ ${buttonKey} }}}
+        {{{ button_back }}}
       </main>
     `;
   }
 }
 
-export const createErrorPage: PageFactory<ErrorPageProps> = (
-  data: ComponentData<ErrorPageProps>,
-): ErrorPage => {
-  if (!data.childrenData) {
+export const createErrorPage: PageFactory<
+  ErrorProps,
+  ErrorPage,
+  ErrorMap,
+  ErrorSchema
+> = (data: ComponentData<ErrorProps, ErrorMap, ErrorSchema>): ErrorPage => {
+  if (!data.childrenSchema) {
     throw new Error("ErrorPage: ChildrenData are not defined");
   }
 
-  const children = createChildren(data.childrenData);
+  const childrenInstances = buildChildren<ErrorMap, ErrorSchema>(
+    data.childrenSchema,
+  );
+
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),
   };
 
-  const preparedData = { ...data, children };
-  return new ErrorPage({ deps, data: preparedData });
+  return new ErrorPage({ deps, data: { ...data, childrenInstances } });
 };

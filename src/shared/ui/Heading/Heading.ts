@@ -8,9 +8,7 @@ import { HeadingProps } from "./types.ts";
 
 export class Heading extends Component<HeadingProps> {
   constructor(props: ComponentProps<HeadingProps>) {
-    const { deps, data } = props;
-
-    super({ deps, data });
+    super(props);
   }
 
   public getSourceMarkup(): string {
@@ -35,7 +33,7 @@ export class Heading extends Component<HeadingProps> {
   }
 }
 
-export const createHeading: ComponentFactory<HeadingProps> = (
+export const createHeading: ComponentFactory<HeadingProps, Heading> = (
   data: ComponentData<HeadingProps>,
 ): Heading => {
   const deps = {

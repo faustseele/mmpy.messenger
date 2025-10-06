@@ -1,6 +1,7 @@
 import Handlebars from "handlebars";
 import { BaseProps } from "../Component/model/base.types.ts";
 import {
+  ChildrenMap,
   ChildrenSchema,
   CombinedChildrenInstances
 } from "../Component/model/children.types.ts";
@@ -35,7 +36,7 @@ export default class FragmentService<C extends ComponentConfigs> {
   public compileWithChildren(
     sourceMarkup: string,
     configs: C,
-    children: CombinedChildrenInstances<BaseProps>,
+    children: CombinedChildrenInstances<BaseProps, ChildrenMap>,
   ): DocumentFragment {
     /* Creating <div id="random UUID"></div>.. placeholders for children */
     const divPlaceholders = this._createDivPlaceholders(children);
@@ -72,7 +73,7 @@ export default class FragmentService<C extends ComponentConfigs> {
    * or a concatenated list of div-placeholders <tags> by key.
    */
   private _createDivPlaceholders(
-    children: CombinedChildrenInstances<BaseProps>,
+    children: CombinedChildrenInstances<BaseProps, ChildrenMap>,
   ): Record<string, string> {
     const divPlaceholders: Record<string, string> = {};
 
@@ -106,7 +107,7 @@ export default class FragmentService<C extends ComponentConfigs> {
    */
   private _replacePlaceholdersInFragment(
     fragment: DocumentFragment,
-    children: CombinedChildrenInstances<BaseProps>,
+    children: CombinedChildrenInstances<BaseProps, ChildrenMap>,
   ): DocumentFragment {
     Object.values(children).forEach((value) => {
       if (Array.isArray(value)) {
@@ -122,7 +123,7 @@ export default class FragmentService<C extends ComponentConfigs> {
       }
     });
 
-    function findAndReplace(child: Component<BaseProps, ChildrenSchema>) {
+    function findAndReplace(child: Component<BaseProps, ChildrenMap, ChildrenSchema>) {
       const placeholder = fragment.querySelector(`[data-id="${child.id}"]`);
       const childElement = child.element;
 

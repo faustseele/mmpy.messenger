@@ -3,7 +3,6 @@ import { TagNameType } from "../../DOM/types.ts";
 
 /* Configurations are used for <input> tag inside <label>-wrapper */ 
 export interface InputConfigs extends ComponentConfigs {
-  slotKey: string;
   tagName: Extract<TagNameType, "label">
   label: string;
   type: "text" | "email" | "password" | "tel";

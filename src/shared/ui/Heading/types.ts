@@ -9,8 +9,7 @@ export interface HeadingProps extends BaseProps {
 }
 
 export interface HeadingConfigs extends ComponentConfigs {
-  slotKey: string;
-  tagName: Extract<TagNameType, "h1" | "h2" | "h3">
+  tagName: Extract<TagNameType, "h1">
   type: string;
   text: string;
   isClickable?: boolean;

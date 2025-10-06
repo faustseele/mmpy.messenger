@@ -33,11 +33,11 @@ export function buildChildren<
     }
   }
 
-  if (Object.keys(childrenSchema.singles).length) {
+  if (Object.keys(childrenSchema.singles ?? {}).length) {
     buildSingles(childrenSchema.singles);
   }
 
-  if (Object.keys(childrenSchema.lists).length) {
+  if (Object.keys(childrenSchema.lists ?? {}).length) {
     buildLists(childrenSchema.lists);
   }
 

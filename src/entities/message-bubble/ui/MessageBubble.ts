@@ -1,12 +1,10 @@
-import { ComponentData } from "../../framework/Component/component.ts";
-import Component, {
-  ComponentProps,
-} from "../../framework/Component/Component.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../utils/factory/factory.d";
+import Component from "../../../shared/lib/Component/model/Component.ts";
+import { ComponentData, ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { MessageProps } from "../model/types.ts";
-import css from "./message.module.css";
+import css from "./messageBubble.module.css";
 
 export class MessageBubble extends Component<MessageProps> {
   constructor(props: ComponentProps<MessageProps>) {
@@ -33,7 +31,7 @@ export class MessageBubble extends Component<MessageProps> {
   }
 }
 
-export const createMessage: ComponentFactory<MessageProps> = (
+export const createMessage: ComponentFactory<MessageProps,  MessageBubble> = (
   data: ComponentData<MessageProps>,
 ): MessageBubble => {
   const messageClasses = [

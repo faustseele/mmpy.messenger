@@ -10,7 +10,6 @@ export interface ButtonProps extends BaseProps {
 } 
 
 export interface ButtonConfigs extends ComponentConfigs {
-  slotKey: string;
   label: string;
   tagName: Extract<TagNameType, "button">;
   type: "button" | "submit";

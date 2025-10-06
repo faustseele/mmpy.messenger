@@ -251,7 +251,7 @@ export default abstract class Component<
     const element = this.domService.element;
     if (!element) return;
 
-    element!.style.display = "flex";
+    // element!.style.display = "flex";
   }
 
   /** DOMService helper

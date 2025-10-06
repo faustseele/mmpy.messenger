@@ -7,13 +7,13 @@ export type ChildrenMap = {
   singles: {
     [key: string]: {
       props: BaseProps;
-      component: Component<BaseProps>;
+      instanceType: Component<BaseProps>;
     };
   };
   lists: {
     [key: string]: {
       props: BaseProps;
-      component: Component<BaseProps>[];
+      instanceType: Component<BaseProps>[];
     };
   };
 };
@@ -26,13 +26,13 @@ export type ChildrenSchema<Map extends ChildrenMap = ChildrenMap> = {
   singles: {
     [K in keyof Map["singles"]]: ChildBlueprint<
       Map["singles"][K]["props"],
-      Map["singles"][K]["component"]
+      Map["singles"][K]["instanceType"]
     >;
   };
   lists: {
     [K in keyof Map["lists"]]: ChildrenBlueprint<
       Map["lists"][K]["props"],
-      Map["lists"][K]["component"][0]
+      Map["lists"][K]["instanceType"][0]
     >;
   };
 };

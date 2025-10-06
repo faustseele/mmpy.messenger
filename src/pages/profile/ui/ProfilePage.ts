@@ -1,23 +1,21 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
-import { connect } from "../../../app/providers/store/connect.ts";
-import { AppState } from "../../../app/providers/store/Store.ts";
 import AuthService from "../../../features/auth/by-credentials/model/AuthService.ts";
-import { ComponentData, ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import {
+  ComponentData,
+  ComponentProps,
+} from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
+import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
 import { Page } from "../../page/ui/Page.ts";
-
-import { ProfilePageProps } from "../model/types.ts";
+import { ProfileMap, ProfileProps, ProfileSchema } from "../model/types.ts";
 import css from "./profile.module.css";
 
-const mapStateToProps = (state: AppState) => ({
-  user: state.user,
-});
-
-export class ProfilePage extends Page<ProfilePageProps> {
-  constructor(props: ComponentProps<ProfilePageProps, >) {
+export class ProfilePage extends Page<ProfileProps, ProfileMap, ProfileSchema> {
+  constructor(props: ComponentProps<ProfileProps, ProfileMap, ProfileSchema>) {
     super(props);
     console.log(props);
   }
@@ -25,14 +23,21 @@ export class ProfilePage extends Page<ProfilePageProps> {
   public componentDidMount(): void {
     super.componentDidMount();
 
-    const inputs = getChildrenFromMap(this.children!, "inputEditors");
-    const headingBack = getChildFromMap(this.children!, "heading_backToChats");
-    const buttonEditInfo = getChildFromMap(this.children!, "buttonEditInfo");
-    const buttonEditPass = getChildFromMap(
-      this.children!,
-      "buttonEditPassword",
-    );
-    const buttonLogout = getChildFromMap(this.children!, "buttonLogout");
+    if (!Object.keys(this.childrenInstances?.singles ?? 0).length) {
+      console.error(
+        "ProfilePage: Children are not defined",
+        this.childrenInstances,
+      );
+      return;
+    }
+
+    const inputs = this.childrenInstances!.lists.inputsEditors;
+    const {
+      heading_backToChats: headingBack,
+      buttonEditInfo,
+      buttonEditPassword,
+      buttonLogout,
+    } = this.childrenInstances!.singles;
 
     const formValidator = new FormValidator(inputs);
 
@@ -47,7 +52,7 @@ export class ProfilePage extends Page<ProfilePageProps> {
       },
     });
 
-    buttonEditPass.setProps({
+    buttonEditPassword.setProps({
       events: {
         click: (e: Event) =>
           formValidator.onFormSubmit(e, RouteLink.Settings, "change-password"),
@@ -71,18 +76,11 @@ export class ProfilePage extends Page<ProfilePageProps> {
   }
 
   public getSourceMarkup(): string {
-    const cd = this.childrenData!;
-    const headingProfileKey = getChildSlotKey(cd, "heading_profile");
-    const headingBackKey = getChildSlotKey(cd, "heading_backToChats");
-    const inputsEditorsKey = getChildSlotKey(cd, "inputEditors");
-    const buttonEditInfoKey = getChildSlotKey(cd, "buttonEditInfo");
-    const buttonEditPassKey = getChildSlotKey(cd, "buttonEditPassword");
-    const buttonLogoutKey = getChildSlotKey(cd, "buttonLogout");
-
     return /*html*/ `
       <header class="${css.profileHeadings}">
-        {{{ ${headingProfileKey} }}}
-        {{{ ${headingBackKey} }}}
+      {{{ heading_profile }}}
+      {{{ heading_backToChats }}}
+
       </header>
       
       <main class="${css.profileContent}">
@@ -99,39 +97,43 @@ export class ProfilePage extends Page<ProfilePageProps> {
 
         <div class="${css.profileInputs}">
           <div class="${css.profileInputs__list}">
-            {{{ ${inputsEditorsKey} }}}
+            {{{ inputsEditors }}}
           </div>
         </div>
       </main>
 
       <footer class="${css.profileFooter}">
-        {{{ ${buttonEditInfoKey} }}}
-        {{{ ${buttonEditPassKey} }}}
-        {{{ ${buttonLogoutKey} }}}
+        {{{ buttonEditInfo }}}
+        {{{ buttonEditPassword }}}
+        {{{ buttonLogout }}}
       </footer>
     `;
   }
 }
 
-export const createProfilePage: PageFactory<ProfilePageProps> = (
-  data: ComponentData<ProfilePageProps>,
+export const createProfilePage: PageFactory<
+  ProfileProps,
+  ProfilePage,
+  ProfileMap,
+  ProfileSchema
+> = (
+  data: ComponentData<ProfileProps, ProfileMap, ProfileSchema>,
 ): ProfilePage => {
-  if (!data.childrenData) {
-    throw new Error("ProfilePage: ChildrenData are not defined");
+  if (!data.childrenSchema) {
+    throw new Error("ProfilePage: ChildrenScheme is not defined");
   }
 
-  const children = createChildren(data.childrenData);
+  const childrenInstances = buildChildren<ProfileMap, ProfileSchema>(
+    data.childrenSchema,
+  );
+
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),
   };
 
-  const preparedData = { ...data, children };
-
-  const ConnectedProfilePage = connect(mapStateToProps)(ProfilePage);
-
-  return new ConnectedProfilePage({
+  return new ProfilePage({
     deps,
-    data: preparedData,
-  }) as ProfilePage;
+    data: { ...data, childrenInstances },
+  });
 };

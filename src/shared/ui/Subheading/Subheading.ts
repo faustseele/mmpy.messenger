@@ -18,7 +18,7 @@ export class Subheading extends Component<SubheadingProps> {
   }
 }
 
-export const createSubheading: ComponentFactory<SubheadingProps> = (
+export const createSubheading: ComponentFactory<SubheadingProps, Subheading> = (
   data: ComponentData<SubheadingProps>,
 ): Subheading => {
   data.configs.text = data.configs.text.toLowerCase();

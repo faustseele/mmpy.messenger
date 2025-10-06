@@ -76,7 +76,7 @@ export class Input extends Component<InputProps> {
   }
 }
 
-export const createInput: ComponentFactory<InputProps> = (
+export const createInput: ComponentFactory<InputProps, Input> = (
   data: ComponentData<InputProps>,
 ): Input => {
   const deps = {

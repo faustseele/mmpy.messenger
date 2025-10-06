@@ -1,271 +1,317 @@
-import participantAvatar from "../../../static/avatar.png";
-import sunsetImage from "../../../static/sunset.jpeg";
-import { createButton } from "../../components/button/Button.ts";
-import catalogueItemCss from "../../components/goToChat/goToChat.module.css";
-import { createGoToChat } from "../../components/goToChat/GoToChat.ts";
-import { createHeading } from "../../components/heading/Heading.ts";
-import { createInput } from "../../components/input/Input.ts";
+import {
+  RouteConfigs,
+  RouteLink,
+} from "../../../app/providers/router/types.ts";
 import { MessageProps } from "../../../entities/message-bubble/model/types.ts";
-import { createMessage } from "../../../entities/message-bubble/ui/MessageBubble.ts";
-import messageFieldCss from "../../components/messageField/messageField.module.css";
-import { createMessageField } from "../../../features/send-message/ui/MessageField.ts";
-import { RouteConfigs, RouteLink } from "../../../app/providers/router/types.ts";
-import { ChildrenData } from "../../framework/Component/children";
-import { ComponentData } from "../../framework/Component/component";
-import { ComponentFactory } from "../../utils/factory/factory.d";
-import cssPages from "../pages.module.css";
-import { ChatChildrenDataPropsMap, ChatPageProps } from "../../../pages/chat/model/types.ts";
-import cssChat from "./chat.module.css";
-import cssHeading from "../../components/heading/heading.module.css";
-import cssBtn from "../../components/button/button.module.css";
+import {
+  MessageBubble,
+  createMessage,
+} from "../../../entities/message-bubble/ui/MessageBubble.ts";
+import { GoToChatProps } from "../../../features/go-to-chat/model/types.ts";
+import catalogueCss from "../../../features/go-to-chat/ui/goToChat.module.css";
+import {
+  GoToChat,
+  createGoToChat,
+} from "../../../features/go-to-chat/ui/GoToChat.ts";
+import { MessageFieldProps } from "../../../features/send-message/model/types.ts";
+import messageFieldCss from "../../../features/send-message/ui/messageField.module.css";
+import {
+  MessageField,
+  createMessageField,
+} from "../../../features/send-message/ui/MessageField.ts";
+import {
+  ChatMap,
+  ChatProps,
+  ChatSchema,
+} from "../../../pages/chat/model/types.ts";
+import cssPage from "../../../pages/page/ui/page.module.css";
+import cssChat from "../../../pages/chat/ui/chat.module.css";
+import participantAvatar from "../../../../static/avatar.png";
+import sunsetImage from "../../../../static/sunset.jpeg";
+import {
+  ComponentData,
+  ComponentInit,
+} from "../../lib/Component/model/types.ts";
+import cssBtn from "../../ui/Button/button.module.css";
+import { Button, createButton } from "../../ui/Button/Button.ts";
+import { ButtonProps } from "../../ui/Button/types.ts";
+import cssHeading from "../../ui/Heading/heading.module.css";
+import { Heading, createHeading } from "../../ui/Heading/Heading.ts";
+import { HeadingProps } from "../../ui/Heading/types.ts";
+import { Input, InputProps, createInput } from "../../ui/Input/Input.ts";
 
-const messages: {
-  type: "list";
-  slotKey: string;
-  dataList: ComponentData<MessageProps>[];
-  childrenFactory: ComponentFactory<MessageProps>;
-} = {
-  type: "list",
-  slotKey: "messages",
-  childrenFactory: createMessage,
-  dataList: [
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "incoming",
-        text: "Привет! Как дела?",
-        date: "10:25",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "outgoing",
-        text: "Привет, Андрей! Всё отлично, а у тебя?",
-        date: "10:26",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "div",
-        type: "date",
-        date: "Сегодня, 12:00",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "incoming",
-        text: "Посмотри, какой закат!",
-        image: sunsetImage,
-        date: "12:05",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "incoming",
-        text: "Пойдём вечером гулять?",
-        date: "12:07",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "outgoing",
-        text: "Да, давай! Во сколько?",
-        date: "12:08",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "incoming",
-        text: "О, вечер — время, когда улицы шепчут тайны, а фонари отбрасывают тени, длинные, как мысли Одиссея. В семь, у старого дуба?",
-        date: "12:10",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "outgoing",
-        text: "Семь — час, когда мир затихает, и душа, как река, течёт к тому дубу, где мы встретимся. Буду там, с сердцем, полным слов.",
-        date: "12:12",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "incoming",
-        text: "Ты всегда так говоришь, будто пишешь книгу! Но мне нравится. Принеси свой смех, он ярче звёзд.",
-        date: "12:15",
-      },
-      componentFactory: createMessage,
-    },
-    {
-      configs: {
-        slotKey: "message",
-        tagName: "article",
-        type: "outgoing",
-        text: "Мой смех — лишь эхо твоего, отражённое в зеркале ночи. До встречи, о звезда моя!",
-        date: "12:17",
-      },
-      componentFactory: createMessage,
-    },
-  ],
-};
+/* Type guards */
+type HeadingInit = ComponentInit<HeadingProps>;
+type ButtonInit = ComponentInit<ButtonProps>;
+type InputInit = ComponentInit<InputProps>;
+type GoToChatInit = ComponentInit<GoToChatProps>;
+type MessageInit = ComponentInit<MessageProps>;
+type MessageFieldInit = ComponentInit<MessageFieldProps>;
 
-const chatChildrenData: ChildrenData<ChatChildrenDataPropsMap> = {
-  heading_chats: {
-    type: "single",
-    data: {
-      configs: {
-        slotKey: "heading_chats",
-        tagName: "h1",
-        text: "Чаты 👥",
-      },
-      attributes: {
-        className: cssHeading.heading,
-      },
-      componentFactory: createHeading,
-    },
-  },
-  heading_goToProfile: {
-    type: "single",
-    data: {
-      configs: {
-        slotKey: "heading_goToProfile",
-        tagName: "h1",
-        text: "Профиль ➛",
-        link: RouteLink.Settings,
-      },
-      attributes: {
-        className: `${cssHeading.heading} ${cssHeading.heading__text_clickable}`,
-      },
-      componentFactory: createHeading,
-    },
-  },
-  searchInput: {
-    type: "single",
-    data: {
-      configs: {
-        slotKey: "searchInput",
-        tagName: "label",
-        label: "Поиск",
-        type: "text",
-        id: "search",
-        placeholder: "Поиск",
-      },
-      attributes: {
-        className: cssChat.searchInput,
-      },
-      componentFactory: createInput,
-    },
-  },
-  catalogueItems: {
-    type: "list",
-    slotKey: "catalogueItems",
-    childrenFactory: createGoToChat,
-    dataList: [
-      {
-        configs: {
-          slotKey: "goToChat",
-          tagName: "li",
-          title: "Андрей",
-          contentText: "Привет, я Андрей! Чат с Андреем для тестов",
-          date: "10 мин",
-          unreadCount: "2",
-          avatar: participantAvatar,
-        },
-        attributes: { className: catalogueItemCss.goToChat },
-        componentFactory: createGoToChat,
-      },
-      {
-        configs: {
-          slotKey: "goToChat",
-          tagName: "li",
-          title: "Вася",
-          contentText:
-            "Я Вася, сейчас я напишу это сообщение со всех аккаунтов",
-          date: "15:44",
-          unreadCount: "1",
-          avatar: participantAvatar,
-        },
-        attributes: { className: catalogueItemCss.goToChat },
-        componentFactory: createGoToChat,
-      },
-    ],
-  },
-  deleteChatButton: {
-    type: "single",
-    data: {
-      configs: {
-        slotKey: "deleteChatButton",
-        tagName: "button",
-        label: "Удалить чат",
-        type: "button",
-        link: RouteLink.NotFound,
-      },
-      attributes: {
-        type: "button",
-        className: `${cssBtn.button} ${cssBtn.button_silent}`,
-      },
-      componentFactory: createButton,
-    },
-  },
-  messages,
-  messageField: {
-    type: "single",
-    data: {
-      configs: {
-        slotKey: "messageField",
-        tagName: "form",
-        id: "message",
-        label: "Cообщение",
-        placeholder: "Cообщение",
-        type: "text",
-      },
-      attributes: {
-        className: messageFieldCss.inputLabelWrap,
-      },
-      componentFactory: createMessageField,
-    },
-  },
-};
+type HeadingConfigs = HeadingProps["configs"];
+type ButtonConfigs = ButtonProps["configs"];
+type InputConfigs = InputProps["configs"];
+type GoToChatConfigs = GoToChatProps["configs"];
+type MessageConfigs = MessageProps["configs"];
+type MessageFieldConfigs = MessageFieldProps["configs"];
 
-export const chatPageData: ChatPageProps = {
-  configs: {
-    slotKey: "chatPage",
+const headingInstance = null as unknown as Heading;
+const buttonInstance = null as unknown as Button;
+const inputInstance = null as unknown as Input;
+const messageFieldInstance = null as unknown as MessageField;
+const messageBubbleListInstance = [] as MessageBubble[];
+const goToChatListInstance = [] as GoToChat[];
+
+const makeHeadingInit = (
+  configs: HeadingConfigs,
+  className: string,
+): HeadingInit => ({
+  configs: { ...configs },
+  attributes: {
+    className,
+  },
+});
+
+const makeButtonInit = (
+  configs: ButtonConfigs,
+  className: string,
+): ButtonInit => ({
+  configs: { ...configs },
+  attributes: {
+    type: configs.type,
+    className,
+  },
+});
+
+const makeInputInit = (
+  configs: InputConfigs,
+  className: string,
+): InputInit => ({
+  configs: { ...configs },
+  attributes: {
+    className,
+    for: configs.id,
+  },
+});
+
+const makeGoToChatInit = (
+  configs: GoToChatConfigs,
+  className: string,
+): GoToChatInit => ({
+  configs: { ...configs },
+  attributes: {
+    className,
+  },
+});
+
+const makeMessageInit = (
+  configs: MessageConfigs,
+  attributes?: MessageProps["attributes"],
+): MessageInit => ({
+  configs: { ...configs },
+  ...(attributes ? { attributes } : {}),
+});
+
+const makeMessageFieldInit = (
+  configs: MessageFieldConfigs,
+  className: string,
+): MessageFieldInit => ({
+  configs: { ...configs },
+  attributes: {
+    className,
+  },
+});
+
+const chatMessagesInit: MessageInit[] = [
+  makeMessageInit({
+    tagName: "article",
+    type: "incoming",
+    text: "Привет! Как дела?",
+    date: "10:25",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "outgoing",
+    text: "Привет, Андрей! Всё отлично, а у тебя?",
+    date: "10:26",
+  }),
+  makeMessageInit({
     tagName: "div",
-    participantAvatar: participantAvatar,
+    type: "date",
+    date: "Сегодня, 12:00",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "incoming",
+    text: "Посмотри, какой закат!",
+    image: sunsetImage,
+    date: "12:05",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "incoming",
+    text: "Пойдём вечером гулять?",
+    date: "12:07",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "outgoing",
+    text: "Да, давай! Во сколько?",
+    date: "12:08",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "incoming",
+    text: "О, вечер — время, когда улицы шепчут тайны, а фонари отбрасывают тени, длинные, как мысли Одиссея. В семь, у старого дуба?",
+    date: "12:10",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "outgoing",
+    text: "Семь — час, когда мир затихает, и душа, как река, течёт к тому дубу, где мы встретимся. Буду там, с сердцем, полным слов.",
+    date: "12:12",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "incoming",
+    text: "Ты всегда так говоришь, будто пишешь книгу! Но мне нравится. Принеси свой смех, он ярче звёзд.",
+    date: "12:15",
+  }),
+  makeMessageInit({
+    tagName: "article",
+    type: "outgoing",
+    text: "Мой смех — лишь эхо твоего, отражённое в зеркале ночи. До встречи, о звезда моя!",
+    date: "12:17",
+  }),
+];
+
+const chatCatalogueInit: GoToChatInit[] = [
+  makeGoToChatInit(
+    {
+      tagName: "li",
+      title: "Андрей",
+      contentText: "Привет, я Андрей! Чат с Андреем для тестов",
+      date: "10 мин",
+      unreadCount: "2",
+      avatar: participantAvatar,
+    },
+    catalogueCss.goToChat,
+  ),
+  makeGoToChatInit(
+    {
+      tagName: "li",
+      title: "Вася",
+      contentText: "Я Вася, сейчас я напишу это сообщение со всех аккаунтов",
+      date: "15:44",
+      unreadCount: "1",
+      avatar: participantAvatar,
+    },
+    catalogueCss.goToChat,
+  ),
+];
+
+const chatSchema: ChatSchema = {
+  singles: {
+    heading_chats: {
+      init: makeHeadingInit(
+        {
+          tagName: "h1",
+          type: "catalogue-title",
+          text: "Чаты 👥",
+        },
+        cssHeading.heading,
+      ),
+      factory: createHeading,
+      instanceType: headingInstance,
+    },
+    heading_goToProfile: {
+      init: makeHeadingInit(
+        {
+          tagName: "h1",
+          type: "catalogue-link",
+          text: "Профиль ➛",
+          isClickable: true,
+          link: RouteLink.Settings,
+        },
+        `${cssHeading.heading} ${cssHeading.heading__text_clickable}`,
+      ),
+      factory: createHeading,
+      instanceType: headingInstance,
+    },
+    searchInput: {
+      init: makeInputInit(
+        {
+          tagName: "label",
+          label: "Поиск",
+          type: "text",
+          isError: false,
+          name: "search",
+          id: "search",
+          errorMessage: "",
+          placeholder: "Поиск",
+        },
+        cssChat.searchInput,
+      ),
+      factory: createInput,
+      instanceType: inputInstance,
+    },
+    deleteChatButton: {
+      init: makeButtonInit(
+        {
+          label: "Удалить чат",
+          tagName: "button",
+          type: "button",
+          link: RouteLink.NotFound,
+        },
+        `${cssBtn.button} ${cssBtn.button_silent}`,
+      ),
+      factory: createButton,
+      instanceType: buttonInstance,
+    },
+    messageField: {
+      init: makeMessageFieldInit(
+        {
+          tagName: "form",
+          id: "message",
+          type: "text",
+          placeholder: "Сообщение",
+          label: "Сообщение",
+        },
+        messageFieldCss.inputLabelWrap,
+      ),
+      factory: createMessageField,
+      instanceType: messageFieldInstance,
+    },
+  },
+  lists: {
+    messages: {
+      init: chatMessagesInit,
+      factory: createMessage,
+      instanceType: messageBubbleListInstance,
+    },
+    catalogueItems: {
+      init: chatCatalogueInit,
+      factory: createGoToChat,
+      instanceType: goToChatListInstance,
+    },
+  },
+};
+
+export const chatPageData: ComponentData<ChatProps, ChatMap, ChatSchema> = {
+  configs: {
+    tagName: "div",
+    participantAvatar,
     participantName: "Андрей",
   },
   attributes: {
-    className: `${cssPages.moduleWindow} ${cssChat.moduleWindow_chat}`,
+    className: `${cssPage.moduleWindow} ${cssChat.moduleWindow_chat}`,
   },
-  childrenData: chatChildrenData,
+  childrenSchema: chatSchema,
 };
 
 export const chatPageRouteConfig: RouteConfigs = {
   path: RouteLink.Chats,
   rootQuery: "#app",
-  authStatus: 'protected',
+  authStatus: "protected",
   params: {},
 };

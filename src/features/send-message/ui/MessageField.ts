@@ -1,8 +1,8 @@
-import { ComponentData } from "../../framework/Component/component";
-import Component, { ComponentProps } from "../../framework/Component/Component.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../utils/factory/factory.d";
+import Component from "../../../shared/lib/Component/model/Component.ts";
+import { ComponentProps, ComponentData } from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { MessageFieldProps } from "../model/types.ts";
 import css from "./messageField.module.css";
 
@@ -27,7 +27,7 @@ export class MessageField extends Component<MessageFieldProps> {
   }
 }
 
-export const createMessageField: ComponentFactory<MessageFieldProps> = (
+export const createMessageField: ComponentFactory<MessageFieldProps, MessageField> = (
   data: ComponentData<MessageFieldProps>,
 ): MessageField => {
   const deps = {

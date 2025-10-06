@@ -1,48 +1,36 @@
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import Router from "../../../app/providers/router/Router.ts";
-import { ChildrenData } from "../../framework/Component/children";
+import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
-  BaseProps,
   ComponentData,
-} from "../../framework/Component/component";
-import {
   ComponentProps,
-} from "../../framework/Component/Component.ts";
-import {
-  getChildFromMap,
-  getChildSlotKey,
-} from "../../framework/Component/utils.ts";
-import DOMService from "../../services/render/DOM/DOMService.ts";
-import FragmentService from "../../services/render/Fragment/FragmentService.ts";
-import { PageFactory } from "../../utils/factory/factory.d";
-import { createChildren } from "../../utils/factory/factory.ts";
+} from "../../../shared/lib/Component/model/types.ts";
+import DOMService from "../../../shared/lib/DOM/DOMService.ts";
+import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
+import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
+import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { ChatChildrenDataPropsMap, ChatPageConfigs } from "../model/types.ts";
+import { ChatMap, ChatProps, ChatSchema } from "../model/types.ts";
 import css from "./chat.module.css";
 
-interface ChatPageProps extends BaseProps {
-  configs: ChatPageConfigs;
-  childrenData?: ChildrenData<ChatChildrenDataPropsMap>;
-}
-
-export class ChatPage extends Page<ChatPageProps> {
-  constructor(props: ComponentProps<ChatPageProps>) {
+export class ChatPage extends Page<ChatProps, ChatMap, ChatSchema> {
+  constructor(props: ComponentProps<ChatProps, ChatMap, ChatSchema>) {
     super(props);
   }
 
   public componentDidMount(): void {
     super.componentDidMount();
 
-    const profileLink = getChildFromMap(this.children!, "heading_goToProfile");
-    const deleteButton = getChildFromMap(this.children!, "deleteChatButton");
+    const headingToProfile =
+      this.childrenInstances!.singles.heading_goToProfile;
+    const deleteButton = this.childrenInstances!.singles.deleteChatButton;
 
-    profileLink.setProps({
+    headingToProfile?.setProps({
       events: {
         click: () => Router.go(RouteLink.Settings),
       },
     });
 
-    deleteButton.setProps({
+    deleteButton?.setProps({
       events: {
         click: () => {
           console.log("Chat deletion initiated.");
@@ -54,26 +42,17 @@ export class ChatPage extends Page<ChatPageProps> {
   }
 
   public getSourceMarkup(): string {
-    const cd = this.childrenData!;
-    const headingChatsSlotKey = getChildSlotKey(cd, "heading_chats");
-    const headingProfileSlotKey = getChildSlotKey(cd, "heading_goToProfile");
-    const searchInputSlotKey = getChildSlotKey(cd, "searchInput");
-    const catalogueItemsSlotKey = getChildSlotKey(cd, "catalogueItems");
-    const deleteButtonSlotKey = getChildSlotKey(cd, "deleteChatButton");
-    const messagesSlotKey = getChildSlotKey(cd, "messages");
-    const messageFieldSlotKey = getChildSlotKey(cd, "messageField");
-
     return /*html*/ `
       <aside class="${css.catalogue}">
         <header class="${css.catalogue__head}">
           <div class="${css.catalogue__headings}">
-            {{{ ${headingChatsSlotKey} }}}
-            {{{ ${headingProfileSlotKey} }}}
+            {{{ heading_chats }}}
+            {{{ heading_goToProfile }}}
           </div>
-          {{{ ${searchInputSlotKey} }}}
+          {{{ searchInput }}}
         </header>
         <ul class="${css.catalogue__items}">
-          {{{ ${catalogueItemsSlotKey} }}}
+          {{{ catalogueItems }}}
         </ul>
       </aside>
 
@@ -84,37 +63,43 @@ export class ChatPage extends Page<ChatPageProps> {
             <p class="${css.chatParticipant__name}">{{ participantName }}</p>
           </div>
           <div class="${css.chatOptions}">
-            {{{ ${deleteButtonSlotKey} }}}
+            {{{ deleteChatButton }}}
             <button type="button" class="${css.chatOptions__button}"></button>
           </div>
         </header>
         <div class="${css.chat__feed}">
-          {{{ ${messagesSlotKey} }}}
+          {{{ messages }}}
         </div>
-        {{{ ${messageFieldSlotKey} }}}
+        {{{ messageField }}}
       </main>
     `;
   }
 }
 
-export const createChatPage: PageFactory<ChatPageProps> = (
-  data: ComponentData<ChatPageProps>,
-): ChatPage => {
-  if (!data.childrenData) {
-    throw new Error("ChatPage: ChildrenData are not defined");
+export const createChatPage: PageFactory<
+  ChatProps,
+  ChatPage,
+  ChatMap,
+  ChatSchema
+> = (data: ComponentData<ChatProps, ChatMap, ChatSchema>): ChatPage => {
+  if (!data.childrenSchema) {
+    throw new Error("ChatPage: childrenSchema is not defined");
   }
 
-  const children = createChildren(data.childrenData);
+  const childrenInstances = buildChildren<ChatMap, ChatSchema>(
+    data.childrenSchema,
+  );
 
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),
     fragmentService: new FragmentService(),
   };
 
-  const preparedData = {
-    ...data,
-    children,
-  };
-
-  return new ChatPage({ deps, data: preparedData });
+  return new ChatPage({
+    deps,
+    data: {
+      ...data,
+      childrenInstances,
+    },
+  });
 };
