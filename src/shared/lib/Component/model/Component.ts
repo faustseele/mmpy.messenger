@@ -10,6 +10,7 @@
  * public -> EventBus -> private
  * */
 
+import { AppState } from "../../../../app/providers/store/Store.ts";
 import DOMService from "../../DOM/DOMService.ts";
 import EventBus from "../../EventBus/EventBus.ts";
 import FragmentService from "../../Fragment/FragmentService.ts";
@@ -22,9 +23,9 @@ import {
   CombinedChildrenInstances,
 } from "./children.types.ts";
 import {
-  ComponentData,
   ComponentEventBusEvents,
   ComponentProps,
+  SetPropsPayload,
 } from "./types.ts";
 
 export default abstract class Component<
@@ -210,24 +211,30 @@ export default abstract class Component<
    * New events -> invoke swap listeners
    * @Partial is used in case ComponentConfigs in the props are not defined.
    * TODO: implement proxifed event */
-  public setProps(nextProps: Partial<ComponentData<TProps>>): void {
-    if (!nextProps) return;
+  public setProps<StateSlice extends AppState>(
+    nextProps: SetPropsPayload<StateSlice, TProps>,
+  ): void {
+    if (!nextProps || !nextProps.data) {
+      return;
+    }
 
-    const hasConfigs = !!nextProps.configs;
-    const hasAttributes = !!nextProps.attributes;
-    const hasEvents = !!nextProps.events;
-    const hasChildrenInstances = !!nextProps.childrenInstances;
+    const nextData = nextProps.data;
+
+    const hasConfigs = !!nextData.configs;
+    const hasAttributes = !!nextData.attributes;
+    const hasEvents = !!nextData.events;
+    const hasChildrenInstances = !!nextData.childrenInstances;
 
     if (hasConfigs) {
-      Object.assign(this._configs, nextProps.configs);
+      Object.assign(this._configs, nextData.configs);
     }
 
     if (hasAttributes) {
-      Object.assign(this._attributes ?? {}, nextProps.attributes);
+      Object.assign(this._attributes ?? {}, nextData.attributes);
     }
 
     if (hasEvents) {
-      const newEvents = Object.assign(this._events ?? {}, nextProps.events);
+      const newEvents = Object.assign(this._events ?? {}, nextData.events);
 
       /* Hot-swap the listeners on the current DOM element */
       if (this.domService.element) {
@@ -239,7 +246,7 @@ export default abstract class Component<
     }
 
     if (hasChildrenInstances) {
-      Object.assign(this._childrenInstances ?? {}, nextProps.childrenInstances);
+      Object.assign(this._childrenInstances ?? {}, nextData.childrenInstances);
     }
   }
 

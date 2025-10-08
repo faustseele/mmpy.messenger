@@ -1,11 +1,8 @@
-import Router from "../../../../app/providers/router/Router.ts";
-import { RouteLink } from "../../../../app/providers/router/types.ts";
-import Store from "../../../../app/providers/store/Store.ts";
-import {
-  SignUpRequest,
-  SignInRequest,
-} from "../../../../entities/user/model/types.ts";
+import Router from "../../../app/providers/router/Router.ts";
+import { RouteLink } from "../../../app/providers/router/types.ts";
+import Store from "../../../app/providers/store/Store.ts";
 import AuthAPI from "../api/AuthAPI.ts";
+import { SignUpRequest, SignInRequest } from "./types.ts";
 
 class AuthService {
   public async signup(data: SignUpRequest) {

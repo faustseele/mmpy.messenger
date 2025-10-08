@@ -46,9 +46,11 @@ export class AuthPage extends Page<AuthProps, AuthMap, AuthSchema> {
 
   private _setSubmitEvent(formValidator: FormValidator): void {
     this.setProps({
-      events: {
-        submit: (e: Event) =>
-          formValidator.onFormSubmit(e, RouteLink.Messenger, this.configs.type),
+      data: {
+        events: {
+          submit: (e: Event) =>
+            formValidator.onFormSubmit(e, this.configs.type),
+        },
       },
     });
   }
@@ -56,9 +58,11 @@ export class AuthPage extends Page<AuthProps, AuthMap, AuthSchema> {
   /* Setting event for the auth-reroute button */
   private _setRerouteEvent(buttonReroute: Button): void {
     buttonReroute.setProps({
-      events: {
-        click: () =>
-          Router.go(buttonReroute.configs.link ?? RouteLink.NotFound),
+      data: {
+        events: {
+          click: () =>
+            Router.go(buttonReroute.configs.link ?? RouteLink.NotFound),
+        },
       },
     });
   }
@@ -70,8 +74,10 @@ export class AuthPage extends Page<AuthProps, AuthMap, AuthSchema> {
   ): void {
     inputs.forEach((input) => {
       input.setProps({
-        events: {
-          focusout: () => formValidator.onInputBlur(input),
+        data: {
+          events: {
+            focusout: () => formValidator.onInputBlur(input),
+          },
         },
       });
     });
@@ -107,7 +113,9 @@ export const createAuthPage: PageFactory<
     throw new Error("childrenSchema is not defined");
   }
 
-  const childrenInstances = buildChildren<AuthMap, AuthSchema>(data.childrenSchema);
+  const childrenInstances = buildChildren<AuthMap, AuthSchema>(
+    data.childrenSchema,
+  );
 
   const deps = {
     domService: new DOMService(data.configs.tagName, data.attributes),

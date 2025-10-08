@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* ...params are used */
 
+import { AppState } from "../../../../app/providers/store/Store.ts";
+import { PropsWithState } from "../../../../app/providers/store/types.ts";
 import { PageConfigs } from "../../../../pages/page/model/types.ts";
 import DOMService from "../../DOM/DOMService.ts";
 import { TagNameType } from "../../DOM/types.ts";
@@ -20,6 +22,15 @@ export interface ComponentProps<
   deps: ComponentDeps;
   data: ComponentData<TProps, TMap, TSchema>;
 }
+
+export type SetPropsPayload<
+  StateSlice extends AppState,
+  TProps extends BaseProps,
+  TMap extends ChildrenMap = ChildrenMap,
+  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
+> = Partial<Omit<PropsWithState<StateSlice, TProps>, "data">> & {
+  data?: Partial<ComponentData<TProps, TMap, TSchema>>;
+};
 
 /* Dependency Injection services */
 export interface ComponentDeps {

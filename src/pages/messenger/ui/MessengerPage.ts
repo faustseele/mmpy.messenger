@@ -10,10 +10,20 @@ import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { MessengerMap, MessengerProps, MessengerSchema } from "../model/types.ts";
+import {
+  MessengerMap,
+  MessengerProps,
+  MessengerSchema,
+} from "../model/types.ts";
 
-export class MessengerPage extends Page<MessengerProps, MessengerMap, MessengerSchema> {
-  constructor(props: ComponentProps<MessengerProps, MessengerMap, MessengerSchema>) {
+export class MessengerPage extends Page<
+  MessengerProps,
+  MessengerMap,
+  MessengerSchema
+> {
+  constructor(
+    props: ComponentProps<MessengerProps, MessengerMap, MessengerSchema>,
+  ) {
     super(props);
   }
 
@@ -25,16 +35,20 @@ export class MessengerPage extends Page<MessengerProps, MessengerMap, MessengerS
     const deleteButton = this.childrenInstances!.singles.deleteChatButton;
 
     headingToSettings?.setProps({
-      events: {
-        click: () => Router.go(RouteLink.Settings),
+      data: {
+        events: {
+          click: () => Router.go(RouteLink.Settings),
+        },
       },
     });
 
     deleteButton?.setProps({
-      events: {
-        click: () => {
-          /* Reroute of deletion */
-          Router.go(RouteLink.NotFound);
+      data: {
+        events: {
+          click: () => {
+            /* Reroute of deletion */
+            Router.go(RouteLink.NotFound);
+          },
         },
       },
     });
@@ -80,7 +94,9 @@ export const createMessengerPage: PageFactory<
   MessengerPage,
   MessengerMap,
   MessengerSchema
-> = (data: ComponentData<MessengerProps, MessengerMap, MessengerSchema>): MessengerPage => {
+> = (
+  data: ComponentData<MessengerProps, MessengerMap, MessengerSchema>,
+): MessengerPage => {
   if (!data.childrenSchema) {
     throw new Error("MessengerPage: childrenSchema is not defined");
   }

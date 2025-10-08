@@ -1,6 +1,7 @@
-import { ChangePasswordRequest, UserResponse } from "../model/types.ts";
-import { BaseAPI } from "../../../shared/api/BaseAPI.ts";
+import { ChangePasswordRequest,  } from "../model/types.ts";
+import { BaseAPI } from "../../../shared/api/model/BaseAPI.ts";
 import HTTPTransport from "../../../shared/api/http/HTTPTransport.ts";
+import { UserResponse } from "../../../features/authenticate/model/types.ts";
 
 const userAPIInstance = new HTTPTransport("/user");
 

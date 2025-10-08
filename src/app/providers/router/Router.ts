@@ -1,11 +1,13 @@
+import AuthService from "../../../features/authenticate/model/AuthService.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
 import {
   ChildrenMap,
   ChildrenSchema,
 } from "../../../shared/lib/Component/model/children.types.ts";
+import Store from "../store/Store.ts";
 import Route from "./Route.ts";
-import { RouteContract, RouteConfigs, RouteLink } from "./types.ts";
+import { RouteConfigs, RouteContract, RouteLink } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";
 
 /**
@@ -63,7 +65,7 @@ class Router {
   public async start(rootQuery: string): Promise<void> {
     try {
       /* Await this so the store is populated before we check routes */
-      // await AuthService.fetchUser();
+      await AuthService.fetchUser();
     } catch (_) {
       console.error("Failed to fetch user on startup");
     }
@@ -100,24 +102,24 @@ class Router {
   private _onRouteChange(path: RouteLink | string): void {
     const route = this._routes.find((route) => matchPath(path, route.path));
 
-    // const isUserLoggedIn = Store.getState().isLoggedIn;
+    const isUserLoggedIn = Store.getState().isLoggedIn;
 
     if (!route) {
       this.go(RouteLink.NotFound);
       return;
     }
 
-    // if (!isUserLoggedIn && route.authStatus === "protected") {
-    /* If user is not logged in and trying to access a protected route, leave the current route */
-    /*       console.warn("Protected route accessed by a guest");
+    /* If user is not logged in and trying to access a protected route,leave the current route */
+    if (!isUserLoggedIn && route.authStatus === "protected") {
+      console.warn("Protected route accessed by a guest");
       return;
-    } */
+    }
 
-    // if (isUserLoggedIn && route.authStatus === "guest") {
     /* If a guest-only route is accessed by a user, leave the current route */
-    /*       console.warn("Guest-only route accessed by a user");
+    if (isUserLoggedIn && route.authStatus === "guest") {
+      console.warn("Guest-only route accessed by a user");
       return;
-    } */
+    }
 
     const params = extractParams(path, route.path);
     route.setRouteConfigs({ params });

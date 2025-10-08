@@ -29,8 +29,10 @@ export class ErrorPage extends Page<ErrorProps, ErrorMap, ErrorSchema> {
     const link = backBtn.configs.link ?? RouteLink.Messenger;
 
     backBtn.setProps({
-      events: {
-        click: () => Router.go(link),
+      data: {
+        events: {
+          click: () => Router.go(link),
+        },
       },
     });
   }

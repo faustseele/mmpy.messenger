@@ -1,6 +1,4 @@
-import Router from "../../../app/providers/router/Router.ts";
-import { RouteLink } from "../../../app/providers/router/types.ts";
-import AuthService from "../../../features/auth/by-credentials/model/AuthService.ts";
+import AuthService from "../../../features/authenticate/model/AuthService.ts";
 import UserService from "../../../features/edit-profile/model/UserService.ts";
 import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
 import { AuthType } from "../../../pages/auth/model/types.ts";
@@ -26,7 +24,6 @@ export default class FormValidator {
 
   public onFormSubmit = async (
     event: Event,
-    link: RouteLink,
     submitType: AuthType | "change-info" | "change-password",
   ): Promise<void> => {
     event.preventDefault();
@@ -63,7 +60,6 @@ export default class FormValidator {
       } else if (submitType === "change-password") {
         console.warn("Not implemented");
       }
-      Router.go(link);
       return;
     } else {
       console.log(logMessages.formHasErrors);

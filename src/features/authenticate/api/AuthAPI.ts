@@ -1,6 +1,6 @@
-import { SignInRequest, SignUpRequest, UserResponse } from "../../../../entities/user/model/types.ts";
-import { BaseAPI } from "../../../../shared/api/BaseAPI.ts";
-import HTTPTransport from "../../../../shared/api/http/HTTPTransport.ts";
+import { BaseAPI } from "../../../shared/api/model/BaseAPI.ts";
+import HTTPTransport from "../../../shared/api/http/HTTPTransport.ts";
+import { SignUpRequest, SignInRequest, UserResponse } from "../model/types.ts";
 
 const authAPIInstance = new HTTPTransport("/auth");
 
@@ -18,8 +18,8 @@ class AuthAPI extends BaseAPI {
   }
 
   public async logout(): Promise<string> {
-    const res = await authAPIInstance.post("/logout") as Promise<string>;
-    console.log(res); 
+    const res = (await authAPIInstance.post("/logout")) as Promise<string>;
+    console.log(res);
     return res;
   }
 }

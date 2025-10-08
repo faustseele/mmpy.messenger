@@ -1,4 +1,5 @@
-import { UserResponse } from "../../../entities/user/model/types.ts";
+import { ChatResponse } from "../../../entities/chat/model/types.ts";
+import { UserResponse } from "../../../features/authenticate/model/types.ts";
 import EventBus from "../../../shared/lib/EventBus/EventBus.ts";
 import { StoreEventBusEvents } from "./types.ts";
 import { set } from "./utils.ts";
@@ -6,6 +7,9 @@ import { set } from "./utils.ts";
 export interface AppState {
   isLoggedIn: boolean;
   user: UserResponse | null;
+  chats: ChatResponse[] | null;
+  /* Needed for the connect HOC `isEqual` check */
+  [key: string]: unknown;
 }
 
 class Store extends EventBus<StoreEventBusEvents> {
@@ -25,6 +29,7 @@ class Store extends EventBus<StoreEventBusEvents> {
   private state: AppState = {
     isLoggedIn: false,
     user: null,
+    chats: null,
   };
 
   public getState() {

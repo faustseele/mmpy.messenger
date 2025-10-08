@@ -1,6 +1,6 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
-import AuthService from "../../../features/auth/by-credentials/model/AuthService.ts";
+import AuthService from "../../../features/authenticate/model/AuthService.ts";
 import {
   ComponentData,
   ComponentProps,
@@ -14,8 +14,14 @@ import { Page } from "../../page/ui/Page.ts";
 import { SettingsMap, SettingsProps, SettingsSchema } from "../model/types.ts";
 import css from "./settings.module.css";
 
-export class SettingsPage extends Page<SettingsProps, SettingsMap, SettingsSchema> {
-  constructor(props: ComponentProps<SettingsProps, SettingsMap, SettingsSchema>) {
+export class SettingsPage extends Page<
+  SettingsProps,
+  SettingsMap,
+  SettingsSchema
+> {
+  constructor(
+    props: ComponentProps<SettingsProps, SettingsMap, SettingsSchema>,
+  ) {
     super(props);
   }
 
@@ -41,28 +47,34 @@ export class SettingsPage extends Page<SettingsProps, SettingsMap, SettingsSchem
     const formValidator = new FormValidator(inputs);
 
     headingBack.setProps({
-      events: { click: () => Router.go(RouteLink.Messenger) },
+      data: {
+        events: { click: () => Router.go(RouteLink.Messenger) },
+      },
     });
 
     buttonEditInfo.setProps({
-      events: {
-        click: (e: Event) =>
-          formValidator.onFormSubmit(e, RouteLink.Settings, "change-info"),
+      data: {
+        events: {
+          click: (e: Event) => formValidator.onFormSubmit(e, "change-info"),
+        },
       },
     });
 
     buttonEditPassword.setProps({
-      events: {
-        click: (e: Event) =>
-          formValidator.onFormSubmit(e, RouteLink.Settings, "change-password"),
+      data: {
+        events: {
+          click: (e: Event) => formValidator.onFormSubmit(e, "change-password"),
+        },
       },
     });
 
     buttonLogout.setProps({
-      events: {
-        click: async (event: Event) => {
-          event.preventDefault();
-          await AuthService.logout();
+      data: {
+        events: {
+          click: async (event: Event) => {
+            event.preventDefault();
+            await AuthService.logout();
+          },
         },
       },
     });
