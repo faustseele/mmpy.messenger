@@ -1,4 +1,4 @@
-import { APIState } from "./store.types.ts";
+import { APIState } from "./types.ts";
 
 export const apiInitialState: APIState = {
   auth: {
@@ -8,5 +8,7 @@ export const apiInitialState: APIState = {
     activeId: null,
     currentChat: null,
     list: null,
+    messagesByChatId: {},
+    wsStatus: "idle",
   },
 };
