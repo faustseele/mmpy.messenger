@@ -118,8 +118,6 @@ export const mapMessengerState = (
 
   const { goToChatNodes, goToChatEdge } = goToChatNodesPatch;
 
-  console.log(goToChatNodesPatch)
-
   return {
     configs: {
       ...headPatch,
