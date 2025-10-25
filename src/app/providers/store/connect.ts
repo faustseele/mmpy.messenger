@@ -1,51 +1,57 @@
+import { PageNode } from "../../../pages/page/model/types.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import Store, { AppState } from "./Store.ts";
-import { MapStateToProps, PropsWithState } from "./types.ts";
-import { isEqual } from "./utils.ts";
+import { isEqual, merge } from "./lib/utils.ts";
+import Store from "./Store.ts";
+import { MapStateToProps } from "./types.ts";
 
-export function connect<StateSlice extends AppState, TProps extends BaseProps>(
-  mapStateToProps: MapStateToProps<StateSlice>,
-) {
-  return function (ConnectedPage: typeof Page<TProps>) {
-    return class extends ConnectedPage {
-      constructor(propsWithState: PropsWithState<StateSlice, TProps>) {
-        let state = mapStateToProps(Store.getState());
+/**
+ * bridges Store <-> Page blueprint
+ */
 
-        /* Avoiding side-effects */
-        const initialProps = { ...propsWithState, state };
-        super(initialProps);
+export function connect<P extends BaseProps, C extends Page<P>>(
+  initNode: PageNode<P, C>,
+  mapStateToProps: MapStateToProps<P>,
+): C {
+  /* on initial Page connection */
+  const id = initNode.params.configs.id;
+  const pageIsNew = !Store.getState().pageNodes[id];
+  let resNode = Store.getState().pageNodes[id];
+  if (pageIsNew) {
+    /* creates instance */
+    initNode.runtime = { instance: initNode.factory(initNode.params) };
+    /* appends new initNode to the Store */
+    Store.set("pageNodes", {
+      ...Store.getState().pageNodes,
+      [id]: initNode,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resNode = initNode as any;
+  }
 
-        const handleUpdate = (args: unknown) => {
-          const nextState = args as StateSlice;
+  function handlePatch() {
+    const patch = mapStateToProps(Store.getState());
+    const patchedParams = merge(initNode.params, patch);
 
-          Store.on("updated", () => {
-            if (!isEqual(state, nextState)) {
-              this.setProps({
-                ...propsWithState,
-                state: nextState,
-              });
-            }
+    if (!isEqual(initNode.params, patchedParams)) {
+      resNode.runtime?.instance.setProps(patchedParams);
+    }
+  }
 
-            state = nextState;
-          });
-        };
+  handlePatch();
 
-        Store.on("updated", handleUpdate);
+  /* on Store changes */
+  const unsubscribe = () =>
+    Store.on("updated", () => {
+      handlePatch();
+    });
 
-        this.unsubscribe = () => Store.off("updated", handleUpdate);
-      }
+  resNode.runtime?.instance.bus.on("flow:component-did-unmount", unsubscribe);
 
-      private unsubscribe?: () => void;
+  if (!resNode.runtime) {
+    console.error(resNode, initNode);
+    throw new Error("connect: resNode.runtime is undefined");
+  }
 
-      public componentDidUnmount(): void {
-        this.unsubscribe?.();
-        super.componentDidUnmount();
-      }
-
-      public getSourceMarkup(): string {
-        return super.getSourceMarkup();
-      }
-    };
-  };
+  return resNode.runtime!.instance as C;
 }

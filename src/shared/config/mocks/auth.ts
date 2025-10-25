@@ -1,27 +1,22 @@
 import { RouteConfigs, RouteLink } from "../../../app/providers/router/types.ts";
 import {
-  ComponentData,
-  ComponentInit,
-} from "../../lib/Component/model/types.ts";
-import { FieldType } from "../../ui/Input/types.ts";
-import {
   AuthMap,
   AuthProps,
   AuthSchema,
 } from "../../../pages/auth/model/types.ts";
-import { Button, createButton } from "../../ui/Button/Button.ts";
-import { ButtonProps } from "../../ui/Button/types.ts";
-import { Heading, createHeading } from "../../ui/Heading/Heading.ts";
-import { HeadingProps } from "../../ui/Heading/types.ts";
-import { Input, InputProps, createInput } from "../../ui/Input/Input.ts";
-import cssBtn from "../../ui/Button/button.module.css";
-import cssHeading from "../../ui/Heading/heading.module.css";
-import cssInput from "../../ui/Input/input.module.css";
 import cssPage from "../../../pages/page/ui/page.module.css";
+import cssBtn from "../../ui/Button/button.module.css";
+import { Button } from "../../ui/Button/Button.ts";
+import { ButtonProps } from "../../ui/Button/types.ts";
+import { buildButton } from "../../ui/Button/utils.ts";
+import cssHeading from "../../ui/Heading/heading.module.css";
+import { Heading } from "../../ui/Heading/Heading.ts";
+import { HeadingProps } from "../../ui/Heading/types.ts";
+import { buildHeading } from "../../ui/Heading/utils.ts";
+import cssInput from "../../ui/Input/input.module.css";
+import { Input, buildInput } from "../../ui/Input/Input.ts";
+import { FieldType, InputProps } from "../../ui/Input/types.ts";
 
-type HeadingInit = ComponentInit<HeadingProps>;
-type ButtonInit = ComponentInit<ButtonProps>;
-type InputInit = ComponentInit<InputProps>;
 
 type HeadingConfigs = HeadingProps["configs"];
 type ButtonConfigs = ButtonProps["configs"];
@@ -62,7 +57,6 @@ const makeInputInit = (
     label,
     type,
     isError: false,
-    name: field,
     id: field,
     errorMessage: "",
     placeholder,
@@ -92,7 +86,7 @@ const signUpSchema: AuthSchema = {
         type: "auth/sign-up",
         text: "Регистрация 🎀",
       }),
-      factory: createHeading,
+      factory: buildHeading,
       instanceType: emptyHeadingInstance,
     },
     buttonFormSubmit: {
@@ -104,7 +98,7 @@ const signUpSchema: AuthSchema = {
         },
         cssBtn.button,
       ),
-      factory: createButton,
+      factory: buildButton,
       instanceType: emptyButtonInstance,
     },
     buttonReroute: {
@@ -117,14 +111,14 @@ const signUpSchema: AuthSchema = {
         },
         `${cssBtn.button} ${cssBtn.button_silent}`,
       ),
-      factory: createButton,
+      factory: buildButton,
       instanceType: emptyButtonInstance,
     },
   },
   lists: {
     inputs: {
       init: signUpInputsInit,
-      factory: createInput,
+      factory: buildInput,
       instanceType: [] as Input[],
     },
   },
@@ -138,7 +132,7 @@ const signInSchema: AuthSchema = {
         type: "auth/sign-in",
         text: "Вход 🚪",
       }),
-      factory: createHeading,
+      factory: buildHeading,
       instanceType: emptyHeadingInstance,
     },
     buttonFormSubmit: {
@@ -150,7 +144,7 @@ const signInSchema: AuthSchema = {
         },
         cssBtn.button,
       ),
-      factory: createButton,
+      factory: buildButton,
       instanceType: emptyButtonInstance,
     },
     buttonReroute: {
@@ -163,14 +157,14 @@ const signInSchema: AuthSchema = {
         },
         `${cssBtn.button} ${cssBtn.button_silent}`,
       ),
-      factory: createButton,
+      factory: buildButton,
       instanceType: emptyButtonInstance,
     },
   },
   lists: {
     inputs: {
       init: signInInputsInit,
-      factory: createInput,
+      factory: buildInput,
       instanceType: [] as Input[],
     },
   },
@@ -198,16 +192,3 @@ export const signInData: ComponentData<AuthProps, AuthMap, AuthSchema> = {
   childrenSchema: signInSchema,
 };
 
-export const signUpRouteConfig: RouteConfigs = {
-  path: RouteLink.SignUp,
-  rootQuery: "#app",
-  authStatus: "guest",
-  params: {},
-};
-
-export const signInRouteConfig: RouteConfigs = {
-  path: RouteLink.SignIn,
-  rootQuery: "#app",
-  authStatus: "guest",
-  params: {},
-};

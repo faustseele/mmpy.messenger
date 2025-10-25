@@ -11,11 +11,13 @@ import {
   ComponentInit,
 } from "../../lib/Component/model/types.ts";
 import cssBtn from "../../ui/Button/button.module.css";
-import { Button, createButton } from "../../ui/Button/Button.ts";
+import { Button } from "../../ui/Button/Button.ts";
 import { ButtonProps } from "../../ui/Button/types.ts";
+import { buildButton } from "../../ui/Button/utils.ts";
 import cssHeading from "../../ui/Heading/heading.module.css";
-import { Heading, createHeading } from "../../ui/Heading/Heading.ts";
+import { Heading } from "../../ui/Heading/Heading.ts";
 import { HeadingProps } from "../../ui/Heading/types.ts";
+import { buildHeading } from "../../ui/Heading/utils.ts";
 import cssSubheading from "../../ui/Subheading/subheading.module.css";
 import { Subheading, createSubheading } from "../../ui/Subheading/Subheading.ts";
 import { SubheadingProps } from "../../ui/Subheading/types.ts";
@@ -67,7 +69,7 @@ const buildErrorSchema = (
         isDrama: true,
         type: code,
       }),
-      factory: createHeading,
+      factory: buildHeading,
       instanceType: headingInstance,
     },
     subheading: {
@@ -88,7 +90,7 @@ const buildErrorSchema = (
         type: "button",
         link: buttonLink,
       }),
-      factory: createButton,
+      factory: buildButton,
       instanceType: buttonInstance,
     },
   },

@@ -1,31 +1,25 @@
 import Handlebars from "handlebars";
-import { BaseProps } from "../Component/model/base.types.ts";
 import {
-  ChildrenMap,
-  ChildrenSchema,
-  CombinedChildrenInstances
-} from "../Component/model/children.types.ts";
-import Component from "../Component/model/Component.ts";
-import { ComponentConfigs } from "../Component/model/types.ts";
+  BaseConfigs,
+  BaseProps,
+} from "../Component/model/base.types.ts";
+import { ChildGraph } from "../Component/model/children.types.ts";
+import { ComponentNode } from "../Component/model/types.ts";
 
 /**
- * @FragmentService – Stateless feature-service.
- * * Compiles markup with Handlebars
- * * Inserts children into the parent DocumentFragment (Element)
+ * @FragmentService – stateless feature-service.
+ * * compiles markup with Handlebars
+ * * inserts children into the parent DocumentFragment (Element)
  * * * before attaching them to the DOM
- * @sourceMarkup is a raw HTML-string
- * E.g., sourceMarkup provided by concrete Components
- * @compiledSourceMarkup is a Handlebars-compiled HTML-string with placeholders
- * @parentElement & @childElement are ready-to-use HTML-Elements
- * Handled by DOMService
- * @children is a state with homogeneous children in each prop
- * @childrenList is an array of children with the same key
+ * @sourceMarkup – raw HTML-string
+ * e.g., sourceMarkup provided by Component
+ * @compiledSourceMarkup – Handlebars-compiled HTML-string with placeholders
  */
-export default class FragmentService<C extends ComponentConfigs> {
+export default class FragmentService<C extends BaseConfigs> {
   /**
    * @returns DocumentFragment
    * DocumentFragment is an off-DOM lightweight container.
-   * When appended to a DOM Element, its child nodes
+   * when appended to a DOM Element, its child nodes-
    * are moved out of the DocumentFragment into the target Element.
    */
   public compile(sourceMarkup: string, configs: C): DocumentFragment {
@@ -36,30 +30,30 @@ export default class FragmentService<C extends ComponentConfigs> {
   public compileWithChildren(
     sourceMarkup: string,
     configs: C,
-    children: CombinedChildrenInstances<BaseProps, ChildrenMap>,
+    children: ChildGraph,
   ): DocumentFragment {
-    /* Creating <div id="random UUID"></div>.. placeholders for children */
+    /* creates <div id="random UUID"></div>.. placeholders for children */
     const divPlaceholders = this._createDivPlaceholders(children);
 
     /**
-     * Handling {{expressions-configs}} & {{{children-html expressions}}}
-     * Inserting placeholders into the sourceMarkup
+     * handles {{expressions-configs}} & {{{children-html expressions}}}
+     * inserts placeholders into the sourceMarkup
      */
     const compiledSourceMarkupWithPlaceholders = Handlebars.compile(
       sourceMarkup,
     )({
-      /* For {{{children-html expressions}}} */
+      /* {{{children-html expressions}}} */
       ...divPlaceholders,
-      /* For {{config-expressions}} of a parent Component */
+      /* {{config-expressions}} of a parent */
       ...configs,
     });
 
-    /* Creating a DocumentFragment <div> children placeholders */
+    /* creates a DocumentFragment <div> children placeholders */
     const fragmentWithPlaceholders = this._createFragmentFromString(
       compiledSourceMarkupWithPlaceholders,
     );
 
-    /* Swapping <div> children placeholders with corresponding Elements*/
+    /* swappes <div> children placeholders with corresponding Elements*/
     const fragmentWithElements = this._replacePlaceholdersInFragment(
       fragmentWithPlaceholders,
       children,
@@ -69,25 +63,22 @@ export default class FragmentService<C extends ComponentConfigs> {
   }
 
   /**
-   * Generates an object with either one div-placeholder '<tag></tag>' by key
+   * generates an obj with either one div-placeholder '<tag></tag>' by key
    * or a concatenated list of div-placeholders <tags> by key.
    */
-  private _createDivPlaceholders(
-    children: CombinedChildrenInstances<BaseProps, ChildrenMap>,
-  ): Record<string, string> {
+  private _createDivPlaceholders(graph: ChildGraph): Record<string, string> {
     const divPlaceholders: Record<string, string> = {};
 
-    Object.entries(children).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        const placeholdersList = value.map(
-          (child) =>
-            /* Setting placeholder for each child -> placeholdersList[] */
-            `<div data-id="${child.id}"></div>`,
+    Object.keys(graph.edges).forEach((edge) => {
+      if (Array.isArray(graph.edges[edge])) {
+        /* sets placeholder for each child -> placeholdersList[] */
+        const placeholdersList = graph.edges[edge].map(
+          (id) => `<div data-id="${id}"></div>`,
         );
-        /* Concatenating placeholdersList[] into one string */
-        divPlaceholders[key] = placeholdersList.join("");
+        /* concatenates placeholdersList[] into one string */
+        divPlaceholders[edge] = placeholdersList.join("");
       } else {
-        divPlaceholders[key] = `<div data-id="${value.id}"></div>`;
+        divPlaceholders[edge] = `<div data-id="${edge}"></div>`;
       }
     });
 
@@ -102,37 +93,40 @@ export default class FragmentService<C extends ComponentConfigs> {
   }
 
   /**
-   * Iterates through the fragment and replaces all placeholder divs
+   * iterates through the fragment and replaces all placeholder divs
    * with their corresponding, real component elements.
    */
   private _replacePlaceholdersInFragment(
     fragment: DocumentFragment,
-    children: CombinedChildrenInstances<BaseProps, ChildrenMap>,
+    graph: ChildGraph,
   ): DocumentFragment {
-    Object.values(children).forEach((value) => {
-      if (Array.isArray(value)) {
-        const children = value;
-
-        children.forEach((child) => {
-          findAndReplace(child);
+    Object.keys(graph.edges).forEach((edge) => {
+      if (Array.isArray(graph.edges[edge])) {
+        graph.edges[edge].forEach((nodeId) => {
+          findAndReplace(graph.nodes[nodeId]);
         });
       } else {
-        const child = value;
-
-        findAndReplace(child);
+        findAndReplace(graph.nodes[edge]);
       }
     });
 
-    function findAndReplace(child: Component<BaseProps, ChildrenMap, ChildrenSchema>) {
-      const placeholder = fragment.querySelector(`[data-id="${child.id}"]`);
-      const childElement = child.element;
+    function findAndReplace(node: ComponentNode<BaseProps>) {
+      if (!node?.runtime?.instance) {
+        console.error("Child has no instance", node);
+        return;
+      }
+
+      const placeholder = fragment.querySelector(
+        `[data-id="${node.params.configs.id}"]`,
+      );
+      const childElement = node.runtime?.instance.element;
 
       if (placeholder && childElement) {
         placeholder.replaceWith(childElement);
       } else {
         console.error(
           `FragmentService Error: Could not replace child placeholder.
-          Child ID: ${child.id}.
+          Child ID: ${node.params.configs.id}.
           Placeholder found: ${!!placeholder}.
           Child element obtained: ${!!childElement}.
           DocumentFragment content:`,

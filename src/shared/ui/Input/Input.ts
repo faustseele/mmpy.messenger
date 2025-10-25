@@ -1,35 +1,33 @@
-import { BaseProps } from "../../lib/Component/model/base.types.ts";
 import Component from "../../lib/Component/model/Component.ts";
-import { ComponentData, ComponentProps } from "../../lib/Component/model/types.ts";
-import DOMService from "../../lib/DOM/DOMService.ts";
-import FragmentService from "../../lib/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
-import { guardHTMLElement } from "../../lib/helpers/html/guards.ts";
-import { FieldType, InputAttributes, InputConfigs } from "./types.ts";
+import { ComponentProps } from "../../lib/Component/model/types.ts";
 import css from "./input.module.css";
-
-export interface InputProps extends BaseProps {
-  configs: InputConfigs;
-  attributes?: InputAttributes;
-  events?: BaseProps["events"];
-}
+import { FieldType, InputProps } from "./types.ts";
 
 export class Input extends Component<InputProps> {
   private input: HTMLInputElement | undefined = undefined;
   private errorLabel: HTMLElement | undefined = undefined;
 
-  constructor(props: ComponentProps<InputProps>) {
-    const { deps, data } = props;
+  constructor({ deps, node }: ComponentProps<InputProps, Input>) {
+    super({ deps, node });
+  }
 
-    super({ deps, data });
-
+  private _getElements(): void {
     this.input = this.element?.querySelector("input") ?? undefined;
     this.errorLabel =
       this.element?.querySelector(`.${css.errorLabel}`) ?? undefined;
   }
 
+  public componentDidMount(): void {
+    this._getElements();
+  }
+
+  public componentDidRender(): void {
+    this._getElements();
+  }
+
   public getNameAndValue(): { name: FieldType | ""; value: string } {
-    if (!guardHTMLElement("Input.input", this.input)) {
+    if (!this.input) {
+      console.error("input is not defined", this.input);
       return { name: "", value: "" };
     }
 
@@ -37,10 +35,12 @@ export class Input extends Component<InputProps> {
   }
 
   public showError(message: string): void {
-    if (
-      !guardHTMLElement("Input.input", this.input) ||
-      !guardHTMLElement("Input.errorLabel", this.errorLabel)
-    ) {
+    if (!this.input || !this.errorLabel) {
+      console.error(
+        "input or error-labal is not defined",
+        this.input,
+        this.errorLabel,
+      );
       return;
     }
 
@@ -50,10 +50,12 @@ export class Input extends Component<InputProps> {
   }
 
   public hideError(): void {
-    if (
-      !guardHTMLElement("Input.input", this.input) ||
-      !guardHTMLElement("Input.errorLabel", this.errorLabel)
-    ) {
+    if (!this.input || !this.errorLabel) {
+      console.error(
+        "input or error-labal is not defined",
+        this.input,
+        this.errorLabel,
+      );
       return;
     }
 
@@ -65,9 +67,9 @@ export class Input extends Component<InputProps> {
     return /*html*/ `
         <input
           class="${css.input} {{#if isSearch}}${css.input_search} {{/if}}"
-          name="{{id}}"
+          name="{{fieldId}}"
           type="{{type}}"
-          id="{{id}}"
+          id="{{fieldId}}"
           placeholder="{{placeholder}}"
           autocomplete="on"
         />
@@ -75,14 +77,3 @@ export class Input extends Component<InputProps> {
       `;
   }
 }
-
-export const createInput: ComponentFactory<InputProps, Input> = (
-  data: ComponentData<InputProps>,
-): Input => {
-  const deps = {
-    domService: new DOMService(data.configs.tagName, data.attributes),
-    fragmentService: new FragmentService(),
-  };
-
-  return new Input({ deps, data });
-};

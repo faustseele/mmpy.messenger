@@ -33,12 +33,15 @@ import {
   ComponentInit,
 } from "../../lib/Component/model/types.ts";
 import cssBtn from "../../ui/Button/button.module.css";
-import { Button, createButton } from "../../ui/Button/Button.ts";
+import { Button, } from "../../ui/Button/Button.ts";
 import { ButtonProps } from "../../ui/Button/types.ts";
+import { buildButton } from "../../ui/Button/utils.ts";
 import cssHeading from "../../ui/Heading/heading.module.css";
-import { Heading, createHeading } from "../../ui/Heading/Heading.ts";
+import { Heading, } from "../../ui/Heading/Heading.ts";
 import { HeadingProps } from "../../ui/Heading/types.ts";
-import { Input, InputProps, createInput } from "../../ui/Input/Input.ts";
+import { buildHeading } from "../../ui/Heading/utils.ts";
+import { Input, buildInput } from "../../ui/Input/Input.ts";
+import { InputProps } from "../../ui/Input/types.ts";
 
 /* Type guards */
 type HeadingInit = ComponentInit<HeadingProps>;
@@ -221,7 +224,7 @@ const chatSchema: MessengerSchema = {
         },
         cssHeading.heading,
       ),
-      factory: createHeading,
+      factory: buildHeading,
       instanceType: headingInstance,
     },
     heading_goToSettings: {
@@ -235,7 +238,7 @@ const chatSchema: MessengerSchema = {
         },
         `${cssHeading.heading} ${cssHeading.heading__text_clickable}`,
       ),
-      factory: createHeading,
+      factory: buildHeading,
       instanceType: headingInstance,
     },
     searchInput: {
@@ -253,7 +256,7 @@ const chatSchema: MessengerSchema = {
         },
         cssChat.searchInput,
       ),
-      factory: createInput,
+      factory: buildInput,
       instanceType: inputInstance,
     },
     deleteChatButton: {
@@ -266,7 +269,7 @@ const chatSchema: MessengerSchema = {
         },
         `${cssBtn.button} ${cssBtn.button_silent}`,
       ),
-      factory: createButton,
+      factory: buildButton,
       instanceType: buttonInstance,
     },
     messageField: {

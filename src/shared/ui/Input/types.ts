@@ -1,24 +1,33 @@
-import { ComponentConfigs, ComponentAttributes } from "../../lib/Component/model/types.ts";
+import {
+  BaseAttributes,
+  BaseConfigs,
+  BaseProps,
+} from "../../lib/Component/model/base.types.ts";
 import { TagNameType } from "../../lib/DOM/types.ts";
 
-/* Configurations are used for <input> tag inside <label>-wrapper */ 
-export interface InputConfigs extends ComponentConfigs {
-  tagName: Extract<TagNameType, "label">
-  label: string;
-  type: "text" | "email" | "password" | "tel";
-  isError?: boolean;
-  isSearch?: boolean;
-  name: FieldType;
-  id: FieldType;
-  errorMessage?: string;
-  placeholder: string;
+export interface InputProps extends BaseProps {
+  /* Configurations are used for <input> tag inside <label>-wrapper */
+  configs: InputConfigs;
+  attributes?: InputAttributes;
+  on?: BaseProps["on"];
 }
 
-/* Attributes are used for <label> wrapper-tag */
-export interface InputAttributes extends ComponentAttributes {
-  className: string;
+export interface InputConfigs extends BaseConfigs {
+  tagName: Extract<TagNameType, "label">;
+  fieldId: FieldType;
+  label: string;
+  type: InputType;
+  placeholder: string;
+  isError?: boolean;
+  isSearch?: boolean;
+  errorMessage?: string;
+}
+
+interface InputAttributes extends BaseAttributes {
   for: FieldType;
 }
+
+export type InputType = "text" | "email" | "password" | "tel";
 
 export type FieldType =
   | "name"

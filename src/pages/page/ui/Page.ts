@@ -1,19 +1,17 @@
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import { ChildrenMap, ChildrenSchema } from "../../../shared/lib/Component/model/children.types.ts";
 import Component from "../../../shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 
-export class Page<
-  TProps extends BaseProps,
-  TMap extends ChildrenMap = ChildrenMap,
-  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
-> extends Component<TProps, TMap, TSchema> {
+export abstract class Page<Props extends BaseProps> extends Component<Props> {
   public pageParams: Record<string, string>;
 
-  constructor(props: ComponentProps<TProps, TMap, TSchema>) {
+  constructor(props: ComponentProps<Props, Page<Props>>) {
     super(props);
 
     this.pageParams = {};
+  }
+
+  public componentDidMount(): void {
   }
 
   public setPageParams(params: Record<string, string>): void {

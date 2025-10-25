@@ -1,22 +1,25 @@
 import { RouteLink } from "../../../app/providers/router/types.ts";
-import { BaseProps } from "../../lib/Component/model/base.types.ts";
-import { ComponentAttributes, ComponentConfigs } from "../../lib/Component/model/types.ts";
+import {
+  BaseAttributes,
+  BaseConfigs,
+  BaseProps,
+} from "../../lib/Component/model/base.types.ts";
 import { TagNameType } from "../../lib/DOM/types.ts";
 
 export interface ButtonProps extends BaseProps {
   configs: ButtonConfigs;
   attributes?: ButtonAttributes;
-  events?: BaseProps["events"];
-} 
+}
 
-export interface ButtonConfigs extends ComponentConfigs {
-  label: string;
+export interface ButtonConfigs extends BaseConfigs {
   tagName: Extract<TagNameType, "button">;
-  type: "button" | "submit";
-  modifier?: string;
+  label: string;
+  isSilent?: boolean;
   link?: RouteLink;
 }
 
-export interface ButtonAttributes extends ComponentAttributes {
-  type: "button" | "submit";
+export interface ButtonAttributes extends BaseAttributes {
+  type?: ButtonType;
 }
+
+type ButtonType = "button" | "submit";

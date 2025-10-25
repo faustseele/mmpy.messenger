@@ -1,41 +1,27 @@
-import { ComponentData, ComponentProps } from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
-import { Input, InputProps } from "../../../shared/ui/Input/Input.ts";
+import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import { Input } from "../../../shared/ui/Input/Input.ts";
 import css from "../../../shared/ui/Input/input.module.css";
+import { InputProps } from "../../../shared/ui/Input/types.ts";
 
 export class InputEditor extends Input {
-  constructor(props: ComponentProps<InputProps>) {
+  constructor(props: ComponentProps<InputProps, InputEditor>) {
     super(props);
   }
 
   public getSourceMarkup(): string {
     return /*html*/ `
     <span class="${css.labelSpan}">
-      {{label}}
+      {{ label }}
     </span>
       <input
         class="${css.input} ${css.input_editor}"
-        name="{{id}}"
+        name="{{fieldId}}"
         type="{{type}}"
-        id="{{id}}"
+        id="{{fieldId}}"
         placeholder="{{placeholder}}"
-        value="{{value}}"
         autocomplete="on"
       />
       <span class="${css.errorLabel}"></span>
     `;
   }
 }
-
-export const createInputEditor: ComponentFactory<InputProps, Input> = (
-  data: ComponentData<InputProps>,
-): InputEditor => {
-  const deps = {
-    domService: new DOMService(data.configs.tagName, data.attributes),
-    fragmentService: new FragmentService(),
-  };
-
-  return new InputEditor({ deps, data });
-};

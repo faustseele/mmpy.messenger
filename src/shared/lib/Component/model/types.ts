@@ -1,90 +1,53 @@
-/* eslint-disable no-unused-vars */
-/* ...params are used */
-
-import { AppState } from "../../../../app/providers/store/Store.ts";
-import { PropsWithState } from "../../../../app/providers/store/types.ts";
-import { PageConfigs } from "../../../../pages/page/model/types.ts";
+import { DeepPartialExceptArray } from "../../../types/universal.ts";
 import DOMService from "../../DOM/DOMService.ts";
-import { TagNameType } from "../../DOM/types.ts";
 import FragmentService from "../../Fragment/FragmentService.ts";
+import { ComponentFactory } from "../../helpers/factory/types.ts";
 import { BaseProps } from "./base.types.ts";
-import {
-  ChildrenInstances,
-  ChildrenMap,
-  ChildrenSchema,
-} from "./children.types.ts";
+import { ChildGraph } from "./children.types.ts";
+import Component from "./Component.ts";
 
-export interface ComponentProps<
-  TProps extends BaseProps,
-  TMap extends ChildrenMap = ChildrenMap,
-  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
-> {
-  deps: ComponentDeps;
-  data: ComponentData<TProps, TMap, TSchema>;
-}
+/**
+ * unique identifier of a Component
+ */
+export type ComponentId = string;
 
-export type SetPropsPayload<
-  StateSlice extends AppState,
-  TProps extends BaseProps,
-  TMap extends ChildrenMap = ChildrenMap,
-  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
-> = Partial<Omit<PropsWithState<StateSlice, TProps>, "data">> & {
-  data?: Partial<ComponentData<TProps, TMap, TSchema>>;
+/**
+ * minimal initial props for Component factory
+ * default state; mutable data
+ */
+export type ComponentParams<P extends BaseProps> = {
+  configs: P["configs"];
+  attributes?: P["attributes"];
+  on?: P["on"];
+  children?: ChildGraph;
+};
+
+/* incoming updates/payload to patch Component */
+export type ComponentPatch<P extends BaseProps> = DeepPartialExceptArray<
+  ComponentParams<P>
+>;
+
+/**
+ * entry at AppState Component graph
+ * static metadata + mutable data + kids
+ */
+export type ComponentNode<
+  P extends BaseProps,
+  C extends Component<P> = Component<P>,
+> = {
+  readonly factory: ComponentFactory<P, C>;
+  params: ComponentParams<P>;
+  runtime?: { instance: C };
+};
+
+/* Component ctor. Props */
+export type ComponentProps<P extends BaseProps, C extends Component<P>> = {
+  deps: ComponentDeps<P>;
+  node: ComponentNode<P, C>;
 };
 
 /* Dependency Injection services */
-export interface ComponentDeps {
-  domService: DOMService<ComponentAttributes, ComponentEvents>;
-  fragmentService: FragmentService<ComponentConfigs>;
-}
-
-/**
- * Extends the ComponentInit payload to a full
- * Data-Structure of a Component instance
- */
-export type ComponentData<
-  TProps extends BaseProps,
-  /* Def for childless components */
-  TMap extends ChildrenMap = ChildrenMap,
-  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
-> = ComponentInit<TProps> & Children<TMap, TSchema>;
-
-/* The minimal payload for every Component initialization */
-export interface ComponentInit<TProps extends BaseProps> {
-  configs: TProps["configs"];
-  attributes?: TProps["attributes"];
-  events?: TProps["events"];
-}
-
-export interface Children<
-  TMap extends ChildrenMap,
-  TSchema extends ChildrenSchema<TMap>,
-> {
-  childrenSchema?: TSchema;
-  childrenInstances?: ChildrenInstances<TMap, TSchema>;
-}
-
-/* Configuration data for a concrete Component instance */
-export interface ComponentConfigs {
-  tagName: TagNameType;
-  type?: string;
-  pageConfigs?: PageConfigs;
-}
-
-/* Attributes for root tag of a Component */
-export interface ComponentAttributes {
-  className?: string;
-  type?: string;
-  style?: string;
-  for?: string;
-}
-
-/* Event handlers for a concrete Component instance */
-export type ComponentEvents = Record<string, (event: Event) => void>;
-
-export type ComponentEventBusEvents =
-  | "init" // Component initialized
-  | "flow:component-did-mount" // Component added to DOM
-  | "flow:render" // Component rendered
-  | "flow:component-did-update" // Component updated
-  | "flow:component-did-unmount"; // Component unmounted
+export type ComponentDeps<P extends BaseProps> = {
+  domService: DOMService<P>;
+  fragmentService: FragmentService<P["configs"]>;
+};

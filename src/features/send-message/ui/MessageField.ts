@@ -1,13 +1,10 @@
 import Component from "../../../shared/lib/Component/model/Component.ts";
-import { ComponentProps, ComponentData } from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
+import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { MessageFieldProps } from "../model/types.ts";
 import css from "./messageField.module.css";
 
 export class MessageField extends Component<MessageFieldProps> {
-  constructor(props: ComponentProps<MessageFieldProps>) {
+  constructor(props: ComponentProps<MessageFieldProps, MessageField>) {
     super(props);
   }
 
@@ -26,14 +23,3 @@ export class MessageField extends Component<MessageFieldProps> {
     `;
   }
 }
-
-export const createMessageField: ComponentFactory<MessageFieldProps, MessageField> = (
-  data: ComponentData<MessageFieldProps>,
-): MessageField => {
-  const deps = {
-    domService: new DOMService(data.configs.tagName, data.attributes),
-    fragmentService: new FragmentService(),
-  };
-
-  return new MessageField({ deps, data });
-};

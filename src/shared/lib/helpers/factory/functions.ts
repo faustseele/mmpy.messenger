@@ -1,45 +1,37 @@
+import { BaseProps } from "../../Component/model/base.types.ts";
 import {
-  ChildrenInstances,
-  ChildrenMap,
-  ChildrenSchema,
+  ChildGraph
 } from "../../Component/model/children.types.ts";
+import Component from "../../Component/model/Component.ts";
 
-export function buildChildren<
-  TMap extends ChildrenMap,
-  TSchema extends ChildrenSchema<TMap>,
->(childrenSchema: TSchema): ChildrenInstances<TMap, TSchema> {
-  if (!childrenSchema) {
-    throw new Error("childrenSchema is not defined");
-  }
+export function buildChildren(graph: ChildGraph): ChildGraph {
+  if (!graph) throw new Error("children-graph is not defined");
 
-  const result = {
-    singles: {},
-    lists: {},
-  } as ChildrenInstances<TMap, TSchema>;
-
-  function buildSingles(singles: TSchema["singles"]): void {
-    for (const key of Object.keys(singles)) {
-      const { init, factory } = singles[key];
-      const child = factory(init);
-      result.singles[key as keyof TSchema["singles"]] = child;
+  Object.keys(graph.edges).forEach((edge) => {
+    if (Array.isArray(graph.edges[edge])) {
+      for (const nodeId of graph.edges[edge]) {
+        const childNode = graph.nodes[nodeId];
+        childNode.runtime = { instance: childNode.factory(childNode.params) };
+      }
+    } else {
+      const childNode = graph.nodes[edge];
+      try {
+        childNode.runtime = { instance: childNode.factory(childNode.params) };
+      } catch (e) {
+        console.error("Error in buildChildren", e);
+      }
     }
-  }
+  });
 
-  function buildLists(lists: TSchema["lists"]): void {
-    for (const key of Object.keys(lists)) {
-      const { init, factory } = lists[key];
-      const childList = init.map((childInit) => factory(childInit));
-      result.lists[key as keyof TSchema["lists"]] = childList;
-    }
-  }
+  return graph;
+}
 
-  if (Object.keys(childrenSchema.singles ?? {}).length) {
-    buildSingles(childrenSchema.singles);
-  }
-
-  if (Object.keys(childrenSchema.lists ?? {}).length) {
-    buildLists(childrenSchema.lists);
-  }
-
-  return result;
+export function getInstances<
+  P extends BaseProps,
+  T extends Component<P>,
+  K extends string = string,
+>(graph: ChildGraph, edgesListKey: K): T[] {
+  return (graph.edges[edgesListKey] as string[])
+    .map((edge) => graph.nodes[edge]?.runtime?.instance)
+    .filter((x): x is T => x != null);
 }

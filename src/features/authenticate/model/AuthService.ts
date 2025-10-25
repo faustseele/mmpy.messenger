@@ -9,8 +9,8 @@ class AuthService {
     try {
       const resSignup = await AuthAPI.signup(data);
       const user = await AuthAPI.request();
-      Store.set("user", user);
-      Store.set("isLoggedIn", true);
+      Store.set("auth.user", user);
+      Store.set("controllers.isLoggedIn", true);
 
       console.log(resSignup, user, Store.getState());
       Router.go(RouteLink.Messenger);
@@ -23,8 +23,8 @@ class AuthService {
     try {
       const resSignin = await AuthAPI.signin(data);
       const user = await AuthAPI.request();
-      Store.set("user", user);
-      Store.set("isLoggedIn", true);
+      Store.set("auth.user", user);
+      Store.set("controllers.isLoggedIn", true);
 
       console.log(resSignin, user, Store.getState());
       Router.go(RouteLink.Messenger);
@@ -36,8 +36,8 @@ class AuthService {
   public async fetchUser() {
     try {
       const user = await AuthAPI.request();
-      Store.set("user", user);
-      Store.set("isLoggedIn", true);
+      Store.set("auth.user", user);
+      Store.set("controllers.isLoggedIn", true);
       console.log(user);
     } catch (e) {
       console.error("Fetch user failed:", e);
@@ -47,8 +47,8 @@ class AuthService {
   public async logout() {
     try {
       const res = await AuthAPI.logout();
-      Store.set("user", null);
-      Store.set("isLoggedIn", false);
+      Store.set("auth.user", null);
+      Store.set("controllers.isLoggedIn", false);
 
       console.log(res, Store.getState());
       Router.go(RouteLink.SignIn);

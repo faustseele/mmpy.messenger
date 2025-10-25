@@ -1,12 +1,17 @@
 import { UserResponse } from "../../../features/authenticate/model/types.ts";
 
-/* From PUT /user/profile */
-export type UserUpdateRequest = Partial<Omit<UserResponse, "id" | "avatar">>;
+/* PUT /user/profile */
+export type UpdateUserProfile = Partial<Omit<UserResponse, "id" | "avatar">>;
 
-/* From PUT /user/password */
-export interface ChangePasswordRequest {
+/* PUT /user/password */
+export interface UpdateUserPassword {
   oldPassword: string;
   newPassword: string;
+}
+
+/* PUT /user/profile/avatar */
+export interface UpdateUserAvatar {
+  avatar: File;
 }
 
 /* From POST /user/search */

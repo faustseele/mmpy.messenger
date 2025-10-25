@@ -1,38 +1,34 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
-import {
-  ComponentData,
-  ComponentProps,
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
-import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
+import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { ErrorMap, ErrorProps, ErrorSchema } from "../model/types.ts";
+import { errorPageParams_404, errorPageParams_500 } from "../config/params.ts";
+import { ErrorNodes, ErrorProps } from "../model/types.ts";
+import { buildErrorPage } from "../model/utils.ts";
 import css from "./errors.module.css";
 
-export class ErrorPage extends Page<ErrorProps, ErrorMap, ErrorSchema> {
-  constructor(props: ComponentProps<ErrorProps, ErrorMap, ErrorSchema>) {
+export class ErrorPage extends Page<ErrorProps> {
+  constructor(props: ComponentProps<ErrorProps, ErrorPage>) {
     super(props);
   }
 
   public componentDidMount(): void {
     super.componentDidMount();
 
-    if (!this.childrenInstances) {
-      throw new Error("childrenInstances is not defined");
+    if (!this.children?.nodes) {
+      throw new Error("children is not defined");
     }
 
-    const backBtn = this.childrenInstances.singles.button_back;
+    /* --- getting instances --- */
+    const nodes = this.children.nodes as ErrorNodes;
+    const backBtn = nodes["button_back"].runtime?.instance as Button;
+    const link = backBtn?.configs.link ?? RouteLink.Messenger;
 
-    const link = backBtn.configs.link ?? RouteLink.Messenger;
-
+    /* --- setting events --- */
     backBtn.setProps({
-      data: {
-        events: {
-          click: () => Router.go(link),
-        },
+      on: {
+        click: () => Router.go(link),
       },
     });
   }
@@ -51,24 +47,5 @@ export class ErrorPage extends Page<ErrorProps, ErrorMap, ErrorSchema> {
   }
 }
 
-export const createErrorPage: PageFactory<
-  ErrorProps,
-  ErrorPage,
-  ErrorMap,
-  ErrorSchema
-> = (data: ComponentData<ErrorProps, ErrorMap, ErrorSchema>): ErrorPage => {
-  if (!data.childrenSchema) {
-    throw new Error("ErrorPage: ChildrenData are not defined");
-  }
-
-  const childrenInstances = buildChildren<ErrorMap, ErrorSchema>(
-    data.childrenSchema,
-  );
-
-  const deps = {
-    domService: new DOMService(data.configs.tagName, data.attributes),
-    fragmentService: new FragmentService(),
-  };
-
-  return new ErrorPage({ deps, data: { ...data, childrenInstances } });
-};
+export const createErrorPage_404 = buildErrorPage(errorPageParams_404);
+export const createErrorPage_500 = buildErrorPage(errorPageParams_500);

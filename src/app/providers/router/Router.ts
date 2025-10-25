@@ -1,10 +1,6 @@
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import {
-  ChildrenMap,
-  ChildrenSchema,
-} from "../../../shared/lib/Component/model/children.types.ts";
 import Store from "../store/Store.ts";
 import Route from "./Route.ts";
 import { RouteConfigs, RouteContract, RouteLink } from "./types.ts";
@@ -14,10 +10,10 @@ import { extractParams, matchPath } from "./utils.ts";
  * @class Router is a @mediator singleton class that listens
  *  to URL changes and calls the appropriate Route.
  *  E.g: '/sign-up -> new Route -> new AuthPage(SignUp)'
- * Mimics History API.
- * Handles the API access for the Pages.
- * @Singleton to ensure there is only one central routing.
- * @Builder to allow chaining 'use()' calls.
+ * mimics History API.
+ * handles the API access for the Pages.
+ * @Singleton ensures there is only one central routing.
+ * @Builder allowes chaining 'use()' calls.
  */
 
 class Router {
@@ -32,39 +28,34 @@ class Router {
   private _history: History = window.history;
 
   /**
-   * A list of all registered routes in the application.
+   * list of all registered routes in the application
    * Route is used due to contravariance
    */
   private _routes: RouteContract[] = [];
 
-  /** The actual route. */
   private _currentRoute: RouteContract | null = null;
 
   constructor() {
     if (Router.__instance) return Router.__instance;
-
     Router.__instance = this;
   }
 
   /**
-   * Registers a new Route with the Router.
+   * registers a new Route with the Router.
    * @returns this for chaining
    */
-  public use<
-    TProps extends BaseProps,
-    TMap extends ChildrenMap = ChildrenMap,
-    TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
-    TPage extends Page<TProps, TMap, TSchema> = Page<TProps, TMap, TSchema>,
-  >(routeConfigs: RouteConfigs, pageFactory: () => TPage): this {
+  public use<P extends BaseProps, C extends Page<P>>(
+    routeConfigs: RouteConfigs,
+    pageFactory: () => C,
+  ): this {
     const route = new Route({ routeConfigs, pageFactory });
     this._routes.push(route);
     return this;
   }
 
-  /* Inits Router. Sets root query to existing Routes. */
+  /* inits Router; sets root query to existing Routes */
   public async start(rootQuery: string): Promise<void> {
     try {
-      /* Await this so the store is populated before we check routes */
       await AuthService.fetchUser();
     } catch (_) {
       console.error("Failed to fetch user on startup");
@@ -72,13 +63,13 @@ class Router {
 
     this._routes.forEach((route) => route.setRootQuery(rootQuery));
 
-    /* Adding listener that's triggered
+    /* adds listener that's triggered
       when the active history entry changes. */
     window.onpopstate = () => {
       this._onRouteChange(window.location.pathname);
     };
 
-    /* Handling the nav-<a> links */
+    /* for the nav-<a> links */
     document.addEventListener("click", (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const navLink = target.closest("nav a");
@@ -88,10 +79,16 @@ class Router {
 
         const path = navLink.getAttribute("href");
 
+        if (path === "/logout") {
+          AuthService.logout();
+          return;
+        }
+
         if (path) {
           this.go(path as RouteLink);
         }
       }
+
     });
 
     /* Initial page load. */
@@ -102,9 +99,10 @@ class Router {
   private _onRouteChange(path: RouteLink | string): void {
     const route = this._routes.find((route) => matchPath(path, route.path));
 
-    const isUserLoggedIn = Store.getState().isLoggedIn;
+    const isUserLoggedIn = Store.getState().controllers.isLoggedIn;
 
     if (!route) {
+      console.warn("Route not found", path);
       this.go(RouteLink.NotFound);
       return;
     }
@@ -112,12 +110,14 @@ class Router {
     /* If user is not logged in and trying to access a protected route,leave the current route */
     if (!isUserLoggedIn && route.authStatus === "protected") {
       console.warn("Protected route accessed by a guest");
+      this.go(RouteLink.SignIn);
       return;
     }
 
     /* If a guest-only route is accessed by a user, leave the current route */
     if (isUserLoggedIn && route.authStatus === "guest") {
       console.warn("Guest-only route accessed by a user");
+      this.go(RouteLink.NotFound);
       return;
     }
 
@@ -127,6 +127,8 @@ class Router {
     this._currentRoute?.leave();
     this._currentRoute = route;
     this._currentRoute!.render();
+    // console.log(this._routes);
+    // console.log("CUR_ROUTE", this._currentRoute);
   }
 
   public go(path: RouteLink): void {

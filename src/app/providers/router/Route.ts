@@ -1,10 +1,6 @@
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import {
-  ChildrenMap,
-  ChildrenSchema,
-} from "../../../shared/lib/Component/model/children.types.ts";
-import { AuthStateType, RouteContract, RouteConfigs } from "./types.ts";
+import { AuthStateType, RouteConfigs, RouteContract } from "./types.ts";
 import { matchPath } from "./utils.ts";
 
 /**
@@ -13,29 +9,23 @@ import { matchPath } from "./utils.ts";
  * Can create & show/hide the Component.
  */
 
-export interface RouteProps<
-  TProps extends BaseProps,
-  TMap extends ChildrenMap = ChildrenMap,
-  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
-> {
+export interface RouteProps<Props extends BaseProps> {
   routeConfigs: RouteConfigs;
-  pageFactory: () => Page<TProps, TMap, TSchema>;
+  pageFactory: () => Page<Props>;
 }
 
 /**
  * @implements Route for 'public contract' match
  */
 export default class Route<
-  TProps extends BaseProps,
-  TMap extends ChildrenMap = ChildrenMap,
-  TSchema extends ChildrenSchema<TMap> = ChildrenSchema<TMap>,
+  Props extends BaseProps,
 > implements RouteContract
 {
   private _rootQuery: string = "";
   private _routeConfigs: RouteConfigs;
   /* Factory args are passed in index.ts */
-  private _pageFactory: () => Page<TProps, TMap, TSchema>;
-  private _pageInstance: Page<TProps, TMap, TSchema> | null = null;
+  private _pageFactory: () => Page<Props>;
+  private _pageInstance: Page<Props> | null = null;
 
   public get path(): string {
     return this._routeConfigs.path;
@@ -44,10 +34,7 @@ export default class Route<
     return this._routeConfigs.authStatus;
   }
 
-  constructor({
-    routeConfigs,
-    pageFactory,
-  }: RouteProps<TProps, TMap, TSchema>) {
+  constructor({ routeConfigs, pageFactory }: RouteProps<Props>) {
     this._routeConfigs = routeConfigs ?? {
       path: "",
       rootQuery: "",

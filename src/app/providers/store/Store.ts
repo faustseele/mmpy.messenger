@@ -1,15 +1,21 @@
-import { ChatResponse } from "../../../entities/chat/model/types.ts";
-import { UserResponse } from "../../../features/authenticate/model/types.ts";
+import { PageNode } from "../../../pages/page/model/types.ts";
+import { Page } from "../../../pages/page/ui/Page.ts";
+import { APIState } from "../../../shared/api/model/types.ts";
+import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { ComponentId } from "../../../shared/lib/Component/model/types.ts";
 import EventBus from "../../../shared/lib/EventBus/EventBus.ts";
+import { apiInitialState } from "./config.ts";
+import { set } from "./lib/utils.ts";
 import { StoreEventBusEvents } from "./types.ts";
-import { set } from "./utils.ts";
 
 export interface AppState {
-  isLoggedIn: boolean;
-  user: UserResponse | null;
-  chats: ChatResponse[] | null;
-  /* Needed for the connect HOC `isEqual` check */
-  [key: string]: unknown;
+  api: APIState;
+  controllers: {
+    isLoggedIn: boolean;
+  };
+  pageNodes: Record<ComponentId, PageNode<BaseProps, Page<BaseProps>>>;
+  /* needed for the connect HOC `isEqual` check */
+  // [key: string]: unknown;
 }
 
 class Store extends EventBus<StoreEventBusEvents> {
@@ -27,9 +33,11 @@ class Store extends EventBus<StoreEventBusEvents> {
   }
 
   private state: AppState = {
-    isLoggedIn: false,
-    user: null,
-    chats: null,
+    api: apiInitialState,
+    controllers: {
+      isLoggedIn: false,
+    },
+    pageNodes: { },
   };
 
   public getState() {
@@ -38,7 +46,7 @@ class Store extends EventBus<StoreEventBusEvents> {
 
   public set(path: string, value: unknown) {
     set(this.state, path, value);
-    // Pass the new state to the subscribers
+    /* passing the new state to the subscribers */
     this.emit("updated", this.getState());
   }
 }

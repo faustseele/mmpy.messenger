@@ -1,76 +1,36 @@
-import "./src/app/styles/index.css";
 import Router from "./src/app/providers/router/Router.ts";
+import "./src/app/styles/index.css";
 import {
-  AuthMap,
-  AuthProps,
-  AuthSchema,
-} from "./src/pages/auth/model/types.ts";
-import { createAuthPage } from "./src/pages/auth/ui/AuthPage.ts";
-import {
-  SettingsMap,
-  SettingsProps,
-  SettingsSchema,
-} from "./src/pages/settings/model/types.ts";
-import { createSettingsPage } from "./src/pages/settings/ui/SettingsPage.ts";
-import {
-  signInData,
+  createAuthPage_signIn,
+  createAuthPage_signUp,
   signInRouteConfig,
-  signUpData,
   signUpRouteConfig,
-} from "./src/shared/config/mocks/auth.ts";
+} from "./src/pages/auth/config/params.ts";
 import {
-  error404RouteConfig,
-  error500RouteConfig,
-  errorPage404Data,
-  errorPage500Data,
-} from "./src/shared/config/mocks/errors.ts";
+  errorRouteConfig_404,
+  errorRouteConfig_500,
+} from "./src/pages/errors/config/params.ts";
 import {
-  profilePageData,
-  profilePageRouteConfig,
-} from "./src/shared/config/mocks/profile.ts";
-import {
-  ErrorMap,
-  ErrorProps,
-  ErrorSchema,
-} from "./src/pages/errors/model/types.ts";
-import { createErrorPage } from "./src/pages/errors/ui/ErrorPage.ts";
-import { createMessengerPage } from "./src/pages/messenger/ui/MessengerPage.ts";
-import {
-  chatPageData,
-  chatPageRouteConfig,
-} from "./src/shared/config/mocks/chat.ts";
-import {
-  MessengerMap,
-  MessengerProps,
-  MessengerSchema,
-} from "./src/pages/messenger/model/types.ts";
+  createErrorPage_404,
+  createErrorPage_500,
+} from "./src/pages/errors/ui/ErrorPage.ts";
+import { createMessengerPage, messengerPageRouteConfig } from "./src/pages/messenger/config/params.ts";
+import { createSettingsPage, settingsPageRouteConfig } from "./src/pages/settings/config/params.ts";
 
 export const rootQuery = "#app";
 
 Router
   /* SignIn route */
-  .use<AuthProps, AuthMap, AuthSchema>(signInRouteConfig, () =>
-    createAuthPage(signInData),
-  )
+  .use(signInRouteConfig, () => createAuthPage_signIn)
   /* SignUp route */
-  .use<AuthProps, AuthMap, AuthSchema>(signUpRouteConfig, () =>
-    createAuthPage(signUpData),
-  )
+  .use(signUpRouteConfig, () => createAuthPage_signUp)
   /* Messenger route */
-  .use<MessengerProps, MessengerMap, MessengerSchema>(chatPageRouteConfig, () =>
-    createMessengerPage(chatPageData),
-  )
+  .use(messengerPageRouteConfig, () => createMessengerPage)
   /* Settings route */
-  .use<SettingsProps, SettingsMap, SettingsSchema>(profilePageRouteConfig, () =>
-    createSettingsPage(profilePageData),
-  )
+  .use(settingsPageRouteConfig, () => createSettingsPage)
   /* NotFound route */
-  .use<ErrorProps, ErrorMap, ErrorSchema>(error404RouteConfig, () =>
-    createErrorPage(errorPage404Data),
-  )
+  .use(errorRouteConfig_404, () => createErrorPage_404)
   /* Error route */
-  .use<ErrorProps, ErrorMap, ErrorSchema>(error500RouteConfig, () =>
-    createErrorPage(errorPage500Data),
-  );
+  .use(errorRouteConfig_500, () => createErrorPage_500);
 
 Router.start(rootQuery);

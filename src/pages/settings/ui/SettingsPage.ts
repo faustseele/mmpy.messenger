@@ -1,97 +1,97 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
-import {
-  ComponentData,
-  ComponentProps,
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
-import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
+import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
+import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
+import { Button } from "../../../shared/ui/Button/Button.ts";
+import { Heading } from "../../../shared/ui/Heading/Heading.ts";
+import { InputProps } from "../../../shared/ui/Input/types.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { SettingsMap, SettingsProps, SettingsSchema } from "../model/types.ts";
+import { SettingsNodes, SettingsProps } from "../model/types.ts";
 import css from "./settings.module.css";
 
-export class SettingsPage extends Page<
-  SettingsProps,
-  SettingsMap,
-  SettingsSchema
-> {
-  constructor(
-    props: ComponentProps<SettingsProps, SettingsMap, SettingsSchema>,
-  ) {
+export class SettingsPage extends Page<SettingsProps> {
+  constructor(props: ComponentProps<SettingsProps, SettingsPage>) {
     super(props);
   }
 
   public componentDidMount(): void {
     super.componentDidMount();
 
-    if (!Object.keys(this.childrenInstances?.singles ?? 0).length) {
-      console.error(
-        "SettingsPage: Children are not defined",
-        this.childrenInstances,
-      );
+    if (!this.children || !this.children.nodes) {
+      console.error("SettingsPage: Children are not defined", this);
       return;
     }
 
-    const inputs = this.childrenInstances!.lists.inputsEditors;
+    /* --- getting instances --- */
     const {
-      heading_backToChats: headingBack,
+      heading_backToChats,
       buttonEditInfo,
       buttonEditPassword,
       buttonLogout,
-    } = this.childrenInstances!.singles;
+    } = this.children.nodes as SettingsNodes;
+    const inputs = getInstances<InputProps, InputEditor>(
+      this.children,
+      "inputsEditors",
+    );
+    const heading = heading_backToChats.runtime?.instance as Heading;
+    const editInfo = buttonEditInfo.runtime?.instance as Button;
+    const editPassword = buttonEditPassword.runtime?.instance as Button;
+    const logout = buttonLogout.runtime?.instance as Button;
 
-    const formValidator = new FormValidator(inputs);
-
-    headingBack.setProps({
-      data: {
-        events: { click: () => Router.go(RouteLink.Messenger) },
-      },
-    });
-
-    buttonEditInfo.setProps({
-      data: {
-        events: {
-          click: (e: Event) => formValidator.onFormSubmit(e, "change-info"),
-        },
-      },
-    });
-
-    buttonEditPassword.setProps({
-      data: {
-        events: {
-          click: (e: Event) => formValidator.onFormSubmit(e, "change-password"),
-        },
-      },
-    });
-
-    buttonLogout.setProps({
-      data: {
-        events: {
-          click: async (event: Event) => {
-            event.preventDefault();
-            await AuthService.logout();
-          },
-        },
-      },
-    });
-
+    /* --- vivifying inputs --- */
+    const validator = new FormValidator(inputs);
     inputs.forEach((input) => {
-      input.setProps({
-        events: { focusout: () => formValidator.onInputBlur(input) },
+      input!.setProps({
+        on: { focusout: () => validator.onInputBlur(input) },
       });
+    });
+
+    /* --- setting events --- */
+    heading.setProps({
+      on: { click: () => Router.go(RouteLink.Messenger) },
+    });
+    this._setButtonEvents(editInfo, editPassword, logout, validator);
+  }
+
+  private _setButtonEvents(
+    editInfo: Button,
+    editPassword: Button,
+    logout: Button,
+    validator: FormValidator,
+  ) {
+    editInfo.setProps({
+      on: {
+        click: (e: Event) => validator.onFormSubmit(e, "change-info"),
+      },
+    });
+    editPassword.setProps({
+      on: {
+        click: (e: Event) => validator.onFormSubmit(e, "change-password"),
+      },
+    });
+    logout.setProps({
+      on: {
+        click: async (event: Event) => {
+          event.preventDefault();
+          await AuthService.logout();
+        },
+      },
     });
   }
 
   public getSourceMarkup(): string {
+    if (!this.children?.nodes)
+      return /*html*/ `<span>ERROR: SettingsPage: Children are not defined</span>`;
+
+    const nodes = this.children.nodes as SettingsNodes;
+
     return /*html*/ `
       <header class="${css.profileHeadings}">
-      {{{ heading_profile }}}
-      {{{ heading_backToChats }}}
-
+        {{{ ${nodes["heading_profile"].params.configs.id} }}}
+        {{{ ${nodes["heading_backToChats"].params.configs.id} }}}
       </header>
       
       <main class="${css.settingsContent}">
@@ -114,37 +114,10 @@ export class SettingsPage extends Page<
       </main>
 
       <footer class="${css.settingsFooter}">
-        {{{ buttonEditInfo }}}
-        {{{ buttonEditPassword }}}
-        {{{ buttonLogout }}}
+        {{{ ${nodes["buttonEditInfo"].params.configs.id} }}}
+        {{{ ${nodes["buttonEditPassword"].params.configs.id} }}}
+        {{{ ${nodes["buttonLogout"].params.configs.id} }}}
       </footer>
     `;
   }
 }
-
-export const createSettingsPage: PageFactory<
-  SettingsProps,
-  SettingsPage,
-  SettingsMap,
-  SettingsSchema
-> = (
-  data: ComponentData<SettingsProps, SettingsMap, SettingsSchema>,
-): SettingsPage => {
-  if (!data.childrenSchema) {
-    throw new Error("SettingsPage: ChildrenScheme is not defined");
-  }
-
-  const childrenInstances = buildChildren<SettingsMap, SettingsSchema>(
-    data.childrenSchema,
-  );
-
-  const deps = {
-    domService: new DOMService(data.configs.tagName, data.attributes),
-    fragmentService: new FragmentService(),
-  };
-
-  return new SettingsPage({
-    deps,
-    data: { ...data, childrenInstances },
-  });
-};

@@ -1,10 +1,10 @@
-import { Indexed, PlainObject } from "./types.ts";
+import { Indexed, PlainObject } from "../../../../shared/types/universal.ts";
 
 /**
- * Recursively merges two indexable objects;
+ * recursively merges two indexable objects;
  * descends into nested plain-objs and overwrites other values, returning the mutated `lhs`;
  * it’s designed to support shallow/deep upds via dot-paths */
-function merge(lhs: Indexed, rhs: Indexed): Indexed {
+export function merge(lhs: Indexed, rhs: Indexed): Indexed {
   for (const p in rhs) {
     if (!rhs.hasOwnProperty!(p)) {
       continue;
@@ -91,3 +91,4 @@ function isPlainObject(value: unknown): value is PlainObject {
     Object.prototype.toString.call(value) === "[object Object]"
   );
 }
+

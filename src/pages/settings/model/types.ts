@@ -1,51 +1,23 @@
-import { InputEditor } from "../../../features/edit-settings/ui/InputEditor.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import { ChildrenMap, ChildrenSchema } from "../../../shared/lib/Component/model/children.types.ts";
+import { ChildrenNodes } from "../../../shared/lib/Component/model/children.types.ts";
 import { TagNameType } from "../../../shared/lib/DOM/types.ts";
-import { Button } from "../../../shared/ui/Button/Button.ts";
-import { ButtonProps } from "../../../shared/ui/Button/types.ts";
-import { Heading } from "../../../shared/ui/Heading/Heading.ts";
-import { HeadingProps } from "../../../shared/ui/Heading/types.ts";
-import { InputProps } from "../../../shared/ui/Input/Input.ts";
+import { PageId } from "../../page/config/const.ts";
 
 export interface SettingsProps extends BaseProps {
   configs: {
+    id: PageId.Settings;
     tagName: Extract<TagNameType, "div">;
     profileName: string;
     profileAvatar: string;
   };
 }
 
-export interface SettingsMap extends ChildrenMap {
-  singles: {
-    heading_profile: {
-      props: HeadingProps;
-      instanceType: Heading;
-    };
-    heading_backToChats: {
-      props: HeadingProps;
-      instanceType: Heading;
-    };
-    buttonEditInfo: {
-      props: ButtonProps;
-      instanceType: Button;
-    };
-    buttonEditPassword: {
-      props: ButtonProps;
-      instanceType: Button;
-    };
-    buttonLogout: {
-      props: ButtonProps;
-      instanceType: Button;
-    };
-  };
-  lists: {
-    inputsEditors: {
-      props: InputProps;
-      instanceType: InputEditor[];
-    };
-  };
-}
+type SettingsMap =
+  | "heading_backToChats"
+  | "heading_profile"
+  | "buttonEditInfo"
+  | "buttonEditPassword"
+  | "buttonLogout"
+  | "inputsEditors";
 
-export type SettingsSchema = ChildrenSchema<SettingsMap>;
-
+export type SettingsNodes = ChildrenNodes<SettingsMap>;

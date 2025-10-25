@@ -1,53 +1,50 @@
-import { v4 as makeUUID } from "uuid";
-import { ComponentAttributes, ComponentEvents } from "../Component/model/types.ts";
+import { BaseProps } from "../Component/model/base.types.ts";
+import { ComponentId } from "../Component/model/types.ts";
 import { TagNameType } from "./types.ts";
 
 /**
- * @DOMService ­– Owns the DOM-related logic.
- * * Creates DOM-Elements
- * * Re-renders the DOM-Elements
- * * Adds/removes event listeners
- * * Shares Dom-Elements
+ * @DOMService ­– owns the DOM-related logic
+ * * creates DOM-Elements
+ * * re-renders the DOM-Elements
+ * * adds/removes event listeners
+ * * shares Dom-Elements
  */
 
-export default class DOMService<
-  A extends ComponentAttributes | undefined,
-  E extends ComponentEvents | undefined,
-> {
-  private readonly _tagName: TagNameType;
-  private _attributes?: A = undefined;
+export default class DOMService<P extends BaseProps> {
+  private readonly _tagName: P["configs"]["tagName"];
+  private _attrs?: P["attributes"] = undefined;
   private _element: HTMLElement | null = null;
+  private _id: ComponentId;
 
-  public readonly id: string = makeUUID();
   public get element(): HTMLElement | null {
     return this._element;
   }
 
-  constructor(tagName: TagNameType, attributes?: A) {
+  constructor(id: ComponentId, tagName: TagNameType, attrs?: P["attributes"]) {
+    this._id = id;
     this._tagName = tagName;
-    this._attributes = attributes;
+    this._attrs = attrs;
   }
 
   public createElement() {
-    /* Creating an empty Element
-      e.g. 'div' -> rendered HTMLElement */
-    this._element = document.createElement(this._tagName);
-
-    /* In case attributes are passed */
-    if (this._attributes) {
-      this._element = this._addAttributes(this._element, this._attributes);
+    if (!this._element) {
+      /* creates an empty tag-element */
+      this._element = document.createElement(this._tagName);
+      if (this._attrs) this._addAttributes(this._element, this._attrs);
     }
   }
 
   private _addAttributes(
     element: HTMLElement,
-    attributes: ComponentAttributes,
+    attrs?: P["attributes"],
   ): HTMLElement {
-    element.setAttribute("data-id", this.id);
+    if (!attrs) return element;
 
-    /* Handling Elements attributes */
-    Object.entries(attributes).forEach(([key, value]) => {
-      if (!value) return;
+    element.setAttribute("data-id", this._id);
+
+    /* Handling Elements attrs */
+    Object.entries(attrs).forEach(([key, value]) => {
+      if (!value || typeof value !== "string") return;
 
       /* Handling special 'className' field */
       if (key === "className") {
@@ -74,19 +71,19 @@ export default class DOMService<
     this._element.appendChild(fragment);
   }
 
-  public addListeners(events?: E): void {
-    if (!this._element || !events) return;
+  public addListeners(on?: P["on"]): void {
+    if (!this._element || !on) return;
 
-    Object.keys(events).forEach((eventName) => {
-      this._element!.addEventListener(eventName, events[eventName]);
+    Object.keys(on).forEach((event) => {
+      this._element!.addEventListener(event, on[event]);
     });
   }
 
-  public removeListeners(events?: E): void {
-    if (!this._element || !events) return;
+  public removeListeners(patch?: P["on"]): void {
+    if (!this._element || !patch) return;
 
-    Object.keys(events).forEach((eventName) => {
-      this._element!.removeEventListener(eventName, events[eventName]);
+    Object.keys(patch).forEach((event) => {
+      this._element!.removeEventListener(event, patch[event]);
     });
   }
 }
