@@ -1,7 +1,9 @@
-import { ChangePasswordRequest,  } from "../model/types.ts";
-import { BaseAPI } from "../../../shared/api/model/BaseAPI.ts";
 import HTTPTransport from "../../../shared/api/http/HTTPTransport.ts";
-import { UserResponse } from "../../../features/authenticate/model/types.ts";
+import { BaseAPI } from "../../../shared/api/model/BaseAPI.ts";
+import {
+  UpdateUserPassword,
+  UserResponse,
+} from "../../../shared/api/model/types.ts";
 
 const userAPIInstance = new HTTPTransport("/user");
 
@@ -10,8 +12,16 @@ class UserAPI extends BaseAPI {
     return userAPIInstance.put("/profile", { data }) as Promise<UserResponse>;
   }
 
-  public updatePassword(data: ChangePasswordRequest): Promise<string> {
+  public updatePassword(data: UpdateUserPassword): Promise<string> {
     return userAPIInstance.put("/password", { data }) as Promise<string>;
+  }
+
+  public updateAvatar(data: File): Promise<UserResponse> {
+    const form = new FormData();
+    form.append("avatar", data);
+    return userAPIInstance.put("/profile/avatar", {
+      data: form,
+    }) as Promise<UserResponse>;
   }
 }
 

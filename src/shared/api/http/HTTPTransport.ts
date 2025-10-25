@@ -1,3 +1,4 @@
+import { API_URL } from "../../config/urls.ts";
 import {
   HttpMethod,
   HttpMethodType,
@@ -14,7 +15,7 @@ import { queryStringify } from "./utils.ts";
  * Incapsulates XMLHttpRequest and works with Promise.
  */
 export default class HTTPTransport {
-  protected static API_URL = "https://ya-praktikum.tech/api/v2";
+  protected static API_URL = API_URL;
   protected endpoint: string;
 
   /* The enum-type is enclosed inside createMethod */

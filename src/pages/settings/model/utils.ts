@@ -1,5 +1,6 @@
 import profileAvatar from "../../../../static/profile-avatar.png";
 import { AppState } from "../../../app/providers/store/Store.ts";
+import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import {
   ComponentDeps,
   ComponentParams,
@@ -20,7 +21,11 @@ export const buildSettingsPage: PageFactory<SettingsProps, SettingsPage> = (
   }
 
   const deps: ComponentDeps<SettingsProps> = {
-    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
+    domService: new DOMService(
+      params.configs.id,
+      params.configs.tagName,
+      params.attributes,
+    ),
     fragmentService: new FragmentService(),
   };
 
@@ -47,7 +52,9 @@ export const mapSettingsState = ({
     configs: {
       tagName: "div",
       profileName: user?.first_name ?? "",
-      profileAvatar: user?.avatar ?? profileAvatar,
+      profileAvatar: user?.avatar
+        ? `${API_URL_RESOURCES}${user.avatar}`
+        : profileAvatar,
     },
   };
 };

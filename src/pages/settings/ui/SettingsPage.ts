@@ -1,6 +1,7 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
+import UserService from "../../../features/edit-profile/model/UserService.ts";
 import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";
@@ -32,28 +33,27 @@ export class SettingsPage extends Page<SettingsProps> {
       buttonEditPassword,
       buttonLogout,
     } = this.children.nodes as SettingsNodes;
-    const inputs = getInstances<InputProps, InputEditor>(
-      this.children,
-      "inputsEditors",
-    );
     const heading = heading_backToChats.runtime?.instance as Heading;
     const editInfo = buttonEditInfo.runtime?.instance as Button;
     const editPassword = buttonEditPassword.runtime?.instance as Button;
     const logout = buttonLogout.runtime?.instance as Button;
 
+    /* --- avatar --- */
+    this._handleAvatarChange();
+
     /* --- vivifying inputs --- */
-    const validator = new FormValidator(inputs);
-    inputs.forEach((input) => {
-      input!.setProps({
-        on: { focusout: () => validator.onInputBlur(input) },
-      });
-    });
+    const validator = this._handleInputs();
 
     /* --- setting events --- */
     heading.setProps({
       on: { click: () => Router.go(RouteLink.Messenger) },
     });
     this._setButtonEvents(editInfo, editPassword, logout, validator);
+  }
+
+  public componentDidRender(): void {
+    /* re-binding avatar change event */
+    this._handleAvatarChange();
   }
 
   private _setButtonEvents(
@@ -80,6 +80,33 @@ export class SettingsPage extends Page<SettingsProps> {
         },
       },
     });
+  }
+
+  private _handleAvatarChange(): void {
+    const input =
+      this.element?.querySelector<HTMLInputElement>("#avatar-input");
+    if (!input || input.dataset.bound) return;
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      await UserService.updateAvatar(file);
+      input.value = "";
+    });
+    input.dataset.bound = "true";
+  }
+
+  private _handleInputs(): FormValidator {
+    const inputs = getInstances<InputProps, InputEditor>(
+      this.children!,
+      "inputsEditors",
+    );
+    const validator = new FormValidator(inputs);
+    inputs.forEach((input) => {
+      input!.setProps({
+        on: { focusout: () => validator.onInputBlur(input) },
+      });
+    });
+    return validator;
   }
 
   public getSourceMarkup(): string {

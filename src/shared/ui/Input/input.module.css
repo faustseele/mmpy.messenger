@@ -1,7 +1,20 @@
 /* Handling autofill */
-.input:-webkit-autofill,
-.input:-webkit-autofill:focus,
-.input:-webkit-autofill:active {
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    /* Setting the bg of inputs
+      to transparent on autofill */
+    -webkit-transition-delay: 999999s;
+    transition-delay: 999999s;
+    
+    /* Setting the text-color
+      of inputs on autofill */
+    -webkit-text-fill-color: var(--color-content-light) !important;
+}
+/* Handling autofill */
+label:-webkit-autofill,
+label:-webkit-autofill:focus,
+label:-webkit-autofill:active {
     /* Setting the bg of inputs
       to transparent on autofill */
     -webkit-transition-delay: 999999s;
@@ -20,7 +33,7 @@
 .labelSpan {
   position: absolute;
   left: 8px;
-  top: 15px;
+  top: 19px;
   font-family: inherit;
   font-size: 14px;
   line-height: 15px;
@@ -30,7 +43,7 @@
 
 .input {
   width: 100%;
-  padding: 14px 10px 15px 10px;
+  padding: 19px 10px 18px 10px;
 
   display: flex;
   text-align: center;

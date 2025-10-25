@@ -1,27 +1,41 @@
+import Store from "../../../app/providers/store/Store.ts";
 import UserAPI from "../../../entities/user/api/UserAPI.ts";
-import { ChangePasswordRequest, UserResponse } from "../../../entities/user/model/types.ts";
+import {
+  UpdateUserPassword,
+  UserResponse,
+} from "../../../shared/api/model/types.ts";
 
 class UserService {
   public async updateProfile(data: Partial<UserResponse>) {
     try {
       const updatedUser = await UserAPI.updateProfile(data);
 
-      // IMPORTANT: When we implement the global Store,
-      // we will update the state here, e.g.:
-      // store.set('user', updatedUser);
-
+      Store.set("api.auth.user", updatedUser);
       console.log("Profile updated successfully:", updatedUser);
     } catch (e) {
       console.error("Profile update failed:", e);
     }
   }
 
-  public async updatePassword(data: ChangePasswordRequest) {
+  public async updatePassword(data: UpdateUserPassword) {
     try {
-      await UserAPI.updatePassword(data);
+      const updatedUser = await UserAPI.updatePassword(data);
+
+      Store.set("api.auth.user", updatedUser);
       console.log("Password updated successfully");
     } catch (e) {
       console.error("Password update failed:", e);
+    }
+  }
+
+  public async updateAvatar(data: File) {
+    try {
+      const updatedUser = await UserAPI.updateAvatar(data);
+
+      Store.set("api.auth.user", updatedUser);
+      console.log("Avatar updated successfully:", updatedUser);
+    } catch (e) {
+      console.error("Avatar update failed:", e);
     }
   }
 }

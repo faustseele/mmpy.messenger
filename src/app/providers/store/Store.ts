@@ -1,6 +1,6 @@
 import { PageNode } from "../../../pages/page/model/types.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
-import { APIState } from "../../../shared/api/model/types.ts";
+import { APIState } from "./store.types.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
 import { ComponentId } from "../../../shared/lib/Component/model/types.ts";
 import EventBus from "../../../shared/lib/EventBus/EventBus.ts";

@@ -33,6 +33,8 @@ const iptIds = [
   "inputEditor-login",
   "inputEditor-display_name",
   "inputEditor-phone",
+  "inputEditor-oldPassword",
+  "inputEditor-newPassword",
 ];
 
 const inputEditorsNodes = {
@@ -75,6 +77,26 @@ const inputEditorsNodes = {
       "Номер телефона",
       "+7 905 551-23-45",
       "tel",
+    ),
+    factory: buildInputEditor as any,
+  },
+  [iptIds[6]]: {
+    params: getEdProps(
+      iptIds[6],
+      "oldPassword",
+      "Старый пароль",
+      "***",
+      "password",
+    ),
+    factory: buildInputEditor as any,
+  },
+  [iptIds[7]]: {
+    params: getEdProps(
+      iptIds[7],
+      "newPassword",
+      "Новый пароль",
+      "***",
+      "password",
     ),
     factory: buildInputEditor as any,
   },

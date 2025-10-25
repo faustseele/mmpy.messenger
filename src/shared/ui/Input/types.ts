@@ -38,4 +38,6 @@ export type FieldType =
   | "phone"
   | "display_name"
   | "search"
-  | "message";
+  | "message"
+  | "oldPassword"
+  | "newPassword";

@@ -42,6 +42,18 @@ const getRegex: Record<FieldType, (value: string) => string> = {
   search: (value: string): string => {
     return value.length > 0 ? "" : "Напишите что-нибудь.";
   },
+  oldPassword: (value: string): string => {
+    const regex = /^(?=.*[A-Z])(?=.*\d).{8,40}$/;
+    return regex.test(value)
+      ? ""
+      : "Пароль: 8-40 символов, минимум 1 цифра и заглавная буква.";
+  },
+  newPassword: (value: string): string => {
+    const regex = /^(?=.*[A-Z])(?=.*\d).{8,40}$/;
+    return regex.test(value)
+      ? ""
+      : "Пароль: 8-40 символов, минимум 1 цифра и заглавная буква.";
+  },
 };
 
 /**
@@ -51,7 +63,7 @@ const getRegex: Record<FieldType, (value: string) => string> = {
  * @returns An empty string if valid, or an error message string if invalid.
  */
 export function validateInputField(
-  fieldName: FieldType | '',
+  fieldName: FieldType | "",
   value?: string,
 ): string {
   if (!fieldName) return "";

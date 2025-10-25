@@ -28,10 +28,14 @@ export default class FormValidator {
   ): Promise<void> => {
     event.preventDefault();
 
-    const isFormValid = this._handleFormValidation();
+    const targetInputs = this._filterInputsBySubmitType(
+      submitType,
+      this.inputs,
+    );
+    const isFormValid = this._handleFormValidation(targetInputs);
 
     if (isFormValid) {
-      const formData = this._getFormData();
+      const formData = this._getFormData(targetInputs);
       console.log(logMessages.formIsValid, formData);
 
       if (submitType === "sign-in") {
@@ -53,12 +57,16 @@ export default class FormValidator {
         await UserService.updateProfile({
           first_name: formData.name,
           second_name: formData.surname,
+          display_name: formData.display_name,
           login: formData.login,
           email: formData.email,
           phone: formData.phone,
         });
       } else if (submitType === "change-password") {
-        console.warn("Not implemented");
+        await UserService.updatePassword({
+          oldPassword: formData.oldPassword,
+          newPassword: formData.newPassword,
+        });
       }
       return;
     } else {
@@ -67,12 +75,17 @@ export default class FormValidator {
     }
   };
 
-  /* Validates all inputs in the form
-    and returns if the form is valid. */
-  private _handleFormValidation(): boolean {
+  /* validates all inputs in the form
+    and returns if the form is valid */
+  private _handleFormValidation(inputs?: Input[] | InputEditor[]): boolean {
+    if (!inputs) {
+      console.error("FormValidator: Inputs are not defined");
+      return false;
+    }
+
     let formIsValid = true;
 
-    this.inputs.forEach((input) => {
+    inputs.forEach((input) => {
       if (!this._handleFieldValidation(input)) {
         formIsValid = false;
       }
@@ -81,8 +94,8 @@ export default class FormValidator {
     return formIsValid;
   }
 
-  /* Validates a single input component
-    and shows/hides its error. */
+  /* validates a single input component
+    and shows/hides its error */
   private _handleFieldValidation(input: Input | InputEditor): boolean {
     if (!input) {
       console.error("FormValidator: Input is not defined");
@@ -100,15 +113,50 @@ export default class FormValidator {
     return inputIsValid;
   }
 
-  /* Collects data from all inputs into a single object. */
-  private _getFormData(): Record<FieldType, string> {
+  /* collects data from all inputs into a single object */
+  private _getFormData(
+    inputs: Input[] | InputEditor[],
+  ): Record<FieldType, string> {
     const formData: Record<string, string> = {};
 
-    this.inputs.forEach((input) => {
+    inputs.forEach((input) => {
       const { name, value } = input.getNameAndValue();
       formData[name] = value;
     });
 
     return formData;
+  }
+
+  /* narrows inputs for validation/submission based on submitType */
+  private _filterInputsBySubmitType(
+    submitType: AuthType | "change-info" | "change-password",
+    inputs: Array<Input | InputEditor>,
+  ): Array<Input | InputEditor> {
+    const PASSWORD_ONLY = new Set(["oldPassword", "newPassword"]);
+    const EXCLUDE_FOR_INFO = new Set([
+      "password",
+      "oldPassword",
+      "newPassword",
+    ]);
+
+    const getMeta = (inp: Input | InputEditor) => {
+      const { name, value } = inp.getNameAndValue();
+      return { name: String(name || ""), value: (value ?? "").trim() };
+    };
+
+    if (submitType === "change-password") {
+      return inputs.filter((inp) => PASSWORD_ONLY.has(getMeta(inp).name));
+    }
+
+    if (submitType === "change-info") {
+      return inputs.filter((inp) => {
+        const { name, value } = getMeta(inp);
+        if (!name || EXCLUDE_FOR_INFO.has(name)) return false;
+        return value.length > 0;
+      });
+    }
+
+    /* default (sign-in/sign-up): validate everything */
+    return inputs;
   }
 }
