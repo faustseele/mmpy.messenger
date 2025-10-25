@@ -97,11 +97,9 @@ export class MessengerPage extends Page<MessengerProps> {
         <ul class="${css.catalogue__items}">
           {{{ goToChatItems }}}
         </ul>
-        
       </aside>
 
       <main class="${css.chat}">
-      
         <header class="${css.chat__header}">
           <div class="${css.chatParticipant}">
             <img class="${css.chatParticipant__avatar}" src="{{ participantAvatar }}" alt="Participant avatar"/>
