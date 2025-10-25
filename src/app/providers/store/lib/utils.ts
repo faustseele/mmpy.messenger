@@ -83,7 +83,7 @@ function isArrayOrObject(value: unknown): value is [] | PlainObject {
  * filtering out: primitives;
  * nulls; funcs & arrs;
  * built-in objs */
-function isPlainObject(value: unknown): value is PlainObject {
+export function isPlainObject(value: unknown): value is PlainObject {
   return (
     typeof value === "object" &&
     value !== null &&

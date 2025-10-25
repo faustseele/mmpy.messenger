@@ -1,39 +1,44 @@
 import { PageNode } from "../../../pages/page/model/types.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import { merge } from "./lib/utils.ts";
+import { getProjection } from "./lib/patch.ts";
+import { isEqual, merge } from "./lib/utils.ts";
 import Store from "./Store.ts";
 import { MapStateToProps } from "./types.ts";
 
 /* bridges Store <-> Page blueprint */
 
 export function connect<P extends BaseProps, C extends Page<P>>(
-  initNode: PageNode<P, C>,
+  blueprint: PageNode<P, C>,
   mapStateToProps: MapStateToProps<P>,
 ): C {
   /* on initial Page connection */
-  const id = initNode.params.configs.id;
+  const id = blueprint.params.configs.id;
   const pageIsNew = !Store.getState().pageNodes[id];
-  let resNode = Store.getState().pageNodes[id];
+  let connectedNode = Store.getState().pageNodes[id];
   if (pageIsNew) {
     /* creates instance */
-    initNode.runtime = { instance: initNode.factory(initNode.params) };
-    /* appends new initNode to the Store */
+    blueprint.runtime = { instance: blueprint.factory(blueprint.params) };
+    /* appends new blueprint to the Store */
     Store.set("pageNodes", {
       ...Store.getState().pageNodes,
-      [id]: initNode,
+      [id]: blueprint,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resNode = initNode as any;
+    connectedNode = blueprint as any;
   }
 
   function handlePatch() {
     const state = Store.getState();
     const patch = mapStateToProps(state);
-    const patchedParams = merge(initNode.params, patch);
+    /* projection -> only patch-realted props from connectedNode.params */
+    const projection = getProjection(connectedNode.params, patch);
 
-    console.log(patchedParams, state);
-    resNode.runtime?.instance.setProps(patchedParams);
+    if (!isEqual(projection, patch)) {
+      // console.log(projection?.configs?.profileName, patch?.configs?.profileName);
+      const patchedParams = merge(connectedNode.params, patch);
+      connectedNode.runtime?.instance.setProps(patchedParams);
+    }
   }
 
   /* initial patch on connect */
@@ -46,14 +51,14 @@ export function connect<P extends BaseProps, C extends Page<P>>(
   Store.on("updated", onStoreUpdated);
 
   /* cleans up subscription on page unmount */
-  resNode.runtime?.instance.bus.on("flow:component-did-unmount", () => {
+  connectedNode.runtime?.instance.bus.on("flow:component-did-unmount", () => {
     Store.off("updated", onStoreUpdated);
   });
 
-  if (!resNode.runtime) {
-    console.error(resNode, initNode);
-    throw new Error("connect: resNode.runtime is undefined");
+  if (!connectedNode.runtime) {
+    console.error(connectedNode, blueprint);
+    throw new Error("connect: connectedNode.runtime is undefined");
   }
 
-  return resNode.runtime!.instance as C;
+  return connectedNode.runtime!.instance as C;
 }
