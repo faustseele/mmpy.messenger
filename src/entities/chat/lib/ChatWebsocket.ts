@@ -2,7 +2,7 @@ import Store from "../../../app/providers/store/Store.ts";
 import { ChatId, ChatMessage } from "../../../shared/api/model/types.ts";
 import { WSS_CHATS } from "../../../shared/config/urls.ts";
 
-export class ChatWs {
+export class ChatWebsocket {
   private sockets = new Map<ChatId, WebSocket>();
   private heartbeats = new Map<ChatId, number>();
 
@@ -91,12 +91,17 @@ export class ChatWs {
     if (!chatId) return;
     const ws = this.sockets.get(chatId);
 
-    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      console.error("WS is not open");
+      return;
+    }
+
     ws.send(JSON.stringify({ type: "message", content }));
   }
 
   private setMessages(chatId: ChatId, messages: ChatMessage[]) {
     const all = Store.getState().api.chats.messagesByChatId || {};
+
     Store.set("api.chats.messagesByChatId", { ...all, [chatId]: messages });
   }
 

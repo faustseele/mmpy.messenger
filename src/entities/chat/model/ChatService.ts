@@ -6,10 +6,10 @@ import {
   GetChatsQuery,
 } from "../../../shared/api/model/types.ts";
 import ChatAPI from "../api/ChatAPI.ts";
-import { ChatWs } from "../lib/ChatWs.ts";
+import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
 
 class ChatService {
-  private ws = new ChatWs();
+  private ws = new ChatWebsocket();
 
   public async fetchChats(query?: GetChatsQuery) {
     try {
@@ -65,7 +65,7 @@ class ChatService {
     }
   }
 
-    public async addUsers(chatId: ChatId, users: number[]) {
+  public async addUsers(chatId: ChatId, users: number[]) {
     try {
       await ChatAPI.addUsers({ chatId, users });
     } catch (e) {
@@ -90,6 +90,9 @@ class ChatService {
     }
   }
 
+  public sendMessage(content: string) {
+    this.ws.sendMessage(content);
+  }
 }
 
 export default new ChatService();

@@ -39,24 +39,24 @@ export class SettingsPage extends Page<SettingsProps> {
     const logout = buttonLogout.runtime?.instance as Button;
 
     /* --- avatar --- */
-    this._handleAvatarChange();
+    this._wireAvatar();
 
     /* --- vivifying inputs --- */
-    const validator = this._handleInputs();
+    const validator = this._vivifyInputs();
 
     /* --- setting events --- */
     heading.setProps({
       on: { click: () => Router.go(RouteLink.Messenger) },
     });
-    this._setButtonEvents(editInfo, editPassword, logout, validator);
+    this._wireButtonEvents(editInfo, editPassword, logout, validator);
   }
 
   public componentDidRender(): void {
     /* re-binding avatar change event */
-    this._handleAvatarChange();
+    this._wireAvatar();
   }
 
-  private _setButtonEvents(
+  private _wireButtonEvents(
     editInfo: Button,
     editPassword: Button,
     logout: Button,
@@ -82,7 +82,7 @@ export class SettingsPage extends Page<SettingsProps> {
     });
   }
 
-  private _handleAvatarChange(): void {
+  private _wireAvatar(): void {
     const input =
       this.element?.querySelector<HTMLInputElement>("#avatar-input");
     if (!input || input.dataset.bound) return;
@@ -95,7 +95,7 @@ export class SettingsPage extends Page<SettingsProps> {
     input.dataset.bound = "true";
   }
 
-  private _handleInputs(): FormValidator {
+  private _vivifyInputs(): FormValidator {
     const inputs = getInstances<InputProps, InputEditor>(
       this.children!,
       "inputsEditors",

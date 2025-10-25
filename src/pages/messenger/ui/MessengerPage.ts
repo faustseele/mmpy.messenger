@@ -1,5 +1,8 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
+import Store from "../../../app/providers/store/Store.ts";
+import ChatService from "../../../entities/chat/model/ChatService.ts";
+import { MessageField } from "../../../features/send-message/ui/MessageField.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Heading } from "../../../shared/ui/Heading/Heading.ts";
@@ -20,22 +23,49 @@ export class MessengerPage extends Page<MessengerProps> {
     }
 
     /* --- getting instances --- */
-    const { heading_goToSettings, deleteChatButton } = this.children
-      .nodes as MessengerNodes;
-
+    const { heading_goToSettings, deleteChatButton, messageField } = this
+      .children.nodes as MessengerNodes;
     const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
-    const deleteButton = deleteChatButton.runtime?.instance as Button;
+    const deleteChat = deleteChatButton.runtime?.instance as Button;
+    const form = messageField.runtime?.instance as MessageField;
 
     /* --- setting events --- */
+    this._wireDeleteCurrentChat(deleteChat);
+    this._wireMessageSubmit(form);
     headingToSettings?.setProps({
       on: {
         click: () => Router.go(RouteLink.Settings),
       },
     });
-    deleteButton?.setProps({
+  }
+
+  private _wireMessageSubmit(form: MessageField) {
+    form?.setProps({
       on: {
-        click: () => {
-          Router.go(RouteLink.NotFound);
+        submit: (e: Event) => {
+          e.preventDefault();
+
+          const el = e.target as HTMLFormElement;
+          const input = el.querySelector("input");
+          const text = (input as HTMLInputElement)?.value?.trim();
+
+          if (text) {
+            ChatService.sendMessage(text);
+            (input as HTMLInputElement).value = "";
+          }
+        },
+      },
+    });
+  }
+
+  private _wireDeleteCurrentChat(deleteChat: Button) {
+    deleteChat.setProps({
+      on: {
+        click: async (e: Event) => {
+          e.preventDefault();
+
+          const id = Store.getState().api.chats.activeId;
+          if (id) await ChatService.deleteChat(id);
         },
       },
     });
@@ -55,6 +85,7 @@ export class MessengerPage extends Page<MessengerProps> {
 
     return /*html*/ `
       <aside class="${css.catalogue}">
+      
         <header class="${css.catalogue__head}">
           <div class="${css.catalogue__headings}">
             {{{ ${heading_chats.params.configs.id} }}}
@@ -62,12 +93,15 @@ export class MessengerPage extends Page<MessengerProps> {
           </div>
           {{{ ${searchInput.params.configs.id} }}}
         </header>
+
         <ul class="${css.catalogue__items}">
           {{{ goToChatItems }}}
         </ul>
+        
       </aside>
 
       <main class="${css.chat}">
+      
         <header class="${css.chat__header}">
           <div class="${css.chatParticipant}">
             <img class="${css.chatParticipant__avatar}" src="{{ participantAvatar }}" alt="Participant avatar"/>
@@ -78,9 +112,11 @@ export class MessengerPage extends Page<MessengerProps> {
             <button type="button" class="${css.chatOptions__button}"></button>
           </div>
         </header>
+
         <div class="${css.chat__feed}">
           {{{ messages }}}
         </div>
+
         {{{ ${messageField.params.configs.id} }}}
       </main>
     `;

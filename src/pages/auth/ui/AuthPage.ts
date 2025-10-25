@@ -36,12 +36,12 @@ export class AuthPage extends Page<AuthProps> {
     const formValidator = new FormValidator(inputs);
 
     /* --- setting events --- */
-    this._setSubmitEvent(formValidator);
-    this._setRerouteEvent(reroute);
-    this._setInputsEvents(inputs, formValidator);
+    this._wireSubmit(formValidator);
+    this._wireReroute(reroute);
+    this._vivifyInputs(inputs, formValidator);
   }
 
-  private _setSubmitEvent(formValidator: FormValidator): void {
+  private _wireSubmit(formValidator: FormValidator): void {
     this.setProps({
       on: {
         submit: (e: Event) => formValidator.onFormSubmit(e, this.configs.type),
@@ -50,7 +50,7 @@ export class AuthPage extends Page<AuthProps> {
   }
 
   /* event for the auth-reroute button */
-  private _setRerouteEvent(buttonReroute: Button): void {
+  private _wireReroute(buttonReroute: Button): void {
     buttonReroute.setProps({
       on: {
         click: () =>
@@ -60,7 +60,7 @@ export class AuthPage extends Page<AuthProps> {
   }
 
   /* blur-events for the input fields */
-  private _setInputsEvents(
+  private _vivifyInputs(
     inputs: Input[],
     formValidator: FormValidator,
   ): void {
