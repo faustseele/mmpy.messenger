@@ -35,13 +35,13 @@ export default class FormValidator {
       console.log(logMessages.formIsValid, formData);
 
       if (submitType === "sign-in") {
-        await AuthService.signin({
+        await AuthService.signIn({
           login: formData.login,
           password: formData.password,
         });
         return;
       } else if (submitType === "sign-up") {
-        await AuthService.signup({
+        await AuthService.signUp({
           first_name: formData.name,
           second_name: formData.surname,
           login: formData.login,

@@ -1,13 +1,11 @@
 import { PageNode } from "../../../pages/page/model/types.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import { isEqual, merge } from "./lib/utils.ts";
+import { merge } from "./lib/utils.ts";
 import Store from "./Store.ts";
 import { MapStateToProps } from "./types.ts";
 
-/**
- * bridges Store <-> Page blueprint
- */
+/* bridges Store <-> Page blueprint */
 
 export function connect<P extends BaseProps, C extends Page<P>>(
   initNode: PageNode<P, C>,
@@ -30,23 +28,27 @@ export function connect<P extends BaseProps, C extends Page<P>>(
   }
 
   function handlePatch() {
-    const patch = mapStateToProps(Store.getState());
+    const state = Store.getState();
+    const patch = mapStateToProps(state);
     const patchedParams = merge(initNode.params, patch);
 
-    if (!isEqual(initNode.params, patchedParams)) {
-      resNode.runtime?.instance.setProps(patchedParams);
-    }
+    console.log(patchedParams, state);
+    resNode.runtime?.instance.setProps(patchedParams);
   }
 
+  /* initial patch on connect */
   handlePatch();
 
   /* on Store changes */
-  const unsubscribe = () =>
-    Store.on("updated", () => {
-      handlePatch();
-    });
+  const onStoreUpdated = () => {
+    handlePatch();
+  };
+  Store.on("updated", onStoreUpdated);
 
-  resNode.runtime?.instance.bus.on("flow:component-did-unmount", unsubscribe);
+  /* cleans up subscription on page unmount */
+  resNode.runtime?.instance.bus.on("flow:component-did-unmount", () => {
+    Store.off("updated", onStoreUpdated);
+  });
 
   if (!resNode.runtime) {
     console.error(resNode, initNode);

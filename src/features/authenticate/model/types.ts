@@ -1,4 +1,4 @@
-/* From POST /auth/signup */
+/* From POST /auth/signUp */
 export interface SignUpRequest {
   first_name: string;
   second_name: string;
@@ -8,12 +8,12 @@ export interface SignUpRequest {
   phone: string;
 }
 
-/* From POST /auth/signup */
+/* From POST /auth/signUp */
 export interface SignUpResponse {
   id: number;
 }
 
-/* From POST /auth/signin */
+/* From POST /auth/signIn */
 export interface SignInRequest {
   login: string;
   password: string;

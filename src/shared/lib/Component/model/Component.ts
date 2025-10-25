@@ -204,6 +204,7 @@ export default abstract class Component<P extends BaseProps> {
   /** invokes Proxy-setters */
   public setProps(patch: ComponentPatch<P>): void {
     if (!patch) return;
+    Object.assign(this._configs, patch.configs);
     const { configs, attributes, on, children } = patch;
     if (configs) Object.assign(this._configs, configs);
     if (attributes) Object.assign(this._attrs!, attributes);

@@ -39,9 +39,7 @@ export const getInputProps = (
       ...configs,
     },
     attributes: {
-      className: cx(
-        `${cssInput.inputLabelWrap} ${configs.isSearch ? cssInput.input_search : ""}`,
-      ),
+      className: cx(`${cssInput.inputLabelWrap}`),
       for: configs.fieldId,
     },
   };

@@ -5,40 +5,53 @@ import AuthAPI from "../api/AuthAPI.ts";
 import { SignUpRequest, SignInRequest } from "./types.ts";
 
 class AuthService {
-  public async signup(data: SignUpRequest) {
+  public async signUp(data: SignUpRequest) {
     try {
-      const resSignup = await AuthAPI.signup(data);
-      const user = await AuthAPI.request();
-      Store.set("auth.user", user);
-      Store.set("controllers.isLoggedIn", true);
+      const resSignUp = await AuthAPI.signUp(data);
+      const user = await AuthAPI.requestUser();
+      Store.set("api.auth.user", user);
+      if (user) {
+        Store.set("controllers.isLoggedIn", true);
+      } else {
+        Store.set("controllers.isLoggedIn", false);
+      }
 
-      console.log(resSignup, user, Store.getState());
       Router.go(RouteLink.Messenger);
+      console.log(resSignUp, user, Store.getState());
     } catch (e) {
-      console.error("Signup failed:", e);
+      console.error("SignUp failed:", e);
     }
   }
 
-  public async signin(data: SignInRequest) {
+  public async signIn(data: SignInRequest) {
     try {
-      const resSignin = await AuthAPI.signin(data);
-      const user = await AuthAPI.request();
-      Store.set("auth.user", user);
-      Store.set("controllers.isLoggedIn", true);
+      const resSignIn = await AuthAPI.signIn(data);
+      const user = await AuthAPI.requestUser();
+      Store.set("api.auth.user", user);
+      if (user) {
+        Store.set("controllers.isLoggedIn", true);
+      } else {
+        Store.set("controllers.isLoggedIn", false);
+      }
 
-      console.log(resSignin, user, Store.getState());
       Router.go(RouteLink.Messenger);
+      console.log(resSignIn, user, Store.getState());
     } catch (e) {
-      console.error("Signin failed:", e);
+      console.error("SignIn failed:", e);
     }
   }
 
   public async fetchUser() {
     try {
-      const user = await AuthAPI.request();
-      Store.set("auth.user", user);
-      Store.set("controllers.isLoggedIn", true);
-      console.log(user);
+      const user = await AuthAPI.requestUser();
+      Store.set("api.auth.user", user);
+      if (user) {
+        Store.set("controllers.isLoggedIn", true);
+        console.log(user);
+      } else {
+        Store.set("controllers.isLoggedIn", false);
+      }
+
     } catch (e) {
       console.error("Fetch user failed:", e);
     }
@@ -47,11 +60,11 @@ class AuthService {
   public async logout() {
     try {
       const res = await AuthAPI.logout();
-      Store.set("auth.user", null);
+      Store.set("api.auth.user", null);
       Store.set("controllers.isLoggedIn", false);
 
-      console.log(res, Store.getState());
       Router.go(RouteLink.SignIn);
+      console.log(res, Store.getState());
     } catch (e) {
       console.error("Logout failed:", e);
     }

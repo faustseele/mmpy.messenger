@@ -5,15 +5,15 @@ import { SignUpRequest, SignInRequest, UserResponse } from "../model/types.ts";
 const authAPIInstance = new HTTPTransport("/auth");
 
 class AuthAPI extends BaseAPI {
-  public signup(data: SignUpRequest): Promise<{ id: number }> {
-    return authAPIInstance.post("/signup", { data }) as Promise<{ id: number }>;
+  public signUp(data: SignUpRequest): Promise<{ id: number }> {
+    return authAPIInstance.post("/signUp", { data }) as Promise<{ id: number }>;
   }
 
-  public signin(data: SignInRequest): Promise<string> {
-    return authAPIInstance.post("/signin", { data }) as Promise<string>;
+  public signIn(data: SignInRequest): Promise<string> {
+    return authAPIInstance.post("/signIn", { data }) as Promise<string>;
   }
 
-  public request(): Promise<UserResponse> {
+  public requestUser(): Promise<UserResponse> {
     return authAPIInstance.get("/user") as Promise<UserResponse>;
   }
 
