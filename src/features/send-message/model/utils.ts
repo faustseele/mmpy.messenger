@@ -4,6 +4,7 @@ import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { MessageField } from "../ui/MessageField.ts";
 import { MessageFieldConfigs, MessageFieldProps } from "./types.ts";
+import css from "../ui/messageField.module.css";
 
 export const createMessageField: ComponentFactory<MessageFieldProps, MessageField> = (
   params: ComponentParams<MessageFieldProps>
@@ -31,7 +32,7 @@ export const getMessageFieldParams = (
       ...configs,
     },
     attributes: {
-      className: "form",
+      className: css.messageField,
     },
   };
 };

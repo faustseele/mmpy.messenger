@@ -1,8 +1,7 @@
 .heading {
  margin: 0;
  padding: 0;
- 
- border-bottom: 1px transparent;
+  border: none;
 }
 
 .heading__text {

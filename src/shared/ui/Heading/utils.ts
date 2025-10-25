@@ -35,7 +35,7 @@ export const getHeadingProps = (
     },
     attributes: {
       className: cx(
-        `${css.heading} ${configs.isClickable ? css.heading__text_clickable : ""} ${configs.isDrama ? css.heading__text_drama : ""}`,
+        `${css.heading}`,
       ),
     },
   };

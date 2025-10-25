@@ -5,6 +5,7 @@ import {
 import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
+import { cx } from "../../lib/helpers/formatting/classnames.ts";
 import cssInput from "./input.module.css";
 import { Input } from "./Input.ts";
 import { InputConfigs, InputProps } from "./types.ts";
@@ -13,7 +14,11 @@ export const buildInput: ComponentFactory<InputProps, Input> = (
   params: ComponentParams<InputProps>,
 ): Input => {
   const deps: ComponentDeps<InputProps> = {
-    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
+    domService: new DOMService(
+      params.configs.id,
+      params.configs.tagName,
+      params.attributes,
+    ),
     fragmentService: new FragmentService(),
   };
 
@@ -34,7 +39,9 @@ export const getInputProps = (
       ...configs,
     },
     attributes: {
-      className: cssInput.inputLabelWrap,
+      className: cx(
+        `${cssInput.inputLabelWrap} ${configs.isSearch ? cssInput.input_search : ""}`,
+      ),
       for: configs.fieldId,
     },
   };
