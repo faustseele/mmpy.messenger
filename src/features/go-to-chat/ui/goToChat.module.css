@@ -29,13 +29,12 @@
   background-color: var(--color-item-bg);
 }
 
-.catalogueItem__content {
+.goToChat__content {
   flex: 1; 
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   row-gap: 2px;
 }
 
@@ -63,7 +62,7 @@
   color: var(--color-content-dark);
 }
 
-.catalogueItem__infoBox {
+.goToChat__infoBox {
   flex: 0 0 auto;
 
   height: 100%;

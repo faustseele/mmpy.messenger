@@ -1,6 +1,7 @@
 import { PageNode } from "../../../pages/page/model/types.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { ComponentPatch } from "../../../shared/lib/Component/model/types.ts";
 import { getProjection } from "./lib/patch.ts";
 import { isEqual, merge } from "./lib/utils.ts";
 import Store from "./Store.ts";
@@ -28,6 +29,31 @@ export function connect<P extends BaseProps, C extends Page<P>>(
     connectedNode = blueprint as any;
   }
 
+  function patchChildren(patch: ComponentPatch<P>) {
+    const patched = patch.children?.nodes;
+    const existing = connectedNode.params.children?.nodes;
+
+    if (patched) {
+      Object.keys(patched).forEach((nodeId) => {
+        const exists = existing?.[nodeId]?.runtime?.instance;
+        if (!exists) {
+          try {
+            /* due to deep-partial any is used here */
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const factory = patched[nodeId]?.factory as any;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const params = patched[nodeId]?.params as any;
+            patched[nodeId]!.runtime = {
+              instance: factory(params),
+            };
+          } catch (err) {
+            console.error("connect: failed to instantiate child", nodeId, err);
+          }
+        }
+      });
+    }
+  }
+
   function handlePatch() {
     const state = Store.getState();
     const patch = mapStateToProps(state);
@@ -36,7 +62,10 @@ export function connect<P extends BaseProps, C extends Page<P>>(
 
     if (!isEqual(projection, patch)) {
       // console.log(projection?.configs?.profileName, patch?.configs?.profileName);
+
+      // patchChildren(patch);
       const patchedParams = merge(connectedNode.params, patch);
+      // console.log(patchedParams);
       connectedNode.runtime?.instance.setProps(patchedParams);
     }
   }

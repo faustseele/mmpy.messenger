@@ -1,3 +1,4 @@
+import { ChatId, ISODateString } from "../../../shared/api/model/types.ts";
 import {
   BaseConfigs,
   BaseProps,
@@ -13,6 +14,7 @@ export interface GoToChatConfigs extends BaseConfigs {
   avatar: string;
   userName: string;
   contentText: string;
-  date: string;
+  date: ISODateString;
+  chatId: ChatId
   unreadCount?: number;
 }

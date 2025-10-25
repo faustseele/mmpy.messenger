@@ -1,6 +1,16 @@
+import defaultAvatar from "../../../../static/avatar.png";
 import { AppState } from "../../../app/providers/store/Store.ts";
+import ChatService from "../../../entities/chat/model/ChatService.ts";
+import { getGoToChatNodeWithInstance } from "../../../features/go-to-chat/model/utils.ts";
+import { ChatResponse } from "../../../shared/api/model/types.ts";
+import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
+import {
+  ChildrenEdges,
+  ChildrenNodes,
+} from "../../../shared/lib/Component/model/children.types.ts";
 import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
   ComponentPatch,
@@ -20,7 +30,11 @@ export const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   }
 
   const deps: ComponentDeps<MessengerProps> = {
-    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
+    domService: new DOMService(
+      params.configs.id,
+      params.configs.tagName,
+      params.attributes,
+    ),
     fragmentService: new FragmentService(),
   };
 
@@ -38,8 +52,85 @@ export const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   });
 };
 
+function buildCatalogueNodes(apiChats: ChatResponse[]): {
+  goToChatNodes: ChildrenNodes;
+  goToChatEdge: ChildrenEdges;
+} {
+  const goToChatNodes: ChildrenNodes = {};
+  /* single edge for goToChat items-list {{{ goToChatItems }}} */
+  const goToChatEdge: ChildrenEdges = {
+    goToChatItems: [],
+  };
+
+  const goToChatItems = goToChatEdge.goToChatItems as ComponentId[];
+
+  apiChats.forEach((apiChat) => {
+    const id = `goToChatItem_${apiChat.id}`;
+    goToChatItems.push(id);
+
+    const avatar = apiChat.avatar
+      ? `${API_URL_RESOURCES}${apiChat.avatar}`
+      : "";
+    const lastMsg = apiChat.last_message;
+    const contentText = lastMsg?.content ?? "";
+    const date = lastMsg?.time ?? "";
+    const unreadCount = apiChat.unread_count;
+
+    const goToChatNode = getGoToChatNodeWithInstance(
+      {
+        id,
+        avatar,
+        userName: apiChat.title,
+        contentText,
+        date,
+        unreadCount,
+        chatId: apiChat.id,
+      },
+      {
+        click: () => ChatService.selectChat(apiChat.id),
+      },
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    goToChatNodes[id] = goToChatNode as any;
+  });
+
+  return { goToChatNodes, goToChatEdge };
+}
+
 export const mapMessengerState = (
-  _state: AppState,
-): ComponentPatch<MessengerProps> => ({
-  configs: {},
-});
+  state: AppState,
+): ComponentPatch<MessengerProps> => {
+  const { currentChat, list } = state.api.chats;
+
+  const headPatch = {
+    participantName: currentChat?.title ?? "Loading..",
+    participantAvatar: currentChat?.avatar
+      ? `${API_URL_RESOURCES}${currentChat.avatar}`
+      : defaultAvatar,
+  };
+
+  const goToChatNodesPatch = buildCatalogueNodes(list ?? []);
+
+  if (!goToChatNodesPatch.goToChatNodes) {
+    console.error("goToChatNodesPatch is not defined");
+  }
+
+  const { goToChatNodes, goToChatEdge } = goToChatNodesPatch;
+
+  console.log(goToChatNodesPatch)
+
+  return {
+    configs: {
+      ...headPatch,
+    },
+    children: {
+      nodes: {
+        ...goToChatNodes,
+      },
+      edges: {
+        ...goToChatEdge,
+      },
+    },
+  };
+};

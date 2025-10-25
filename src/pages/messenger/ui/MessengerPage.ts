@@ -25,6 +25,9 @@ export class MessengerPage extends Page<MessengerProps> {
       throw new Error("MessengerPage: Children are not defined");
     }
 
+    /* --- api-check 4 chats --- */
+    if (!Store.getState().api.chats.list) ChatService.fetchChats();
+
     /* --- getting instances --- */
     const { heading_goToSettings, deleteChatButton, messageField } = this
       .children.nodes as MessengerNodes;
@@ -41,9 +44,6 @@ export class MessengerPage extends Page<MessengerProps> {
       },
     });
     this._wireCatalogueClicks();
-
-    /* --- api-check --- */
-    if (!Store.getState().api.chats.list) ChatService.fetchChats();
   }
 
   private _wireMessageSubmit(form: MessageField) {

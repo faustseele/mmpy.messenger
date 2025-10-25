@@ -10,7 +10,7 @@ import {
   getMessageParams,
 } from "../../../entities/message-bubble/model/utils.ts";
 import {
-  createGoToChat,
+  buildGoToChat,
   getGoToChatParams,
 } from "../../../features/go-to-chat/model/utils.ts";
 import {
@@ -99,10 +99,11 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
           avatar: participantAvatar,
           userName: "Андрей",
           contentText: "Привет! Это демо-чат.",
+          chatId: -1111,
           date: "10:25",
           unreadCount: 2,
         }),
-        factory: createGoToChat as any,
+        factory: buildGoToChat as any,
       },
       // A couple of demo messages
       message_1: {

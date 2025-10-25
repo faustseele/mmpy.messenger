@@ -12,15 +12,15 @@ export class GoToChat extends Component<GoToChatProps> {
     return /*html*/ `
       <img class="${css.avatar}" alt="User's avatar from catalogue" src="{{ avatar }}" />
 
-      <div class="${css.catalogueItem__content}">
-        <p class="${css.userName}">{{ last_message.user.first_name }}</p>
-        <p class="${css.contentText}">{{ last_message.content }}</p>
+      <div class="${css.goToChat__content}">
+        <p class="${css.userName}">{{ userName }}</p>
+        <p class="${css.contentText}">{{ contentText }}</p>
       </div>
 
-      <div class="${css.catalogueItem__infoBox}">
-        <p class="${css.infoBoxText}">{{ last_message.time }}</p>
+      <div class="${css.goToChat__infoBox}">
+        <p class="${css.infoBoxText}">{{ date }}</p>
         {{#if unread_count }}
-          <p class="${css.infoBoxText} ${css.infoBoxText_unread}">{{ unread_count }}</p>
+          <p class="${css.infoBoxText} ${css.infoBoxText_unread}">{{ unreadCount }}</p>
         {{/if}}
       </div>
     `;

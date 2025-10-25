@@ -13,7 +13,7 @@ import { GoToChatProps } from "../../../features/go-to-chat/model/types.ts";
 import catalogueCss from "../../../features/go-to-chat/ui/goToChat.module.css";
 import {
   GoToChat,
-  createGoToChat,
+  buildGoToChat,
 } from "../../../features/go-to-chat/ui/GoToChat.ts";
 import { MessageFieldProps } from "../../../features/send-message/model/types.ts";
 import messageFieldCss from "../../../features/send-message/ui/messageField.module.css";
@@ -295,7 +295,7 @@ const chatSchema: MessengerSchema = {
     },
     catalogueItems: {
       init: chatCatalogueInit,
-      factory: createGoToChat,
+      factory: buildGoToChat,
       instanceType: goToChatListInstance,
     },
   },
