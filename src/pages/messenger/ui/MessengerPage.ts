@@ -43,7 +43,6 @@ export class MessengerPage extends Page<MessengerProps> {
         click: () => Router.go(RouteLink.Settings),
       },
     });
-    this._wireCatalogueClicks();
   }
 
   private _wireMessageSubmit(form: MessageField) {
@@ -76,22 +75,6 @@ export class MessengerPage extends Page<MessengerProps> {
         },
       },
     });
-  }
-
-  private _wireCatalogueClicks() {
-    const goTos = getInstances<GoToChatProps, GoToChat>(
-      this.children!,
-      "goToChatItems",
-    );
-    goTos.forEach((goTo) => {
-      const chatId = (goTo.configs as { chat_id?: number }).chat_id;
-
-      if (!chatId) return;
-
-      goTo.setProps({ on: { click: () => ChatService.selectChat(chatId) } });
-    });
-
-    this.bus.on("flow:render", this._wireCatalogueClicks.bind(this));
   }
 
   public getSourceMarkup(): string {

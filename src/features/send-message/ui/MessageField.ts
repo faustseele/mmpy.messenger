@@ -18,6 +18,7 @@ export class MessageField extends Component<MessageFieldProps> {
         id="{{id}}"
         placeholder="{{placeholder}}"
         aria-label="{{label}}"
+        autocomplete="off"
       />
       <button type="submit" class="${css.inputButton} ${css.sendButton}" aria-label="Send message"></button>
     `;
