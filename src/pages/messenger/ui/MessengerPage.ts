@@ -32,13 +32,14 @@ export class MessengerPage extends Page<MessengerProps> {
     const {
       heading_goToSettings,
       addChatButton,
-      newChatInput,
+      addUserButton,
       deleteChatButton,
       closeChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
     const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
     const addChat = addChatButton.runtime?.instance as Button;
+    const addUser = addUserButton.runtime?.instance as Button;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
     const closeChat = closeChatButton.runtime?.instance as Button;
     const form = messageField.runtime?.instance as MessageField;
@@ -46,11 +47,24 @@ export class MessengerPage extends Page<MessengerProps> {
     /* --- setting events --- */
     this._wireMessageSubmit(form);
     this._wireAddChat(addChat);
+    this._wireAddUser(addUser);
     this._wireDeleteCurrentChat(deleteChat);
     this._wireCloseChat(closeChat);
     headingToSettings?.setProps({
       on: {
         click: () => Router.go(RouteLink.Settings),
+      },
+    });
+  }
+
+  private _wireAddUser(addUser: Button) {
+    addUser?.setProps({
+      on: {
+        click: () => {
+          const input = window.prompt("Логин пользователя:", "");
+          if (input === null) return;
+
+        },
       },
     });
   }
@@ -118,9 +132,10 @@ export class MessengerPage extends Page<MessengerProps> {
       heading_chats,
       heading_goToSettings,
       searchInput,
+      addChatButton,
+      addUserButton,
       deleteChatButton,
       closeChatButton,
-      addChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
 
@@ -154,6 +169,7 @@ export class MessengerPage extends Page<MessengerProps> {
                 {{{ ${deleteChatButton.params.configs.id} }}}
                 {{{ ${closeChatButton.params.configs.id} }}}
             {{~else}}
+              {{{ ${addUserButton.params.configs.id} }}}
               {{{ ${addChatButton.params.configs.id} }}}
             {{/if}}
           </div>

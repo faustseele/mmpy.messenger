@@ -1,5 +1,6 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
+import Store from "../../../app/providers/store/Store.ts";
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
 import UserService from "../../../features/edit-profile/model/UserService.ts";
 import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
@@ -43,6 +44,8 @@ export class SettingsPage extends Page<SettingsProps> {
 
     /* --- vivifying inputs --- */
     const validator = this._vivifyInputs();
+    /* sets placeholders for inputs from user-res */
+    this._hydrateInputPlaceholders();
 
     /* --- setting events --- */
     heading.setProps({
@@ -54,6 +57,48 @@ export class SettingsPage extends Page<SettingsProps> {
   public componentDidRender(): void {
     /* re-binding avatar change event */
     this._wireAvatar();
+  }
+
+  private _hydrateInputPlaceholders(): void {
+    const user = Store.getState().api.auth.user;
+    if (!user || !this.children) return;
+
+    const inputs = getInstances<InputProps, InputEditor>(
+      this.children,
+      "inputsEditors",
+    );
+
+    inputs.forEach((input) => {
+      const field = input.configs.fieldId;
+
+      let placeholder: string | null = null;
+      switch (field) {
+        case "email":
+          placeholder = user.email;
+          break;
+        case "name":
+          placeholder = user.first_name;
+          break;
+        case "surname":
+          placeholder = user.second_name;
+          break;
+        case "login":
+          placeholder = user.login;
+          break;
+        case "display_name":
+          placeholder = user.display_name;
+          break;
+        case "phone":
+          placeholder = user.phone;
+          break;
+        default:
+          placeholder = null;
+      }
+
+      if (placeholder !== null) {
+        input.setProps({ configs: { placeholder } });
+      }
+    });
   }
 
   private _wireButtonEvents(

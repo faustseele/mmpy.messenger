@@ -93,6 +93,13 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
         }),
         factory: buildButton as any,
       },
+      addUserButton: {
+        params: getButtonProps({
+          id: "addUserButton",
+          label: "Добавить пользователя 👤",
+        }),
+        factory: buildButton as any,
+      },
       messageField: {
         params: getMessageFieldParams({
           id: "messageField",
@@ -109,6 +116,7 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       deleteChatButton: "deleteChatButton",
       closeChatButton: "closeChatButton",
       addChatButton: "addChatButton",
+      addUserButton: "addUserButton",
       messageField: "messageField",
       goToChatItems: [],
       messages: [],

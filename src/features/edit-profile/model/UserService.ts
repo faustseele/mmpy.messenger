@@ -38,6 +38,8 @@ class UserService {
       console.error("Avatar update failed:", e);
     }
   }
+
+  
 }
 
 export default new UserService();
