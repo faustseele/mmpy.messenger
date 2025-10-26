@@ -20,8 +20,8 @@ export type MessengerMap =
   | "closeChatButton"
   | "addChatButton"
   | "newChatInput"
-  | "messageField"
+  | "goToChatItems"
   | "messages"
-  | "goToChatItems";
+  | "messageField"
 
 export type MessengerNodes = ChildrenNodes<MessengerMap>;

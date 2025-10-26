@@ -9,6 +9,7 @@ import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { Input } from "../../../shared/ui/Input/Input.ts";
 import { Page } from "../../page/ui/Page.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
+import { getNewChatPlaceholder } from "../model/utils.ts";
 import css from "./messenger.module.css";
 
 export class MessengerPage extends Page<MessengerProps> {
@@ -67,6 +68,7 @@ export class MessengerPage extends Page<MessengerProps> {
           ChatService.createChat(title);
 
           input.cleanInput()
+          input.setProps({ configs: { placeholder: getNewChatPlaceholder() }})
         },
       },
     });

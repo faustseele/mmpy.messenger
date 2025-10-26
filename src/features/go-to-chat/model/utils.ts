@@ -8,7 +8,7 @@ import {
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
-import { tinyDate } from "../../../shared/lib/helpers/formatting/string.ts";
+import { tinyDate } from "../../../shared/lib/helpers/formatting/date.ts";
 import { GoToChat } from "../ui/GoToChat.ts";
 import css from "../ui/goToChat.module.css";
 import { GoToChatConfigs, GoToChatProps } from "./types.ts";

@@ -6,14 +6,6 @@ import {
 } from "../../../app/providers/router/types.ts";
 import { connect } from "../../../app/providers/store/connect.ts";
 import {
-  createMessage,
-  getMessageParams,
-} from "../../../entities/message-bubble/model/utils.ts";
-import {
-  buildGoToChat,
-  getGoToChatParams,
-} from "../../../features/go-to-chat/model/utils.ts";
-import {
   createMessageField,
   getMessageFieldParams,
 } from "../../../features/send-message/model/utils.ts";
@@ -32,7 +24,7 @@ import { PageId } from "../../page/config/const.ts";
 import { PageNode } from "../../page/model/types.ts";
 import cssPage from "../../page/ui/page.module.css";
 import { MessengerProps } from "../model/types.ts";
-import { buildMessengerPage, mapMessengerState } from "../model/utils.ts";
+import { buildMessengerPage, getNewChatPlaceholder, mapMessengerState } from "../model/utils.ts";
 import { MessengerPage } from "../ui/MessengerPage.ts";
 import cssMessenger from "../ui/messenger.module.css";
 
@@ -107,7 +99,7 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
           fieldId: "name",
           label: "Новый чат",
           type: "text",
-          placeholder: `Чат № ${getChatNumber()}`,
+          placeholder: getNewChatPlaceholder(),
         }),
         factory: buildInput as any,
       },
@@ -119,37 +111,6 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
         }),
         factory: createMessageField as any,
       },
-      goToChatItem_1: {
-        params: getGoToChatParams({
-          id: "goToChatItem_1",
-          avatar: participantAvatar,
-          userName: "Андрей",
-          contentText: "Привет! Это демо-чат.",
-          chatId: -1111,
-          date: "10:25",
-          unreadCount: 2,
-        }),
-        factory: buildGoToChat as any,
-      },
-      // A couple of demo messages
-      message_1: {
-        params: getMessageParams({
-          id: "message_1",
-          text: "Привет! Это демо-чат.",
-          date: "10:25",
-          type: "incoming",
-        }),
-        factory: createMessage as any,
-      },
-      message_2: {
-        params: getMessageParams({
-          id: "message_2",
-          text: "Всё отлично!",
-          date: "10:26",
-          type: "outgoing",
-        }),
-        factory: createMessage as any,
-      },
     },
     edges: {
       heading_chats: "heading_chats",
@@ -160,8 +121,8 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       addChatButton: "addChatButton",
       newChatInput: "newChatInput",
       messageField: "messageField",
-      goToChatItems: ["goToChatItem_1"],
-      messages: ["message_1", "message_2"],
+      goToChatItems: [],
+      messages: [],
     },
   },
 };

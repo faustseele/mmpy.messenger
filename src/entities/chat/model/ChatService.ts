@@ -56,6 +56,7 @@ class ChatService {
     try {
       const resChat = await ChatAPI.createChat({ title });
       const resChats = await this.fetchChats();
+      this.selectChat(resChat.id);
 
       console.log(`chat ${title} create success !:`, resChat, resChats);
     } catch (e) {
