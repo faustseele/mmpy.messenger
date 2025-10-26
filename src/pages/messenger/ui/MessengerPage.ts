@@ -29,11 +29,12 @@ export class MessengerPage extends Page<MessengerProps> {
     }
 
     /* --- getting instances --- */
-    const { heading_goToSettings, deleteChatButton, messageField } = this
+    const { heading_goToSettings, deleteChatButton, closeChatButton, messageField } = this
       .children.nodes as MessengerNodes;
     const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
     const form = messageField.runtime?.instance as MessageField;
+    const closeChat = closeChatButton.runtime?.instance as Button;
 
     /* --- setting events --- */
     this._wireDeleteCurrentChat(deleteChat);
@@ -43,11 +44,11 @@ export class MessengerPage extends Page<MessengerProps> {
         click: () => Router.go(RouteLink.Settings),
       },
     });
-  }
-
-  public componentDidRender(): void {
-    const options = this.element?.querySelector(`.${css.chatOptions__button}`) as HTMLButtonElement;
-    options?.addEventListener("click", () => ChatService.deselectChat());
+    closeChat?.setProps({
+      on: {
+        click: () => ChatService.deselectChat(),
+      },
+    });
   }
 
   private _wireMessageSubmit(form: MessageField) {
@@ -91,6 +92,7 @@ export class MessengerPage extends Page<MessengerProps> {
       heading_goToSettings,
       searchInput,
       deleteChatButton,
+      closeChatButton,
       addChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
@@ -123,7 +125,7 @@ export class MessengerPage extends Page<MessengerProps> {
           {{~#if participantName}}
             <div class="${css.chatOptions}">
               {{{ ${deleteChatButton.params.configs.id} }}}
-              <button type="button" class="${css.chatOptions__button}"></button>
+              {{{ ${closeChatButton.params.configs.id} }}}
             </div>
           {{~else}}
             {{{ ${addChatButton.params.configs.id} }}}
@@ -136,7 +138,9 @@ export class MessengerPage extends Page<MessengerProps> {
           {{/if}}
         </div>
 
-        {{{ ${messageField.params.configs.id} }}}
+        {{#if participantName}}
+          {{{ ${messageField.params.configs.id} }}}
+        {{/if}}
       </main>
     `;
   }

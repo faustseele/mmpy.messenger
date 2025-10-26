@@ -79,9 +79,17 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       deleteChatButton: {
         params: getButtonProps({
           id: "deleteChatButton",
-          label: "Удалить чат 🔥",
+          label: "Удалить 🔥",
           isSilent: true,
           link: RouteLink.NotFound,
+        }),
+        factory: buildButton as any,
+      },
+      closeChatButton: {
+        params: getButtonProps({
+          id: "closeChatButton",
+          label: "Закрыть ❌",
+          isSilent: true,
         }),
         factory: buildButton as any,
       },
@@ -137,6 +145,7 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       heading_goToSettings: "heading_goToSettings",
       searchInput: "searchInput",
       deleteChatButton: "deleteChatButton",
+      closeChatButton: "closeChatButton",
       addChatButton: "addChatButton",
       messageField: "messageField",
       goToChatItems: ["goToChatItem_1"],

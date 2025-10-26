@@ -110,9 +110,10 @@ class ChatService {
   }
 
   public deselectChat() {
-    console.log("deselect chat");
     Store.set("api.chats.activeId", null);
     Store.set("api.chats.currentChat", null);
+
+    console.log("deselect chat");
   }
 }
 

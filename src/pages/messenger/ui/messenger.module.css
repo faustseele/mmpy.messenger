@@ -113,9 +113,11 @@
 .chatParticipant__name {
   font-family: inherit;
   font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   line-height: 18px;
 
-  color: var(--color-content-light);
+  color: var(--color-content-darkest);
 }
 
 .chatOptions {

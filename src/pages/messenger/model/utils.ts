@@ -118,13 +118,11 @@ export const mapMessengerState = (
 
   const goToChatNodesPatch = buildCatalogueNodes(list ?? []);
 
-  console.log(goToChatNodesPatch);
-
   if (!goToChatNodesPatch.goToChatNodes) {
     console.error("goToChatNodesPatch is not defined");
   }
 
-  /* removes phantom empty-body-<li> els */
+  /* temp-fix: removes phantom empty-body-<li> els */
   goToChatNodesPatch.goToChatEdge["goToChatItems"] = Array.from(
     new Set(goToChatNodesPatch.goToChatEdge["goToChatItems"]),
   );
