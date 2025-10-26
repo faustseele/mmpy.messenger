@@ -1,5 +1,5 @@
 #### Project *middle.messenger.praktikum.yandex*
-- **Tech-Stack**
+**Tech-Stack**
 - Runs on: TypeScript + Handlebars + XHR
 - Styles: PostCSS + CSS-Modules
 - Code Style by: ESLint (Standard), Stylelint
