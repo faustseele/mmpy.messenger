@@ -18,6 +18,7 @@ import {
   getMessageFieldParams,
 } from "../../../features/send-message/model/utils.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
+import { getChatNumber } from "../../../shared/lib/helpers/formatting/string.ts";
 import {
   buildButton,
   getButtonProps,
@@ -100,6 +101,16 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
         }),
         factory: buildButton as any,
       },
+      newChatInput: {
+        params: getInputProps({
+          id: "newChatInput",
+          fieldId: "name",
+          label: "Новый чат",
+          type: "text",
+          placeholder: `Чат № ${getChatNumber()}`,
+        }),
+        factory: buildInput as any,
+      },
       messageField: {
         params: getMessageFieldParams({
           id: "messageField",
@@ -147,6 +158,7 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       deleteChatButton: "deleteChatButton",
       closeChatButton: "closeChatButton",
       addChatButton: "addChatButton",
+      newChatInput: "newChatInput",
       messageField: "messageField",
       goToChatItems: ["goToChatItem_1"],
       messages: ["message_1", "message_2"],

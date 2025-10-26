@@ -47,7 +47,7 @@ class ChatService {
       const resChat = await ChatAPI.createChat({ title });
       const resChats = await this.fetchChats();
 
-      console.log("chat create success !:", resChat, resChats);
+      console.log(`chat ${title} create success !:`, resChat, resChats);
     } catch (e) {
       console.error("chat create failed:", e);
     }

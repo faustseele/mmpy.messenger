@@ -26,6 +26,7 @@ label:-webkit-autofill:active {
 
 .inputLabelWrap {
   width: 100%;
+  min-width: 120px;
   position: relative;
 }
 

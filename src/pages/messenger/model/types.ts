@@ -19,6 +19,7 @@ export type MessengerMap =
   | "deleteChatButton"
   | "closeChatButton"
   | "addChatButton"
+  | "newChatInput"
   | "messageField"
   | "messages"
   | "goToChatItems";

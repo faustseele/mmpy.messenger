@@ -124,6 +124,9 @@
   display: flex;
   align-items: center;
   column-gap: 4px;
+
+  width: min-content;
+
   opacity: 0.8;
 }
 
