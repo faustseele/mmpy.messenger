@@ -9,7 +9,7 @@ export type ErrorCodeType = "404" | "500";
 
 export interface ErrorProps extends BaseProps {
   configs: {
-    id: PageId.Error;
+    id: PageId.Error404 | PageId.Error500;
     tagName: Extract<TagNameType, "div">;
     code: ErrorCodeType;
   };
