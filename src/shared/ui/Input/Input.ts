@@ -32,8 +32,6 @@ export class Input extends Component<InputProps> {
       return { name: "", value: "" };
     }
 
-    console.log(this.input);
-
     return { name: this.input.name as FieldType, value: this.input.value };
   }
 
