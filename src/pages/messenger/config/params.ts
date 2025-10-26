@@ -10,7 +10,6 @@ import {
   getMessageFieldParams,
 } from "../../../features/send-message/model/utils.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
-import { getChatNumber } from "../../../shared/lib/helpers/formatting/string.ts";
 import {
   buildButton,
   getButtonProps,
@@ -23,8 +22,9 @@ import { buildInput, getInputProps } from "../../../shared/ui/Input/utils.ts";
 import { PageId } from "../../page/config/const.ts";
 import { PageNode } from "../../page/model/types.ts";
 import cssPage from "../../page/ui/page.module.css";
+import { mapMessengerState } from "../model/map.ts";
 import { MessengerProps } from "../model/types.ts";
-import { buildMessengerPage, getNewChatPlaceholder, mapMessengerState } from "../model/utils.ts";
+import { buildMessengerPage, getNewChatPlaceholder } from "../model/utils.ts";
 import { MessengerPage } from "../ui/MessengerPage.ts";
 import cssMessenger from "../ui/messenger.module.css";
 

@@ -33,7 +33,11 @@ class ChatService {
       store_lastChatId(chatId);
 
       const list = Store.getState().api.chats.list;
-      const current = list?.find((c: ChatResponse) => c.id === chatId) ?? null;
+      
+      /* evading api.chats.list mutation */
+      const currentRaw =
+        list?.find((c: ChatResponse) => c.id === chatId) ?? null;
+      const current = currentRaw ? structuredClone(currentRaw) : null;
       Store.set("api.chats.currentChat", current);
 
       const user = Store.getState().api.auth.user;

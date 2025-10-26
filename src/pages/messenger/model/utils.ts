@@ -1,5 +1,4 @@
-import defaultAvatar from "../../../../static/avatar.png";
-import Store, { AppState } from "../../../app/providers/store/Store.ts";
+import Store from "../../../app/providers/store/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
 import {
   createMessage,
@@ -16,8 +15,7 @@ import {
   ComponentDeps,
   ComponentId,
   ComponentNode,
-  ComponentParams,
-  ComponentPatch,
+  ComponentParams
 } from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
@@ -62,7 +60,7 @@ export const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   });
 };
 
-function buildCatalogueNodes(apiChats: ChatResponse[]): {
+export function buildCatalogueNodes(apiChats: ChatResponse[]): {
   goToChatNodes: ChildrenNodes;
   goToChatEdge: ChildrenEdges;
 } {
@@ -104,10 +102,12 @@ function buildCatalogueNodes(apiChats: ChatResponse[]): {
     goToChatNodes[id] = goToChatNode as any;
   });
 
+  //  console.log(apiChats)
+
   return { goToChatNodes, goToChatEdge };
 }
 
-function buildMessageNodes(): {
+export function buildMessageNodes(): {
   messageNodes: ChildrenNodes;
   messageEdge: ChildrenEdges;
 } {
@@ -146,52 +146,3 @@ function buildMessageNodes(): {
 
   return { messageNodes, messageEdge };
 }
-
-export const mapMessengerState = (
-  state: AppState,
-): ComponentPatch<MessengerProps> => {
-  const { currentChat, list } = state.api.chats;
-
-  const avatar = currentChat
-    ? currentChat.avatar
-      ? `${API_URL_RESOURCES}${currentChat.avatar}`
-      : defaultAvatar
-    : "";
-
-  const headPatch = {
-    participantName: currentChat?.title ?? "",
-    participantAvatar: avatar,
-  };
-
-  const goToChatNodesPatch = buildCatalogueNodes(list ?? []);
-
-  const messageNodesPatch = buildMessageNodes();
-
-  if (!goToChatNodesPatch.goToChatNodes) {
-    console.error("goToChatNodesPatch is not defined");
-  }
-
-  /* temp-fix: removes phantom empty-body-<li> els */
-  goToChatNodesPatch.goToChatEdge["goToChatItems"] = Array.from(
-    new Set(goToChatNodesPatch.goToChatEdge["goToChatItems"]),
-  );
-
-  const { goToChatNodes, goToChatEdge } = goToChatNodesPatch;
-  const { messageNodes, messageEdge } = messageNodesPatch;
-
-  return {
-    configs: {
-      ...headPatch,
-    },
-    children: {
-      nodes: {
-        ...goToChatNodes,
-        ...messageNodes,
-      },
-      edges: {
-        ...goToChatEdge,
-        ...messageEdge,
-      },
-    },
-  };
-};
