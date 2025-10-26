@@ -5,6 +5,7 @@ import {
   ChatUsersQuery,
   GetChatsQuery,
 } from "../../../shared/api/model/types.ts";
+import { store_lastChatId } from "../../../shared/lib/LocalStorage/chats.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
 
@@ -15,7 +16,11 @@ class ChatService {
     try {
       const list = await ChatAPI.getChats(query);
       Store.set("api.chats.list", list);
-      
+
+      /* auto-restore last active chat */
+      const last = Number(localStorage.getItem("lastActiveChatId"));
+      if (last && list?.some((chat) => chat.id === last)) this.selectChat(last);
+
       console.log("chats fetch success !:", list);
     } catch (e) {
       console.error("chats fetch fail:", e);
@@ -25,6 +30,7 @@ class ChatService {
   public async selectChat(chatId: number) {
     try {
       Store.set("api.chats.activeId", chatId);
+      store_lastChatId(chatId);
 
       const list = Store.getState().api.chats.list;
       const current = list?.find((c: ChatResponse) => c.id === chatId) ?? null;
@@ -32,6 +38,10 @@ class ChatService {
 
       const user = Store.getState().api.auth.user;
       if (!user) return;
+
+      /* closing prev socket */
+      const prevId = Store.getState().api.chats.activeId;
+      if (prevId && prevId !== chatId) this.ws.closeWS(prevId);
 
       const { token } = await ChatAPI.getToken(chatId);
       this.ws.openWS(user.id, chatId, token);
@@ -57,7 +67,7 @@ class ChatService {
     try {
       const delRes = await ChatAPI.deleteChat({ chatId });
       this.ws.closeWS(chatId);
-      
+
       console.log("chat delete success !:", delRes);
 
       const { activeId } = Store.getState().api.chats;
@@ -110,6 +120,9 @@ class ChatService {
   }
 
   public deselectChat() {
+    const currId = Store.getState().api.chats.activeId;
+    if (currId) this.ws.closeWS(currId);
+
     Store.set("api.chats.activeId", null);
     Store.set("api.chats.currentChat", null);
 
