@@ -1,19 +1,15 @@
 #### Project
-**Name**: middle.messenger.praktikum.yandex
-
-**Tech-Stack**
-
-Runs on: TypeScript + Handlebars + XHR
-
-Styles: PostCSS + CSS-Modules
-
-Code Style by: ESLint (Standard), Stylelint
-
-Build + Preview: Vite
+- **Name**: middle.messenger.praktikum.yandex
+- **Tech-Stack**
+- Runs on: TypeScript + Handlebars + XHR
+- Styles: PostCSS + CSS-Modules
+- Code Style by: ESLint (Standard), Stylelint
+- Build + Preview: Vite
 
 #### Architecture (одобрено менторами)
 
 **Feature-based** structure (lightweight Feature‑Sliced Design): `src/app`, `src/pages`, `src/features`, `src/entities`, `src/shared`.
+
 Component dependencies (**DI**) are explicit and minimal:
 - DOMService (DOM dependency) creates/updates elements & manages listeners: `src/shared/lib/DOM/DOMService.ts`
 - FragmentService (fragment dependency) compiles Handlebars markup to DocumentFragment & stitches children: `src/shared/lib/Fragment/FragmentService.ts`
