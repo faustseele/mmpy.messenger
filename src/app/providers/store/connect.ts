@@ -44,6 +44,7 @@ export function connect<P extends BaseProps, C extends Page<P>>(
     const existing = connectedNode.params.children?.nodes;
 
     if (patched) {
+      console.log("patchChildren:", patched);
       Object.keys(patched).forEach((nodeId) => {
         const exists = existing?.[nodeId]?.runtime?.instance;
         if (!exists) {

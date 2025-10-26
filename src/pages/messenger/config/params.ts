@@ -24,7 +24,7 @@ import { PageNode } from "../../page/model/types.ts";
 import cssPage from "../../page/ui/page.module.css";
 import { mapMessengerState } from "../model/map.ts";
 import { MessengerProps } from "../model/types.ts";
-import { buildMessengerPage, getNewChatPlaceholder } from "../model/utils.ts";
+import { buildMessengerPage } from "../model/utils.ts";
 import { MessengerPage } from "../ui/MessengerPage.ts";
 import cssMessenger from "../ui/messenger.module.css";
 
@@ -93,16 +93,6 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
         }),
         factory: buildButton as any,
       },
-      newChatInput: {
-        params: getInputProps({
-          id: "newChatInput",
-          fieldId: "name",
-          label: "Новый чат",
-          type: "text",
-          placeholder: getNewChatPlaceholder(),
-        }),
-        factory: buildInput as any,
-      },
       messageField: {
         params: getMessageFieldParams({
           id: "messageField",
@@ -119,7 +109,6 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       deleteChatButton: "deleteChatButton",
       closeChatButton: "closeChatButton",
       addChatButton: "addChatButton",
-      newChatInput: "newChatInput",
       messageField: "messageField",
       goToChatItems: [],
       messages: [],

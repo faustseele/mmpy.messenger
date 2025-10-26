@@ -6,10 +6,8 @@ import { MessageField } from "../../../features/send-message/ui/MessageField.ts"
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Heading } from "../../../shared/ui/Heading/Heading.ts";
-import { Input } from "../../../shared/ui/Input/Input.ts";
 import { Page } from "../../page/ui/Page.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
-import { getNewChatPlaceholder } from "../model/utils.ts";
 import css from "./messenger.module.css";
 
 export class MessengerPage extends Page<MessengerProps> {
@@ -41,14 +39,13 @@ export class MessengerPage extends Page<MessengerProps> {
     } = this.children.nodes as MessengerNodes;
     const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
     const addChat = addChatButton.runtime?.instance as Button;
-    const input = newChatInput.runtime?.instance as Input;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
     const closeChat = closeChatButton.runtime?.instance as Button;
     const form = messageField.runtime?.instance as MessageField;
 
     /* --- setting events --- */
     this._wireMessageSubmit(form);
-    this._wireAddChat(addChat, input);
+    this._wireAddChat(addChat);
     this._wireDeleteCurrentChat(deleteChat);
     this._wireCloseChat(closeChat);
     headingToSettings?.setProps({
@@ -58,17 +55,14 @@ export class MessengerPage extends Page<MessengerProps> {
     });
   }
 
-  private _wireAddChat(addChat: Button, input: Input) {
+  private _wireAddChat(addChat: Button) {
     addChat?.setProps({
       on: {
         click: () => {
-          const { value } = input.getNameAndValue();
-          const title = value ? value : input.configs.placeholder;
+          const input = window.prompt("Название чата:", "");
+          if (input === null) return;
 
-          ChatService.createChat(title);
-
-          input.cleanInput()
-          input.setProps({ configs: { placeholder: getNewChatPlaceholder() }})
+          ChatService.createChat(input.trim());
         },
       },
     });
@@ -127,7 +121,6 @@ export class MessengerPage extends Page<MessengerProps> {
       deleteChatButton,
       closeChatButton,
       addChatButton,
-      newChatInput,
       messageField,
     } = this.children.nodes as MessengerNodes;
 
@@ -162,7 +155,6 @@ export class MessengerPage extends Page<MessengerProps> {
                 {{{ ${closeChatButton.params.configs.id} }}}
             {{~else}}
               {{{ ${addChatButton.params.configs.id} }}}
-              {{{ ${newChatInput.params.configs.id} }}}
             {{/if}}
           </div>
         </header>
