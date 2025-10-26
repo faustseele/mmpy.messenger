@@ -11,9 +11,9 @@ class UserService {
       const updatedUser = await UserAPI.updateProfile(data);
 
       Store.set("api.auth.user", updatedUser);
-      console.log("Profile updated successfully:", updatedUser);
+      console.log("profile update success:", updatedUser);
     } catch (e) {
-      console.error("Profile update failed:", e);
+      console.error("profile update fail:", e);
     }
   }
 
@@ -22,9 +22,9 @@ class UserService {
       const updatedUser = await UserAPI.updatePassword(data);
 
       Store.set("api.auth.user", updatedUser);
-      console.log("Password updated successfully");
+      console.log("psw update success:", updatedUser);
     } catch (e) {
-      console.error("Password update failed:", e);
+      console.error("psw update fail:", e);
     }
   }
 
@@ -33,13 +33,23 @@ class UserService {
       const updatedUser = await UserAPI.updateAvatar(data);
 
       Store.set("api.auth.user", updatedUser);
-      console.log("Avatar updated successfully:", updatedUser);
+      console.log("avatar update success:", updatedUser);
     } catch (e) {
-      console.error("Avatar update failed:", e);
+      console.error("avatar update fail:", e);
     }
   }
 
-  
+  public async findByLogin(login: string): Promise<UserResponse | null> {
+    try {
+      const users = await UserAPI.findUsers({ login });
+      const res = users?.[0] ?? null;
+      console.log("findByLogin success:", res);
+      return res;
+    } catch (e) {
+      console.error("findByLogin fail:", e);
+      return null;
+    }
+  }
 }
 
 export default new UserService();

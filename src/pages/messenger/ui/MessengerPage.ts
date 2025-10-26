@@ -2,6 +2,7 @@ import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
 import Store from "../../../app/providers/store/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
+import UserService from "../../../features/edit-profile/model/UserService.ts";
 import { MessageField } from "../../../features/send-message/ui/MessageField.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
@@ -34,14 +35,16 @@ export class MessengerPage extends Page<MessengerProps> {
       addChatButton,
       addUserButton,
       deleteChatButton,
+      deleteUserButton,
       closeChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
     const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
     const addChat = addChatButton.runtime?.instance as Button;
     const addUser = addUserButton.runtime?.instance as Button;
-    const deleteChat = deleteChatButton.runtime?.instance as Button;
     const closeChat = closeChatButton.runtime?.instance as Button;
+    const deleteChat = deleteChatButton.runtime?.instance as Button;
+    const deleteUser = deleteUserButton.runtime?.instance as Button;
     const form = messageField.runtime?.instance as MessageField;
 
     /* --- setting events --- */
@@ -49,6 +52,7 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireAddChat(addChat);
     this._wireAddUser(addUser);
     this._wireDeleteCurrentChat(deleteChat);
+    this._wireDeleteUser(deleteUser);
     this._wireCloseChat(closeChat);
     headingToSettings?.setProps({
       on: {
@@ -60,10 +64,30 @@ export class MessengerPage extends Page<MessengerProps> {
   private _wireAddUser(addUser: Button) {
     addUser?.setProps({
       on: {
-        click: () => {
+        click: async () => {
           const input = window.prompt("Логин пользователя:", "");
           if (input === null) return;
 
+          const login = input.trim();
+          if (!login) return;
+
+          const chatId = Store.getState().api.chats.activeId;
+          if (!chatId) {
+            console.error("No active chat to add user into");
+            return;
+          }
+
+          const user = await UserService.findByLogin(login);
+          if (!user) {
+            console.error("User not found by login:", login);
+            return;
+          }
+
+          await ChatService.addUsers(chatId, [user.id]);
+          console.log(
+            `User ${user.login} (id=${user.id}) added to chat`,
+            chatId,
+          );
         },
       },
     });
@@ -76,7 +100,10 @@ export class MessengerPage extends Page<MessengerProps> {
           const input = window.prompt("Название чата:", "");
           if (input === null) return;
 
-          ChatService.createChat(input.trim());
+          const title = input.trim();
+          if (!title) return;
+
+          ChatService.createChat(title);
         },
       },
     });
@@ -90,6 +117,25 @@ export class MessengerPage extends Page<MessengerProps> {
 
           const id = Store.getState().api.chats.activeId;
           if (id) await ChatService.deleteChat(id);
+        },
+      },
+    });
+  }
+
+  private _wireDeleteUser(deleteUser: Button) {
+    deleteUser?.setProps({
+      on: {
+        click: async (e: Event) => {
+          e.preventDefault();
+
+          const id = Store.getState().api.chats.activeId;
+          if (!id) return;
+
+          const userId = Store.getState().api.auth.user?.id;
+          if (!userId) return;
+
+          await ChatService.removeUsers(id, [userId]);
+          console.log(`User ${userId} removed from chat ${id}`);
         },
       },
     });
@@ -134,8 +180,9 @@ export class MessengerPage extends Page<MessengerProps> {
       searchInput,
       addChatButton,
       addUserButton,
-      deleteChatButton,
       closeChatButton,
+      deleteChatButton,
+      deleteUserButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
 
@@ -166,10 +213,11 @@ export class MessengerPage extends Page<MessengerProps> {
 
           <div class="${css.chatOptions}">
             {{~#if participantName}}
+                {{{ ${addUserButton.params.configs.id} }}}
+                {{{ ${deleteUserButton.params.configs.id} }}}
                 {{{ ${deleteChatButton.params.configs.id} }}}
                 {{{ ${closeChatButton.params.configs.id} }}}
             {{~else}}
-              {{{ ${addUserButton.params.configs.id} }}}
               {{{ ${addChatButton.params.configs.id} }}}
             {{/if}}
           </div>

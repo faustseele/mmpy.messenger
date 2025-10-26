@@ -37,12 +37,14 @@ export const getButtonProps = ({
   type,
   link,
   isSilent,
+  tooltip,
 }: {
   id: ComponentId;
   label: string;
   type?: "button" | "submit";
   link?: RouteLink;
   isSilent?: boolean;
+  tooltip?: string;
 }): ComponentParams<ButtonProps> => {
   return {
     configs: {
@@ -55,6 +57,7 @@ export const getButtonProps = ({
     attributes: {
       className: `${css.button} ${isSilent ? css.button_silent : ""}`.trim(),
       type: type ?? "button",
+      title: tooltip ?? "",
     },
   };
 };

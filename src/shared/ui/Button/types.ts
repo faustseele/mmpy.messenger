@@ -20,6 +20,7 @@ export interface ButtonConfigs extends BaseConfigs {
 
 export interface ButtonAttributes extends BaseAttributes {
   type?: ButtonType;
+  title?: string;
 }
 
 type ButtonType = "button" | "submit";

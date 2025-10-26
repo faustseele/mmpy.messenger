@@ -69,34 +69,46 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
         }),
         factory: buildInput as any,
       },
-      deleteChatButton: {
-        params: getButtonProps({
-          id: "deleteChatButton",
-          label: "Удалить 🔥",
-          isSilent: true,
-          link: RouteLink.NotFound,
-        }),
-        factory: buildButton as any,
-      },
-      closeChatButton: {
-        params: getButtonProps({
-          id: "closeChatButton",
-          label: "Закрыть ❌",
-          isSilent: true,
-        }),
-        factory: buildButton as any,
-      },
       addChatButton: {
         params: getButtonProps({
           id: "addChatButton",
           label: "Добавить чат 💬",
+          tooltip: "Создать новый чат",
         }),
         factory: buildButton as any,
       },
       addUserButton: {
         params: getButtonProps({
           id: "addUserButton",
-          label: "Добавить пользователя 👤",
+          label: "Добавить 👤",
+          tooltip: "Добавить пользователя",
+        }),
+        factory: buildButton as any,
+      },
+      closeChatButton: {
+        params: getButtonProps({
+          id: "closeChatButton",
+          label: "❌",
+          isSilent: true,
+          tooltip: "Закрыть чат",
+        }),
+        factory: buildButton as any,
+      },
+      deleteChatButton: {
+        params: getButtonProps({
+          id: "deleteChatButton",
+          label: "Удалить 💬",
+          isSilent: true,
+          tooltip: "Удалить чат",
+        }),
+        factory: buildButton as any,
+      },
+      deleteUserButton: {
+        params: getButtonProps({
+          id: "deleteUserButton",
+          label: "Удалить 👤",
+          isSilent: true,
+          tooltip: "Удалить пользователя",
         }),
         factory: buildButton as any,
       },
@@ -113,10 +125,11 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       heading_chats: "heading_chats",
       heading_goToSettings: "heading_goToSettings",
       searchInput: "searchInput",
-      deleteChatButton: "deleteChatButton",
-      closeChatButton: "closeChatButton",
       addChatButton: "addChatButton",
       addUserButton: "addUserButton",
+      closeChatButton: "closeChatButton",
+      deleteUserButton: "deleteUserButton",
+      deleteChatButton: "deleteChatButton",
       messageField: "messageField",
       goToChatItems: [],
       messages: [],
