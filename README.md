@@ -20,7 +20,7 @@ Component dependencies (**DI**) are explicit and minimal:
 **The link**: https://dynamic-smakager-a6d4a4.netlify.app
 
 ### How to run
-```bash
+```bash 
 npm install
 ```
 ```bash
