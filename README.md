@@ -1,5 +1,4 @@
-#### Project
-- **Name**: middle.messenger.praktikum.yandex
+#### Project *middle.messenger.praktikum.yandex*
 - **Tech-Stack**
 - Runs on: TypeScript + Handlebars + XHR
 - Styles: PostCSS + CSS-Modules
