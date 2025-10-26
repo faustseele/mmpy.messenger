@@ -14,6 +14,12 @@
 
   background-color: var(--color-panel-light);
   border-right: var(--color-universal-br) 1px solid;
+
+  overflow-y: scroll;
+}
+
+.catalogue::-webkit-scrollbar {
+  width: 0;
 }
 
 .catalogue__head {

@@ -104,8 +104,6 @@ export function buildCatalogueNodes(apiChats: ChatResponse[]): {
     goToChatNodes[id] = goToChatNode as any;
   });
 
-  //  console.log(apiChats)
-
   return { goToChatNodes, goToChatEdge };
 }
 

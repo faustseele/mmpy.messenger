@@ -1,5 +1,6 @@
 import Component from "../../lib/Component/model/Component.ts";
 import { ComponentProps } from "../../lib/Component/model/types.ts";
+import { setTextSafe } from "../../lib/security/sanitize.ts";
 import css from "./input.module.css";
 import { FieldType, InputProps } from "./types.ts";
 
@@ -55,7 +56,7 @@ export class Input extends Component<InputProps> {
       return;
     }
 
-    this.errorLabel.textContent = message;
+    setTextSafe(this.errorLabel, message);
     this.errorLabel.style.display = "block";
     this.input.classList.add("class", css.input_error);
   }

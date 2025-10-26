@@ -80,8 +80,8 @@ export default class Route<
         return;
       }
 
-      /* Ensuring the root is clean before appending the new Page */
-      root.innerHTML = "";
+      /* keeps root clean before appending new pg */
+      root.textContent = "";
 
       root.append(element);
     }
