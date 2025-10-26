@@ -20,6 +20,10 @@
   border-color: var(--color-universal-br-active);
 }
 
+.goToChat:focus {
+  border-color: var(--color-universal-br-active);
+}
+
 .avatar {
   width: 34px;
   height: 34px;

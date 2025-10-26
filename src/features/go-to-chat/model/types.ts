@@ -1,5 +1,6 @@
 import { ChatId, ISODateString } from "../../../shared/api/model/types.ts";
 import {
+  BaseAttributes,
   BaseConfigs,
   BaseProps,
 } from "../../../shared/lib/Component/model/base.types.ts";
@@ -7,6 +8,7 @@ import { TagNameType } from "../../../shared/lib/DOM/types.ts";
 
 export interface GoToChatProps extends BaseProps {
   configs: GoToChatConfigs;
+  attributes?: GoToChatAttributes;
 }
 
 export interface GoToChatConfigs extends BaseConfigs {
@@ -17,4 +19,8 @@ export interface GoToChatConfigs extends BaseConfigs {
   date: ISODateString;
   chatId: ChatId
   unreadCount?: number;
+}
+
+export interface GoToChatAttributes extends BaseAttributes {
+  tabindex: string;
 }

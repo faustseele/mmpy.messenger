@@ -15,7 +15,7 @@ import {
   ComponentDeps,
   ComponentId,
   ComponentNode,
-  ComponentParams
+  ComponentParams,
 } from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
@@ -94,7 +94,9 @@ export function buildCatalogueNodes(apiChats: ChatResponse[]): {
         chatId: apiChat.id,
       },
       {
-        click: () => ChatService.selectChat(apiChat.id),
+        click: () => {
+          ChatService.selectChat(apiChat.id);
+        },
       },
     );
 

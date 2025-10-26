@@ -55,6 +55,7 @@ export const getGoToChatParams = (
     },
     attributes: {
       className: css.goToChat,
+      tabindex: "0"
     },
     on: {
       ...on,
