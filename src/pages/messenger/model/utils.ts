@@ -62,6 +62,8 @@ function buildCatalogueNodes(apiChats: ChatResponse[]): {
     goToChatItems: [],
   };
 
+  // console.log(apiChats)
+
   const goToChatItems = goToChatEdge.goToChatItems as ComponentId[];
 
   apiChats.forEach((apiChat) => {
@@ -103,18 +105,29 @@ export const mapMessengerState = (
 ): ComponentPatch<MessengerProps> => {
   const { currentChat, list } = state.api.chats;
 
-  const headPatch = {
-    participantName: currentChat?.title ?? "Loading..",
-    participantAvatar: currentChat?.avatar
+  const avatar = currentChat
+    ? currentChat.avatar
       ? `${API_URL_RESOURCES}${currentChat.avatar}`
-      : defaultAvatar,
+      : defaultAvatar
+    : "";
+
+  const headPatch = {
+    participantName: currentChat?.title ?? "",
+    participantAvatar: avatar,
   };
 
   const goToChatNodesPatch = buildCatalogueNodes(list ?? []);
 
+  console.log(goToChatNodesPatch);
+
   if (!goToChatNodesPatch.goToChatNodes) {
     console.error("goToChatNodesPatch is not defined");
   }
+
+  /* removes phantom empty-body-<li> els */
+  goToChatNodesPatch.goToChatEdge["goToChatItems"] = Array.from(
+    new Set(goToChatNodesPatch.goToChatEdge["goToChatItems"]),
+  );
 
   const { goToChatNodes, goToChatEdge } = goToChatNodesPatch;
 

@@ -17,6 +17,7 @@ export type MessengerMap =
   | "heading_goToSettings"
   | "searchInput"
   | "deleteChatButton"
+  | "addChatButton"
   | "messageField"
   | "messages"
   | "goToChatItems";

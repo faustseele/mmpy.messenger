@@ -91,7 +91,7 @@ export function connect<P extends BaseProps, C extends Page<P>>(
   connectedNode.runtime?.instance.bus.on("flow:component-did-unmount", () => {
     /* cleans up subscription on page unmount */
     Store.off("updated", onStoreUpdated);
-    
+
     /* marks __disposed so next connect() recreates instance lazily */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (connectedNode as any).__disposed = true;

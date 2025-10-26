@@ -13,7 +13,7 @@ export class Heading extends Component<HeadingProps> {
         {{#if isClickable}}
           <a class="${css.heading__text}
             ${css.heading__text_clickable}"">
-            {{ text }}
+            {{text}}
           </a>
 
         {{else}}
@@ -23,7 +23,7 @@ export class Heading extends Component<HeadingProps> {
               ${css.heading__text_drama}
             {{/if}}">
             
-            {{ text }}
+            {{text}}
           </p>
         {{/if}}
       `;

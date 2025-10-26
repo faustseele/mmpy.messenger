@@ -45,6 +45,11 @@ export class MessengerPage extends Page<MessengerProps> {
     });
   }
 
+  public componentDidRender(): void {
+    const options = this.element?.querySelector(`.${css.chatOptions__button}`) as HTMLButtonElement;
+    options?.addEventListener("click", () => ChatService.deselectChat());
+  }
+
   private _wireMessageSubmit(form: MessageField) {
     form?.setProps({
       on: {
@@ -86,6 +91,7 @@ export class MessengerPage extends Page<MessengerProps> {
       heading_goToSettings,
       searchInput,
       deleteChatButton,
+      addChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
 
@@ -108,17 +114,26 @@ export class MessengerPage extends Page<MessengerProps> {
       <main class="${css.chat}">
         <header class="${css.chat__header}">
           <div class="${css.chatParticipant}">
-            <img class="${css.chatParticipant__avatar}" src="{{ participantAvatar }}" alt="Participant avatar"/>
+            {{#if participantAvatar}}
+              <img class="${css.chatParticipant__avatar}" src="{{ participantAvatar }}" alt="Participant avatar"/>
+            {{/if}}
             <p class="${css.chatParticipant__name}">{{ participantName }}</p>
           </div>
-          <div class="${css.chatOptions}">
-            {{{ ${deleteChatButton.params.configs.id} }}}
-            <button type="button" class="${css.chatOptions__button}"></button>
-          </div>
+
+          {{~#if participantName}}
+            <div class="${css.chatOptions}">
+              {{{ ${deleteChatButton.params.configs.id} }}}
+              <button type="button" class="${css.chatOptions__button}"></button>
+            </div>
+          {{~else}}
+            {{{ ${addChatButton.params.configs.id} }}}
+          {{/if}}
         </header>
 
         <div class="${css.chat__feed}">
-          {{{ messages }}}
+          {{#if participantName}}
+            {{{ messages }}}
+          {{/if}}
         </div>
 
         {{{ ${messageField.params.configs.id} }}}

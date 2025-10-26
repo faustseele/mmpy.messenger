@@ -123,7 +123,7 @@ export default class FragmentService<C extends BaseConfigs> {
 
       if (placeholder && childElement) {
         placeholder.replaceWith(childElement);
-      } else {
+      } /* else {
         console.error(
           `FragmentService Error: Could not replace child placeholder.
           Child ID: ${node.params.configs.id}.
@@ -132,7 +132,7 @@ export default class FragmentService<C extends BaseConfigs> {
           DocumentFragment content:`,
           fragment,
         );
-      }
+      } */
     }
 
     return fragment;

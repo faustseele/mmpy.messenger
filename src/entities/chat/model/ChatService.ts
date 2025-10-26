@@ -108,6 +108,12 @@ class ChatService {
   public sendMessage(content: string) {
     this.ws.sendMessage(content);
   }
+
+  public deselectChat() {
+    console.log("deselect chat");
+    Store.set("api.chats.activeId", null);
+    Store.set("api.chats.currentChat", null);
+  }
 }
 
 export default new ChatService();

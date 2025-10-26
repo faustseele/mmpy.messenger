@@ -40,7 +40,7 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
     id: PageId.Messenger,
     tagName: "div",
     participantAvatar,
-    participantName: "Андрей",
+    participantName: "",
   } as any,
   attributes: {
     className: `${cssPage.moduleWindow} ${cssMessenger.moduleWindow_messenger}`,
@@ -79,9 +79,16 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       deleteChatButton: {
         params: getButtonProps({
           id: "deleteChatButton",
-          label: "Удалить чат",
+          label: "Удалить чат 🔥",
           isSilent: true,
           link: RouteLink.NotFound,
+        }),
+        factory: buildButton as any,
+      },
+      addChatButton: {
+        params: getButtonProps({
+          id: "addChatButton",
+          label: "Добавить чат 💬",
         }),
         factory: buildButton as any,
       },
@@ -130,6 +137,7 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
       heading_goToSettings: "heading_goToSettings",
       searchInput: "searchInput",
       deleteChatButton: "deleteChatButton",
+      addChatButton: "addChatButton",
       messageField: "messageField",
       goToChatItems: ["goToChatItem_1"],
       messages: ["message_1", "message_2"],
