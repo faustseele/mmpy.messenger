@@ -21,16 +21,16 @@ export const rootQuery = "#app";
 
 Router
   /* SignIn route */
-  .use(signInRouteConfig, () => createAuthPage_signIn)
+  .use(signInRouteConfig, createAuthPage_signIn)
   /* SignUp route */
-  .use(signUpRouteConfig, () => createAuthPage_signUp)
+  .use(signUpRouteConfig, createAuthPage_signUp)
   /* Messenger route */
-  .use(messengerPageRouteConfig, () => createMessengerPage)
+  .use(messengerPageRouteConfig, createMessengerPage)
   /* Settings route */
-  .use(settingsPageRouteConfig, () => createSettingsPage)
+  .use(settingsPageRouteConfig, createSettingsPage)
   /* NotFound route */
-  .use(errorRouteConfig_404, () => createErrorPage_404)
+  .use(errorRouteConfig_404, createErrorPage_404)
   /* Error route */
-  .use(errorRouteConfig_500, () => createErrorPage_500);
+  .use(errorRouteConfig_500, createErrorPage_500);
 
 Router.start(rootQuery);

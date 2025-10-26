@@ -2,11 +2,8 @@ import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
 import Store from "../../../app/providers/store/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
-import { GoToChatProps } from "../../../features/go-to-chat/model/types.ts";
-import { GoToChat } from "../../../features/go-to-chat/ui/GoToChat.ts";
 import { MessageField } from "../../../features/send-message/ui/MessageField.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
-import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { Page } from "../../page/ui/Page.ts";
@@ -26,7 +23,10 @@ export class MessengerPage extends Page<MessengerProps> {
     }
 
     /* --- api-check 4 chats --- */
-    if (!Store.getState().api.chats.list) ChatService.fetchChats();
+    if (!Store.getState().api.chats.list) {
+      console.log("MessengerPage: fetching chats");
+      ChatService.fetchChats();
+    }
 
     /* --- getting instances --- */
     const { heading_goToSettings, deleteChatButton, messageField } = this

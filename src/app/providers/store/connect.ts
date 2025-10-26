@@ -8,25 +8,35 @@ import Store from "./Store.ts";
 import { MapStateToProps } from "./types.ts";
 
 /* bridges Store <-> Page blueprint */
-
 export function connect<P extends BaseProps, C extends Page<P>>(
   blueprint: PageNode<P, C>,
   mapStateToProps: MapStateToProps<P>,
 ): C {
-  /* on initial Page connection */
   const id = blueprint.params.configs.id;
-  const pageIsNew = !Store.getState().pageNodes[id];
-  let connectedNode = Store.getState().pageNodes[id];
-  if (pageIsNew) {
-    /* creates instance */
+  const nodeInStore = Store.getState().pageNodes[id];
+
+  /* working-node from now-on */
+  let connectedNode = nodeInStore;
+
+  if (!nodeInStore) {
+    /* on initial Page connection */
     blueprint.runtime = { instance: blueprint.factory(blueprint.params) };
-    /* appends new blueprint to the Store */
+
+    /* registers new page-node */
     Store.set("pageNodes", {
       ...Store.getState().pageNodes,
       [id]: blueprint,
     });
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     connectedNode = blueprint as any;
+  } else if ((nodeInStore as { __disposed?: boolean }).__disposed) {
+    /* recreates instance after prior unmount */
+    nodeInStore.runtime = { instance: nodeInStore.factory(nodeInStore.params) };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (nodeInStore as any).__disposed = false;
+    connectedNode = nodeInStore;
   }
 
   function patchChildren(patch: ComponentPatch<P>) {
@@ -57,15 +67,14 @@ export function connect<P extends BaseProps, C extends Page<P>>(
   function handlePatch() {
     const state = Store.getState();
     const patch = mapStateToProps(state);
+
     /* projection -> only patch-realted props from connectedNode.params */
     const projection = getProjection(connectedNode.params, patch);
 
     if (!isEqual(projection, patch)) {
-      // console.log(projection?.configs?.profileName, patch?.configs?.profileName);
+      patchChildren(patch);
 
-      // patchChildren(patch);
       const patchedParams = merge(connectedNode.params, patch);
-      // console.log(patchedParams);
       connectedNode.runtime?.instance.setProps(patchedParams);
     }
   }
@@ -79,9 +88,13 @@ export function connect<P extends BaseProps, C extends Page<P>>(
   };
   Store.on("updated", onStoreUpdated);
 
-  /* cleans up subscription on page unmount */
   connectedNode.runtime?.instance.bus.on("flow:component-did-unmount", () => {
+    /* cleans up subscription on page unmount */
     Store.off("updated", onStoreUpdated);
+    
+    /* marks __disposed so next connect() recreates instance lazily */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (connectedNode as any).__disposed = true;
   });
 
   if (!connectedNode.runtime) {

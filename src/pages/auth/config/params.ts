@@ -218,5 +218,5 @@ export const signInRouteConfig: RouteConfigs = {
   params: {},
 };
 
-export const createAuthPage_signIn = connect(authPageNode_in, mapAuthState);
-export const createAuthPage_signUp = connect(authPageNode_up, mapAuthState);
+export const createAuthPage_signIn = () => connect(authPageNode_in, mapAuthState);
+export const createAuthPage_signUp = () => connect(authPageNode_up, mapAuthState);

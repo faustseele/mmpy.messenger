@@ -9,6 +9,8 @@ export abstract class Page<Props extends BaseProps> extends Component<Props> {
     super(props);
 
     this.pageParams = {};
+
+    console.log(this);
   }
 
   public componentDidMount(): void {

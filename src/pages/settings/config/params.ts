@@ -180,4 +180,5 @@ export const settingsPageRouteConfig: RouteConfigs = {
   params: {},
 };
 
-export const createSettingsPage = connect(settingsPageNode, mapSettingsState);
+export const createSettingsPage = () =>
+  connect(settingsPageNode, mapSettingsState);

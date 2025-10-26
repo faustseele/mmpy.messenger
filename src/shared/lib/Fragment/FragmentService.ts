@@ -32,7 +32,7 @@ export default class FragmentService<C extends BaseConfigs> {
     configs: C,
     children: ChildGraph,
   ): DocumentFragment {
-    /* creates <div id="random UUID"></div>.. placeholders for children */
+    /* creates <li id="random UUID"></li>.. placeholders for children */
     const divPlaceholders = this._createDivPlaceholders(children);
 
     /**
@@ -48,12 +48,12 @@ export default class FragmentService<C extends BaseConfigs> {
       ...configs,
     });
 
-    /* creates a DocumentFragment <div> children placeholders */
+    /* creates a DocumentFragment <li> children placeholders */
     const fragmentWithPlaceholders = this._createFragmentFromString(
       compiledSourceMarkupWithPlaceholders,
     );
 
-    /* swappes <div> children placeholders with corresponding Elements*/
+    /* swappes <li> children placeholders with corresponding Elements*/
     const fragmentWithElements = this._replacePlaceholdersInFragment(
       fragmentWithPlaceholders,
       children,
@@ -63,8 +63,8 @@ export default class FragmentService<C extends BaseConfigs> {
   }
 
   /**
-   * generates an obj with either one div-placeholder '<tag></tag>' by key
-   * or a concatenated list of div-placeholders <tags> by key.
+   * generates an obj with either one li-placeholder '<tag></tag>' by key
+   * or a concatenated list of li-placeholders <tags> by key.
    */
   private _createDivPlaceholders(graph: ChildGraph): Record<string, string> {
     const divPlaceholders: Record<string, string> = {};
@@ -73,12 +73,12 @@ export default class FragmentService<C extends BaseConfigs> {
       if (Array.isArray(graph.edges[edge])) {
         /* sets placeholder for each child -> placeholdersList[] */
         const placeholdersList = graph.edges[edge].map(
-          (id) => `<div data-id="${id}"></div>`,
+          (id) => `<li data-id="${id}"></li>`,
         );
         /* concatenates placeholdersList[] into one string */
         divPlaceholders[edge] = placeholdersList.join("");
       } else {
-        divPlaceholders[edge] = `<div data-id="${edge}"></div>`;
+        divPlaceholders[edge] = `<li data-id="${edge}"></li>`;
       }
     });
 

@@ -149,7 +149,5 @@ export const messengerPageRouteConfig: RouteConfigs = {
   params: {},
 };
 
-export const createMessengerPage = connect(
-  messengerPageNode,
-  mapMessengerState,
-);
+export const createMessengerPage = () =>
+  connect(messengerPageNode, mapMessengerState);

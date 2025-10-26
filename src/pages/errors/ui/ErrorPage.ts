@@ -47,5 +47,5 @@ export class ErrorPage extends Page<ErrorProps> {
   }
 }
 
-export const createErrorPage_404 = buildErrorPage(errorPageParams_404);
-export const createErrorPage_500 = buildErrorPage(errorPageParams_500);
+export const createErrorPage_404 = () => buildErrorPage(errorPageParams_404);
+export const createErrorPage_500 = () => buildErrorPage(errorPageParams_500);
