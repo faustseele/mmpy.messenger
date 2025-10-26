@@ -1,12 +1,11 @@
-#### Project *middle.messenger.praktikum.yandex*
+### Project *middle.messenger.praktikum.yandex*
 **Tech-Stack**
 - Runs on: TypeScript + Handlebars + XHR
 - Styles: PostCSS + CSS-Modules
 - Code Style by: ESLint (Standard), Stylelint
 - Build + Preview: Vite
 
-#### Architecture (одобрено менторами)
-
+### Architecture (одобрено менторами)
 **Feature-based** structure (lightweight Feature‑Sliced Design): `src/app`, `src/pages`, `src/features`, `src/entities`, `src/shared`.
 
 Component dependencies (**DI**) are explicit and minimal:
@@ -17,10 +16,10 @@ Component dependencies (**DI**) are explicit and minimal:
 - Factory helpers: `src/shared/lib/helpers/factory/functions.ts`
 - Usage with page blueprints and lazy instantiation: `src/app/providers/store/connect.ts`
 
-#### Deployed at Netlify
+### Deployed at Netlify
 **The link**: https://dynamic-smakager-a6d4a4.netlify.app
 
-#### How to run
+### How to run
 ```bash
 npm install
 ```
