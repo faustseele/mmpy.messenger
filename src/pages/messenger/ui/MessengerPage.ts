@@ -66,7 +66,6 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireAvatar();
   }
 
-
   private _wireAddUser(addUser: Button) {
     addUser?.setProps({
       on: {
@@ -134,14 +133,27 @@ export class MessengerPage extends Page<MessengerProps> {
         click: async (e: Event) => {
           e.preventDefault();
 
-          const id = Store.getState().api.chats.activeId;
-          if (!id) return;
+          const chatId = Store.getState().api.chats.activeId;
+          if (!chatId) {
+            console.error("No active chat to remove user from");
+            return;
+          }
 
-          const userId = Store.getState().api.auth.user?.id;
-          if (!userId) return;
+          const usersInChat = (await ChatService.getUsers(chatId)).filter(
+            (user) => user.id !== Store.getState().api.auth.user?.id,
+          );
 
-          await ChatService.removeUsers(id, [userId]);
-          console.log(`User ${userId} removed from chat ${id}`);
+          const usersString = usersInChat
+            .map((user) => `• ${user.login} – id: ${user.id}`)
+            .join("\n");
+
+          console.log(usersInChat);
+
+          const userId = window.prompt(`Кого удалить?\n\n${usersString}`, "");
+          if (!userId || isNaN(Number(userId))) return;
+
+          await ChatService.removeUsers(chatId, [Number(userId)]);
+          console.log(`User ${userId} removed from chat ${chatId}`);
         },
       },
     });
@@ -162,7 +174,7 @@ export class MessengerPage extends Page<MessengerProps> {
       this.element?.querySelector<HTMLInputElement>("#avatar-input-chat");
 
     if (!input || input.dataset.bound) return;
-    
+
     input.addEventListener("change", async () => {
       const id = Store.getState().api.chats.activeId;
 
@@ -235,6 +247,7 @@ export class MessengerPage extends Page<MessengerProps> {
         <header class="${css.chat__header}">
           <div class="${css.chatParticipant}">
 
+          {{#if participantName}}
             <label for="avatar-input-chat" class="${css.avatarContainer}">
               <img class="${css.avatar}" src="{{ participantAvatar }}" alt="Participant avatar"  />
               <div class="${css.avatarOverlay}">
@@ -242,6 +255,7 @@ export class MessengerPage extends Page<MessengerProps> {
               </div>
             </label>
             <input id="avatar-input-chat" type="file" name="avatar" class="${css.avatarFileInput}" />
+            {{/if}}
 
             <p class="${css.chatParticipant__name}">{{ participantName }}</p>
           </div>

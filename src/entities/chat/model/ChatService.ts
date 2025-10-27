@@ -73,7 +73,7 @@ class ChatService {
       const updatedChat = await ChatAPI.updateChatAvatar(chatId, avatar);
 
       console.log("chat avatar update success:", updatedChat);
-      
+
       this.fetchChats();
     } catch (e) {
       console.error("chat avatar update fail:", e);
@@ -108,10 +108,9 @@ class ChatService {
     try {
       const res = await ChatAPI.removeUsers({ chatId, users });
 
-      await this.fetchChats();
       console.log("users-remove success:", res);
 
-      this.deselectChat();
+      await this.fetchChats();
     } catch (e) {
       console.error("users-remove failed:", e);
     }
