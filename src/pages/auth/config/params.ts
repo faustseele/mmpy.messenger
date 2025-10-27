@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RouteConfigs, RouteLink } from "../../../app/providers/router/types.ts";
+import {
+  RouteConfigs,
+  RouteLink,
+} from "../../../app/providers/router/types.ts";
 import { connect } from "../../../app/providers/store/connect.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
-import {
-  buildButton,
-  getButtonProps,
-} from "../../../shared/ui/Button/utils.ts";
-import {
-  buildHeading,
-  getHeadingProps,
-} from "../../../shared/ui/Heading/utils.ts";
-import { buildInput, getInputProps } from "../../../shared/ui/Input/utils.ts";
+import { getButtonNode } from "../../../shared/ui/Button/utils.ts";
+import { getHeadingNode } from "../../../shared/ui/Heading/utils.ts";
+import { getInputNode } from "../../../shared/ui/Input/utils.ts";
 import { PageId } from "../../page/config/const.ts";
 import { PageNode } from "../../page/model/types.ts";
 import cssPage from "../../page/ui/page.module.css";
@@ -27,80 +24,66 @@ const iptIds = [
   "input-phone",
 ];
 
-const iptIds_in = ["input-login", "input-password"];
-
-const factory = buildInput as any;
-
 const inputNodes_up = {
-  [iptIds[0]]: {
-    params: getInputProps({
-      id: iptIds[0],
-      fieldId: "name",
-      label: "Имя",
-      type: "text",
-      placeholder: "Иван",
-    }),
-    factory,
-  },
-  [iptIds[1]]: {
-    params: getInputProps({
-      id: iptIds[1],
-      fieldId: "surname",
-      label: "Фамилия",
-      type: "text",
-      placeholder: "Фамилия",
-    }),
-    factory,
-  },
-  [iptIds[2]]: {
-    params: getInputProps({
-      id: iptIds[2],
-      fieldId: "login",
-      label: "Логин",
-      type: "text",
-      placeholder: "Логин",
-    }),
-    factory,
-  },
-  [iptIds[3]]: {
-    params: getInputProps({
-      id: iptIds[3],
-      fieldId: "email",
-      label: "Эл. почта",
-      type: "email",
-      placeholder: "Эл. почта",
-    }),
-    factory,
-  },
-  [iptIds[4]]: {
-    params: getInputProps({
-      id: iptIds[4],
-      fieldId: "password",
-      label: "Пароль",
-      type: "password",
-      placeholder: "Пароль",
-    }),
-    factory,
-  },
-  [iptIds[5]]: {
-    params: getInputProps({
-      id: iptIds[5],
-      fieldId: "phone",
-      label: "Телефон",
-      type: "tel",
-      placeholder: "Телефон",
-    }),
-    factory,
-  },
+  [iptIds[0]]: getInputNode({
+    id: iptIds[0],
+    fieldId: "name",
+    label: "Имя",
+    type: "text",
+    placeholder: "Имя",
+  }),
+  [iptIds[1]]: getInputNode({
+    id: iptIds[1],
+    fieldId: "surname",
+    label: "Фамилия",
+    type: "text",
+    placeholder: "Фамилия",
+  }),
+  [iptIds[2]]: getInputNode({
+    id: iptIds[2],
+    fieldId: "login",
+    label: "Логин",
+    type: "text",
+    placeholder: "Логин",
+  }),
+  [iptIds[3]]: getInputNode({
+    id: iptIds[3],
+    fieldId: "email",
+    label: "Эл. почта",
+    type: "email",
+    placeholder: "Эл. почта",
+  }),
+  [iptIds[4]]: getInputNode({
+    id: iptIds[4],
+    fieldId: "password",
+    label: "Пароль",
+    type: "password",
+    placeholder: "Пароль",
+  }),
+  [iptIds[5]]: getInputNode({
+    id: iptIds[5],
+    fieldId: "phone",
+    label: "Телефон",
+    type: "tel",
+    placeholder: "Телефон",
+  }),
 };
 
 const inputNodes_in = {
-  [iptIds_in[0]]: {
-    ...inputNodes_up[iptIds[2]],
-  },
-  [iptIds_in[1]]: {
-    ...inputNodes_up[iptIds[4]],
-  },
+  [iptIds[2]]: getInputNode({
+    id: iptIds[2],
+    fieldId: "login",
+    label: "Логин",
+    type: "text",
+    placeholder: "Логин",
+  }),
+  [iptIds[4]]: getInputNode({
+    id: iptIds[4],
+    fieldId: "password",
+    label: "Пароль",
+    type: "password",
+    placeholder: "Пароль",
+  }),
 };
 
 const authPageParams_in: ComponentParams<AuthProps> = {
@@ -115,35 +98,26 @@ const authPageParams_in: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...inputNodes_in,
-      heading: {
-        params: getHeadingProps({
-          id: "heading",
-          text: "Вход 🚪",
-        }),
-        factory: buildHeading as any,
-      },
-      buttonFormSubmit: {
-        params: getButtonProps({
-          id: "buttonFormSubmit",
-          label: "Войти ✓",
-          type: "submit",
-        }),
-        factory: buildButton as any,
-      },
-      buttonReroute: {
-        params: getButtonProps({
-          id: "buttonReroute",
-          label: "Впервые?",
-          link: RouteLink.SignUp,
-        }),
-        factory: buildButton as any,
-      },
+      heading: getHeadingNode({
+        id: "heading",
+        text: "Вход 🚪",
+      }) as any,
+      buttonFormSubmit: getButtonNode({
+        id: "buttonFormSubmit",
+        label: "Войти ✓",
+        type: "submit",
+      }) as any,
+      buttonReroute: getButtonNode({
+        id: "buttonReroute",
+        label: "Впервые?",
+        link: RouteLink.SignUp,
+      }) as any,
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
       buttonReroute: "buttonReroute",
-      inputs: iptIds_in,
+      inputs: [iptIds[2], iptIds[4]],
     },
   },
 };
@@ -160,30 +134,21 @@ const authPageParams_up: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...inputNodes_up,
-      heading: {
-        params: getHeadingProps({
-          id: "heading",
-          text: "Регистрация 🎀",
-        }),
-        factory: buildHeading as any,
-      },
-      buttonFormSubmit: {
-        params: getButtonProps({
-          id: "buttonFormSubmit",
-          label: "Зарегистрироваться ✓",
-          type: "submit",
-        }),
-        factory: buildButton as any,
-      },
-      buttonReroute: {
-        params: getButtonProps({
-          id: "buttonReroute",
-          label: "Я свой!",
-          link: RouteLink.SignIn,
-          isSilent: true,
-        }),
-        factory: buildButton as any,
-      },
+      heading: getHeadingNode({
+        id: "heading",
+        text: "Регистрация 🎀",
+      }) as any,
+      buttonFormSubmit: getButtonNode({
+        id: "buttonFormSubmit",
+        label: "Зарегистрироваться ✓",
+        type: "submit",
+      }) as any,
+      buttonReroute: getButtonNode({
+        id: "buttonReroute",
+        label: "Я свой!",
+        link: RouteLink.SignIn,
+        isSilent: true,
+      }) as any,
     },
     edges: {
       heading: "heading",
@@ -218,5 +183,7 @@ export const signInRouteConfig: RouteConfigs = {
   params: {},
 };
 
-export const createAuthPage_signIn = () => connect(authPageNode_in, mapAuthState);
-export const createAuthPage_signUp = () => connect(authPageNode_up, mapAuthState);
+export const createAuthPage_signIn = () =>
+  connect(authPageNode_in, mapAuthState);
+export const createAuthPage_signUp = () =>
+  connect(authPageNode_up, mapAuthState);

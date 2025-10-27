@@ -2,6 +2,7 @@ import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
   ComponentDeps,
   ComponentId,
+  ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
 import DOMService from "../../lib/DOM/DOMService.ts";
@@ -10,6 +11,31 @@ import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import css from "./button.module.css";
 import { Button } from "./Button.ts";
 import { ButtonProps } from "./types.ts";
+
+export const getButtonNode = ({
+  id,
+  label,
+  type,
+  link,
+  isSilent,
+  tooltip,
+}: {
+  id: ComponentId;
+  label: string;
+  type?: "button" | "submit";
+  link?: RouteLink;
+  isSilent?: boolean;
+  tooltip?: string;
+}): ComponentNode<ButtonProps> => {
+  const params = getButtonProps({ id, label, type, link, isSilent, tooltip });
+  return {
+    params,
+    factory: buildButton,
+    runtime: {
+      instance: buildButton(params),
+    },
+  };
+};
 
 export const buildButton: ComponentFactory<ButtonProps, Button> = (
   params: ComponentParams<ButtonProps>,

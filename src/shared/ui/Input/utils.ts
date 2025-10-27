@@ -1,5 +1,6 @@
 import {
   ComponentDeps,
+  ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
 import DOMService from "../../lib/DOM/DOMService.ts";
@@ -9,6 +10,19 @@ import { cx } from "../../lib/helpers/formatting/classnames.ts";
 import cssInput from "./input.module.css";
 import { Input } from "./Input.ts";
 import { InputConfigs, InputProps } from "./types.ts";
+
+export const getInputNode = (
+  configs: Omit<InputConfigs, "tagName">,
+): ComponentNode<InputProps, Input> => {
+  const params = getInputProps(configs);
+  return {
+    params,
+    factory: buildInput,
+    runtime: {
+      instance: buildInput(params),
+    },
+  };
+};
 
 export const buildInput: ComponentFactory<InputProps, Input> = (
   params: ComponentParams<InputProps>,

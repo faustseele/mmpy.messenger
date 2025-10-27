@@ -1,5 +1,6 @@
 import {
   ComponentDeps,
+  ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
 import DOMService from "../../lib/DOM/DOMService.ts";
@@ -9,6 +10,19 @@ import { cx } from "../../lib/helpers/formatting/classnames.ts";
 import css from "./heading.module.css";
 import { Heading } from "./Heading.ts";
 import { HeadingConfigs, HeadingProps } from "./types.ts";
+
+export const getHeadingNode = (
+  configs: Omit<HeadingConfigs, "tagName">,
+): ComponentNode<HeadingProps, Heading> => {
+  const params = getHeadingProps(configs);
+  return {
+    params,
+    factory: buildHeading,
+    runtime: {
+      instance: buildHeading(params),
+    },
+  };
+};
 
 export const buildHeading: ComponentFactory<HeadingProps, Heading> = (
   params: ComponentParams<HeadingProps>,

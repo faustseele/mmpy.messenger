@@ -23,14 +23,12 @@ export class AuthPage extends Page<AuthProps> {
   }
 
   public componentDidMount(): void {
-
     if (!this.children?.edges) {
       throw new Error("children is not defined");
     }
 
     /* --- getting instances --- */
-    const { buttonReroute } = this.children
-      .nodes as AuthNodes;
+    const { buttonReroute } = this.children.nodes as AuthNodes;
     const reroute = buttonReroute.runtime?.instance as Button;
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
     const formValidator = new FormValidator(inputs);
@@ -60,10 +58,7 @@ export class AuthPage extends Page<AuthProps> {
   }
 
   /* blur-events for the input fields */
-  private _vivifyInputs(
-    inputs: Input[],
-    formValidator: FormValidator,
-  ): void {
+  private _vivifyInputs(inputs: Input[], formValidator: FormValidator): void {
     inputs.forEach((input) => {
       input.setProps({
         on: {

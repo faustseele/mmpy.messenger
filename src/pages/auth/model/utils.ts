@@ -6,7 +6,6 @@ import {
 } from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { PageNode } from "../../page/model/types.ts";
 import { AuthPage } from "../ui/AuthPage.ts";
@@ -25,10 +24,7 @@ export const buildAuthPage: PageFactory<AuthProps, AuthPage> = (
   };
 
   const node: PageNode<AuthProps, AuthPage> = {
-    params: {
-      ...params,
-      children: buildChildren(params.children),
-    },
+    params,
     factory: buildAuthPage,
   };
 

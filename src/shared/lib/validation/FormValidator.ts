@@ -38,6 +38,11 @@ export default class FormValidator {
       const formData = this._getFormData(targetInputs);
       console.log(logMessages.formIsValid, formData);
 
+      /* cleans up inputs */
+      targetInputs.forEach((input) => {
+        input.cleanInput();
+      });
+
       if (submitType === "sign-in") {
         await AuthService.signIn({
           login: formData.login,
