@@ -68,9 +68,6 @@ export function buildCatalogueNodes(apiChats: ChatResponse[]): {
 
     const avatar = apiChat.avatar ?? "";
 
-    console.log(avatar);
-
-    console.log(apiChat);
     const lastMsg = apiChat.last_message;
     const contentText = lastMsg?.content ?? "";
     const date = lastMsg?.time ?? "";
