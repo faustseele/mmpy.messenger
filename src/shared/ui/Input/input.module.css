@@ -1,15 +1,24 @@
-/* Handling autofill */
-input:-webkit-autofill,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    /* Setting the bg of inputs
-      to transparent on autofill */
-    -webkit-transition-delay: 999999s;
-    transition-delay: 999999s;
-    
-    /* Setting the text-color
-      of inputs on autofill */
-    -webkit-text-fill-color: var(--color-content-light) !important;
+/* autofill theming - ensure browser highlight is overridden */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-content-light) !important;
+  caret-color: var(--color-content-light);
+
+  /* paint our theme color over UA autofill bg */
+  -webkit-box-shadow: 0 0 0 1000px var(--color-panel) inset !important;
+  box-shadow: 0 0 0 1000px var(--color-panel) inset !important;
+
+  /* avoid flicker on back/forward navigation */
+  transition: background-color 0s 600000s, color 0s 600000s;
+}
+
+/* standard and firefox selectors */
+.input:autofill,
+.input:-moz-autofill {
+  color: var(--color-content-light) !important;
+  box-shadow: 0 0 0 1000px var(--color-panel) inset !important;
 }
 
 

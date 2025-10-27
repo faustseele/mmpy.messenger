@@ -19,7 +19,7 @@ export class InputEditor extends Input {
         type="{{type}}"
         id="{{fieldId}}"
         placeholder="{{placeholder}}"
-        autocomplete="on"
+        autocomplete="{{autocomplete}}"
       />
       <span class="${css.errorLabel}"></span>
     `;

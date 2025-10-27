@@ -21,9 +21,10 @@ export interface InputConfigs extends BaseConfigs {
   isError?: boolean;
   isSearch?: boolean;
   errorMessage?: string;
+  autocomplete?: "on" | "off";
 }
 
-interface InputAttributes extends BaseAttributes {
+export interface InputAttributes extends BaseAttributes {
   for: FieldType;
 }
 
