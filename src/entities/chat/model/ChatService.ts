@@ -33,7 +33,7 @@ class ChatService {
       store_lastChatId(chatId);
 
       const list = Store.getState().api.chats.list;
-      
+
       /* evading api.chats.list mutation */
       const currentRaw =
         list?.find((c: ChatResponse) => c.id === chatId) ?? null;
@@ -73,16 +73,10 @@ class ChatService {
       const delRes = await ChatAPI.deleteChat({ chatId });
       this.ws.closeWS(chatId);
 
+      await this.fetchChats();
       console.log("chat delete success !:", delRes);
-
-      const { activeId } = Store.getState().api.chats;
-      if (activeId === chatId) {
-        Store.set("api.chats.activeId", null);
-        Store.set("api.chats.currentChat", null);
-      }
-      const fetchRes = await this.fetchChats();
-
-      console.log("chats fetch success !:", fetchRes);
+      
+      this.deselectChat()
     } catch (e) {
       console.error("chat delete failed:", e);
     }
@@ -102,7 +96,10 @@ class ChatService {
     try {
       const res = await ChatAPI.removeUsers({ chatId, users });
 
+      await this.fetchChats();
       console.log("users-remove success:", res);
+
+      this.deselectChat()
     } catch (e) {
       console.error("users-remove failed:", e);
     }

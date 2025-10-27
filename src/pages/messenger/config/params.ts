@@ -5,20 +5,15 @@ import {
   RouteLink,
 } from "../../../app/providers/router/types.ts";
 import { connect } from "../../../app/providers/store/connect.ts";
-import {
-  createMessageField,
-  getMessageFieldParams,
-} from "../../../features/send-message/model/utils.ts";
+import { getMessageFieldNode } from "../../../features/send-message/model/utils.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
 import {
-  buildButton,
-  getButtonProps,
+  getButtonNode
 } from "../../../shared/ui/Button/utils.ts";
 import {
-  buildHeading,
-  getHeadingProps,
+  getHeadingNode
 } from "../../../shared/ui/Heading/utils.ts";
-import { buildInput, getInputProps } from "../../../shared/ui/Input/utils.ts";
+import { getInputNode } from "../../../shared/ui/Input/utils.ts";
 import { PageId } from "../../page/config/const.ts";
 import { PageNode } from "../../page/model/types.ts";
 import cssPage from "../../page/ui/page.module.css";
@@ -34,92 +29,65 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
     tagName: "div",
     participantAvatar,
     participantName: "",
-  } as any,
+  },
   attributes: {
     className: `${cssPage.moduleWindow} ${cssMessenger.moduleWindow_messenger}`,
   },
   children: {
     nodes: {
-      heading_chats: {
-        params: getHeadingProps({
-          id: "heading_chats",
-          type: "catalogue-title",
-          text: "Чаты 👥",
-        }),
-        factory: buildHeading as any,
-      },
-      heading_goToSettings: {
-        params: getHeadingProps({
-          id: "heading_goToSettings",
-          type: "catalogue-link",
-          text: "Профиль ➛",
-          isClickable: true,
-          link: RouteLink.Settings,
-        }),
-        factory: buildHeading as any,
-      },
-      searchInput: {
-        params: getInputProps({
-          id: "searchInput",
-          fieldId: "search",
-          label: "Поиск",
-          type: "text",
-          placeholder: "Поиск",
-          isSearch: true,
-        }),
-        factory: buildInput as any,
-      },
-      addChatButton: {
-        params: getButtonProps({
-          id: "addChatButton",
-          label: "Добавить чат 💬",
-          tooltip: "Создать новый чат",
-        }),
-        factory: buildButton as any,
-      },
-      addUserButton: {
-        params: getButtonProps({
-          id: "addUserButton",
-          label: "Добавить 👤",
-          tooltip: "Добавить пользователя",
-        }),
-        factory: buildButton as any,
-      },
-      closeChatButton: {
-        params: getButtonProps({
-          id: "closeChatButton",
-          label: "❌",
-          isSilent: true,
-          tooltip: "Закрыть чат",
-        }),
-        factory: buildButton as any,
-      },
-      deleteChatButton: {
-        params: getButtonProps({
-          id: "deleteChatButton",
-          label: "Удалить 💬",
-          isSilent: true,
-          tooltip: "Удалить чат",
-        }),
-        factory: buildButton as any,
-      },
-      deleteUserButton: {
-        params: getButtonProps({
-          id: "deleteUserButton",
-          label: "Удалить 👤",
-          isSilent: true,
-          tooltip: "Удалить пользователя",
-        }),
-        factory: buildButton as any,
-      },
-      messageField: {
-        params: getMessageFieldParams({
-          id: "messageField",
-          label: "Сообщение",
-          placeholder: "Сообщение",
-        }),
-        factory: createMessageField as any,
-      },
+      heading_chats: getHeadingNode({
+        id: "heading_chats",
+        type: "catalogue-title",
+        text: "Чаты 👥",
+      }) as any,
+      heading_goToSettings: getHeadingNode({
+        id: "heading_goToSettings",
+        type: "catalogue-link",
+        text: "Профиль ➛",
+        isClickable: true,
+        link: RouteLink.Settings,
+      }) as any,
+      searchInput: getInputNode({
+        id: "searchInput",
+        fieldId: "search",
+        label: "Поиск",
+        type: "text",
+        placeholder: "Поиск",
+        isSearch: true,
+      }) as any,
+      addChatButton: getButtonNode({
+        id: "addChatButton",
+        label: "Добавить чат 💬",
+        tooltip: "Создать новый чат",
+      }) as any,
+      addUserButton: getButtonNode({
+        id: "addUserButton",
+        label: "Добавить 👤",
+        tooltip: "Добавить пользователя",
+      }) as any,
+      closeChatButton: getButtonNode({
+        id: "closeChatButton",
+        label: "❌",
+        isSilent: true,
+        tooltip: "Закрыть чат",
+      }) as any,
+      deleteChatButton: getButtonNode({
+        id: "deleteChatButton",
+        label: "Удалить 💬",
+        isSilent: true,
+        tooltip: "Удалить чат",
+      }) as any,
+      deleteUserButton: getButtonNode({
+        id: "deleteUserButton",
+        label: "Удалить 👤",
+        isSilent: true,
+        tooltip: "Удалить пользователя",
+      }) as any,
+      messageField: getMessageFieldNode({
+        id: "messageField",
+        label: "Сообщение",
+        placeholder: "Сообщение",
+      }) as any,
     },
     edges: {
       heading_chats: "heading_chats",

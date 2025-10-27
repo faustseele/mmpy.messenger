@@ -19,7 +19,6 @@ import {
 } from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { hhmmDate } from "../../../shared/lib/helpers/formatting/date.ts";
 import { getChatNumber } from "../../../shared/lib/helpers/formatting/string.ts";
@@ -33,10 +32,6 @@ export function getNewChatPlaceholder() {
 export const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   params: ComponentParams<MessengerProps>,
 ): MessengerPage => {
-  if (!params.children) {
-    throw new Error("MessengerPage: children is not defined");
-  }
-
   const deps: ComponentDeps<MessengerProps> = {
     domService: new DOMService(
       params.configs.id,
@@ -47,10 +42,7 @@ export const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   };
 
   const node: ComponentNode<MessengerProps, MessengerPage> = {
-    params: {
-      ...params,
-      children: buildChildren(params.children),
-    },
+    params,
     factory: buildMessengerPage,
   };
 
