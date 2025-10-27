@@ -4,14 +4,12 @@ import {
   ComponentParams
 } from "../../../shared/lib/Component/model/types.ts";
 import {
-  buildButton,
-  getButtonProps,
+  getButtonNode
 } from "../../../shared/ui/Button/utils.ts";
 import {
-  buildHeading,
-  getHeadingProps,
+  getHeadingNode
 } from "../../../shared/ui/Heading/utils.ts";
-import { buildSubheading, getSubheadingProps } from "../../../shared/ui/Subheading/utils.ts";
+import { getSubheadingNode } from "../../../shared/ui/Subheading/utils.ts";
 import { PageId } from "../../page/config/const.ts";
 import cssPage from "../../page/ui/page.module.css";
 import { ErrorProps } from "../model/types.ts";
@@ -28,31 +26,22 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: {
-        params: getHeadingProps({
-          id: "heading",
-          type: "error/404",
-          text: "⛔ Ошибка 404",
-          isDrama: true,
-        }),
-        factory: buildHeading as any,
-      },
-      subheading: {
-        params: getSubheadingProps({
-          id: "subheading",
-          text: "🌑 Не туда попали",
-          isDrama: true,
-        }),
-        factory: buildSubheading as any,
-      },
-      button_back: {
-        params: getButtonProps({
-          id: "button_back",
-          label: "Назад к чатам",
-          link: RouteLink.Messenger,
-        }),
-        factory: buildButton as any,
-      },
+      heading: getHeadingNode({
+        id: "heading",
+        type: "error/404",
+        text: "⛔ Ошибка 404",
+        isDrama: true,
+      }) as any,
+      subheading: getSubheadingNode({
+        id: "subheading",
+        text: "🌑 Не туда попали",
+        isDrama: true,
+      }) as any,
+      button_back: getButtonNode({
+        id: "button_back",
+        label: "Назад к чатам",
+        link: RouteLink.Messenger,
+      }) as any,
     },
     edges: {
       heading: "heading",
@@ -73,31 +62,22 @@ export const errorPageParams_500: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: {
-        params: getHeadingProps({
-          id: "heading",
-          type: "error/500",
-          text: "🪜 Ошибка 500",
-          isDrama: true,
-        }),
-        factory: buildHeading as any,
-      },
-      subheading: {
-        params: getSubheadingProps({
-          id: "subheading",
-          text: "🔧 Мы уже фиксим",
-          isDrama: true,
-        }),
-        factory: buildSubheading as any,
-      },
-      button_back: {
-        params: getButtonProps({
-          id: "button_back",
-          label: "Назад к чатам",
-          link: RouteLink.Messenger,
-        }),
-        factory: buildButton as any,
-      },
+      heading: getHeadingNode({
+        id: "heading",
+        type: "error/500",
+        text: "🪜 Ошибка 500",
+        isDrama: true,
+      }) as any,
+      subheading: getSubheadingNode({
+        id: "subheading",
+        text: "🔧 Мы уже фиксим",
+        isDrama: true,
+      }) as any,
+      button_back: getButtonNode({
+        id: "button_back",
+        label: "Назад к чатам",
+        link: RouteLink.Messenger,
+      }) as any,
     },
     edges: {
       heading: "heading",
