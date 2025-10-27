@@ -255,7 +255,7 @@ export class MessengerPage extends Page<MessengerProps> {
               </div>
             </label>
             <input id="avatar-input-chat" type="file" name="avatar" class="${css.avatarFileInput}" />
-            {{/if}}
+          {{/if}}
 
             <p class="${css.chatParticipant__name}">{{ participantName }}</p>
           </div>
