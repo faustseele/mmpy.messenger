@@ -39,9 +39,6 @@ export class SettingsPage extends Page<SettingsProps> {
     const editPassword = buttonEditPassword.runtime?.instance as Button;
     const logout = buttonLogout.runtime?.instance as Button;
 
-    /* --- avatar --- */
-    this._wireAvatar();
-
     /* --- vivifying inputs --- */
     const validator = this._vivifyInputs();
     /* sets placeholders for inputs from user-res */
@@ -131,9 +128,11 @@ export class SettingsPage extends Page<SettingsProps> {
     const input =
       this.element?.querySelector<HTMLInputElement>("#avatar-input");
     if (!input || input.dataset.bound) return;
+
     input.addEventListener("change", async () => {
       const file = input.files?.[0];
       if (!file) return;
+
       await UserService.updateAvatar(file);
       input.value = "";
     });

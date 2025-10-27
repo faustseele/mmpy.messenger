@@ -4,9 +4,8 @@ import {
   createMessage,
   getMessageParams,
 } from "../../../entities/message-bubble/model/utils.ts";
-import { getGoToChatNodeWithInstance } from "../../../features/go-to-chat/model/utils.ts";
+import { getGoToChatNode } from "../../../features/go-to-chat/model/utils.ts";
 import { ChatResponse } from "../../../shared/api/model/types.ts";
-import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import {
   ChildrenEdges,
   ChildrenNodes,
@@ -67,15 +66,17 @@ export function buildCatalogueNodes(apiChats: ChatResponse[]): {
     const id = `goToChatItem_${apiChat.id}`;
     goToChatItems.push(id);
 
-    const avatar = apiChat.avatar
-      ? `${API_URL_RESOURCES}${apiChat.avatar}`
-      : "";
+    const avatar = apiChat.avatar ?? "";
+
+    console.log(avatar);
+
+    console.log(apiChat);
     const lastMsg = apiChat.last_message;
     const contentText = lastMsg?.content ?? "";
     const date = lastMsg?.time ?? "";
     const unreadCount = apiChat.unread_count;
 
-    const goToChatNode = getGoToChatNodeWithInstance(
+    const goToChatNode = getGoToChatNode(
       {
         id,
         avatar,

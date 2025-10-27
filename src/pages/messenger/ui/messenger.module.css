@@ -111,11 +111,6 @@
   column-gap: 8px;
 }
 
-.chatParticipant__avatar {
-  width: 34px;
-  height: 34px;
-}
-
 .chatParticipant__name {
   font-family: inherit;
   font-size: 14px;
@@ -174,4 +169,70 @@
 
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+/* --- avatar --- */
+
+.avatar {
+  width: 38px;
+  height: 38px;
+}
+
+
+.avatarContainer {
+  display: block;    
+  position: relative;
+
+  width: 38px;  
+  height: 38px;     
+
+  border-radius: 50%;
+
+  overflow: hidden;  
+  cursor: pointer;
+}
+
+.avatarImage {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* The overlay that appears on top of le image */
+.avatarOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  
+  background-color: var(--avatar-select-bg);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  opacity: 0;
+  
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Shows overlay on le hover */
+.avatarContainer:hover .avatarOverlay {
+  opacity: 1;
+}
+
+/* The text inside the overlay */
+.overlayText {
+  font-size: 11px;
+  font-weight: 300;
+}
+
+/* hidin the default file input completely */
+.avatarFileInput {
+  display: none;
 }

@@ -61,6 +61,12 @@ export class MessengerPage extends Page<MessengerProps> {
     });
   }
 
+  public componentDidRender(): void {
+    /* re-binding avatar change event */
+    this._wireAvatar();
+  }
+
+
   private _wireAddUser(addUser: Button) {
     addUser?.setProps({
       on: {
@@ -151,6 +157,29 @@ export class MessengerPage extends Page<MessengerProps> {
     });
   }
 
+  private _wireAvatar(): void {
+    const input =
+      this.element?.querySelector<HTMLInputElement>("#avatar-input-chat");
+
+    if (!input || input.dataset.bound) return;
+    
+    input.addEventListener("change", async () => {
+      const id = Store.getState().api.chats.activeId;
+
+      if (!id) {
+        console.error("No active chat to update avatar");
+        return;
+      }
+
+      const file = input.files?.[0];
+
+      if (!file) return;
+      await ChatService.updateChatAvatar(id, file);
+      input.value = "";
+    });
+    input.dataset.bound = "true";
+  }
+
   private _wireMessageSubmit(form: MessageField) {
     form?.setProps({
       on: {
@@ -205,18 +234,24 @@ export class MessengerPage extends Page<MessengerProps> {
       <main class="${css.chat}">
         <header class="${css.chat__header}">
           <div class="${css.chatParticipant}">
-            {{#if participantAvatar}}
-              <img class="${css.chatParticipant__avatar}" src="{{ participantAvatar }}" alt="Participant avatar"/>
-            {{/if}}
+
+            <label for="avatar-input-chat" class="${css.avatarContainer}">
+              <img class="${css.avatar}" src="{{ participantAvatar }}" alt="Participant avatar"  />
+              <div class="${css.avatarOverlay}">
+                <span class="${css.overlayText}">🔄</span>
+              </div>
+            </label>
+            <input id="avatar-input-chat" type="file" name="avatar" class="${css.avatarFileInput}" />
+
             <p class="${css.chatParticipant__name}">{{ participantName }}</p>
           </div>
 
           <div class="${css.chatOptions}">
             {{~#if participantName}}
-                {{{ ${addUserButton.params.configs.id} }}}
-                {{{ ${deleteUserButton.params.configs.id} }}}
-                {{{ ${deleteChatButton.params.configs.id} }}}
-                {{{ ${closeChatButton.params.configs.id} }}}
+              {{{ ${addUserButton.params.configs.id} }}}
+              {{{ ${deleteUserButton.params.configs.id} }}}
+              {{{ ${deleteChatButton.params.configs.id} }}}
+              {{{ ${closeChatButton.params.configs.id} }}}
             {{~else}}
               {{{ ${addChatButton.params.configs.id} }}}
             {{/if}}

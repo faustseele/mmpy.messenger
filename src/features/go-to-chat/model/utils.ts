@@ -13,26 +13,17 @@ import { GoToChat } from "../ui/GoToChat.ts";
 import css from "../ui/goToChat.module.css";
 import { GoToChatConfigs, GoToChatProps } from "./types.ts";
 
-export const getGoToChatNodeWithInstance = (
-  configs: Omit<GoToChatConfigs, "tagName">,
-  on?: GoToChatProps["on"],
-) => {
-  const node = getGoToChatNode(configs, on);
-  return {
-    ...node,
-    runtime: {
-      instance: buildGoToChat(node.params),
-    },
-  };
-};
-
 export const getGoToChatNode = (
   configs: Omit<GoToChatConfigs, "tagName">,
   on?: GoToChatProps["on"],
-) => {
+): ComponentNode<GoToChatProps, GoToChat> => {
+  const params = getGoToChatParams(configs, on);
   return {
-    params: getGoToChatParams(configs, on),
+    params,
     factory: buildGoToChat,
+    runtime: {
+      instance: buildGoToChat(params),
+    },
   };
 };
 
@@ -55,7 +46,7 @@ export const getGoToChatParams = (
     },
     attributes: {
       className: css.goToChat,
-      tabindex: "0"
+      tabindex: "0",
     },
     on: {
       ...on,

@@ -13,6 +13,7 @@ import {
   DeleteChatRequest,
   DeleteChatResponse,
   GetChatsQuery,
+  UpdateChatAvatarResponse,
 } from "../../../shared/api/model/types.ts";
 
 const chatsAPIInstance = new HTTPTransport("/chats");
@@ -27,6 +28,19 @@ class ChatAPI extends BaseAPI {
 
   public createChat(data: CreateChatRequest): Promise<CreateChatResponse> {
     return chatsAPIInstance.post("", { data }) as Promise<CreateChatResponse>;
+  }
+
+  public updateChatAvatar(
+    chatId: ChatId,
+    avatar: File,
+  ): Promise<UpdateChatAvatarResponse> {
+    const form = new FormData();
+    form.append("chatId", String(chatId));
+    form.append("avatar", avatar);
+    console.log(form)
+    return chatsAPIInstance.put("/avatar", {
+      data: form,
+    }) as Promise<UpdateChatAvatarResponse>;
   }
 
   public deleteChat(data: DeleteChatRequest): Promise<DeleteChatResponse> {

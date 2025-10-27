@@ -68,6 +68,18 @@ class ChatService {
     }
   }
 
+  public async updateChatAvatar(chatId: ChatId, avatar: File) {
+    try {
+      const updatedChat = await ChatAPI.updateChatAvatar(chatId, avatar);
+
+      console.log("chat avatar update success:", updatedChat);
+      
+      this.fetchChats();
+    } catch (e) {
+      console.error("chat avatar update fail:", e);
+    }
+  }
+
   public async deleteChat(chatId: ChatId) {
     try {
       const delRes = await ChatAPI.deleteChat({ chatId });
@@ -75,8 +87,8 @@ class ChatService {
 
       await this.fetchChats();
       console.log("chat delete success !:", delRes);
-      
-      this.deselectChat()
+
+      this.deselectChat();
     } catch (e) {
       console.error("chat delete failed:", e);
     }
@@ -99,7 +111,7 @@ class ChatService {
       await this.fetchChats();
       console.log("users-remove success:", res);
 
-      this.deselectChat()
+      this.deselectChat();
     } catch (e) {
       console.error("users-remove failed:", e);
     }
