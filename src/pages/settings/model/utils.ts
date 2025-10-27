@@ -8,7 +8,6 @@ import {
 } from "../../../shared/lib/Component/model/types.ts";
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { buildChildren } from "../../../shared/lib/helpers/factory/functions.ts";
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { SettingsPage } from "../ui/SettingsPage.ts";
 import { SettingsProps } from "./types.ts";
@@ -16,10 +15,6 @@ import { SettingsProps } from "./types.ts";
 export const buildSettingsPage: PageFactory<SettingsProps, SettingsPage> = (
   params: ComponentParams<SettingsProps>,
 ): SettingsPage => {
-  if (!params.children) {
-    throw new Error("SettingsPage: Children is not defined");
-  }
-
   const deps: ComponentDeps<SettingsProps> = {
     domService: new DOMService(
       params.configs.id,
@@ -31,10 +26,7 @@ export const buildSettingsPage: PageFactory<SettingsProps, SettingsPage> = (
 
   const node = {
     factory: buildSettingsPage,
-    params: {
-      ...params,
-      children: buildChildren(params.children),
-    },
+    params,
   };
 
   return new SettingsPage({

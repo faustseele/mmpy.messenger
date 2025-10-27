@@ -11,10 +11,6 @@ import { ErrorProps } from "./types.ts";
 export const buildErrorPage: PageFactory<ErrorProps, ErrorPage> = (
   params: ComponentParams<ErrorProps>,
 ): ErrorPage => {
-  if (!params.children) {
-    throw new Error("ErrorPage: children are not defined");
-  }
-
   const deps: ComponentDeps<ErrorProps> = {
     domService: new DOMService(
       params.configs.id,

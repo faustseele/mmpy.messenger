@@ -14,10 +14,6 @@ import { AuthProps } from "./types.ts";
 export const buildAuthPage: PageFactory<AuthProps, AuthPage> = (
   params: ComponentParams<AuthProps>,
 ): AuthPage => {
-  if (!params.children) {
-    throw new Error("childrenSchema is not defined");
-  }
-
   const deps: ComponentDeps<AuthProps> = {
     domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
     fragmentService: new FragmentService(),
