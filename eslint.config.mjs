@@ -1,7 +1,7 @@
 import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import globals from "globals";
 import importPlugin from "eslint-plugin-import";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   /* Array of configuration objects,
@@ -26,9 +26,15 @@ export default tseslint.config(
     },
     rules: {
       "eol-last": ["warn", "always"],
-      "no-unused-vars": ["warn"],
-      "@typescript-eslint/no-unused-vars": ["warn"],
-      /* Enforce extensions for TypeScript files */
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "import/extensions": [
         "error",
         "always",

@@ -1,19 +1,33 @@
-#### Project
-**Name**: middle.messenger.praktikum.yandex
+### Project *middle.messenger.praktikum.yandex*
 **Tech-Stack**
-Runs on: Vanilla JS + HandleBars + XHR
-Styles: PostCSS + CSS-Modules
-Code Style by: Eslint (Standard), Stylelint
+- Runs on: TypeScript + Handlebars + XHR
+- Styles: PostCSS + CSS-Modules
+- Code Style by: ESLint (Standard), Stylelint
+- Build + Preview: Vite
 
-#### Deployed at Netlify
+### Architecture (одобрено менторами)
+**Feature-based** structure (lightweight Feature‑Sliced Design): `src/app`, `src/pages`, `src/features`, `src/entities`, `src/shared`.
+
+Component dependencies (**DI**) are explicit and minimal:
+- DOMService (DOM dependency) creates/updates elements & manages listeners: `src/shared/lib/DOM/DOMService.ts`
+- FragmentService (fragment dependency) compiles Handlebars markup to DocumentFragment & stitches children: `src/shared/lib/Fragment/FragmentService.ts`
+
+**Factory** + **DI**: components are created via factories that inject the services and wire child nodes, enabling *decoupling* and testability:
+- Factory helpers: `src/shared/lib/helpers/factory/functions.ts`
+- Usage with page blueprints and lazy instantiation: `src/app/providers/store/connect.ts`
+
+### Deployed at Netlify
 **The link**: https://dynamic-smakager-a6d4a4.netlify.app
 
-#### How to run
-```bash
+### How to run
+```bash 
 npm install
 ```
 ```bash
-npm run start
+npm run dev
+```
+```bash
+npm run build
 ```
 **Available links**:
 - authentication: `/sign-up` `/sign-in`

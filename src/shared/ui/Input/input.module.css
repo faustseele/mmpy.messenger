@@ -1,0 +1,112 @@
+/* autofill theming - ensure browser highlight is overridden */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-content-light) !important;
+  caret-color: var(--color-content-light);
+
+  /* paint our theme color over UA autofill bg */
+  -webkit-box-shadow: 0 0 0 1000px var(--color-panel) inset !important;
+  box-shadow: 0 0 0 1000px var(--color-panel) inset !important;
+
+  /* avoid flicker on back/forward navigation */
+  transition: background-color 0s 600000s, color 0s 600000s;
+}
+
+/* standard and firefox selectors */
+.input:autofill,
+.input:-moz-autofill {
+  color: var(--color-content-light) !important;
+  box-shadow: 0 0 0 1000px var(--color-panel) inset !important;
+}
+
+
+.inputLabelWrap {
+  width: 100%;
+  min-width: 120px;
+  position: relative;
+}
+
+.labelSpan {
+  position: absolute;
+  left: 8px;
+  top: 19px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+  color: var(--color-content-darkest);
+}
+
+.input {
+  width: 100%;
+  padding: 19px 10px 18px 10px;
+
+  display: flex;
+  text-align: center;
+  
+  border: none;
+  border-bottom: solid 1px var(--color-panel-lightest);  
+  box-sizing: border-box;
+
+  background-color: transparent;
+
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+  color: var(--color-content-light);
+
+  transition: 0.2s ease-in-out;
+}
+
+.input_editor {
+  text-align: right;
+  font-style: italic;
+}
+
+
+.input_error::placeholder {
+  opacity: 0.4;
+}
+
+.errorLabel {
+  display: block;
+
+  position: absolute;
+  right: 4px;
+  bottom: 9px;
+
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 8px;
+  color: var(--color-alert);
+  text-align: right;
+}
+
+.input::placeholder {
+  color: var(--color-content-darkest);
+  opacity: 0.7;
+}
+
+.input_editor::placeholder {
+  color: var(--color-content-light);
+}
+
+.input_search {
+  border-bottom: none;
+  text-align: start;
+  background-color: var(--color-btn-bg);
+  border: 1px solid var(--color-btn-br);
+  border-radius: 4px;
+}
+
+.input:hover {
+  border-color: var(--color-acc-bold);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-acc);
+}

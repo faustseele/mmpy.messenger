@@ -1,29 +1,36 @@
-import Router from "./src/core/Router/Router.ts";
-import { Routes } from "./src/core/Router/routes.d";
+import Router from "./src/app/providers/router/Router.ts";
+import "./src/app/styles/index.css";
+import {
+  createAuthPage_signIn,
+  createAuthPage_signUp,
+  signInRouteConfig,
+  signUpRouteConfig,
+} from "./src/pages/auth/config/params.ts";
+import {
+  errorRouteConfig_404,
+  errorRouteConfig_500,
+} from "./src/pages/errors/config/params.ts";
+import {
+  createErrorPage_404,
+  createErrorPage_500,
+} from "./src/pages/errors/ui/ErrorPage.ts";
+import { createMessengerPage, messengerPageRouteConfig } from "./src/pages/messenger/config/params.ts";
+import { createSettingsPage, settingsPageRouteConfig } from "./src/pages/settings/config/params.ts";
 
-export const router = new Router();
+export const rootQuery = "#app";
 
-/* Handling Browser's ⬅️ / ➡️ buttons */
-window.addEventListener("popstate", (event) => {
-  const path = event.state?.path || "/sign-in";
-  router.routeTo(path, event);
-});
+Router
+  /* SignIn route */
+  .use(signInRouteConfig, createAuthPage_signIn)
+  /* SignUp route */
+  .use(signUpRouteConfig, createAuthPage_signUp)
+  /* Messenger route */
+  .use(messengerPageRouteConfig, createMessengerPage)
+  /* Settings route */
+  .use(settingsPageRouteConfig, createSettingsPage)
+  /* NotFound route */
+  .use(errorRouteConfig_404, createErrorPage_404)
+  /* Error route */
+  .use(errorRouteConfig_500, createErrorPage_500);
 
-/* Handling clicks on links */
-
-const nav = document.getElementsByTagName("nav")[0];
-nav?.addEventListener("click", (e: Event) => {
-  e.preventDefault();
-  if (
-    e.target instanceof HTMLAnchorElement &&
-    e.target.classList.contains("navButton")
-  ) {
-    const link = e.target.getAttribute("href");
-    if (link) {
-      router.routeTo(link as Routes, e);
-    }
-  }
-});
-
-/* Handling initial page load */
-router.routeTo(Routes.SignIn, "initial route");
+Router.start(rootQuery);
