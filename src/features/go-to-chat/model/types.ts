@@ -18,6 +18,7 @@ export interface GoToChatConfigs extends BaseConfigs {
   contentText: string;
   date: ISODateString;
   chatId: ChatId
+  isNotes?: boolean;
   unreadCount?: number;
 }
 

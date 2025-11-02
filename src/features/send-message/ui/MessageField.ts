@@ -1,3 +1,4 @@
+import ChatService from "../../../entities/chat/model/ChatService.ts";
 import Component from "../../../shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { MessageFieldProps } from "../model/types.ts";
@@ -8,9 +9,27 @@ export class MessageField extends Component<MessageFieldProps> {
     super(props);
   }
 
+  public componentDidMount(): void {
+    this.setProps({
+      on: {
+        submit: (e: Event) => {
+          e.preventDefault();
+
+          const el = e.target as HTMLFormElement;
+          const input = el.querySelector("input");
+          const text = (input as HTMLInputElement)?.value?.trim();
+
+          if (text) {
+            ChatService.sendMessage(text);
+            (input as HTMLInputElement).value = "";
+          }
+        },
+      },
+    });
+  }
+
   public getSourceMarkup(): string {
     return /*html*/ `
-      <button type="button" class="${css.inputButton} ${css.attachButton}" aria-label="Attach file"></button>
       <input
         class="${css.input}"
         name="{{id}}"

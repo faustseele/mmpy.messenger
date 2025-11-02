@@ -3,11 +3,13 @@ import {
   ChatId,
   ChatResponse,
   ChatUsersQuery,
+  CreateChatResponse,
   GetChatsQuery,
 } from "../../../shared/api/model/types.ts";
 import { store_lastChatId } from "../../../shared/lib/LocalStorage/chats.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
+import { isChatNotes } from "./utils.ts";
 
 class ChatService {
   private ws = new ChatWebsocket();
@@ -20,6 +22,15 @@ class ChatService {
       /* auto-restore last active chat */
       const last = Number(localStorage.getItem("lastActiveChatId"));
       if (last && list?.some((chat) => chat.id === last)) this.selectChat(last);
+
+      /* set isNotes for each chat */
+      await Promise.all(
+        list?.map(async (chat) => {
+          const is = await isChatNotes(chat.id);
+          Store.set("isNotes", { [chat.id]: is });
+          return is;
+        }),
+      );
 
       console.log("chats fetch success !:", list);
     } catch (e) {
@@ -40,6 +51,11 @@ class ChatService {
       const current = currentRaw ? structuredClone(currentRaw) : null;
       Store.set("api.chats.currentChat", current);
 
+      if (!current) {
+        console.error("Current chat not found");
+        return;
+      }
+
       const user = Store.getState().api.auth.user;
       if (!user) return;
 
@@ -56,15 +72,19 @@ class ChatService {
     }
   }
 
-  public async createChat(title: string) {
+  public async createChat(
+    title: string,
+  ): Promise<CreateChatResponse | undefined> {
     try {
       const resChat = await ChatAPI.createChat({ title });
       const resChats = await this.fetchChats();
       this.selectChat(resChat.id);
 
       console.log(`chat ${title} create success !:`, resChat, resChats);
+      return resChat;
     } catch (e) {
       console.error("chat create failed:", e);
+      return;
     }
   }
 
@@ -126,6 +146,10 @@ class ChatService {
       console.error("users-get failed:", e);
       return [];
     }
+  }
+
+  public isCurrentChatNotes() {
+    return Store.getState().isNotes[Store.getState().api.chats.activeId ?? 0];
   }
 
   public sendMessage(content: string) {

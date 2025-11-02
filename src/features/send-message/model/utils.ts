@@ -1,5 +1,7 @@
+import ChatService from "../../../entities/chat/model/ChatService.ts";
 import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
 } from "../../../shared/lib/Component/model/types.ts";
@@ -8,12 +10,12 @@ import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import css from "../ui/messageField.module.css";
 import { MessageField } from "../ui/MessageField.ts";
-import { MessageFieldConfigs, MessageFieldProps } from "./types.ts";
+import { MessageFieldProps } from "./types.ts";
 
 export const getMessageFieldNode = (
-  configs: Omit<MessageFieldConfigs, "tagName" | "type">,
+  id: ComponentId
 ): ComponentNode<MessageFieldProps, MessageField> => {
-  const params = getMessageFieldParams(configs);
+  const params = getMessageFieldParams(id);
   return {
     params,
     factory: buildMessageField,
@@ -45,13 +47,15 @@ export const buildMessageField: ComponentFactory<
 };
 
 export const getMessageFieldParams = (
-  configs: Omit<MessageFieldConfigs, "tagName" | "type">,
+  id: ComponentId,
 ): ComponentParams<MessageFieldProps> => {
   return {
     configs: {
+      id,
       tagName: "form",
       type: "text",
-      ...configs,
+      label: "Message Input",
+      placeholder: ChatService.isCurrentChatNotes() ? "Заметка:" : "Cообщение...",
     },
     attributes: {
       className: css.messageField,

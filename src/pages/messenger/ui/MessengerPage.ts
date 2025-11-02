@@ -4,11 +4,14 @@ import Store from "../../../app/providers/store/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
 import UserService from "../../../features/edit-profile/model/UserService.ts";
 import { MessageField } from "../../../features/send-message/ui/MessageField.ts";
+import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import { urlToFile } from "../../../shared/lib/helpers/file.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { Page } from "../../page/ui/Page.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
+import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
 
 export class MessengerPage extends Page<MessengerProps> {
@@ -17,8 +20,6 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   public componentDidMount(): void {
-    super.componentDidMount();
-
     if (!this.children?.nodes) {
       throw new Error("MessengerPage: Children are not defined");
     }
@@ -32,27 +33,27 @@ export class MessengerPage extends Page<MessengerProps> {
     /* --- getting instances --- */
     const {
       heading_goToSettings,
-      addChatButton,
-      addUserButton,
+      addNotesButton,
+      findUserChatButton,
       deleteChatButton,
-      deleteUserButton,
+      deleteNotesButton,
       closeChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
     const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
-    const addChat = addChatButton.runtime?.instance as Button;
-    const addUser = addUserButton.runtime?.instance as Button;
+    const addChat = addNotesButton.runtime?.instance as Button;
+    const addUser = findUserChatButton.runtime?.instance as Button;
     const closeChat = closeChatButton.runtime?.instance as Button;
+    const deleteNotes = deleteNotesButton.runtime?.instance as Button;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
-    const deleteUser = deleteUserButton.runtime?.instance as Button;
     const form = messageField.runtime?.instance as MessageField;
 
     /* --- setting events --- */
     this._wireMessageSubmit(form);
-    this._wireAddChat(addChat);
-    this._wireAddUser(addUser);
-    this._wireDeleteCurrentChat(deleteChat);
-    this._wireDeleteUser(deleteUser);
+    this._wireAddNotes(addChat);
+    this._wireAddChat(addUser);
+    this._wireDeleteChat(deleteChat);
+    this._wireDeleteChat(deleteNotes);
     this._wireCloseChat(closeChat);
     headingToSettings?.setProps({
       on: {
@@ -66,21 +67,17 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireAvatar();
   }
 
-  private _wireAddUser(addUser: Button) {
+  private _wireAddChat(addUser: Button) {
     addUser?.setProps({
       on: {
         click: async () => {
-          const input = window.prompt("Логин пользователя:", "");
+          const explanation = `Логин пользователя:\n\n Доступные сейчас: \n• emil\n• LevTolstoy\n• yandex\n• LeUser\n• mishima\n• tolkien\n• baudrillard\n• foucault\n• shakespear`;
+
+          const input = window.prompt(explanation, "");
           if (input === null) return;
 
           const login = input.trim();
           if (!login) return;
-
-          const chatId = Store.getState().api.chats.activeId;
-          if (!chatId) {
-            console.error("No active chat to add user into");
-            return;
-          }
 
           const user = await UserService.findByLogin(login);
           if (!user) {
@@ -88,21 +85,39 @@ export class MessengerPage extends Page<MessengerProps> {
             return;
           }
 
-          await ChatService.addUsers(chatId, [user.id]);
+          const newChatRes = await ChatService.createChat(
+            `${user.first_name} ${user.second_name}`,
+          );
+
+          if (!newChatRes) {
+            console.error("Chat create failed");
+            return;
+          }
+
+          await ChatService.addUsers(newChatRes.id, [user.id]);
+
+          if (user.avatar) {
+            const avatar = await urlToFile(
+              `${API_URL_RESOURCES}${user.avatar}`,
+            );
+            ChatService.updateChatAvatar(newChatRes.id, avatar);
+          }
+
           console.log(
             `User ${user.login} (id=${user.id}) added to chat`,
-            chatId,
+            newChatRes.id,
           );
         },
       },
     });
   }
 
-  private _wireAddChat(addChat: Button) {
+  private _wireAddNotes(addChat: Button) {
     addChat?.setProps({
       on: {
         click: () => {
-          const input = window.prompt("Название чата:", "");
+          const chatName = randomNoteLabel();
+          const input = window.prompt("Как назовём заметки?", chatName);
           if (input === null) return;
 
           const title = input.trim();
@@ -114,46 +129,21 @@ export class MessengerPage extends Page<MessengerProps> {
     });
   }
 
-  private _wireDeleteCurrentChat(deleteChat: Button) {
+  private _wireDeleteChat(deleteChat: Button) {
     deleteChat.setProps({
       on: {
         click: async (e: Event) => {
           e.preventDefault();
 
+          const title = Store.getState().api.chats.currentChat?.title;
+
+          const confirm = window.confirm(
+            `Вы уверены, что хотите удалить ${title}?`,
+          );
+          if (!confirm) return;
+
           const id = Store.getState().api.chats.activeId;
           if (id) await ChatService.deleteChat(id);
-        },
-      },
-    });
-  }
-
-  private _wireDeleteUser(deleteUser: Button) {
-    deleteUser?.setProps({
-      on: {
-        click: async (e: Event) => {
-          e.preventDefault();
-
-          const chatId = Store.getState().api.chats.activeId;
-          if (!chatId) {
-            console.error("No active chat to remove user from");
-            return;
-          }
-
-          const usersInChat = (await ChatService.getUsers(chatId)).filter(
-            (user) => user.id !== Store.getState().api.auth.user?.id,
-          );
-
-          const usersString = usersInChat
-            .map((user) => `• ${user.login} – id: ${user.id}`)
-            .join("\n");
-
-          console.log(usersInChat);
-
-          const userId = window.prompt(`Кого удалить?\n\n${usersString}`, "");
-          if (!userId || isNaN(Number(userId))) return;
-
-          await ChatService.removeUsers(chatId, [Number(userId)]);
-          console.log(`User ${userId} removed from chat ${chatId}`);
         },
       },
     });
@@ -212,20 +202,22 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   public getSourceMarkup(): string {
+    const chatId = Store.getState().api.chats.activeId;
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: MessengerPage: Children are not defined</span>`;
 
     const {
       heading_chats,
       heading_goToSettings,
-      searchInput,
-      addChatButton,
-      addUserButton,
+      addNotesButton,
+      findUserChatButton,
       closeChatButton,
+      deleteNotesButton,
       deleteChatButton,
-      deleteUserButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
+
+    const isNotes = Store.getState().isNotes[chatId ?? 0];
 
     return /*html*/ `
       <aside class="${css.catalogue}">
@@ -235,7 +227,6 @@ export class MessengerPage extends Page<MessengerProps> {
             {{{ ${heading_chats.params.configs.id} }}}
             {{{ ${heading_goToSettings.params.configs.id} }}}
           </div>
-          {{{ ${searchInput.params.configs.id} }}}
         </header>
 
         <ul class="${css.catalogue__items}">
@@ -262,12 +253,11 @@ export class MessengerPage extends Page<MessengerProps> {
 
           <div class="${css.chatOptions}">
             {{~#if participantName}}
-              {{{ ${addUserButton.params.configs.id} }}}
-              {{{ ${deleteUserButton.params.configs.id} }}}
-              {{{ ${deleteChatButton.params.configs.id} }}}
+              {{{ ${isNotes ? deleteNotesButton.params.configs.id : deleteChatButton.params.configs.id}}}}
               {{{ ${closeChatButton.params.configs.id} }}}
             {{~else}}
-              {{{ ${addChatButton.params.configs.id} }}}
+              {{{ ${addNotesButton.params.configs.id} }}}
+              {{{ ${findUserChatButton.params.configs.id} }}}
             {{/if}}
           </div>
         </header>

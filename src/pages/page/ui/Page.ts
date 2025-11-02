@@ -13,15 +13,12 @@ export abstract class Page<Props extends BaseProps> extends Component<Props> {
     console.log(this);
   }
 
-  public componentDidMount(): void {
-  }
-
   public setPageParams(params: Record<string, string>): void {
     this.pageParams = params;
   }
 
   public getSourceMarkup(): string {
-    /* Reassigned in concrete Page Components */
+    /* reassigned in concrete Page */
     return /*html*/ ``;
   }
 }
