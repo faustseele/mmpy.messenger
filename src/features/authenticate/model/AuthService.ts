@@ -1,6 +1,7 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
 import Store from "../../../app/providers/store/Store.ts";
+import ChatService from "../../../entities/chat/model/ChatService.ts";
 import { SignUpRequest, SignInRequest } from "../../../shared/api/model/types.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
@@ -18,6 +19,10 @@ class AuthService {
 
       Router.go(RouteLink.Messenger);
       console.log(resSignUp, user, Store.getState());
+
+      /* generating one notes-chat */
+      await ChatService.createChat('Заметки 📃');
+
     } catch (e) {
       console.error("SignUp failed:", e);
     }
@@ -60,7 +65,10 @@ class AuthService {
   public async logout() {
     try {
       const res = await AuthAPI.logout();
-      Store.set("api.auth.user", null);
+      Store.set("api.chats.activeId", null);
+      Store.set("api.chats.currentChat", null);
+      Store.set("api.chats.list", null);
+
       Store.set("controllers.isLoggedIn", false);
 
       Router.go(RouteLink.SignIn);

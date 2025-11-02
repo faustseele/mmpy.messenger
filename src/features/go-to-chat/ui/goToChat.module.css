@@ -16,6 +16,10 @@
   cursor: pointer;
 }
 
+.goToChat_note {
+  border: dashed 1px var(--color-btn-br);
+}
+
 .goToChat:hover {
   border-color: var(--color-universal-br-active);
 }
@@ -39,11 +43,13 @@
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
   row-gap: 2px;
 }
 
 .userName {
   margin: 0;
+  padding-bottom: 3px;
 
   font-family: inherit;
   font-size: 13px;

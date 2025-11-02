@@ -20,8 +20,6 @@ export class SettingsPage extends Page<SettingsProps> {
   }
 
   public componentDidMount(): void {
-    super.componentDidMount();
-
     if (!this.children || !this.children.nodes) {
       console.error("SettingsPage: Children are not defined", this);
       return;
@@ -54,6 +52,8 @@ export class SettingsPage extends Page<SettingsProps> {
   public componentDidRender(): void {
     /* re-binding avatar change event */
     this._wireAvatar();
+    /* sets placeholders for inputs from user-res */
+    this._hydrateInputPlaceholders();
   }
 
   private _hydrateInputPlaceholders(): void {
@@ -83,7 +83,7 @@ export class SettingsPage extends Page<SettingsProps> {
           placeholder = user.login;
           break;
         case "display_name":
-          placeholder = user.display_name;
+          placeholder = user.display_name ?? user.login;
           break;
         case "phone":
           placeholder = user.phone;

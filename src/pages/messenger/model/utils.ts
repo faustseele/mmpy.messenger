@@ -20,12 +20,12 @@ import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import { hhmmDate } from "../../../shared/lib/helpers/formatting/date.ts";
-import { getChatNumber } from "../../../shared/lib/helpers/formatting/string.ts";
+import { noteLabels } from "../config/const.ts";
 import { MessengerPage } from "../ui/MessengerPage.ts";
 import { MessengerProps } from "./types.ts";
 
 export function getNewChatPlaceholder() {
-  return `Чат № ${getChatNumber()}`;
+  return `Чат № ${randomNoteLabel()}`;
 }
 
 export const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
@@ -51,7 +51,7 @@ export const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   });
 };
 
-export function buildCatalogueNodes(apiChats: ChatResponse[]): {
+export function buildGoToChatItems(apiChats: ChatResponse[]): {
   goToChatNodes: ChildrenNodes;
   goToChatEdge: ChildrenEdges;
 } {
@@ -68,6 +68,8 @@ export function buildCatalogueNodes(apiChats: ChatResponse[]): {
 
     const avatar = apiChat.avatar ?? "";
 
+    const isNotes = Store.getState().isNotes[apiChat.id];
+
     const lastMsg = apiChat.last_message;
     const contentText = lastMsg?.content ?? "";
     const date = lastMsg?.time ?? "";
@@ -82,6 +84,7 @@ export function buildCatalogueNodes(apiChats: ChatResponse[]): {
         date,
         unreadCount,
         chatId: apiChat.id,
+        isNotes
       },
       {
         click: () => {
@@ -136,3 +139,6 @@ export function buildMessageNodes(): {
 
   return { messageNodes, messageEdge };
 }
+
+export const randomNoteLabel = (): string =>
+  noteLabels[Math.floor(Math.random() * noteLabels.length)];

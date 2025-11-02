@@ -2,8 +2,9 @@ import { AppState } from "../../../app/providers/store/Store.ts";
 import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import { ComponentPatch } from "../../../shared/lib/Component/model/types.ts";
 import { MessengerProps } from "./types.ts";
-import { buildCatalogueNodes, buildMessageNodes } from "./utils.ts";
+import { buildGoToChatItems, buildMessageNodes } from "./utils.ts";
 import defaultAvatar from "../../../../static/avatar.png";
+import { getMessageFieldNode } from "../../../features/send-message/model/utils.ts";
 
 export const mapMessengerState = (
   state: AppState,
@@ -21,7 +22,7 @@ export const mapMessengerState = (
     participantAvatar: avatar,
   };
 
-  const goToChatNodesPatch = buildCatalogueNodes(list ?? []);
+  const goToChatNodesPatch = buildGoToChatItems(list ?? []);
 
   const messageNodesPatch = buildMessageNodes();
 
@@ -29,10 +30,6 @@ export const mapMessengerState = (
     console.error("goToChatNodesPatch is not defined");
   }
 
-  /* temp-fix: removes phantom empty-body-<li> els */
-  goToChatNodesPatch.goToChatEdge["goToChatItems"] = Array.from(
-    new Set(goToChatNodesPatch.goToChatEdge["goToChatItems"]),
-  );
 
   const { goToChatNodes, goToChatEdge } = goToChatNodesPatch;
   const { messageNodes, messageEdge } = messageNodesPatch;
@@ -45,6 +42,7 @@ export const mapMessengerState = (
       nodes: {
         ...goToChatNodes,
         ...messageNodes,
+        messageField: getMessageFieldNode("messageField"),
       },
       edges: {
         ...goToChatEdge,

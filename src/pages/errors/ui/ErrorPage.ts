@@ -14,8 +14,6 @@ export class ErrorPage extends Page<ErrorProps> {
   }
 
   public componentDidMount(): void {
-    super.componentDidMount();
-
     if (!this.children?.nodes) {
       throw new Error("children is not defined");
     }

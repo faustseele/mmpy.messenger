@@ -14,7 +14,9 @@ export class GoToChat extends Component<GoToChatProps> {
 
       <div class="${css.goToChat__content}">
         <p class="${css.userName}">{{ userName }}</p>
-        <p class="${css.contentText}">{{ contentText }}</p>
+        {{#if contentText }}
+          <p class="${css.contentText}">{{ contentText }}</p>
+        {{/if}}
       </div>
 
       <div class="${css.goToChat__infoBox}">

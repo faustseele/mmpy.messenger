@@ -12,9 +12,8 @@ export interface AppState {
   controllers: {
     isLoggedIn: boolean;
   };
+  isNotes: Record<ComponentId, boolean>
   pageNodes: Record<ComponentId, PageNode<BaseProps, Page<BaseProps>>>;
-  /* needed for the connect HOC `isEqual` check */
-  // [key: string]: unknown;
 }
 
 class Store extends EventBus<StoreEventBusEvents> {
@@ -36,6 +35,7 @@ class Store extends EventBus<StoreEventBusEvents> {
     controllers: {
       isLoggedIn: false,
     },
+    isNotes: {},
     pageNodes: { },
   };
 

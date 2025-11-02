@@ -7,12 +7,8 @@ import {
 import { connect } from "../../../app/providers/store/connect.ts";
 import { getMessageFieldNode } from "../../../features/send-message/model/utils.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
-import {
-  getButtonNode
-} from "../../../shared/ui/Button/utils.ts";
-import {
-  getHeadingNode
-} from "../../../shared/ui/Heading/utils.ts";
+import { getButtonNode } from "../../../shared/ui/Button/utils.ts";
+import { getHeadingNode } from "../../../shared/ui/Heading/utils.ts";
 import { getInputNode } from "../../../shared/ui/Input/utils.ts";
 import { PageId } from "../../page/config/const.ts";
 import { PageNode } from "../../page/model/types.ts";
@@ -55,15 +51,15 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
         placeholder: "Поиск",
         isSearch: true,
       }) as any,
-      addChatButton: getButtonNode({
-        id: "addChatButton",
-        label: "Добавить чат 💬",
-        tooltip: "Создать новый чат",
+      addNotesButton: getButtonNode({
+        id: "addNotesButton",
+        label: "Заметки ✏️",
+        tooltip: "Добавить новые заметки",
       }) as any,
-      addUserButton: getButtonNode({
-        id: "addUserButton",
-        label: "Добавить 👤",
-        tooltip: "Добавить пользователя",
+      findUserChatButton: getButtonNode({
+        id: "findUserChatButton",
+        label: "Найти пользователя 👤",
+        tooltip: "Найти пользователя по логину",
       }) as any,
       closeChatButton: getButtonNode({
         id: "closeChatButton",
@@ -71,33 +67,29 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
         isSilent: true,
         tooltip: "Закрыть чат",
       }) as any,
+      deleteNotesButton: getButtonNode({
+        id: "deleteNotesButton",
+        label: "Сжечь заметки 🔥",
+        isSilent: true,
+        tooltip: "Стереть заметки",
+      }) as any,
       deleteChatButton: getButtonNode({
         id: "deleteChatButton",
-        label: "Удалить 💬",
+        label: "Удалить чат 👤",
         isSilent: true,
-        tooltip: "Удалить чат",
+        tooltip: "Удалить чат с пользователем",
       }) as any,
-      deleteUserButton: getButtonNode({
-        id: "deleteUserButton",
-        label: "Удалить 👤",
-        isSilent: true,
-        tooltip: "Удалить пользователя",
-      }) as any,
-      messageField: getMessageFieldNode({
-        id: "messageField",
-        label: "Сообщение",
-        placeholder: "Сообщение",
-      }) as any,
+      messageField: getMessageFieldNode("messageField") as any,
     },
     edges: {
       heading_chats: "heading_chats",
       heading_goToSettings: "heading_goToSettings",
       searchInput: "searchInput",
-      addChatButton: "addChatButton",
-      addUserButton: "addUserButton",
+      addNotesButton: "addNotesButton",
+      findUserChatButton: "findUserChatButton",
       closeChatButton: "closeChatButton",
-      deleteUserButton: "deleteUserButton",
       deleteChatButton: "deleteChatButton",
+      deleteNotesButton: "deleteNotesButton",
       messageField: "messageField",
       goToChatItems: [],
       messages: [],

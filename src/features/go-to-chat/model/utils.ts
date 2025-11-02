@@ -8,6 +8,7 @@ import {
 import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
+import { cx } from "../../../shared/lib/helpers/formatting/classnames.ts";
 import { tinyDate } from "../../../shared/lib/helpers/formatting/date.ts";
 import { GoToChat } from "../ui/GoToChat.ts";
 import css from "../ui/goToChat.module.css";
@@ -45,7 +46,7 @@ export const getGoToChatParams = (
       date: date,
     },
     attributes: {
-      className: css.goToChat,
+      className: cx(`${css.goToChat} ${configs.isNotes ? css.goToChat_note : ""}`),
       tabindex: "0",
     },
     on: {
