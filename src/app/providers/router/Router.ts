@@ -1,7 +1,7 @@
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import Store from "../store/Store.ts";
+import Store from "../store/model/Store.ts";
 import Route from "./Route.ts";
 import { RouteConfigs, RouteContract, RouteLink } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";

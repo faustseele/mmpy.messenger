@@ -1,4 +1,4 @@
-import Store from "../../../app/providers/store/Store.ts";
+import Store from "../../../app/providers/store/model/Store.ts";
 import { ChatId, ChatMessage } from "../../../shared/api/model/types.ts";
 import { WSS_CHATS } from "../../../shared/config/urls.ts";
 

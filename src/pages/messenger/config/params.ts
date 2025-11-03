@@ -4,22 +4,17 @@ import {
   RouteConfigs,
   RouteLink,
 } from "../../../app/providers/router/types.ts";
-import { connect } from "../../../app/providers/store/connect.ts";
-import { getMessageFieldNode } from "../../../features/send-message/model/utils.ts";
+import { getMessageFieldNode } from "../../../features/send-message/model/factory.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
 import { getButtonNode } from "../../../shared/ui/Button/utils.ts";
 import { getHeadingNode } from "../../../shared/ui/Heading/utils.ts";
 import { getInputNode } from "../../../shared/ui/Input/utils.ts";
 import { PageId } from "../../page/config/const.ts";
-import { PageNode } from "../../page/model/types.ts";
 import cssPage from "../../page/ui/page.module.css";
-import { mapMessengerState } from "../model/map.ts";
 import { MessengerProps } from "../model/types.ts";
-import { buildMessengerPage } from "../model/utils.ts";
-import { MessengerPage } from "../ui/MessengerPage.ts";
 import cssMessenger from "../ui/messenger.module.css";
 
-const messengerPageParams: ComponentParams<MessengerProps> = {
+export const messengerPageParams: ComponentParams<MessengerProps> = {
   configs: {
     id: PageId.Messenger,
     tagName: "div",
@@ -97,17 +92,9 @@ const messengerPageParams: ComponentParams<MessengerProps> = {
   },
 };
 
-export const messengerPageNode: PageNode<MessengerProps, MessengerPage> = {
-  params: messengerPageParams,
-  factory: buildMessengerPage as any,
-};
-
 export const messengerPageRouteConfig: RouteConfigs = {
   path: RouteLink.Messenger,
   rootQuery: "#app",
   authStatus: "protected",
   params: {},
 };
-
-export const createMessengerPage = () =>
-  connect(messengerPageNode, mapMessengerState);

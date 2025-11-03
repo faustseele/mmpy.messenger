@@ -1,8 +1,8 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
-import Store from "../../../app/providers/store/Store.ts";
+import Store from "../../../app/providers/store/model/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
-import UserService from "../../../features/edit-profile/model/UserService.ts";
+import UserService from "../../../entities/user/model/UserService.ts";
 import { MessageField } from "../../../features/send-message/ui/MessageField.ts";
 import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";

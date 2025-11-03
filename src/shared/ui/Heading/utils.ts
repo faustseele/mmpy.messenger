@@ -24,22 +24,7 @@ export const getHeadingNode = (
   };
 };
 
-export const buildHeading: ComponentFactory<HeadingProps, Heading> = (
-  params: ComponentParams<HeadingProps>,
-): Heading => {
-  const deps: ComponentDeps<HeadingProps> = {
-    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
-    fragmentService: new FragmentService(),
-  };
-  const node = {
-    params,
-    factory: buildHeading,
-  };
-
-  return new Heading({ deps, node });
-};
-
-export const getHeadingProps = (
+const getHeadingProps = (
   configs: Omit<HeadingConfigs, "tagName">,
 ): ComponentParams<HeadingProps> => {
   return {
@@ -53,4 +38,19 @@ export const getHeadingProps = (
       ),
     },
   };
+};
+
+const buildHeading: ComponentFactory<HeadingProps, Heading> = (
+  params: ComponentParams<HeadingProps>,
+): Heading => {
+  const deps: ComponentDeps<HeadingProps> = {
+    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
+    fragmentService: new FragmentService(),
+  };
+  const node = {
+    params,
+    factory: buildHeading,
+  };
+
+  return new Heading({ deps, node });
 };

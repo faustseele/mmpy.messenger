@@ -29,27 +29,7 @@ export const getSubheadingNode = ({
   };
 };
 
-export const buildSubheading: ComponentFactory<SubheadingProps, Subheading> = (
-  params: ComponentParams<SubheadingProps>,
-): Subheading => {
-  const deps: ComponentDeps<SubheadingProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
-    fragmentService: new FragmentService(),
-  };
-
-  const node = {
-    params,
-    factory: buildSubheading,
-  };
-
-  return new Subheading({ deps, node });
-};
-
-export const getSubheadingProps = ({
+const getSubheadingProps = ({
   id,
   text,
   isDrama = false,
@@ -69,4 +49,24 @@ export const getSubheadingProps = ({
         `${cssSubheading.subheading} ${isDrama ? cssSubheading.subheading_drama : ""}`.trim(),
     },
   };
+};
+
+const buildSubheading: ComponentFactory<SubheadingProps, Subheading> = (
+  params: ComponentParams<SubheadingProps>,
+): Subheading => {
+  const deps: ComponentDeps<SubheadingProps> = {
+    domService: new DOMService(
+      params.configs.id,
+      params.configs.tagName,
+      params.attributes,
+    ),
+    fragmentService: new FragmentService(),
+  };
+
+  const node = {
+    params,
+    factory: buildSubheading,
+  };
+
+  return new Subheading({ deps, node });
 };

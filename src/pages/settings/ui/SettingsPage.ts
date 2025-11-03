@@ -1,8 +1,8 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
-import Store from "../../../app/providers/store/Store.ts";
+import Store from "../../../app/providers/store/model/Store.ts";
+import UserService from "../../../entities/user/model/UserService.ts";
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
-import UserService from "../../../features/edit-profile/model/UserService.ts";
 import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";

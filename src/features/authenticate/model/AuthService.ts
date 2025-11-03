@@ -1,6 +1,6 @@
 import Router from "../../../app/providers/router/Router.ts";
 import { RouteLink } from "../../../app/providers/router/types.ts";
-import Store from "../../../app/providers/store/Store.ts";
+import Store from "../../../app/providers/store/model/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
 import { SignUpRequest, SignInRequest } from "../../../shared/api/model/types.ts";
 import AuthAPI from "../api/AuthAPI.ts";

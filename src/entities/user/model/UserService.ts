@@ -1,4 +1,4 @@
-import Store from "../../../app/providers/store/Store.ts";
+import Store from "../../../app/providers/store/model/Store.ts";
 import UserAPI from "../../../entities/user/api/UserAPI.ts";
 import {
   UpdateUserPassword,

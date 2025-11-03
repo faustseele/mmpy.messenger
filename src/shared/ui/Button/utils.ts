@@ -37,27 +37,7 @@ export const getButtonNode = ({
   };
 };
 
-export const buildButton: ComponentFactory<ButtonProps, Button> = (
-  params: ComponentParams<ButtonProps>,
-): Button => {
-  const deps: ComponentDeps<ButtonProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
-    fragmentService: new FragmentService(),
-  };
-
-  const node = {
-    params,
-    factory: buildButton,
-  };
-
-  return new Button({ deps, node });
-};
-
-export const getButtonProps = ({
+const getButtonProps = ({
   id,
   label,
   type,
@@ -86,4 +66,24 @@ export const getButtonProps = ({
       title: tooltip ?? "",
     },
   };
+};
+
+const buildButton: ComponentFactory<ButtonProps, Button> = (
+  params: ComponentParams<ButtonProps>,
+): Button => {
+  const deps: ComponentDeps<ButtonProps> = {
+    domService: new DOMService(
+      params.configs.id,
+      params.configs.tagName,
+      params.attributes,
+    ),
+    fragmentService: new FragmentService(),
+  };
+
+  const node = {
+    params,
+    factory: buildButton,
+  };
+
+  return new Button({ deps, node });
 };

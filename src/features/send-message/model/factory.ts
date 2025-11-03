@@ -25,7 +25,24 @@ export const getMessageFieldNode = (
   };
 };
 
-export const buildMessageField: ComponentFactory<
+const getMessageFieldParams = (
+  id: ComponentId,
+): ComponentParams<MessageFieldProps> => {
+  return {
+    configs: {
+      id,
+      tagName: "form",
+      type: "text",
+      label: "Message Input",
+      placeholder: ChatService.isCurrentChatNotes() ? "Заметка:" : "Cообщение...",
+    },
+    attributes: {
+      className: css.messageField,
+    },
+  };
+};
+
+const buildMessageField: ComponentFactory<
   MessageFieldProps,
   MessageField
 > = (params: ComponentParams<MessageFieldProps>): MessageField => {
@@ -44,21 +61,4 @@ export const buildMessageField: ComponentFactory<
   };
 
   return new MessageField({ deps, node });
-};
-
-export const getMessageFieldParams = (
-  id: ComponentId,
-): ComponentParams<MessageFieldProps> => {
-  return {
-    configs: {
-      id,
-      tagName: "form",
-      type: "text",
-      label: "Message Input",
-      placeholder: ChatService.isCurrentChatNotes() ? "Заметка:" : "Cообщение...",
-    },
-    attributes: {
-      className: css.messageField,
-    },
-  };
 };

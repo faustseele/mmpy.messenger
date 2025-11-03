@@ -33,7 +33,7 @@ export const getEditorNode = (
   };
 };
 
-export const getEditorProps = (
+const getEditorProps = (
   id: ComponentId,
   fieldId: FieldType,
   label: string,
@@ -62,7 +62,7 @@ export const getEditorProps = (
   },
 });
 
-export const buildInputEditor: ComponentFactory<InputProps, Input> = (
+const buildInputEditor: ComponentFactory<InputProps, Input> = (
   params: ComponentParams<InputProps>,
 ): InputEditor => {
   const deps: ComponentDeps<InputProps> = {

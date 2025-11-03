@@ -1,10 +1,11 @@
-import { AppState } from "../../../app/providers/store/Store.ts";
+import defaultAvatar from "../../../../static/avatar.png";
+import { AppState } from "../../../app/providers/store/model/Store.ts";
+import { getMessagesGraph } from "../../../entities/message-bubble/model/factory.ts";
+import { getGoToChatGraph } from "../../../features/go-to-chat/model/factory.ts";
+import { getMessageFieldNode } from "../../../features/send-message/model/factory.ts";
 import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import { ComponentPatch } from "../../../shared/lib/Component/model/types.ts";
 import { MessengerProps } from "./types.ts";
-import { buildGoToChatItems, buildMessageNodes } from "./utils.ts";
-import defaultAvatar from "../../../../static/avatar.png";
-import { getMessageFieldNode } from "../../../features/send-message/model/utils.ts";
 
 export const mapMessengerState = (
   state: AppState,
@@ -22,17 +23,16 @@ export const mapMessengerState = (
     participantAvatar: avatar,
   };
 
-  const goToChatNodesPatch = buildGoToChatItems(list ?? []);
+  const goToChatNodesPatch = getGoToChatGraph(list ?? []);
 
-  const messageNodesPatch = buildMessageNodes();
+  const messageNodesPatch = getMessagesGraph();
 
-  if (!goToChatNodesPatch.goToChatNodes) {
+  if (!goToChatNodesPatch.nodes) {
     console.error("goToChatNodesPatch is not defined");
   }
 
-
-  const { goToChatNodes, goToChatEdge } = goToChatNodesPatch;
-  const { messageNodes, messageEdge } = messageNodesPatch;
+  const { nodes: goToChatNodes, edges: goToChatEdge } = goToChatNodesPatch;
+  const { nodes: messageNodes, edges: messageEdge } = messageNodesPatch;
 
   return {
     configs: {

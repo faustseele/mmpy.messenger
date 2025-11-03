@@ -3,9 +3,7 @@ import { RouteLink } from "../../../app/providers/router/types.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Page } from "../../page/ui/Page.ts";
-import { errorPageParams_404, errorPageParams_500 } from "../config/params.ts";
 import { ErrorNodes, ErrorProps } from "../model/types.ts";
-import { buildErrorPage } from "../model/utils.ts";
 import css from "./errors.module.css";
 
 export class ErrorPage extends Page<ErrorProps> {
@@ -44,6 +42,3 @@ export class ErrorPage extends Page<ErrorProps> {
     `;
   }
 }
-
-export const createErrorPage_404 = () => buildErrorPage(errorPageParams_404);
-export const createErrorPage_500 = () => buildErrorPage(errorPageParams_500);

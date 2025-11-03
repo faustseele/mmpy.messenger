@@ -3,7 +3,6 @@ import {
   RouteConfigs,
   RouteLink,
 } from "../../../app/providers/router/types.ts";
-import { connect } from "../../../app/providers/store/connect.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
 import { getButtonNode } from "../../../shared/ui/Button/utils.ts";
 import { getHeadingNode } from "../../../shared/ui/Heading/utils.ts";
@@ -11,8 +10,8 @@ import { getInputNode } from "../../../shared/ui/Input/utils.ts";
 import { PageId } from "../../page/config/const.ts";
 import { PageNode } from "../../page/model/types.ts";
 import cssPage from "../../page/ui/page.module.css";
+import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
-import { buildAuthPage, mapAuthState } from "../model/utils.ts";
 import type { AuthPage } from "../ui/AuthPage.ts";
 
 const iptIds = [
@@ -182,8 +181,3 @@ export const signInRouteConfig: RouteConfigs = {
   authStatus: "guest",
   params: {},
 };
-
-export const createAuthPage_signIn = () =>
-  connect(authPageNode_in, mapAuthState);
-export const createAuthPage_signUp = () =>
-  connect(authPageNode_up, mapAuthState);

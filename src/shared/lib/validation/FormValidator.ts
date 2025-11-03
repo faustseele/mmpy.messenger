@@ -1,5 +1,5 @@
+import UserService from "../../../entities/user/model/UserService.ts";
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
-import UserService from "../../../features/edit-profile/model/UserService.ts";
 import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
 import { AuthType } from "../../../pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";

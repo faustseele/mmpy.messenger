@@ -1,7 +1,16 @@
 import defaultAvatar from "../../../../static/avatar.png";
+import Store from "../../../app/providers/store/model/Store.ts";
+import ChatService from "../../../entities/chat/model/ChatService.ts";
+import { ChatResponse } from "../../../shared/api/model/types.ts";
 import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import {
+  ChildGraph,
+  ChildrenNodes,
+  ChildrenEdges,
+} from "../../../shared/lib/Component/model/children.types.ts";
+import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
 } from "../../../shared/lib/Component/model/types.ts";
@@ -13,6 +22,51 @@ import { tinyDate } from "../../../shared/lib/helpers/formatting/date.ts";
 import { GoToChat } from "../ui/GoToChat.ts";
 import css from "../ui/goToChat.module.css";
 import { GoToChatConfigs, GoToChatProps } from "./types.ts";
+
+export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
+  const goToChatNodes: ChildrenNodes = {};
+  /* single edge for goToChat items-list {{{ goToChatItems }}} */
+  const goToChatEdge: ChildrenEdges = {
+    goToChatItems: [],
+  };
+  const goToChatItems = goToChatEdge.goToChatItems as ComponentId[];
+
+  apiChats.forEach((apiChat) => {
+    const id = `goToChatItem_${apiChat.id}`;
+    const isNotes = Store.getState().isNotes[apiChat.id];
+
+    const avatar = apiChat.avatar ?? "";
+    const lastMsg = apiChat.last_message;
+    const contentText = lastMsg?.content ?? "";
+    const date = lastMsg?.time ?? "";
+    const unreadCount = apiChat.unread_count;
+
+    const goToChatNode = getGoToChatNode(
+      {
+        id,
+        avatar,
+        userName: apiChat.title,
+        contentText,
+        date,
+        unreadCount,
+        chatId: apiChat.id,
+        isNotes,
+      },
+      {
+        click: () => {
+          ChatService.selectChat(apiChat.id);
+        },
+      },
+    );
+
+    /* populating */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    goToChatNodes[id] = goToChatNode as any;
+    goToChatItems.push(id);
+  });
+
+  return { nodes: goToChatNodes, edges: goToChatEdge };
+}
 
 export const getGoToChatNode = (
   configs: Omit<GoToChatConfigs, "tagName">,
@@ -28,7 +82,7 @@ export const getGoToChatNode = (
   };
 };
 
-export const getGoToChatParams = (
+const getGoToChatParams = (
   configs: Omit<GoToChatConfigs, "tagName">,
   on?: GoToChatProps["on"],
 ): ComponentParams<GoToChatProps> => {
@@ -46,7 +100,9 @@ export const getGoToChatParams = (
       date: date,
     },
     attributes: {
-      className: cx(`${css.goToChat} ${configs.isNotes ? css.goToChat_note : ""}`),
+      className: cx(
+        `${css.goToChat} ${configs.isNotes ? css.goToChat_note : ""}`,
+      ),
       tabindex: "0",
     },
     on: {
@@ -55,7 +111,7 @@ export const getGoToChatParams = (
   };
 };
 
-export const buildGoToChat: ComponentFactory<GoToChatProps, GoToChat> = (
+const buildGoToChat: ComponentFactory<GoToChatProps, GoToChat> = (
   params: ComponentParams<GoToChatProps>,
 ): GoToChat => {
   const deps: ComponentDeps<GoToChatProps> = {

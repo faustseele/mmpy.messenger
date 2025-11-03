@@ -1,21 +1,19 @@
 import Router from "./src/app/providers/router/Router.ts";
 import "./src/app/styles/index.css";
 import {
-  createAuthPage_signIn,
-  createAuthPage_signUp,
   signInRouteConfig,
   signUpRouteConfig,
 } from "./src/pages/auth/config/params.ts";
+import { createAuthPage_signIn, createAuthPage_signUp } from "./src/pages/auth/model/factory.ts";
 import {
   errorRouteConfig_404,
   errorRouteConfig_500,
 } from "./src/pages/errors/config/params.ts";
-import {
-  createErrorPage_404,
-  createErrorPage_500,
-} from "./src/pages/errors/ui/ErrorPage.ts";
-import { createMessengerPage, messengerPageRouteConfig } from "./src/pages/messenger/config/params.ts";
-import { createSettingsPage, settingsPageRouteConfig } from "./src/pages/settings/config/params.ts";
+import { createErrorPage_404, createErrorPage_500 } from "./src/pages/errors/model/factory.ts";
+import { messengerPageRouteConfig } from "./src/pages/messenger/config/params.ts";
+import { createMessengerPage } from "./src/pages/messenger/model/factory.ts";
+import { settingsPageRouteConfig } from "./src/pages/settings/config/params.ts";
+import { createSettingsPage } from "./src/pages/settings/model/factory.ts";
 
 export const rootQuery = "#app";
 

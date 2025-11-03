@@ -1,4 +1,4 @@
-import { APIState } from "./types.ts";
+import { APIState } from "../model/types.ts";
 
 export const apiInitialState: APIState = {
   auth: {

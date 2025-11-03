@@ -24,7 +24,22 @@ export const getInputNode = (
   };
 };
 
-export const buildInput: ComponentFactory<InputProps, Input> = (
+const getInputProps = (
+  configs: Omit<InputConfigs, "tagName">,
+): ComponentParams<InputProps> => {
+  return {
+    configs: {
+      tagName: "label",
+      ...configs,
+    },
+    attributes: {
+      className: cx(`${cssInput.inputLabelWrap}`),
+      for: configs.fieldId,
+    },
+  };
+};
+
+const buildInput: ComponentFactory<InputProps, Input> = (
   params: ComponentParams<InputProps>,
 ): Input => {
   const deps: ComponentDeps<InputProps> = {
@@ -42,19 +57,4 @@ export const buildInput: ComponentFactory<InputProps, Input> = (
   };
 
   return new Input({ deps, node });
-};
-
-export const getInputProps = (
-  configs: Omit<InputConfigs, "tagName">,
-): ComponentParams<InputProps> => {
-  return {
-    configs: {
-      tagName: "label",
-      ...configs,
-    },
-    attributes: {
-      className: cx(`${cssInput.inputLabelWrap}`),
-      for: configs.fieldId,
-    },
-  };
 };

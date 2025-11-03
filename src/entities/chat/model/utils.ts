@@ -1,4 +1,4 @@
-import Store from "../../../app/providers/store/Store.ts";
+import Store from "../../../app/providers/store/model/Store.ts";
 import { ChatId } from "../../../shared/api/model/types.ts";
 import ChatService from "./ChatService.ts";
 

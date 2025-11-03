@@ -9,7 +9,7 @@ export interface MessageProps extends BaseProps {
 }
 
 export interface MessageConfigs extends BaseConfigs {
-  tagName: Extract<TagNameType, "article" | "div">;
+  tagName: Extract<TagNameType, "article">;
   type: MessageType;
   date: string;
   text?: string;

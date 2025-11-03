@@ -4,10 +4,9 @@ import {
   RouteConfigs,
   RouteLink,
 } from "../../../app/providers/router/types.ts";
-import { connect } from "../../../app/providers/store/connect.ts";
 import {
   getEditorNode
-} from "../../../features/edit-profile/model/utils.ts";
+} from "../../../features/edit-profile/model/factory.ts";
 import cssPage from "../../../pages/page/ui/page.module.css";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
 import {
@@ -17,11 +16,8 @@ import {
   getHeadingNode
 } from "../../../shared/ui/Heading/utils.ts";
 import { PageId } from "../../page/config/const.ts";
-import { PageNode } from "../../page/model/types.ts";
 import { SettingsProps } from "../model/types.ts";
-import { buildSettingsPage, mapSettingsState } from "../model/utils.ts";
 import cssSettings from "../ui/settings.module.css";
-import type { SettingsPage } from "../ui/SettingsPage.ts";
 
 const iptIds = [
   "inputEditor-email",
@@ -93,7 +89,7 @@ const inputEditorsNodes = {
   ),
 };
 
-const settingsPageParams: ComponentParams<SettingsProps> = {
+export const settingsPageParams: ComponentParams<SettingsProps> = {
   configs: {
     id: PageId.Settings,
     tagName: "div",
@@ -144,17 +140,9 @@ const settingsPageParams: ComponentParams<SettingsProps> = {
   },
 };
 
-export const settingsPageNode: PageNode<SettingsProps, SettingsPage> = {
-  params: settingsPageParams,
-  factory: buildSettingsPage as any,
-};
-
 export const settingsPageRouteConfig: RouteConfigs = {
   path: RouteLink.Settings,
   rootQuery: "#app",
   authStatus: "protected",
   params: {},
 };
-
-export const createSettingsPage = () =>
-  connect(settingsPageNode, mapSettingsState);
