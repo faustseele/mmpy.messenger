@@ -1,4 +1,3 @@
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
   ComponentDeps,
   ComponentId,
@@ -8,6 +7,7 @@ import {
 import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
+import { RouteLink } from "../../types/universal.ts";
 import css from "./button.module.css";
 import { Button } from "./Button.ts";
 import { ButtonProps } from "./types.ts";

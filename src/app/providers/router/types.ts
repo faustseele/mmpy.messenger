@@ -25,13 +25,3 @@ export interface RouteConfigs {
   authStatus: AuthStateType;
   params: Record<string, string>;
 }
-
-/* Eslint doesn't like the enums */
-export enum RouteLink {
-  SignIn = "/",
-  SignUp = "/sign-up",
-  Messenger = "/messenger",
-  Settings = "/settings",
-  NotFound = "/404",
-  Error = "/500",
-}

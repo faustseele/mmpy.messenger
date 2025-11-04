@@ -1,11 +1,11 @@
 import Router from "../../../app/providers/router/Router.ts";
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import Store from "../../../app/providers/store/model/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
 import UserService from "../../../entities/user/model/UserService.ts";
 import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { urlToFile } from "../../../shared/lib/helpers/file.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { Page } from "../../page/ui/Page.ts";

@@ -2,13 +2,13 @@
 import profileAvatar from "../../../../static/profile-avatar.png";
 import {
   RouteConfigs,
-  RouteLink,
 } from "../../../app/providers/router/types.ts";
 import {
   getEditorNode
 } from "../../../features/edit-profile/model/factory.ts";
 import cssPage from "../../../pages/page/ui/page.module.css";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import {
   getButtonNode
 } from "../../../shared/ui/Button/utils.ts";

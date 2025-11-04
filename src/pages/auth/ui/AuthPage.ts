@@ -1,8 +1,8 @@
 import Router from "../../../app/providers/router/Router.ts";
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Input } from "../../../shared/ui/Input/Input.ts";
 import { InputProps } from "../../../shared/ui/Input/types.ts";

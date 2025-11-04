@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RouteConfigs, RouteLink } from "../../../app/providers/router/types.ts";
+import { RouteConfigs } from "../../../app/providers/router/types.ts";
 import {
   ComponentParams
 } from "../../../shared/lib/Component/model/types.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import {
   getButtonNode
 } from "../../../shared/ui/Button/utils.ts";
