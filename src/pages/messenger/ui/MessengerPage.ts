@@ -3,7 +3,6 @@ import { RouteLink } from "../../../app/providers/router/types.ts";
 import Store from "../../../app/providers/store/model/Store.ts";
 import ChatService from "../../../entities/chat/model/ChatService.ts";
 import UserService from "../../../entities/user/model/UserService.ts";
-import { MessageField } from "../../../features/send-message/ui/MessageField.ts";
 import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { urlToFile } from "../../../shared/lib/helpers/file.ts";
@@ -38,7 +37,6 @@ export class MessengerPage extends Page<MessengerProps> {
       deleteChatButton,
       deleteNotesButton,
       closeChatButton,
-      messageField,
     } = this.children.nodes as MessengerNodes;
     const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
     const addChat = addNotesButton.runtime?.instance as Button;
@@ -46,10 +44,8 @@ export class MessengerPage extends Page<MessengerProps> {
     const closeChat = closeChatButton.runtime?.instance as Button;
     const deleteNotes = deleteNotesButton.runtime?.instance as Button;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
-    const form = messageField.runtime?.instance as MessageField;
 
     /* --- setting events --- */
-    this._wireMessageSubmit(form);
     this._wireAddNotes(addChat);
     this._wireAddChat(addUser);
     this._wireDeleteChat(deleteChat);
@@ -180,25 +176,6 @@ export class MessengerPage extends Page<MessengerProps> {
       input.value = "";
     });
     input.dataset.bound = "true";
-  }
-
-  private _wireMessageSubmit(form: MessageField) {
-    form?.setProps({
-      on: {
-        submit: (e: Event) => {
-          e.preventDefault();
-
-          const el = e.target as HTMLFormElement;
-          const input = el.querySelector("input");
-          const text = (input as HTMLInputElement)?.value?.trim();
-
-          if (text) {
-            ChatService.sendMessage(text);
-            (input as HTMLInputElement).value = "";
-          }
-        },
-      },
-    });
   }
 
   public getSourceMarkup(): string {
