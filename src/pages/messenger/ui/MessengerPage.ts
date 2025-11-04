@@ -51,9 +51,9 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireDeleteChat(deleteChat);
     this._wireDeleteChat(deleteNotes);
     this._wireCloseChat(closeChat);
-    headingToSettings?.setProps({
+    headingToSettings.setProps({
       on: {
-        click: () => Router.go(RouteLink.Settings),
+        click: () => Router.go(headingToSettings.configs.link ?? RouteLink.Settings),
       },
     });
   }

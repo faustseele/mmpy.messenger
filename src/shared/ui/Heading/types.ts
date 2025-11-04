@@ -15,6 +15,10 @@ export interface HeadingConfigs extends BaseConfigs {
   link?: RouteLink;
 }
 
-interface HeadingAttributes extends BaseAttributes {
+export interface HeadingAttributes extends BaseAttributes {
   className: string;
+}
+
+export interface HeadingOn {
+  click?: () => void;
 }
