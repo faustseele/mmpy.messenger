@@ -1,15 +1,3 @@
-/** Abstract class for the Component
- * Following the Separation of Concerns principle,
- * Two Dependencies are injected into the Component:
- * @DOMService & @FragmentService
- *
- * '_initComponent' method call-sequence:
- * _initComponent -> CDM + CDR
- *
- * Lifecycle flow:methods call-sequence:
- * public -> EventBus -> private
- * */
-
 import { PageId } from "../../../../pages/page/config/const.ts";
 import DOMService from "../../DOM/DOMService.ts";
 import EventBus from "../../EventBus/EventBus.ts";
@@ -19,6 +7,19 @@ import { BaseProps } from "./base.types.ts";
 import { ChildGraph, ChildrenFlat } from "./children.types.ts";
 import { ComponentEventBusEvents } from "./event.types.ts";
 import { ComponentId, ComponentPatch, ComponentProps } from "./types.ts";
+
+/**
+ * abstract class for the Component
+ * following the Separation of Concerns principle,
+ * 2 deps are injected into Component:
+ * @DOMService & @FragmentService
+ *
+ * '_initComponent' method call-sequence:
+ * _initComponent -> CDR -> CDM 
+ *
+ * lifecycle flow:methods sequence:
+ * EventBus → private hook → public hook
+ */
 
 export default abstract class Component<P extends BaseProps> {
   /* --- Dependencies --- */
@@ -58,8 +59,8 @@ export default abstract class Component<P extends BaseProps> {
   }
 
   /* get overridden */
-  public componentDidMount(): void {}
   public componentDidRender(): void {}
+  public componentDidMount(): void {}
   public componentDidUpdate(): void {}
   public componentDidUnmount(): void {}
   public getSourceMarkup(): string {
@@ -96,11 +97,11 @@ export default abstract class Component<P extends BaseProps> {
 
   /* private methods are called through EventBus */
   private _registerEventBusEvents(): void {
+    this._bus.on("flow:render", this._componentDidRender.bind(this));
     this._bus.on(
       "flow:component-did-mount",
       this._componentDidMount.bind(this),
     );
-    this._bus.on("flow:render", this._componentDidRender.bind(this));
     this._bus.on(
       "flow:component-did-update",
       this._componentDidUpdate.bind(this),
@@ -118,23 +119,6 @@ export default abstract class Component<P extends BaseProps> {
 
     /* element exists -> call CDM */
     this._bus.emit("flow:component-did-mount");
-  }
-
-  /* informational; propagates to childrenFlat */
-  private _componentDidMount(): void {
-    if (!this.childrenFlat) return;
-
-    /* recusively mounting children */
-    Object.values(this.childrenFlat).forEach((child) => {
-      if (!child.runtime?.instance) {
-        console.error("Child has no instance", child, this);
-        return;
-      }
-      child.runtime.instance.bus.emit("flow:component-did-mount");
-    });
-
-    /* allows components to run post-mount logic */
-    this.componentDidMount();
   }
 
   /* on _initComponent & CDM; On CDU */
@@ -168,6 +152,23 @@ export default abstract class Component<P extends BaseProps> {
     this.componentDidRender();
   }
 
+  /* informational; propagates to childrenFlat */
+  private _componentDidMount(): void {
+    if (!this.childrenFlat) return;
+
+    /* recusively mounting children */
+    Object.values(this.childrenFlat).forEach((child) => {
+      if (!child.runtime?.instance) {
+        console.error("Child has no instance", child, this);
+        return;
+      }
+      child.runtime.instance.bus.emit("flow:component-did-mount");
+    });
+
+    /* allows components to run post-mount logic */
+    this.componentDidMount();
+  }
+
   /* emits -> CDR */
   private _componentDidUpdate(): void {
     this._bus.emit("flow:render");
@@ -177,18 +178,17 @@ export default abstract class Component<P extends BaseProps> {
   }
 
   /**
-   * emits on -> Router -> new Page
+   * emits on Router -> new Page
    * propagates to children
    * called before the CDUnmounted
    * removes listeners 
    */
   private _componentDidUnmount(): void {
     this.domService.removeListeners(this._on);
-    this._bus.emit("flow:component-did-unmount");
 
     if (!this.childrenFlat) return;
 
-    /* recusively mountes children */
+    /* using bus to fully unmount children */
     Object.values(this.childrenFlat).forEach((value) => {
       if (!value.runtime?.instance) {
         console.error("Child has no instance", value, this);
@@ -223,7 +223,7 @@ export default abstract class Component<P extends BaseProps> {
     const element = this.domService.element;
     if (!element) return;
 
-    // element!.style.display = "flex";
+    element!.style.display = "flex";
   }
 
   /** DOMService helper

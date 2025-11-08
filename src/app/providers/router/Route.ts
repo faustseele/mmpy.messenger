@@ -51,7 +51,9 @@ export default class Route<
 
   public leave() {
     if (this._pageInstance) {
-      this._pageInstance.componentDidUnmount();
+
+      /* using bus to fully unmount the page */
+      this._pageInstance.bus.emit("flow:component-did-unmount");
       this._pageInstance.element?.remove();
       /* Nullifing the instance to ensure it's recreated on next visit */
       this._pageInstance = null;
