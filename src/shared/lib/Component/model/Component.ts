@@ -1,4 +1,3 @@
-import { PageId } from "../../../../pages/page/config/const.ts";
 import DOMService from "../../DOM/DOMService.ts";
 import EventBus from "../../EventBus/EventBus.ts";
 import FragmentService from "../../Fragment/FragmentService.ts";
@@ -209,9 +208,6 @@ export default abstract class Component<P extends BaseProps> {
     if (attributes) Object.assign(this._attrs!, attributes);
     if (on) Object.assign(this._on!, on);
     if (children) Object.assign(this._children as object, children);
-    if (this._configs.id === PageId.SignIn) {
-      // console.log(this._on);
-    }
   }
 
   /* DOMService -> makes visible */

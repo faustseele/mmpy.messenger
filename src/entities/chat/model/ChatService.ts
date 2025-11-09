@@ -76,12 +76,12 @@ class ChatService {
     title: string,
   ): Promise<CreateChatResponse | undefined> {
     try {
-      const resChat = await ChatAPI.createChat({ title });
+      const res = await ChatAPI.createChat({ title });
       const resChats = await this.fetchChats();
-      this.selectChat(resChat.id);
+      this.selectChat(res.id);
 
-      console.log(`chat ${title} create success !:`, resChat, resChats);
-      return resChat;
+      console.log(`chat ${title} create success !:`, res, resChats);
+      return res;
     } catch (e) {
       console.error("chat create failed:", e);
       return;
@@ -162,8 +162,6 @@ class ChatService {
 
     Store.set("api.chats.activeId", null);
     Store.set("api.chats.currentChat", null);
-
-    console.log("deselect chat");
   }
 }
 

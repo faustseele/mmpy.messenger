@@ -8,7 +8,7 @@ import AuthAPI from "../api/AuthAPI.ts";
 class AuthService {
   public async signUp(data: SignUpRequest) {
     try {
-      const resSignUp = await AuthAPI.signUp(data);
+      const res = await AuthAPI.signUp(data);
       const user = await AuthAPI.requestUser();
       Store.set("api.auth.user", user);
       if (user) {
@@ -18,7 +18,7 @@ class AuthService {
       }
 
       Router.go(RouteLink.Messenger);
-      console.log(resSignUp, user, Store.getState());
+      console.log(res, user, Store.getState());
 
       /* generating one notes-chat */
       await ChatService.createChat('Заметки 📃');
@@ -30,7 +30,7 @@ class AuthService {
 
   public async signIn(data: SignInRequest) {
     try {
-      const resSignIn = await AuthAPI.signIn(data);
+      const res = await AuthAPI.signIn(data);
       const user = await AuthAPI.requestUser();
       Store.set("api.auth.user", user);
       if (user) {
@@ -40,7 +40,7 @@ class AuthService {
       }
 
       Router.go(RouteLink.Messenger);
-      console.log(resSignIn, user, Store.getState());
+      console.log(res, user, Store.getState());
     } catch (e) {
       console.error("SignIn failed:", e);
     }
