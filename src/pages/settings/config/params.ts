@@ -7,6 +7,7 @@ import {
   getEditorNode
 } from "../../../features/edit-profile/model/factory.ts";
 import cssPage from "../../../pages/page/ui/page.module.css";
+import { ROOT_QUERY } from "../../../shared/config/dom.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
 import { RouteLink } from "../../../shared/types/universal.ts";
 import {
@@ -142,7 +143,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
 
 export const settingsPageRouteConfig: RouteConfigs = {
   path: RouteLink.Settings,
-  rootQuery: "#app",
+  rootQuery: ROOT_QUERY,
   authStatus: "protected",
   params: {},
 };

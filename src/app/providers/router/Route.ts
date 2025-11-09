@@ -1,4 +1,5 @@
 import { Page } from "../../../pages/page/ui/Page.ts";
+import { ROOT_QUERY } from "../../../shared/config/dom.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
 import { AuthStateType, RouteConfigs, RouteContract } from "./types.ts";
 import { matchPath } from "./utils.ts";
@@ -21,7 +22,6 @@ export default class Route<
   Props extends BaseProps,
 > implements RouteContract
 {
-  private _rootQuery: string = "";
   private _routeConfigs: RouteConfigs;
   /* Factory args are passed in index.ts */
   private _pageFactory: () => Page<Props>;
@@ -37,7 +37,7 @@ export default class Route<
   constructor({ routeConfigs, pageFactory }: RouteProps<Props>) {
     this._routeConfigs = routeConfigs ?? {
       path: "",
-      rootQuery: "",
+      rootQuery: ROOT_QUERY,
       params: {},
     };
     this._pageFactory = pageFactory;
@@ -61,7 +61,7 @@ export default class Route<
   }
 
   public setRootQuery(next: string) {
-    this._rootQuery = next;
+    this._routeConfigs.rootQuery = next;
   }
 
   public setRouteConfigs(nextConfigs: Partial<RouteConfigs>): void {
@@ -74,7 +74,7 @@ export default class Route<
 
       this._pageInstance.setPageParams(this._routeConfigs.params);
 
-      const root = document.querySelector(this._rootQuery);
+      const root = document.querySelector(this._routeConfigs.rootQuery);
       const element = this._pageInstance!.element;
 
       if (!root || !element) {

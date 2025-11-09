@@ -2,6 +2,7 @@
 import {
   RouteConfigs,
 } from "../../../app/providers/router/types.ts";
+import { ROOT_QUERY } from "../../../shared/config/dom.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
 import { RouteLink } from "../../../shared/types/universal.ts";
 import { getButtonNode } from "../../../shared/ui/Button/utils.ts";
@@ -170,14 +171,14 @@ export const authPageNode_up: PageNode<AuthProps, AuthPage> = {
 
 export const signUpRouteConfig: RouteConfigs = {
   path: RouteLink.SignUp,
-  rootQuery: "#app",
+  rootQuery: ROOT_QUERY,
   authStatus: "guest",
   params: {},
 };
 
 export const signInRouteConfig: RouteConfigs = {
   path: RouteLink.SignIn,
-  rootQuery: "#app",
+  rootQuery: ROOT_QUERY,
   authStatus: "guest",
   params: {},
 };

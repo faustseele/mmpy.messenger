@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RouteConfigs } from "../../../app/providers/router/types.ts";
+import { ROOT_QUERY } from "../../../shared/config/dom.ts";
 import {
   ComponentParams
 } from "../../../shared/lib/Component/model/types.ts";
@@ -91,14 +92,14 @@ export const errorPageParams_500: ComponentParams<ErrorProps> = {
 
 export const errorRouteConfig_404: RouteConfigs = {
   path: RouteLink.NotFound,
-  rootQuery: "#app",
+  rootQuery: ROOT_QUERY,
   authStatus: "any",
   params: {},
 };
 
 export const errorRouteConfig_500: RouteConfigs = {
   path: RouteLink.Error,
-  rootQuery: "#app",
+  rootQuery: ROOT_QUERY,
   authStatus: "any",
   params: {},
 };

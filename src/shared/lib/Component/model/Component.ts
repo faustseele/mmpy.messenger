@@ -15,7 +15,7 @@ import { ComponentId, ComponentPatch, ComponentProps } from "./types.ts";
  * @DOMService & @FragmentService
  *
  * '_initComponent' method call-sequence:
- * _initComponent -> CDR -> CDM 
+ * _initComponent -> CDR -> CDM
  *
  * lifecycle flow:methods sequence:
  * EventBus → private hook → public hook
@@ -172,7 +172,7 @@ export default abstract class Component<P extends BaseProps> {
   /* emits -> CDR */
   private _componentDidUpdate(): void {
     this._bus.emit("flow:render");
-    
+
     /* allows components to run post-update logic */
     this.componentDidUpdate();
   }
@@ -181,7 +181,7 @@ export default abstract class Component<P extends BaseProps> {
    * emits on Router -> new Page
    * propagates to children
    * called before the CDUnmounted
-   * removes listeners 
+   * removes listeners
    */
   private _componentDidUnmount(): void {
     this.domService.removeListeners(this._on);
@@ -200,8 +200,7 @@ export default abstract class Component<P extends BaseProps> {
     this.componentDidUnmount();
   }
 
-
-  /** invokes Proxy-setters */
+  /* invokes Proxy-setters */
   public setProps(patch: ComponentPatch<P>): void {
     if (!patch) return;
     Object.assign(this._configs, patch.configs);
@@ -215,10 +214,7 @@ export default abstract class Component<P extends BaseProps> {
     }
   }
 
-  /**
-   * DOMService helper.
-   * Makes the Component visible
-   */
+  /* DOMService -> makes visible */
   public show(): void {
     const element = this.domService.element;
     if (!element) return;
@@ -226,8 +222,7 @@ export default abstract class Component<P extends BaseProps> {
     element!.style.display = "flex";
   }
 
-  /** DOMService helper
-   * Makes the Component invisible */
+  /* DOMService -> makes invisible */
   public hide(): void {
     const element = this.domService.element;
     if (!element) return;

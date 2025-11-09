@@ -55,14 +55,12 @@ class Router {
   }
 
   /* inits Router; sets root query to existing Routes */
-  public async start(rootQuery: string): Promise<void> {
+  public async start(): Promise<void> {
     try {
       await AuthService.fetchUser();
     } catch (_) {
       console.error("Failed to fetch user on startup");
     }
-
-    this._routes.forEach((route) => route.setRootQuery(rootQuery));
 
     /* adds listener that's triggered
       when the active history entry changes. */
