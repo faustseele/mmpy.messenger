@@ -8,7 +8,6 @@ import DOMService from "../../../shared/lib/DOM/DOMService.ts";
 import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
 import css from "../../../shared/ui/Input/input.module.css";
-import { Input } from "../../../shared/ui/Input/Input.ts";
 import { FieldType, InputConfigs, InputProps } from "../../../shared/ui/Input/types.ts";
 import { InputEditor } from "../ui/InputEditor.ts";
 
@@ -62,7 +61,7 @@ const getEditorProps = (
   },
 });
 
-const buildInputEditor: ComponentFactory<InputProps, Input> = (
+const buildInputEditor: ComponentFactory<InputProps, InputEditor> = (
   params: ComponentParams<InputProps>,
 ): InputEditor => {
   const deps: ComponentDeps<InputProps> = {

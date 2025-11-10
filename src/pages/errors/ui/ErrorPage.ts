@@ -1,6 +1,6 @@
 import Router from "../../../app/providers/router/Router.ts";
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Page } from "../../page/ui/Page.ts";
 import { ErrorNodes, ErrorProps } from "../model/types.ts";

@@ -48,7 +48,6 @@ export function connect<P extends BaseProps, C extends Page<P>>(
         const exists = existing?.[nodeId]?.runtime?.instance;
         if (!exists) {
           try {
-            /* due to deep-partial any is used here */
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const factory = patched[nodeId]?.factory as any;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -68,7 +68,7 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
   return { nodes: goToChatNodes, edges: goToChatEdge };
 }
 
-export const getGoToChatNode = (
+const getGoToChatNode = (
   configs: Omit<GoToChatConfigs, "tagName">,
   on?: GoToChatProps["on"],
 ): ComponentNode<GoToChatProps, GoToChat> => {

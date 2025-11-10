@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import participantAvatar from "../../../../static/avatar.png";
 import {
-  RouteConfigs,
-  RouteLink,
+  RouteConfigs
 } from "../../../app/providers/router/types.ts";
 import { getMessageFieldNode } from "../../../features/send-message/model/factory.ts";
+import { ROOT_QUERY } from "../../../shared/config/dom.ts";
 import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import { getButtonNode } from "../../../shared/ui/Button/utils.ts";
 import { getHeadingNode } from "../../../shared/ui/Heading/utils.ts";
 import { getInputNode } from "../../../shared/ui/Input/utils.ts";
@@ -94,7 +95,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
 
 export const messengerPageRouteConfig: RouteConfigs = {
   path: RouteLink.Messenger,
-  rootQuery: "#app",
+  rootQuery: ROOT_QUERY,
   authStatus: "protected",
   params: {},
 };

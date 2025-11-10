@@ -1,9 +1,10 @@
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
 import { Page } from "../../../pages/page/ui/Page.ts";
 import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import Store from "../store/model/Store.ts";
 import Route from "./Route.ts";
-import { RouteConfigs, RouteContract, RouteLink } from "./types.ts";
+import { RouteConfigs, RouteContract } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";
 
 /**
@@ -54,14 +55,12 @@ class Router {
   }
 
   /* inits Router; sets root query to existing Routes */
-  public async start(rootQuery: string): Promise<void> {
+  public async start(): Promise<void> {
     try {
       await AuthService.fetchUser();
     } catch (_) {
       console.error("Failed to fetch user on startup");
     }
-
-    this._routes.forEach((route) => route.setRootQuery(rootQuery));
 
     /* adds listener that's triggered
       when the active history entry changes. */
@@ -70,26 +69,7 @@ class Router {
     };
 
     /* for the nav-<a> links */
-    document.addEventListener("click", (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const navLink = target.closest("nav a");
-
-      if (navLink) {
-        e.preventDefault();
-
-        const path = navLink.getAttribute("href");
-
-        if (path === "/logout") {
-          AuthService.logout();
-          return;
-        }
-
-        if (path) {
-          this.go(path as RouteLink);
-        }
-      }
-
-    });
+    this._handleNavLinks();
 
     /* Initial page load. */
     this._onRouteChange(window.location.pathname);
@@ -142,6 +122,22 @@ class Router {
 
   public forward(): void {
     this._history.forward();
+  }
+
+  private _handleNavLinks() {
+    const navs = document.getElementsByClassName(
+      "navButton",
+    ) as HTMLCollectionOf<HTMLAnchorElement>;
+
+    for (const a of Array.from(navs)) {
+      a.addEventListener("click", (e: MouseEvent) => {
+        e.preventDefault();
+
+        const path = a.getAttribute("href");
+        if (path === "/logout") AuthService.logout();
+        else this.go(path as RouteLink);
+      });
+    }
   }
 }
 

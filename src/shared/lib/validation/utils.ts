@@ -26,7 +26,7 @@ const getRegex: Record<FieldType, (value: string) => string> = {
     const regex = /^(?=.*[A-Z])(?=.*\d).{8,40}$/;
     return regex.test(value)
       ? ""
-      : "Пароль: 8-40 символов, минимум 1 цифра и заглавная буква.";
+      : "8-40 символов, минимум 1 цифра и заглавная буква.";
   },
   phone: (value: string): string => {
     const regex = /^\+?\d{10,15}$/;
@@ -46,13 +46,13 @@ const getRegex: Record<FieldType, (value: string) => string> = {
     const regex = /^(?=.*[A-Z])(?=.*\d).{8,40}$/;
     return regex.test(value)
       ? ""
-      : "Пароль: 8-40 символов, минимум 1 цифра и заглавная буква.";
+      : "8-40 символов, минимум 1 цифра и заглавная буква.";
   },
   newPassword: (value: string): string => {
     const regex = /^(?=.*[A-Z])(?=.*\d).{8,40}$/;
     return regex.test(value)
       ? ""
-      : "Пароль: 8-40 символов, минимум 1 цифра и заглавная буква.";
+      : "8-40 символов, минимум 1 цифра и заглавная буква.";
   },
 };
 

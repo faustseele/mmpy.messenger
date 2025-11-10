@@ -1,5 +1,4 @@
 import Router from "../../../app/providers/router/Router.ts";
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import Store from "../../../app/providers/store/model/Store.ts";
 import UserService from "../../../entities/user/model/UserService.ts";
 import AuthService from "../../../features/authenticate/model/AuthService.ts";
@@ -7,6 +6,7 @@ import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
 import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
 import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";
 import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
+import { RouteLink } from "../../../shared/types/universal.ts";
 import { Button } from "../../../shared/ui/Button/Button.ts";
 import { Heading } from "../../../shared/ui/Heading/Heading.ts";
 import { InputProps } from "../../../shared/ui/Input/types.ts";

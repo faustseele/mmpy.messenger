@@ -9,12 +9,13 @@ import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import { cx } from "../../lib/helpers/formatting/classnames.ts";
 import css from "./heading.module.css";
 import { Heading } from "./Heading.ts";
-import { HeadingConfigs, HeadingProps } from "./types.ts";
+import { HeadingConfigs, HeadingOn, HeadingProps } from "./types.ts";
 
 export const getHeadingNode = (
   configs: Omit<HeadingConfigs, "tagName">,
+  on?: HeadingOn
 ): ComponentNode<HeadingProps, Heading> => {
-  const params = getHeadingProps(configs);
+  const params = getHeadingProps(configs, on);
   return {
     params,
     factory: buildHeading,
@@ -26,6 +27,7 @@ export const getHeadingNode = (
 
 const getHeadingProps = (
   configs: Omit<HeadingConfigs, "tagName">,
+  on?: HeadingOn,
 ): ComponentParams<HeadingProps> => {
   return {
     configs: {
@@ -37,6 +39,9 @@ const getHeadingProps = (
         `${css.heading}`,
       ),
     },
+    on: {
+      ...on,
+    }
   };
 };
 

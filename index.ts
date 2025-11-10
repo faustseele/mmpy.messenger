@@ -15,8 +15,6 @@ import { createMessengerPage } from "./src/pages/messenger/model/factory.ts";
 import { settingsPageRouteConfig } from "./src/pages/settings/config/params.ts";
 import { createSettingsPage } from "./src/pages/settings/model/factory.ts";
 
-export const rootQuery = "#app";
-
 Router
   /* SignIn route */
   .use(signInRouteConfig, createAuthPage_signIn)
@@ -31,4 +29,4 @@ Router
   /* Error route */
   .use(errorRouteConfig_500, createErrorPage_500);
 
-Router.start(rootQuery);
+Router.start();

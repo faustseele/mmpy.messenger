@@ -1,10 +1,10 @@
-import { RouteLink } from "../../../app/providers/router/types.ts";
 import {
   BaseAttributes,
   BaseConfigs,
   BaseProps,
 } from "../../lib/Component/model/base.types.ts";
 import { TagNameType } from "../../lib/DOM/types.ts";
+import { RouteLink } from "../../types/universal.ts";
 
 export interface ButtonProps extends BaseProps {
   configs: ButtonConfigs;
