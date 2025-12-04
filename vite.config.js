@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import path from "path";
 
 export default defineConfig({
   plugins: [],
@@ -18,5 +19,13 @@ export default defineConfig({
       Including .ts and .d.ts ensures Vite can handle
       TypeScript files with explicit extensions */
     extensions: [".js", ".ts", ".d.ts"],
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      "@app": path.resolve(__dirname, "./src/app"),
+      "@entities": path.resolve(__dirname, "./src/entities"),
+      "@features": path.resolve(__dirname, "./src/features"),
+      "@pages": path.resolve(__dirname, "./src/pages"),
+      "@shared": path.resolve(__dirname, "./src/shared"),
+    },
   },
 });

@@ -1,19 +1,25 @@
-import Router from "./src/app/providers/router/Router.ts";
-import "./src/app/styles/index.css";
+import Router from "@app/providers/router/Router.ts";
+import "@app/styles/index.css";
 import {
   signInRouteConfig,
   signUpRouteConfig,
-} from "./src/pages/auth/config/params.ts";
-import { createAuthPage_signIn, createAuthPage_signUp } from "./src/pages/auth/model/factory.ts";
+} from "@pages/auth/config/params.ts";
+import {
+  createAuthPage_signIn,
+  createAuthPage_signUp,
+} from "@pages/auth/model/factory.ts";
 import {
   errorRouteConfig_404,
   errorRouteConfig_500,
-} from "./src/pages/errors/config/params.ts";
-import { createErrorPage_404, createErrorPage_500 } from "./src/pages/errors/model/factory.ts";
-import { messengerPageRouteConfig } from "./src/pages/messenger/config/params.ts";
-import { createMessengerPage } from "./src/pages/messenger/model/factory.ts";
-import { settingsPageRouteConfig } from "./src/pages/settings/config/params.ts";
-import { createSettingsPage } from "./src/pages/settings/model/factory.ts";
+} from "@pages/errors/config/params.ts";
+import {
+  createErrorPage_404,
+  createErrorPage_500,
+} from "@pages/errors/model/factory.ts";
+import { messengerPageRouteConfig } from "@pages/messenger/config/params.ts";
+import { createMessengerPage } from "@pages/messenger/model/factory.ts";
+import { settingsPageRouteConfig } from "@pages/settings/config/params.ts";
+import { createSettingsPage } from "@pages/settings/model/factory.ts";
 
 Router
   /* SignIn route */
