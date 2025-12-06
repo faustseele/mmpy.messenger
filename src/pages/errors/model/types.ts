@@ -1,9 +1,9 @@
-import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import {
   ChildrenNodes
-} from "../../../shared/lib/Component/model/children.types.ts";
-import { TagNameType } from "../../../shared/lib/DOM/types.ts";
-import { PageId } from "../../page/config/const.ts";
+} from "@shared/lib/Component/model/children.types.ts";
+import { TagNameType } from "@shared/lib/DOM/types.ts";
+import { PageId } from "@pages/page/config/const.ts";
 
 export type ErrorCodeType = "404" | "500";
 

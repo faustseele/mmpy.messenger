@@ -1,7 +1,7 @@
-import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
-import { Input } from "../../../shared/ui/Input/Input.ts";
-import css from "../../../shared/ui/Input/input.module.css";
-import { InputProps } from "../../../shared/ui/Input/types.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { Input } from "@shared/ui/Input/Input.ts";
+import css from "@shared/ui/Input/input.module.css";
+import { InputProps } from "@shared/ui/Input/types.ts";
 
 export class InputEditor extends Input {
   constructor(props: ComponentProps<InputProps, InputEditor>) {

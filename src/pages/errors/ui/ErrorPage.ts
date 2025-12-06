@@ -1,8 +1,8 @@
-import Router from "../../../app/providers/router/Router.ts";
-import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
-import { Button } from "../../../shared/ui/Button/Button.ts";
-import { Page } from "../../page/ui/Page.ts";
+import Router from "@app/providers/router/Router.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { RouteLink } from "@shared/types/universal.ts";
+import { Button } from "@shared/ui/Button/Button.ts";
+import { Page } from "@pages/page/ui/Page.ts";
 import { ErrorNodes, ErrorProps } from "../model/types.ts";
 import css from "./errors.module.css";
 

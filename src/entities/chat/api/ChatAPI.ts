@@ -1,5 +1,5 @@
-import HTTPTransport from "../../../shared/api/http/HTTPTransport.ts";
-import { BaseAPI } from "../../../shared/api/model/BaseAPI.ts";
+import HTTPTransport from "@shared/api/http/HTTPTransport.ts";
+import { BaseAPI } from "@shared/api/model/BaseAPI.ts";
 import {
   ChatId,
   ChatResponse,
@@ -14,7 +14,7 @@ import {
   DeleteChatResponse,
   GetChatsQuery,
   UpdateChatAvatarResponse,
-} from "../../../shared/api/model/types.ts";
+} from "@shared/api/model/types.ts";
 
 const chatsAPIInstance = new HTTPTransport("/chats");
 

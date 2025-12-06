@@ -4,13 +4,6 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  {
-    env: {
-      /* Is needed for __dirname in vite.config.js */
-      node: true,
-    },
-  },
-
   /* Array of configuration objects,
     prioritizes the last one */
   /* Single configuration object */
@@ -29,6 +22,8 @@ export default tseslint.config(
       /* Adds support for global variables */
       globals: {
         ...globals.browser,
+        /* Is needed for __dirname in vite.config.js */
+        node: true,
       },
     },
     rules: {

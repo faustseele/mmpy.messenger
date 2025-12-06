@@ -2,21 +2,21 @@
 import profileAvatar from "../../../../static/profile-avatar.png";
 import {
   RouteConfigs,
-} from "../../../app/providers/router/types.ts";
+} from "@app/providers/router/types.ts";
 import {
   getEditorNode
-} from "../../../features/edit-profile/model/factory.ts";
-import cssPage from "../../../pages/page/ui/page.module.css";
-import { ROOT_QUERY } from "../../../shared/config/dom.ts";
-import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
+} from "@features/edit-profile/model/factory.ts";
+import cssPage from "@pages/page/ui/page.module.css";
+import { ROOT_QUERY } from "@shared/config/dom.ts";
+import { ComponentParams } from "@shared/lib/Component/model/types.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 import {
   getButtonNode
-} from "../../../shared/ui/Button/utils.ts";
+} from "@shared/ui/Button/utils.ts";
 import {
   getHeadingNode
-} from "../../../shared/ui/Heading/utils.ts";
-import { PageId } from "../../page/config/const.ts";
+} from "@shared/ui/Heading/utils.ts";
+import { PageId } from "@pages/page/config/const.ts";
 import { SettingsProps } from "../model/types.ts";
 import cssSettings from "../ui/settings.module.css";
 

@@ -1,7 +1,7 @@
-import Component from "../../lib/Component/model/Component.ts";
+import Component from "@shared/lib/Component/model/Component.ts";
 import {
   ComponentProps
-} from "../../lib/Component/model/types.ts";
+} from "@shared/lib/Component/model/types.ts";
 import { ButtonProps } from "./types.ts";
 
 export class Button extends Component<ButtonProps> {

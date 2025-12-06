@@ -1,10 +1,10 @@
 import defaultAvatar from "../../../../static/avatar.png";
-import { AppState } from "../../../app/providers/store/model/Store.ts";
-import { getMessagesGraph } from "../../../entities/message-bubble/model/factory.ts";
-import { getGoToChatGraph } from "../../../features/go-to-chat/model/factory.ts";
-import { getMessageFieldNode } from "../../../features/send-message/model/factory.ts";
-import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
-import { ComponentPatch } from "../../../shared/lib/Component/model/types.ts";
+import { AppState } from "@app/providers/store/model/Store.ts";
+import { getMessagesGraph } from "@entities/message-bubble/model/factory.ts";
+import { getGoToChatGraph } from "@features/go-to-chat/model/factory.ts";
+import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
+import { API_URL_RESOURCES } from "@shared/config/urls.ts";
+import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
 import { MessengerProps } from "./types.ts";
 
 export const mapMessengerState = (

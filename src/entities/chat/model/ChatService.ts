@@ -1,12 +1,12 @@
-import Store from "../../../app/providers/store/model/Store.ts";
+import Store from "@app/providers/store/model/Store.ts";
 import {
   ChatId,
   ChatResponse,
   ChatUsersQuery,
   CreateChatResponse,
   GetChatsQuery,
-} from "../../../shared/api/model/types.ts";
-import { store_lastChatId } from "../../../shared/lib/LocalStorage/chats.ts";
+} from "@shared/api/model/types.ts";
+import { store_lastChatId } from "@shared/lib/LocalStorage/chats.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
 import { isChatNotes } from "./utils.ts";

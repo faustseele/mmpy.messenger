@@ -1,12 +1,12 @@
-import { connect } from "../../../app/providers/store/model/connect.ts";
+import { connect } from "@app/providers/store/model/connect.ts";
 import {
   ComponentDeps,
   ComponentParams,
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
-import { PageNode } from "../../page/model/types.ts";
+} from "@shared/lib/Component/model/types.ts";
+import DOMService from "@shared/lib/DOM/DOMService.ts";
+import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
+import { PageFactory } from "@shared/lib/helpers/factory/types.ts";
+import { PageNode } from "@pages/page/model/types.ts";
 import { settingsPageParams } from "../config/params.ts";
 import { SettingsPage } from "../ui/SettingsPage.ts";
 import { mapSettingsState } from "./map.ts";

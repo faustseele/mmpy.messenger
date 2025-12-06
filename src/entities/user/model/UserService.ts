@@ -1,9 +1,9 @@
-import Store from "../../../app/providers/store/model/Store.ts";
-import UserAPI from "../../../entities/user/api/UserAPI.ts";
+import Store from "@app/providers/store/model/Store.ts";
+import UserAPI from "@entities/user/api/UserAPI.ts";
 import {
   UpdateUserPassword,
   UserResponse,
-} from "../../../shared/api/model/types.ts";
+} from "@shared/api/model/types.ts";
 
 class UserService {
   public async updateProfile(data: Partial<UserResponse>) {

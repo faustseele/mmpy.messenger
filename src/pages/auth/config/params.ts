@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   RouteConfigs,
-} from "../../../app/providers/router/types.ts";
-import { ROOT_QUERY } from "../../../shared/config/dom.ts";
-import { ComponentParams } from "../../../shared/lib/Component/model/types.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
-import { getButtonNode } from "../../../shared/ui/Button/utils.ts";
-import { getHeadingNode } from "../../../shared/ui/Heading/utils.ts";
-import { getInputNode } from "../../../shared/ui/Input/utils.ts";
-import { PageId } from "../../page/config/const.ts";
-import { PageNode } from "../../page/model/types.ts";
-import cssPage from "../../page/ui/page.module.css";
+} from "@app/providers/router/types.ts";
+import { ROOT_QUERY } from "@shared/config/dom.ts";
+import { ComponentParams } from "@shared/lib/Component/model/types.ts";
+import { RouteLink } from "@shared/types/universal.ts";
+import { getButtonNode } from "@shared/ui/Button/utils.ts";
+import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
+import { getInputNode } from "@shared/ui/Input/utils.ts";
+import { PageId } from "@pages/page/config/const.ts";
+import { PageNode } from "@pages/page/model/types.ts";
+import cssPage from "@pages/page/ui/page.module.css";
 import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
 import type { AuthPage } from "../ui/AuthPage.ts";

@@ -1,7 +1,7 @@
-import UserService from "../../../entities/user/model/UserService.ts";
-import AuthService from "../../../features/authenticate/model/AuthService.ts";
-import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
-import { AuthType } from "../../../pages/auth/model/types.ts";
+import UserService from "@entities/user/model/UserService.ts";
+import AuthService from "@features/authenticate/model/AuthService.ts";
+import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
+import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
 import { FieldType } from "../../ui/Input/types.ts";
 import { validateInputField } from "./utils.ts";

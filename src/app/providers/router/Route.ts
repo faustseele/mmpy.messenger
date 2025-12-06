@@ -1,6 +1,6 @@
-import { Page } from "../../../pages/page/ui/Page.ts";
-import { ROOT_QUERY } from "../../../shared/config/dom.ts";
-import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
+import { Page } from "@pages/page/ui/Page.ts";
+import { ROOT_QUERY } from "@shared/config/dom.ts";
+import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { AuthStateType, RouteConfigs, RouteContract } from "./types.ts";
 import { matchPath } from "./utils.ts";
 
