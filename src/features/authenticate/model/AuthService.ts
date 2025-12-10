@@ -1,7 +1,7 @@
 import Router from "@app/providers/router/Router.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import ChatService from "@entities/chat/model/ChatService.ts";
-import { SignUpRequest, SignInRequest } from "@shared/api/model/types.ts";
+import { SignInRequest, SignUpRequest } from "@shared/api/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
@@ -13,6 +13,7 @@ class AuthService {
       Store.set("api.auth.user", user);
       if (user) {
         Store.set("controllers.isLoggedIn", true);
+        ChatService.fetchChats();
       } else {
         Store.set("controllers.isLoggedIn", false);
       }
@@ -21,8 +22,7 @@ class AuthService {
       console.log(res, user, Store.getState());
 
       /* generating one notes-chat */
-      await ChatService.createChat('Заметки 📃');
-
+      await ChatService.createChat("Заметки 📃");
     } catch (e) {
       console.error("SignUp failed:", e);
     }
@@ -35,6 +35,7 @@ class AuthService {
       Store.set("api.auth.user", user);
       if (user) {
         Store.set("controllers.isLoggedIn", true);
+        ChatService.fetchChats();
       } else {
         Store.set("controllers.isLoggedIn", false);
       }
@@ -56,7 +57,6 @@ class AuthService {
       } else {
         Store.set("controllers.isLoggedIn", false);
       }
-
     } catch (e) {
       console.error("Fetch user failed:", e);
     }

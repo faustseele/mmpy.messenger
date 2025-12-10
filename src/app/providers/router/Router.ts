@@ -1,8 +1,9 @@
+import Store from "@app/providers/store/model/Store.ts";
 import AuthService from "@features/authenticate/model/AuthService.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import Store from "@app/providers/store/model/Store.ts";
+import { guardRoute } from "./guards.ts";
 import Route from "./Route.ts";
 import { RouteConfigs, RouteContract } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";
@@ -69,11 +70,9 @@ class Router {
     this._onRouteChange(window.location.pathname);
   }
 
-  /* Is triggered when the URL changes. */
+  /** triggered when the URL changes */
   private _onRouteChange(path: RouteLink | string): void {
     const route = this._routes.find((route) => matchPath(path, route.path));
-
-    const isUserLoggedIn = Store.getState().controllers.isLoggedIn;
 
     if (!route) {
       console.warn("Route not found", path);
@@ -81,17 +80,10 @@ class Router {
       return;
     }
 
-    /* If user is not logged in and trying to access a protected route,leave the current route */
-    if (!isUserLoggedIn && route.authStatus === "protected") {
-      console.warn("Protected route accessed by a guest");
-      this.go(RouteLink.SignIn);
-      return;
-    }
+    const guardRes = guardRoute(route, Store.getState());
 
-    /* If a guest-only route is accessed by a user, leave the current route */
-    if (isUserLoggedIn && route.authStatus === "guest") {
-      console.warn("Guest-only route accessed by a user");
-      this.go(RouteLink.NotFound);
+    if (!guardRes.ok) {
+      this.go(guardRes.redirect!);
       return;
     }
 
@@ -101,8 +93,6 @@ class Router {
     this._currentRoute?.leave();
     this._currentRoute = route;
     this._currentRoute!.render();
-    // console.log(this._routes);
-    // console.log("CUR_ROUTE", this._currentRoute);
   }
 
   public go(path: RouteLink): void {

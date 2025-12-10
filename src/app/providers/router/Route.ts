@@ -88,6 +88,5 @@ export default class Route<
       root.append(element);
     }
 
-    this._pageInstance!.show();
   }
 }
