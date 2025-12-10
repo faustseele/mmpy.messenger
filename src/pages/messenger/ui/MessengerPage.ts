@@ -23,11 +23,6 @@ export class MessengerPage extends Page<MessengerProps> {
       throw new Error("MessengerPage: Children are not defined");
     }
 
-    /* --- api-check 4 chats --- */
-    if (!Store.getState().api.chats.list) {
-      console.log("MessengerPage: fetching chats");
-      ChatService.fetchChats();
-    }
 
     /* --- getting instances --- */
     const {
