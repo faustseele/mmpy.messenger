@@ -1,3 +1,4 @@
+import { initApp } from "@/app/init/index.ts";
 import Router from "@app/providers/router/Router.ts";
 import "@app/styles/index.css";
 import {
@@ -20,6 +21,8 @@ import { messengerPageRouteConfig } from "@pages/messenger/config/params.ts";
 import { createMessengerPage } from "@pages/messenger/model/factory.ts";
 import { settingsPageRouteConfig } from "@pages/settings/config/params.ts";
 import { createSettingsPage } from "@pages/settings/model/factory.ts";
+
+await initApp();
 
 Router
   /* SignIn route */

@@ -1,12 +1,12 @@
-import Router from "@app/providers/router/Router.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import ChatService from "@entities/chat/model/ChatService.ts";
 import { SignInRequest, SignUpRequest } from "@shared/api/model/types.ts";
-import { RouteLink } from "@shared/types/universal.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
 class AuthService {
-  public async signUp(data: SignUpRequest) {
+  public async signUp(data: SignUpRequest): Promise<{
+    ok: boolean;
+  }> {
     try {
       const res = await AuthAPI.signUp(data);
       const user = await AuthAPI.requestUser();
@@ -18,17 +18,20 @@ class AuthService {
         Store.set("controllers.isLoggedIn", false);
       }
 
-      Router.go(RouteLink.Messenger);
-      console.log(res, user, Store.getState());
-
       /* generating one notes-chat */
       await ChatService.createChat("Заметки 📃");
+
+      console.log(res, user, Store.getState());
+
+      return { ok: !!user };
     } catch (e) {
-      console.error("SignUp failed:", e);
+      throw new Error("SignUp failed", { cause: e });
     }
   }
 
-  public async signIn(data: SignInRequest) {
+  public async signIn(data: SignInRequest): Promise<{
+    ok: boolean;
+  }> {
     try {
       const res = await AuthAPI.signIn(data);
       const user = await AuthAPI.requestUser();
@@ -40,10 +43,11 @@ class AuthService {
         Store.set("controllers.isLoggedIn", false);
       }
 
-      Router.go(RouteLink.Messenger);
       console.log(res, user, Store.getState());
+
+      return { ok: !!user };
     } catch (e) {
-      console.error("SignIn failed:", e);
+      throw new Error("SignIn failed", { cause: e });
     }
   }
 
@@ -62,7 +66,9 @@ class AuthService {
     }
   }
 
-  public async logout() {
+  public async logout(): Promise<{
+    ok: boolean;
+  }> {
     try {
       const res = await AuthAPI.logout();
       Store.set("api.chats.activeId", null);
@@ -71,10 +77,10 @@ class AuthService {
 
       Store.set("controllers.isLoggedIn", false);
 
-      Router.go(RouteLink.SignIn);
       console.log(res, Store.getState());
+      return { ok: !!res };
     } catch (e) {
-      console.error("Logout failed:", e);
+      throw new Error("Logout failed", { cause: e });
     }
   }
 }

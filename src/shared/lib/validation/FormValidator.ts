@@ -5,6 +5,8 @@ import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
 import { FieldType } from "../../ui/Input/types.ts";
 import { validateInputField } from "./utils.ts";
+import Router from "@/app/providers/router/Router.ts";
+import { RouteLink } from "@/shared/types/universal.ts";
 
 const logMessages = {
   formIsValid: "✅ Form is valid! Here it is 👇",
@@ -44,13 +46,16 @@ export default class FormValidator {
       });
 
       if (submitType === "sign-in") {
-        await AuthService.signIn({
+        const res = await AuthService.signIn({
           login: formData.login,
           password: formData.password,
         });
+        
+        if (res.ok) Router.go(RouteLink.Messenger);
+
         return;
       } else if (submitType === "sign-up") {
-        await AuthService.signUp({
+        const res = await AuthService.signUp({
           first_name: formData.name,
           second_name: formData.surname,
           login: formData.login,
@@ -58,6 +63,7 @@ export default class FormValidator {
           password: formData.password,
           phone: formData.phone,
         });
+        if (res.ok) Router.go(RouteLink.Messenger);
       } else if (submitType === "change-info") {
         await UserService.updateProfile({
           first_name: formData.name,
