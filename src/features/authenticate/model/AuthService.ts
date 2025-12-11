@@ -57,17 +57,19 @@ class AuthService {
   }> {
     try {
       const user = await AuthAPI.requestUser();
-      Store.set("api.auth.user", user);
       if (user) {
+        Store.set("api.auth.user", user);
         Store.set("controllers.isLoggedIn", true);
         console.log(user);
         return { ok: true };
       } else {
+        Store.set("api.auth.user", null);
         Store.set("controllers.isLoggedIn", false);
         return { ok: false };
       }
-    } catch (e) {
-      throw new Error("Fetch user failed", { cause: e });
+    } catch (_) {
+      /* user is not logged in, no error to throw */
+      return { ok: false };
     }
   }
 

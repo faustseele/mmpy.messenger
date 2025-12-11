@@ -8,17 +8,11 @@ export const initApp = async () => {
 };
 
 const bootstrapAuth = async () => {
-  try {
-    const res = await AuthService.fetchUser();
-    if (res.ok) {
-      await ChatService.fetchChats();
-    } else {
-      console.error("Failed to fetch user on startup");
-    }
-    const isLoggedIn = Store.getState().controllers.isLoggedIn;
-    console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
-
-  } catch (_) {
-    console.error("Failed to fetch user on startup");
+  const res = await AuthService.fetchUser();
+  if (res.ok) {
+    await ChatService.fetchChats();
   }
+
+  const isLoggedIn = Store.getState().controllers.isLoggedIn;
+  console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
 };
