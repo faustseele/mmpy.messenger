@@ -6,7 +6,10 @@ import {
   CreateChatResponse,
   GetChatsQuery,
 } from "@shared/api/model/types.ts";
-import { store_lastChatId } from "@shared/lib/LocalStorage/chats.ts";
+import {
+  lsGet_lastChatId,
+  lsStore_lastChatId,
+} from "@shared/lib/LocalStorage/chats.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
 import { isChatNotes } from "./utils.ts";
@@ -20,7 +23,7 @@ class ChatService {
       Store.set("api.chats.list", list);
 
       /* auto-restore last active chat */
-      const last = Number(localStorage.getItem("lastActiveChatId"));
+      const last = Number(lsGet_lastChatId());
       if (last && list?.some((chat) => chat.id === last)) this.selectChat(last);
 
       /* set isNotes for each chat */
@@ -41,7 +44,7 @@ class ChatService {
   public async selectChat(chatId: number) {
     try {
       Store.set("api.chats.activeId", chatId);
-      store_lastChatId(chatId);
+      lsStore_lastChatId(chatId);
 
       const list = Store.getState().api.chats.list;
 

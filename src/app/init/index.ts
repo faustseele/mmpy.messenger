@@ -9,13 +9,15 @@ export const initApp = async () => {
 
 const bootstrapAuth = async () => {
   try {
-    await AuthService.fetchUser();
+    const res = await AuthService.fetchUser();
+    if (res.ok) {
+      await ChatService.fetchChats();
+    } else {
+      console.error("Failed to fetch user on startup");
+    }
     const isLoggedIn = Store.getState().controllers.isLoggedIn;
     console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
 
-    if (isLoggedIn) {
-      await ChatService.fetchChats();
-    }
   } catch (_) {
     console.error("Failed to fetch user on startup");
   }

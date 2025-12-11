@@ -119,7 +119,12 @@ export class SettingsPage extends Page<SettingsProps> {
         click: async (event: Event) => {
           event.preventDefault();
           const res = await AuthService.logout();
-          if (res.ok) Router.go(RouteLink.SignIn);
+          if (res.ok) {
+            Router.go(RouteLink.SignIn);
+          } else {
+            console.error("Logout failed");
+            Router.go(RouteLink.Error);
+          }
         },
       },
     });

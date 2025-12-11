@@ -114,12 +114,19 @@ class Router {
     ) as HTMLCollectionOf<HTMLAnchorElement>;
 
     for (const a of Array.from(navs)) {
-      a.addEventListener("click", (e: MouseEvent) => {
+      a.addEventListener("click", async (e: MouseEvent) => {
         e.preventDefault();
 
         const path = a.getAttribute("href");
-        if (path === "/logout") AuthService.logout();
-        else this.go(path as RouteLink);
+        if (path === "/logout") {
+          const res = await AuthService.logout();
+          if (res.ok) {
+            this.go(RouteLink.SignIn);
+          } else {
+            this.go(RouteLink.Error)
+            console.error("Logout failed");
+          }
+        } else this.go(path as RouteLink);
       });
     }
   }

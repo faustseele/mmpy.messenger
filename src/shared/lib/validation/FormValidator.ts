@@ -1,3 +1,5 @@
+import Router from "@/app/providers/router/Router.ts";
+import { RouteLink } from "@/shared/types/universal.ts";
 import UserService from "@entities/user/model/UserService.ts";
 import AuthService from "@features/authenticate/model/AuthService.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
@@ -5,8 +7,6 @@ import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
 import { FieldType } from "../../ui/Input/types.ts";
 import { validateInputField } from "./utils.ts";
-import Router from "@/app/providers/router/Router.ts";
-import { RouteLink } from "@/shared/types/universal.ts";
 
 const logMessages = {
   formIsValid: "✅ Form is valid! Here it is 👇",
@@ -50,8 +50,12 @@ export default class FormValidator {
           login: formData.login,
           password: formData.password,
         });
-        
-        if (res.ok) Router.go(RouteLink.Messenger);
+
+        if (res.ok) {
+          Router.go(RouteLink.Messenger);
+        } else {
+          console.error("SignIn failed");
+        }
 
         return;
       } else if (submitType === "sign-up") {
@@ -63,7 +67,11 @@ export default class FormValidator {
           password: formData.password,
           phone: formData.phone,
         });
-        if (res.ok) Router.go(RouteLink.Messenger);
+        if (res.ok) {
+          Router.go(RouteLink.Messenger);
+        } else {
+          console.error("SignUp failed");
+        }
       } else if (submitType === "change-info") {
         await UserService.updateProfile({
           first_name: formData.name,

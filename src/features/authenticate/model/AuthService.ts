@@ -1,3 +1,4 @@
+import { lsRemove_lastChatId } from "@/shared/lib/LocalStorage/chats.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import ChatService from "@entities/chat/model/ChatService.ts";
 import { SignInRequest, SignUpRequest } from "@shared/api/model/types.ts";
@@ -51,18 +52,22 @@ class AuthService {
     }
   }
 
-  public async fetchUser() {
+  public async fetchUser(): Promise<{
+    ok: boolean;
+  }> {
     try {
       const user = await AuthAPI.requestUser();
       Store.set("api.auth.user", user);
       if (user) {
         Store.set("controllers.isLoggedIn", true);
         console.log(user);
+        return { ok: true };
       } else {
         Store.set("controllers.isLoggedIn", false);
+        return { ok: false };
       }
     } catch (e) {
-      console.error("Fetch user failed:", e);
+      throw new Error("Fetch user failed", { cause: e });
     }
   }
 
@@ -76,6 +81,9 @@ class AuthService {
       Store.set("api.chats.list", null);
 
       Store.set("controllers.isLoggedIn", false);
+
+      /* remove last active chat */
+      lsRemove_lastChatId();
 
       console.log(res, Store.getState());
       return { ok: !!res };
