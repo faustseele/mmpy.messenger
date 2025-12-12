@@ -1,4 +1,4 @@
-import { initApp } from "@/app/init/index.ts";
+import { bootstrapNavLinks, initApp } from "@/app/init/index.ts";
 import Router from "@app/providers/router/Router.ts";
 import "@app/styles/index.css";
 import {
@@ -22,9 +22,11 @@ import { createMessengerPage } from "@pages/messenger/model/factory.ts";
 import { settingsPageRouteConfig } from "@pages/settings/config/params.ts";
 import { createSettingsPage } from "@pages/settings/model/factory.ts";
 
-await initApp();
-
 try {
+  await initApp();
+} catch (e) {
+  throw new Error("initialization failed", { cause: e });
+} finally {
   Router
     /* SignIn route */
     .use(signInRouteConfig, createAuthPage_signIn)
@@ -38,8 +40,8 @@ try {
     .use(errorRouteConfig_404, createErrorPage_404)
     /* Error route */
     .use(errorRouteConfig_500, createErrorPage_500);
-} catch (e) {
-  throw new Error('Router initialization failed', { cause: e });
-} finally {
   Router.start();
+
+  /* for the nav-<a> links */
+  bootstrapNavLinks();
 }

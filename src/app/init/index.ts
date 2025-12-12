@@ -1,6 +1,8 @@
-import AuthService from "@/features/authenticate/model/AuthService.ts";
-import Store from "../providers/store/model/Store.ts";
 import ChatService from "@/entities/chat/model/ChatService.ts";
+import AuthService from "@/features/authenticate/model/AuthService.ts";
+import { RouteLink } from "@/shared/types/universal.ts";
+import Router from "../providers/router/Router.ts";
+import Store from "../providers/store/model/Store.ts";
 
 /** initilizes application; keeps Router separate */
 export const initApp = async () => {
@@ -15,4 +17,28 @@ const bootstrapAuth = async () => {
 
   const isLoggedIn = Store.getState().controllers.isLoggedIn;
   console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
+};
+
+/** for the nav-<a> links */
+export const bootstrapNavLinks = () => {
+  const navs = document.getElementsByClassName(
+    "navButton",
+  ) as HTMLCollectionOf<HTMLAnchorElement>;
+
+  for (const a of Array.from(navs)) {
+    a.addEventListener("click", async (e: MouseEvent) => {
+      e.preventDefault();
+
+      const path = a.getAttribute("href");
+      if (path === "/logout") {
+        const res = await AuthService.logout();
+        if (res.ok) {
+          Router.go(RouteLink.SignIn);
+        } else {
+          Router.go(RouteLink.Error);
+          console.error("Logout failed");
+        }
+      } else Router.go(path as RouteLink);
+    });
+  }
 };

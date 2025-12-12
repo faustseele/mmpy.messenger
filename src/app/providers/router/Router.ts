@@ -1,5 +1,4 @@
 import Store from "@app/providers/store/model/Store.ts";
-import AuthService from "@features/authenticate/model/AuthService.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
@@ -63,8 +62,6 @@ class Router {
       this._onRouteChange(window.location.pathname);
     };
 
-    /* for the nav-<a> links */
-    this._handleNavLinks();
 
     /* initial page load */
     this._onRouteChange(window.location.pathname);
@@ -106,29 +103,6 @@ class Router {
 
   public forward(): void {
     this._history.forward();
-  }
-
-  private _handleNavLinks() {
-    const navs = document.getElementsByClassName(
-      "navButton",
-    ) as HTMLCollectionOf<HTMLAnchorElement>;
-
-    for (const a of Array.from(navs)) {
-      a.addEventListener("click", async (e: MouseEvent) => {
-        e.preventDefault();
-
-        const path = a.getAttribute("href");
-        if (path === "/logout") {
-          const res = await AuthService.logout();
-          if (res.ok) {
-            this.go(RouteLink.SignIn);
-          } else {
-            this.go(RouteLink.Error)
-            console.error("Logout failed");
-          }
-        } else this.go(path as RouteLink);
-      });
-    }
   }
 }
 
