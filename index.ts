@@ -24,18 +24,22 @@ import { createSettingsPage } from "@pages/settings/model/factory.ts";
 
 await initApp();
 
-Router
-  /* SignIn route */
-  .use(signInRouteConfig, createAuthPage_signIn)
-  /* SignUp route */
-  .use(signUpRouteConfig, createAuthPage_signUp)
-  /* Messenger route */
-  .use(messengerPageRouteConfig, createMessengerPage)
-  /* Settings route */
-  .use(settingsPageRouteConfig, createSettingsPage)
-  /* NotFound route */
-  .use(errorRouteConfig_404, createErrorPage_404)
-  /* Error route */
-  .use(errorRouteConfig_500, createErrorPage_500);
-
-Router.start();
+try {
+  Router
+    /* SignIn route */
+    .use(signInRouteConfig, createAuthPage_signIn)
+    /* SignUp route */
+    .use(signUpRouteConfig, createAuthPage_signUp)
+    /* Messenger route */
+    .use(messengerPageRouteConfig, createMessengerPage)
+    /* Settings route */
+    .use(settingsPageRouteConfig, createSettingsPage)
+    /* NotFound route */
+    .use(errorRouteConfig_404, createErrorPage_404)
+    /* Error route */
+    .use(errorRouteConfig_500, createErrorPage_500);
+} catch (e) {
+  throw new Error('Router initialization failed', { cause: e });
+} finally {
+  Router.start();
+}

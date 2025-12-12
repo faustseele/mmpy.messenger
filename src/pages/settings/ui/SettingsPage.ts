@@ -118,6 +118,7 @@ export class SettingsPage extends Page<SettingsProps> {
       on: {
         click: async (event: Event) => {
           event.preventDefault();
+          
           const res = await AuthService.logout();
           if (res.ok) {
             Router.go(RouteLink.SignIn);
