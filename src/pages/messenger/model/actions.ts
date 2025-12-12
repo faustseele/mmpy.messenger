@@ -1,4 +1,5 @@
 import ChatService from "@/entities/chat/model/ChatService.ts";
+import UserService from "@/entities/user/model/UserService.ts";
 import { ChatId } from "@/shared/api/model/types.ts";
 
 export const handleAddNotes = (title: string) => {
@@ -27,3 +28,8 @@ export const handleCloseChat = () => {
 export const handleUpdateChatAvatar = async (id: ChatId, avatar: File) => {
   ChatService.updateChatAvatar(id, avatar);
 };
+
+export const handleFindUser = async (login: string) => {
+  return await UserService.findByLogin(login);
+};
+

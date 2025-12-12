@@ -1,6 +1,5 @@
 import Router from "@app/providers/router/Router.ts";
 import Store from "@app/providers/store/model/Store.ts";
-import UserService from "@entities/user/model/UserService.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -14,6 +13,7 @@ import {
   handleAddUsers,
   handleCloseChat,
   handleDeleteChat,
+  handleFindUser,
   handleUpdateChatAvatar,
 } from "../model/actions.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
@@ -77,7 +77,7 @@ export class MessengerPage extends Page<MessengerProps> {
           const login = input.trim();
           if (!login) return;
 
-          const user = await UserService.findByLogin(login);
+          const user = await handleFindUser(login);
           if (!user) {
             console.error("User not found by login:", login);
             return;
