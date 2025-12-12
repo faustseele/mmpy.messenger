@@ -1,8 +1,7 @@
 import Router from "@app/providers/router/Router.ts";
 import Store from "@app/providers/store/model/Store.ts";
-import UserService from "@entities/user/model/UserService.ts";
-import AuthService from "@features/authenticate/model/AuthService.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
+import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
@@ -10,7 +9,7 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
-import { Page } from "@pages/page/ui/Page.ts";
+import { handleLogout, handleUpdateUserAvatar } from "../model/actions.ts";
 import { SettingsNodes, SettingsProps } from "../model/types.ts";
 import css from "./settings.module.css";
 
@@ -119,13 +118,7 @@ export class SettingsPage extends Page<SettingsProps> {
         click: async (event: Event) => {
           event.preventDefault();
           
-          const res = await AuthService.logout();
-          if (res.ok) {
-            Router.go(RouteLink.SignIn);
-          } else {
-            console.error("Logout failed");
-            Router.go(RouteLink.Error);
-          }
+          handleLogout()
         },
       },
     });
@@ -140,7 +133,7 @@ export class SettingsPage extends Page<SettingsProps> {
       const file = input.files?.[0];
       if (!file) return;
 
-      await UserService.updateAvatar(file);
+      await handleUpdateUserAvatar(file);
       input.value = "";
     });
     input.dataset.bound = "true";
