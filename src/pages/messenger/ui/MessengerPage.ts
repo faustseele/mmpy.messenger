@@ -1,14 +1,21 @@
 import Router from "@app/providers/router/Router.ts";
 import Store from "@app/providers/store/model/Store.ts";
-import ChatService from "@entities/chat/model/ChatService.ts";
 import UserService from "@entities/user/model/UserService.ts";
+import { Page } from "@pages/page/ui/Page.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { urlToFile } from "@shared/lib/helpers/file.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
-import { Page } from "@pages/page/ui/Page.ts";
+import {
+  handleAddChatWithUser,
+  handleAddNotes,
+  handleAddUsers,
+  handleCloseChat,
+  handleDeleteChat,
+  handleUpdateChatAvatar,
+} from "../model/actions.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
@@ -22,7 +29,6 @@ export class MessengerPage extends Page<MessengerProps> {
     if (!this.children?.nodes) {
       throw new Error("MessengerPage: Children are not defined");
     }
-
 
     /* --- getting instances --- */
     const {
@@ -48,7 +54,8 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireCloseChat(closeChat);
     headingToSettings.setProps({
       on: {
-        click: () => Router.go(headingToSettings.configs.link ?? RouteLink.Settings),
+        click: () =>
+          Router.go(headingToSettings.configs.link ?? RouteLink.Settings),
       },
     });
   }
@@ -76,8 +83,9 @@ export class MessengerPage extends Page<MessengerProps> {
             return;
           }
 
-          const newChatRes = await ChatService.createChat(
-            `${user.first_name} ${user.second_name}`,
+          const newChatRes = await handleAddChatWithUser(
+            user.first_name,
+            user.second_name,
           );
 
           if (!newChatRes) {
@@ -85,13 +93,13 @@ export class MessengerPage extends Page<MessengerProps> {
             return;
           }
 
-          await ChatService.addUsers(newChatRes.id, [user.id]);
+          await handleAddUsers(newChatRes.id, [user.id]);
 
           if (user.avatar) {
             const avatar = await urlToFile(
               `${API_URL_RESOURCES}${user.avatar}`,
             );
-            ChatService.updateChatAvatar(newChatRes.id, avatar);
+            handleUpdateChatAvatar(newChatRes.id, avatar);
           }
 
           console.log(
@@ -114,7 +122,7 @@ export class MessengerPage extends Page<MessengerProps> {
           const title = input.trim();
           if (!title) return;
 
-          ChatService.createChat(title);
+          handleAddNotes(title);
         },
       },
     });
@@ -134,7 +142,7 @@ export class MessengerPage extends Page<MessengerProps> {
           if (!confirm) return;
 
           const id = Store.getState().api.chats.activeId;
-          if (id) await ChatService.deleteChat(id);
+          if (id) handleDeleteChat(id);
         },
       },
     });
@@ -143,8 +151,8 @@ export class MessengerPage extends Page<MessengerProps> {
   private _wireCloseChat(closeChat: Button) {
     closeChat?.setProps({
       on: {
-        click: async () => {
-          ChatService.deselectChat();
+        click: () => {
+          handleCloseChat();
         },
       },
     });
@@ -167,7 +175,7 @@ export class MessengerPage extends Page<MessengerProps> {
       const file = input.files?.[0];
 
       if (!file) return;
-      await ChatService.updateChatAvatar(id, file);
+      await handleUpdateChatAvatar(id, file);
       input.value = "";
     });
     input.dataset.bound = "true";

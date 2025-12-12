@@ -1,0 +1,29 @@
+import ChatService from "@/entities/chat/model/ChatService.ts";
+import { ChatId } from "@/shared/api/model/types.ts";
+
+export const handleAddNotes = (title: string) => {
+  ChatService.createChat(title);
+};
+
+export const handleAddChatWithUser = async (
+  firstName: string,
+  secondName: string,
+) => {
+  return await ChatService.createChat(`${firstName} ${secondName}`);
+};
+
+export const handleAddUsers = async (id: ChatId, users: number[]) => {
+  await ChatService.addUsers(id, users);
+};
+
+export const handleDeleteChat = async (id: ChatId) => {
+  await ChatService.deleteChat(id);
+};
+
+export const handleCloseChat = () => {
+  ChatService.deselectChat();
+};
+
+export const handleUpdateChatAvatar = async (id: ChatId, avatar: File) => {
+  ChatService.updateChatAvatar(id, avatar);
+};
