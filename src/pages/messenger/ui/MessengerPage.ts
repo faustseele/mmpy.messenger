@@ -1,5 +1,4 @@
 import Router from "@app/providers/router/Router.ts";
-import Store from "@app/providers/store/model/Store.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -134,14 +133,13 @@ export class MessengerPage extends Page<MessengerProps> {
         click: async (e: Event) => {
           e.preventDefault();
 
-          const title = Store.getState().api.chats.currentChat?.title;
-
           const confirm = window.confirm(
-            `Вы уверены, что хотите удалить ${title}?`,
+            `Вы уверены, что хотите удалить ${this.configs.chatTitle}?`,
           );
           if (!confirm) return;
 
-          const id = Store.getState().api.chats.activeId;
+          const id = this.configs.chatId;
+
           if (id) handleDeleteChat(id);
         },
       },
@@ -165,7 +163,7 @@ export class MessengerPage extends Page<MessengerProps> {
     if (!input || input.dataset.bound) return;
 
     input.addEventListener("change", async () => {
-      const id = Store.getState().api.chats.activeId;
+      const id = this.configs.chatId;
 
       if (!id) {
         console.error("No active chat to update avatar");
@@ -182,7 +180,8 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   public getSourceMarkup(): string {
-    const chatId = Store.getState().api.chats.activeId;
+    const isNotes = this.configs.isNotes;
+
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: MessengerPage: Children are not defined</span>`;
 
@@ -197,7 +196,6 @@ export class MessengerPage extends Page<MessengerProps> {
       messageField,
     } = this.children.nodes as MessengerNodes;
 
-    const isNotes = Store.getState().isNotes[chatId ?? 0];
 
     return /*html*/ `
       <aside class="${css.catalogue}">

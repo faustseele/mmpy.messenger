@@ -1,10 +1,11 @@
-import defaultAvatar from "../../../../static/avatar.png";
+import { PageId } from "@/pages/page/config/const.ts";
 import { AppState } from "@app/providers/store/model/Store.ts";
 import { getMessagesGraph } from "@entities/message-bubble/model/factory.ts";
 import { getGoToChatGraph } from "@features/go-to-chat/model/factory.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
+import defaultAvatar from "../../../../static/avatar.png";
 import { MessengerProps } from "./types.ts";
 
 export const mapMessengerState = (
@@ -18,7 +19,12 @@ export const mapMessengerState = (
       : defaultAvatar
     : "";
 
-  const headPatch = {
+  const configs: MessengerProps["configs"] = {
+    id: PageId.Messenger,
+    tagName: "div",
+    isNotes: state.isNotes[currentChat?.id ?? 0],
+    chatId: currentChat?.id,
+    chatTitle: currentChat?.title,
     participantName: currentChat?.title ?? "",
     participantAvatar: avatar,
   };
@@ -35,9 +41,7 @@ export const mapMessengerState = (
   const { nodes: messageNodes, edges: messageEdge } = messageNodesPatch;
 
   return {
-    configs: {
-      ...headPatch,
-    },
+    configs,
     children: {
       nodes: {
         ...goToChatNodes,
