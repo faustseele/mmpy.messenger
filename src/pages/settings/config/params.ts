@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import profileAvatar from "../../../../static/profile-avatar.png";
 import {
   RouteConfigs,
 } from "@app/providers/router/types.ts";
 import {
   getEditorNode
 } from "@features/edit-profile/model/factory.ts";
+import { PageId } from "@pages/page/config/const.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
@@ -16,7 +16,8 @@ import {
 import {
   getHeadingNode
 } from "@shared/ui/Heading/utils.ts";
-import { PageId } from "@pages/page/config/const.ts";
+import profileAvatar from "../../../../static/profile-avatar.png";
+import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
 import cssSettings from "../ui/settings.module.css";
 
@@ -139,6 +140,9 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       inputsEditors: iptIds,
     },
   },
+  on: {
+    messengerClick: handleMessengerClick
+  }
 };
 
 export const settingsPageRouteConfig: RouteConfigs = {

@@ -42,7 +42,7 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireCloseChat(closeChat);
     headingToSettings.setProps({
       on: {
-        click: () => this.on?.goToSettings?.(),
+        click: this.on?.goToSettings
       },
     });
   }

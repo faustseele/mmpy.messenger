@@ -1,11 +1,9 @@
-import Router from "@app/providers/router/Router.ts";
-import Store from "@app/providers/store/model/Store.ts";
+import Store from "@/app/providers/store/model/Store.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
-import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
@@ -43,7 +41,7 @@ export class SettingsPage extends Page<SettingsProps> {
 
     /* --- setting events --- */
     heading.setProps({
-      on: { click: () => Router.go(RouteLink.Messenger) },
+      on: { click: this.on?.messengerClick },
     });
     this._wireButtonEvents(editInfo, editPassword, logout, validator);
   }
@@ -117,8 +115,8 @@ export class SettingsPage extends Page<SettingsProps> {
       on: {
         click: async (event: Event) => {
           event.preventDefault();
-          
-          handleLogout()
+
+          handleLogout();
         },
       },
     });

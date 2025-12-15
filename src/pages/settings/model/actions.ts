@@ -3,6 +3,10 @@ import UserService from "@/entities/user/model/UserService.ts";
 import AuthService from "@/features/authenticate/model/AuthService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 
+export const handleMessengerClick = () => {
+  Router.go(RouteLink.Messenger);
+};
+
 export const handleUpdateUserAvatar = async (avatar: File) => {
   await UserService.updateAvatar(avatar);
 };

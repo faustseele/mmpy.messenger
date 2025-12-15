@@ -10,6 +10,9 @@ export interface SettingsProps extends BaseProps {
     profileName: string;
     profileAvatar: string;
   };
+  on: {
+    messengerClick: () => void;
+  }
 }
 
 type SettingsMap =
