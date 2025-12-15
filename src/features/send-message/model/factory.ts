@@ -11,6 +11,7 @@ import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
 import css from "../ui/messageField.module.css";
 import { MessageField } from "../ui/MessageField.ts";
 import { MessageFieldProps } from "./types.ts";
+import { handleSendMessage } from "./actions.ts";
 
 export const getMessageFieldNode = (
   id: ComponentId
@@ -38,6 +39,9 @@ const getMessageFieldParams = (
     },
     attributes: {
       className: css.messageField,
+    },
+    on: {
+      sendMessage: handleSendMessage,
     },
   };
 };
