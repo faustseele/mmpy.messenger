@@ -1,20 +1,9 @@
-import Router from "@app/providers/router/Router.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { urlToFile } from "@shared/lib/helpers/file.ts";
-import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
-import {
-  handleAddChatWithUser,
-  handleAddNotes,
-  handleAddUsers,
-  handleCloseChat,
-  handleDeleteChat,
-  handleFindUser,
-  handleUpdateChatAvatar,
-} from "../model/actions.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
@@ -45,7 +34,7 @@ export class MessengerPage extends Page<MessengerProps> {
     const deleteNotes = deleteNotesButton.runtime?.instance as Button;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
 
-    /* --- setting events --- */
+    /* --- settings events --- */
     this._wireAddNotes(addChat);
     this._wireAddChat(addUser);
     this._wireDeleteChat(deleteChat);
@@ -53,8 +42,7 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireCloseChat(closeChat);
     headingToSettings.setProps({
       on: {
-        click: () =>
-          Router.go(headingToSettings.configs.link ?? RouteLink.Settings),
+        click: () => this.on?.goToSettings?.(),
       },
     });
   }
@@ -76,13 +64,13 @@ export class MessengerPage extends Page<MessengerProps> {
           const login = input.trim();
           if (!login) return;
 
-          const user = await handleFindUser(login);
+          const user = await this.on?.findUser?.(login);
           if (!user) {
             console.error("User not found by login:", login);
             return;
           }
 
-          const newChatRes = await handleAddChatWithUser(
+          const newChatRes = await this.on?.addChatWithUser?.(
             user.first_name,
             user.second_name,
           );
@@ -92,13 +80,13 @@ export class MessengerPage extends Page<MessengerProps> {
             return;
           }
 
-          await handleAddUsers(newChatRes.id, [user.id]);
+          await this.on?.addUsers?.(newChatRes.id, [user.id]);
 
           if (user.avatar) {
             const avatar = await urlToFile(
               `${API_URL_RESOURCES}${user.avatar}`,
             );
-            handleUpdateChatAvatar(newChatRes.id, avatar);
+            this.on?.updateChatAvatar?.(newChatRes.id, avatar);
           }
 
           console.log(
@@ -121,7 +109,7 @@ export class MessengerPage extends Page<MessengerProps> {
           const title = input.trim();
           if (!title) return;
 
-          handleAddNotes(title);
+          this.on?.addNotes?.(title);
         },
       },
     });
@@ -140,7 +128,7 @@ export class MessengerPage extends Page<MessengerProps> {
 
           const id = this.configs.chatId;
 
-          if (id) handleDeleteChat(id);
+          if (id) this.on?.deleteChat?.(id);
         },
       },
     });
@@ -150,7 +138,7 @@ export class MessengerPage extends Page<MessengerProps> {
     closeChat?.setProps({
       on: {
         click: () => {
-          handleCloseChat();
+          this.on?.closeChat?.();
         },
       },
     });
@@ -164,16 +152,15 @@ export class MessengerPage extends Page<MessengerProps> {
 
     input.addEventListener("change", async () => {
       const id = this.configs.chatId;
+      const file = input.files?.[0];
 
-      if (!id) {
-        console.error("No active chat to update avatar");
+      if (!id || !file) {
+        console.error("No active chat to update avatar or bad file");
         return;
       }
 
-      const file = input.files?.[0];
+      await this.on?.updateChatAvatar?.(id, file);
 
-      if (!file) return;
-      await handleUpdateChatAvatar(id, file);
       input.value = "";
     });
     input.dataset.bound = "true";
@@ -195,7 +182,6 @@ export class MessengerPage extends Page<MessengerProps> {
       deleteChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
-
 
     return /*html*/ `
       <aside class="${css.catalogue}">

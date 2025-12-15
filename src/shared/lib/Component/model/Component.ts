@@ -42,6 +42,9 @@ export default abstract class Component<P extends BaseProps> {
   public get attributes(): P["attributes"] {
     return this._attrs;
   }
+  public get on(): P["on"] {
+    return this._on;
+  }
   public get element(): HTMLElement | null {
     return this.domService.element;
   }

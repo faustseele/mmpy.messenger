@@ -28,5 +28,7 @@ export type BaseAttributes = {
 };
 
 export type BaseOn = {
-  [key: string]: (event: Event) => void;
+  /* accepting literally any function */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: (...args: any[]) => any;
 };

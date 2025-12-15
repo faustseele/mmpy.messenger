@@ -29,13 +29,23 @@ export type ComponentPatch<P extends BaseProps> = DeepPartialExceptArray<
 
 /**
  * entry at AppState Component graph
- * static metadata + mutable data + kids
+ * static immutable metadata + mutable params w/ kids + instance
  */
 export type ComponentNode<
   P extends BaseProps,
   C extends Component<P> = Component<P>,
 > = {
   readonly factory: ComponentFactory<P, C>;
+  /*
+   TODO: add metadata
+   Rationale: wont be seen by map-fns;
+   no need for DeepPartialExceptArray in params,
+   bc params can be completely partial now
+  */
+  metadata?: {
+    readonly id: ComponentId;
+    readonly tagName: P["configs"]["tagName"];
+  };
   params: ComponentParams<P>;
   runtime?: { instance: C };
 };

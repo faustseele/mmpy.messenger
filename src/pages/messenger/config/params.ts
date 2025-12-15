@@ -1,17 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import participantAvatar from "../../../../static/avatar.png";
-import {
-  RouteConfigs
-} from "@app/providers/router/types.ts";
+import { RouteConfigs } from "@app/providers/router/types.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
+import { PageId } from "@pages/page/config/const.ts";
+import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { getButtonNode } from "@shared/ui/Button/utils.ts";
 import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
 import { getInputNode } from "@shared/ui/Input/utils.ts";
-import { PageId } from "@pages/page/config/const.ts";
-import cssPage from "@pages/page/ui/page.module.css";
+import participantAvatar from "../../../../static/avatar.png";
+import {
+  handleAddChatWithUser,
+  handleAddNotes,
+  handleAddUsers,
+  handleCloseChat,
+  handleDeleteChat,
+  handleFindUser,
+  handleGoToSettings,
+  handleUpdateChatAvatar,
+} from "../model/actions.ts";
 import { MessengerProps } from "../model/types.ts";
 import cssMessenger from "../ui/messenger.module.css";
 
@@ -90,6 +98,16 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
       goToChatItems: [],
       messages: [],
     },
+  },
+  on: {
+    addChatWithUser: handleAddChatWithUser,
+    addNotes: handleAddNotes,
+    addUsers: handleAddUsers,
+    closeChat: handleCloseChat,
+    deleteChat: handleDeleteChat,
+    findUser: handleFindUser,
+    updateChatAvatar: handleUpdateChatAvatar,
+    goToSettings: handleGoToSettings,
   },
 };
 
