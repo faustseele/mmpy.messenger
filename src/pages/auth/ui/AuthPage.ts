@@ -1,12 +1,10 @@
-import Router from "@app/providers/router/Router.ts";
+import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
-import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
-import { Page } from "@pages/page/ui/Page.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
 import css from "./auth.module.css";
 
@@ -51,8 +49,7 @@ export class AuthPage extends Page<AuthProps> {
   private _wireReroute(buttonReroute: Button): void {
     buttonReroute.setProps({
       on: {
-        click: () =>
-          Router.go(buttonReroute.configs.link ?? RouteLink.NotFound),
+        click: () => this.on?.reroute?.(this.configs.type),
       },
     });
   }

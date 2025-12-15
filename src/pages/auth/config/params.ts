@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  RouteConfigs,
-} from "@app/providers/router/types.ts";
+import { RouteConfigs } from "@app/providers/router/types.ts";
+import { PageId } from "@pages/page/config/const.ts";
+import { PageNode } from "@pages/page/model/types.ts";
+import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { getButtonNode } from "@shared/ui/Button/utils.ts";
 import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
 import { getInputNode } from "@shared/ui/Input/utils.ts";
-import { PageId } from "@pages/page/config/const.ts";
-import { PageNode } from "@pages/page/model/types.ts";
-import cssPage from "@pages/page/ui/page.module.css";
+import { handleReroute, } from "../model/actions.ts";
 import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
 import type { AuthPage } from "../ui/AuthPage.ts";
@@ -120,6 +119,9 @@ const authPageParams_in: ComponentParams<AuthProps> = {
       inputs: [iptIds[2], iptIds[4]],
     },
   },
+  on: {
+    reroute: handleReroute,
+  },
 };
 
 const authPageParams_up: ComponentParams<AuthProps> = {
@@ -156,6 +158,9 @@ const authPageParams_up: ComponentParams<AuthProps> = {
       buttonReroute: "buttonReroute",
       inputs: iptIds,
     },
+  },
+  on: {
+    reroute: handleReroute,
   },
 };
 

@@ -19,13 +19,13 @@ export interface MessengerProps extends BaseProps {
       firstName: string,
       secondName: string,
     ) => Promise<CreateChatResponse | undefined>;
-    addNotes?: (title: string) => void;
-    addUsers?: (chatId: ChatId, users: number[]) => Promise<void>;
-    closeChat?: () => void;
-    deleteChat?: (chatId: ChatId) => Promise<void>;
-    findUser?: (login: string) => Promise<UserResponse | null>;
-    updateChatAvatar?: (chatId: ChatId, file: File) => Promise<void>;
-    goToSettings?: () => void;
+    addNotes: (title: string) => void;
+    addUsers: (chatId: ChatId, users: number[]) => Promise<void>;
+    closeChat: () => void;
+    deleteChat: (chatId: ChatId) => Promise<void>;
+    findUser: (login: string) => Promise<UserResponse | null>;
+    updateChatAvatar: (chatId: ChatId, file: File) => Promise<void>;
+    goToSettings: () => void;
   };
 }
 
