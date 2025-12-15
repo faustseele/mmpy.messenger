@@ -1,4 +1,3 @@
-import Store from "@/app/providers/store/model/Store.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -54,8 +53,9 @@ export class SettingsPage extends Page<SettingsProps> {
   }
 
   private _hydrateInputPlaceholders(): void {
-    const user = Store.getState().api.auth.user;
-    if (!user || !this.children) return;
+    if (!this.configs.user || !this.children) return;
+
+    const user = this.configs.user;
 
     const inputs = getInstances<InputProps, InputEditor>(
       this.children,
