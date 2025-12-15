@@ -13,6 +13,9 @@ export interface ErrorProps extends BaseProps {
     tagName: Extract<TagNameType, "div">;
     code: ErrorCodeType;
   };
+  on: {
+    back: () => void;
+  }
 }
 
 type ErrorMap = "heading" | "subheading" | "button_back";

@@ -1,8 +1,6 @@
-import Router from "@app/providers/router/Router.ts";
-import { ComponentProps } from "@shared/lib/Component/model/types.ts";
-import { RouteLink } from "@shared/types/universal.ts";
-import { Button } from "@shared/ui/Button/Button.ts";
 import { Page } from "@pages/page/ui/Page.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { Button } from "@shared/ui/Button/Button.ts";
 import { ErrorNodes, ErrorProps } from "../model/types.ts";
 import css from "./errors.module.css";
 
@@ -19,12 +17,11 @@ export class ErrorPage extends Page<ErrorProps> {
     /* --- getting instances --- */
     const nodes = this.children.nodes as ErrorNodes;
     const backBtn = nodes["button_back"].runtime?.instance as Button;
-    const link = backBtn?.configs.link ?? RouteLink.Messenger;
 
     /* --- setting events --- */
     backBtn.setProps({
       on: {
-        click: () => Router.go(link),
+        click: () => this.on?.back()
       },
     });
   }
