@@ -14,7 +14,6 @@ class AuthService {
       Store.set("api.auth.user", user);
       if (user) {
         Store.set("controllers.isLoggedIn", true);
-        ChatService.fetchChats();
       } else {
         Store.set("controllers.isLoggedIn", false);
       }
@@ -39,7 +38,6 @@ class AuthService {
       Store.set("api.auth.user", user);
       if (user) {
         Store.set("controllers.isLoggedIn", true);
-        ChatService.fetchChats();
       } else {
         Store.set("controllers.isLoggedIn", false);
       }
@@ -65,6 +63,7 @@ class AuthService {
       } else {
         Store.set("api.auth.user", null);
         Store.set("controllers.isLoggedIn", false);
+        lsRemove_lastChatId()
         return { ok: false };
       }
     } catch (_) {

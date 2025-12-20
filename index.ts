@@ -25,7 +25,7 @@ import { createSettingsPage } from "@pages/settings/model/factory.ts";
 try {
   await initApp();
 } catch (e) {
-  throw new Error("initialization failed", { cause: e });
+  console.error("ininitialization failed", e);
 } finally {
   Router
     /* SignIn route */

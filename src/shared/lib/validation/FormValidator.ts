@@ -1,4 +1,5 @@
 import Router from "@/app/providers/router/Router.ts";
+import ChatService from "@/entities/chat/model/ChatService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import UserService from "@entities/user/model/UserService.ts";
 import AuthService from "@features/authenticate/model/AuthService.ts";
@@ -52,6 +53,8 @@ export default class FormValidator {
         });
 
         if (res.ok) {
+          /* fetch chats on successful login */
+          ChatService.fetchChats();
           Router.go(RouteLink.Messenger);
         } else {
           console.error("SignIn failed");
@@ -68,6 +71,8 @@ export default class FormValidator {
           phone: formData.phone,
         });
         if (res.ok) {
+          /* fetch chats on successful signup */
+          ChatService.fetchChats();
           Router.go(RouteLink.Messenger);
         } else {
           console.error("SignUp failed");

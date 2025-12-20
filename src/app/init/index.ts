@@ -10,13 +10,17 @@ export const initApp = async () => {
 };
 
 const bootstrapAuth = async () => {
-  const res = await AuthService.fetchUser();
-  if (res.ok) {
-    await ChatService.fetchChats();
-  }
+  try {
+    const res = await AuthService.fetchUser();
+    if (res.ok) {
+      await ChatService.fetchChats();
+    } 
 
-  const isLoggedIn = Store.getState().controllers.isLoggedIn;
-  console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
+    const isLoggedIn = Store.getState().controllers.isLoggedIn;
+    console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
+  } catch (error) {
+    throw new Error("bootstrapAuth failed", { cause: error });
+  }
 };
 
 /** for the nav-<a> links */
