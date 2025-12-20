@@ -4,17 +4,6 @@ import UserService from "@/entities/user/model/UserService.ts";
 import { ChatId } from "@/shared/api/model/types.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 
-export const handleAddNotes = (title: string) => {
-  ChatService.createChat(title);
-};
-
-export const handleAddChatWithUser = async (
-  firstName: string,
-  secondName: string,
-) => {
-  return await ChatService.createChat(`${firstName} ${secondName}`);
-};
-
 export const handleAddUsers = async (id: ChatId, users: number[]) => {
   await ChatService.addUsers(id, users);
 };

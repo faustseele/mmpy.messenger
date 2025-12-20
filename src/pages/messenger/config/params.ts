@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { createChat } from "@/entities/chat/model/actions.ts";
 import { RouteConfigs } from "@app/providers/router/types.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
 import { PageId } from "@pages/page/config/const.ts";
@@ -11,8 +12,6 @@ import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
 import { getInputNode } from "@shared/ui/Input/utils.ts";
 import participantAvatar from "../../../../static/avatar.png";
 import {
-  handleAddChatWithUser,
-  handleAddNotes,
   handleAddUsers,
   handleCloseChat,
   handleDeleteChat,
@@ -100,8 +99,9 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
     },
   },
   on: {
-    addChatWithUser: handleAddChatWithUser,
-    addNotes: handleAddNotes,
+    addChatWithUser: (firstName: string, secondName: string) =>
+      createChat(`{${firstName} ${secondName}}`),
+    addNotes: createChat,
     addUsers: handleAddUsers,
     closeChat: handleCloseChat,
     deleteChat: handleDeleteChat,

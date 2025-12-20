@@ -3,6 +3,7 @@ import ChatService from "@/entities/chat/model/ChatService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
+import { createChat } from "@/entities/chat/model/actions.ts";
 
 export const signUp = async (data: SignUpData) => {
   const res = await AuthService.signUp(data);
@@ -12,7 +13,7 @@ export const signUp = async (data: SignUpData) => {
     Router.go(RouteLink.Messenger);
 
     /* generating one notes-chat */
-    await ChatService.createChat("Заметки 📃");
+    createChat("Заметки 📃");
   } else {
     console.error("SignUp failed");
   }

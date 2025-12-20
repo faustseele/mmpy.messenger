@@ -97,6 +97,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
     tagName: "div",
     profileName: "Loading..",
     profileAvatar,
+    user: null,
   },
   attributes: {
     className: `${cssPage.moduleWindow} ${cssSettings.moduleWindow_profile}`,
