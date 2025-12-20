@@ -1,5 +1,5 @@
+import { updatePassword, updateProfile } from "@/entities/user/model/actions.ts";
 import { signIn, signUp } from "@/features/authenticate/model/actions.ts";
-import UserService from "@entities/user/model/UserService.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
@@ -59,7 +59,7 @@ export default class FormValidator {
           phone: formData.phone,
         });
       } else if (submitType === "change-info") {
-        await UserService.updateProfile({
+        await updateProfile({
           first_name: formData.name,
           second_name: formData.surname,
           display_name: formData.display_name,
@@ -68,7 +68,7 @@ export default class FormValidator {
           phone: formData.phone,
         });
       } else if (submitType === "change-password") {
-        await UserService.updatePassword({
+        await updatePassword({
           oldPassword: formData.oldPassword,
           newPassword: formData.newPassword,
         });
