@@ -1,6 +1,5 @@
 import { lsRemove_lastChatId } from "@/shared/lib/LocalStorage/chats.ts";
 import Store from "@app/providers/store/model/Store.ts";
-import ChatService from "@entities/chat/model/ChatService.ts";
 import { SignInRequest, SignUpRequest } from "@shared/api/model/types.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
@@ -17,9 +16,6 @@ class AuthService {
       } else {
         Store.set("controllers.isLoggedIn", false);
       }
-
-      /* generating one notes-chat */
-      await ChatService.createChat("Заметки 📃");
 
       console.log(res, user, Store.getState());
 

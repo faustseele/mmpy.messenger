@@ -1,3 +1,4 @@
+import { logout } from "@/features/authenticate/model/actions.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -6,7 +7,7 @@ import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
-import { handleLogout, handleUpdateUserAvatar } from "../model/actions.ts";
+import { handleUpdateUserAvatar } from "../model/actions.ts";
 import { SettingsNodes, SettingsProps } from "../model/types.ts";
 import css from "./settings.module.css";
 
@@ -31,7 +32,7 @@ export class SettingsPage extends Page<SettingsProps> {
     const heading = heading_backToChats.runtime?.instance as Heading;
     const editInfo = buttonEditInfo.runtime?.instance as Button;
     const editPassword = buttonEditPassword.runtime?.instance as Button;
-    const logout = buttonLogout.runtime?.instance as Button;
+    const logoutBtn = buttonLogout.runtime?.instance as Button;
 
     /* --- vivifying inputs --- */
     const validator = this._vivifyInputs();
@@ -42,7 +43,7 @@ export class SettingsPage extends Page<SettingsProps> {
     heading.setProps({
       on: { click: this.on?.messengerClick },
     });
-    this._wireButtonEvents(editInfo, editPassword, logout, validator);
+    this._wireButtonEvents(editInfo, editPassword, logoutBtn, validator);
   }
 
   public componentDidRender(): void {
@@ -98,7 +99,7 @@ export class SettingsPage extends Page<SettingsProps> {
   private _wireButtonEvents(
     editInfo: Button,
     editPassword: Button,
-    logout: Button,
+    logoutBtn: Button,
     validator: FormValidator,
   ) {
     editInfo.setProps({
@@ -111,12 +112,12 @@ export class SettingsPage extends Page<SettingsProps> {
         click: (e: Event) => validator.onFormSubmit(e, "change-password"),
       },
     });
-    logout.setProps({
+    logoutBtn.setProps({
       on: {
         click: async (event: Event) => {
           event.preventDefault();
 
-          handleLogout();
+          logout();
         },
       },
     });

@@ -1,8 +1,5 @@
-import Router from "@/app/providers/router/Router.ts";
-import ChatService from "@/entities/chat/model/ChatService.ts";
-import { RouteLink } from "@/shared/types/universal.ts";
+import { signIn, signUp } from "@/features/authenticate/model/actions.ts";
 import UserService from "@entities/user/model/UserService.ts";
-import AuthService from "@features/authenticate/model/AuthService.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
@@ -47,22 +44,13 @@ export default class FormValidator {
       });
 
       if (submitType === "sign-in") {
-        const res = await AuthService.signIn({
+        await signIn({
           login: formData.login,
-          password: formData.password,
+          password: formData.password
         });
-
-        if (res.ok) {
-          /* fetch chats on successful login */
-          ChatService.fetchChats();
-          Router.go(RouteLink.Messenger);
-        } else {
-          console.error("SignIn failed");
-        }
-
         return;
       } else if (submitType === "sign-up") {
-        const res = await AuthService.signUp({
+        await signUp({
           first_name: formData.name,
           second_name: formData.surname,
           login: formData.login,
@@ -70,13 +58,6 @@ export default class FormValidator {
           password: formData.password,
           phone: formData.phone,
         });
-        if (res.ok) {
-          /* fetch chats on successful signup */
-          ChatService.fetchChats();
-          Router.go(RouteLink.Messenger);
-        } else {
-          console.error("SignUp failed");
-        }
       } else if (submitType === "change-info") {
         await UserService.updateProfile({
           first_name: formData.name,

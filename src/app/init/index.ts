@@ -1,4 +1,5 @@
 import ChatService from "@/entities/chat/model/ChatService.ts";
+import { logout } from "@/features/authenticate/model/actions.ts";
 import AuthService from "@/features/authenticate/model/AuthService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
@@ -14,7 +15,7 @@ const bootstrapAuth = async () => {
     const res = await AuthService.fetchUser();
     if (res.ok) {
       await ChatService.fetchChats();
-    } 
+    }
 
     const isLoggedIn = Store.getState().controllers.isLoggedIn;
     console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
@@ -35,14 +36,10 @@ export const bootstrapNavLinks = () => {
 
       const path = a.getAttribute("href");
       if (path === "/logout") {
-        const res = await AuthService.logout();
-        if (res.ok) {
-          Router.go(RouteLink.SignIn);
-        } else {
-          Router.go(RouteLink.Error);
-          console.error("Logout failed");
-        }
-      } else Router.go(path as RouteLink);
+        logout();
+      } else {
+        Router.go(path as RouteLink);
+      }
     });
   }
 };
