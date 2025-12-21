@@ -1,5 +1,3 @@
-import { updatePassword, updateProfile } from "@/entities/user/model/actions.ts";
-import { signIn, signUp } from "@/features/authenticate/model/actions.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
@@ -13,9 +11,22 @@ const logMessages = {
 
 export default class FormValidator {
   private inputs: Input[] | InputEditor[];
+  private onSubmitSuccess?: (
+    formData: Record<string, string>,
+    submitType: string,
+  ) => Promise<void>;
 
-  constructor(inputs: Input[] | InputEditor[]) {
+  constructor(
+    inputs: Input[] | InputEditor[],
+    options: {
+      onSubmitSuccess?: (
+        formData: Record<string, string>,
+        submitType: string,
+      ) => Promise<void>;
+    },
+  ) {
     this.inputs = inputs;
+    this.onSubmitSuccess = options.onSubmitSuccess;
   }
 
   public onInputBlur = (input: Input): void => {
@@ -43,36 +54,8 @@ export default class FormValidator {
         input.cleanInput();
       });
 
-      if (submitType === "sign-in") {
-        await signIn({
-          login: formData.login,
-          password: formData.password
-        });
-        return;
-      } else if (submitType === "sign-up") {
-        await signUp({
-          first_name: formData.name,
-          second_name: formData.surname,
-          login: formData.login,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone,
-        });
-      } else if (submitType === "change-info") {
-        await updateProfile({
-          first_name: formData.name,
-          second_name: formData.surname,
-          display_name: formData.display_name,
-          login: formData.login,
-          email: formData.email,
-          phone: formData.phone,
-        });
-      } else if (submitType === "change-password") {
-        await updatePassword({
-          oldPassword: formData.oldPassword,
-          newPassword: formData.newPassword,
-        });
-      }
+      this.onSubmitSuccess?.(formData, submitType);
+
       return;
     } else {
       console.log(logMessages.formHasErrors);

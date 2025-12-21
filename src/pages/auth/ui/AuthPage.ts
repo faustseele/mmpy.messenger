@@ -6,6 +6,7 @@ import { Button } from "@shared/ui/Button/Button.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
+import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./auth.module.css";
 
 export class AuthPage extends Page<AuthProps> {
@@ -29,7 +30,7 @@ export class AuthPage extends Page<AuthProps> {
     const { buttonReroute } = this.children.nodes as AuthNodes;
     const reroute = buttonReroute.runtime?.instance as Button;
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
-    const formValidator = new FormValidator(inputs);
+    const formValidator = new FormValidator(inputs, { onSubmitSuccess });
 
     /* --- setting events --- */
     this._wireSubmit(formValidator);

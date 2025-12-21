@@ -9,6 +9,7 @@ import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
 import { SettingsNodes, SettingsProps } from "../model/types.ts";
+import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./settings.module.css";
 
 export class SettingsPage extends Page<SettingsProps> {
@@ -143,7 +144,7 @@ export class SettingsPage extends Page<SettingsProps> {
       this.children!,
       "inputsEditors",
     );
-    const validator = new FormValidator(inputs);
+    const validator = new FormValidator(inputs, { onSubmitSuccess });
     inputs.forEach((input) => {
       input!.setProps({
         on: { focusout: () => validator.onInputBlur(input) },
