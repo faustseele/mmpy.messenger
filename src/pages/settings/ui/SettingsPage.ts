@@ -1,5 +1,5 @@
-import { updateAvatar } from "@/entities/user/model/actions.ts";
-import { logout } from "@/features/authenticate/model/actions.ts";
+import { handleUpdateAvatar } from "@/entities/user/model/actions.ts";
+import { handleLogout } from "@/features/authenticate/model/actions.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -118,7 +118,7 @@ export class SettingsPage extends Page<SettingsProps> {
         click: async (event: Event) => {
           event.preventDefault();
 
-          logout();
+          handleLogout();
         },
       },
     });
@@ -133,7 +133,7 @@ export class SettingsPage extends Page<SettingsProps> {
       const file = input.files?.[0];
       if (!file) return;
 
-      await updateAvatar(file);
+      await handleUpdateAvatar(file);
       input.value = "";
     });
     input.dataset.bound = "true";

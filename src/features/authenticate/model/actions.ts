@@ -3,9 +3,8 @@ import ChatService from "@/entities/chat/model/ChatService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
-import { createChat } from "@/entities/chat/model/actions.ts";
 
-export const signUp = async (data: SignUpData) => {
+export const handleSignUp = async (data: SignUpData) => {
   const res = await AuthService.signUp(data);
   if (res.ok) {
     /* fetch chats on successful signup */
@@ -13,13 +12,13 @@ export const signUp = async (data: SignUpData) => {
     Router.go(RouteLink.Messenger);
 
     /* generating one notes-chat */
-    createChat("Заметки 📃");
+    ChatService.createChat("Заметки 📃");
   } else {
     console.error("SignUp failed");
   }
 };
 
-export const signIn = async (data: SignInData) => {
+export const handleSignIn = async (data: SignInData) => {
   const res = await AuthService.signIn(data);
 
   if (res.ok) {
@@ -31,7 +30,7 @@ export const signIn = async (data: SignInData) => {
   }
 };
 
-export const logout = async () => {
+export const handleLogout = async () => {
   const res = await AuthService.logout();
   if (res.ok) {
     Router.go(RouteLink.SignIn);

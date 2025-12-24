@@ -1,5 +1,5 @@
 import ChatService from "@/entities/chat/model/ChatService.ts";
-import { logout } from "@/features/authenticate/model/actions.ts";
+import { handleLogout } from "@/features/authenticate/model/actions.ts";
 import AuthService from "@/features/authenticate/model/AuthService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
@@ -36,7 +36,7 @@ export const bootstrapNavLinks = () => {
 
       const path = a.getAttribute("href");
       if (path === "/logout") {
-        logout();
+        handleLogout();
       } else {
         Router.go(path as RouteLink);
       }

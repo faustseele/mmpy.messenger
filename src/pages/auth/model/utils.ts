@@ -1,13 +1,13 @@
-import { signIn, signUp } from "@/features/authenticate/model/actions.ts";
+import { handleSignIn, handleSignUp } from "@/features/authenticate/model/actions.ts";
 
 export const onSubmitSuccess = async (formData: Record<string, string>, submitType: string) => {
   if (submitType === "sign-in") {
-    await signIn({
+    await handleSignIn({
       login: formData.login,
       password: formData.password,
     });
   } else if (submitType === "sign-up") {
-    await signUp({
+    await handleSignUp({
       first_name: formData.name,
       second_name: formData.surname,
       login: formData.login,

@@ -1,4 +1,4 @@
-import { selectChat } from "@/entities/chat/model/actions.ts";
+import { handleSelectChat } from "@/entities/chat/model/actions.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import { ChatResponse } from "@shared/api/model/types.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
@@ -54,7 +54,7 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
       },
       {
         click: () => {
-          selectChat(apiChat.id);
+          handleSelectChat(apiChat.id);
         },
       },
     );

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createChat } from "@/entities/chat/model/actions.ts";
+import { handleCreateChat } from "@/entities/chat/model/actions.ts";
 import { RouteConfigs } from "@app/providers/router/types.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
 import { PageId } from "@pages/page/config/const.ts";
@@ -100,8 +100,8 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
   },
   on: {
     addChatWithUser: (firstName: string, secondName: string) =>
-      createChat(`{${firstName} ${secondName}}`),
-    addNotes: createChat,
+      handleCreateChat(`{${firstName} ${secondName}}`),
+    addNotes: handleCreateChat,
     addUsers: handleAddUsers,
     closeChat: handleCloseChat,
     deleteChat: handleDeleteChat,

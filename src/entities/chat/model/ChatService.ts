@@ -79,12 +79,7 @@ class ChatService {
     title: string,
   ): Promise<CreateChatResponse | undefined> {
     try {
-      const res = await ChatAPI.createChat({ title });
-      const resChats = await this.fetchChats();
-      this.selectChat(res.id);
-
-      console.log(`chat ${title} create success !:`, res, resChats);
-      return res;
+      return await ChatAPI.createChat({ title });
     } catch (e) {
       console.error("chat create failed:", e);
       return;
