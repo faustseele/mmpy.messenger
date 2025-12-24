@@ -1,4 +1,4 @@
-import ChatService from "@/entities/chat/model/ChatService.ts";
+import { handleFetchChats } from "@/entities/chat/model/actions.ts";
 import { handleLogout } from "@/features/authenticate/model/actions.ts";
 import AuthService from "@/features/authenticate/model/AuthService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
@@ -14,7 +14,7 @@ const bootstrapAuth = async () => {
   try {
     const res = await AuthService.fetchUser();
     if (res.ok) {
-      await ChatService.fetchChats();
+      await handleFetchChats();
     }
 
     const isLoggedIn = Store.getState().controllers.isLoggedIn;

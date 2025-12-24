@@ -8,16 +8,8 @@ export const handleAddUsers = async (id: ChatId, users: number[]) => {
   await ChatService.addUsers(id, users);
 };
 
-export const handleDeleteChat = async (id: ChatId) => {
-  await ChatService.deleteChat(id);
-};
-
 export const handleCloseChat = () => {
   ChatService.deselectChat();
-};
-
-export const handleUpdateChatAvatar = async (id: ChatId, avatar: File) => {
-  ChatService.updateChatAvatar(id, avatar);
 };
 
 export const handleFindUser = async (login: string) => {

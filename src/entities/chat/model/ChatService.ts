@@ -5,39 +5,27 @@ import {
   ChatUsersQuery,
   CreateChatResponse,
   GetChatsQuery,
+  UpdateChatAvatarResponse,
 } from "@shared/api/model/types.ts";
-import {
-  lsGet_lastChatId,
-  lsStore_lastChatId,
-} from "@shared/lib/LocalStorage/chats.ts";
+import { lsStore_lastChatId } from "@shared/lib/LocalStorage/chats.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
-import { isChatNotes } from "./utils.ts";
 
 class ChatService {
   private ws = new ChatWebsocket();
 
-  public async fetchChats(query?: GetChatsQuery) {
+  public async fetchChats(
+    query?: GetChatsQuery,
+  ): Promise<ChatResponse[] | undefined> {
     try {
       const list = await ChatAPI.getChats(query);
       Store.set("api.chats.list", list);
-
-      /* auto-restore last active chat */
-      const last = Number(lsGet_lastChatId());
-      if (last && list?.some((chat) => chat.id === last)) this.selectChat(last);
-
-      /* set isNotes for each chat */
-      await Promise.all(
-        list?.map(async (chat) => {
-          const is = await isChatNotes(chat.id);
-          Store.set("isNotes", { [chat.id]: is });
-          return is;
-        }),
-      );
-
       console.log("chats fetch success !:", list);
+
+      return list;
     } catch (e) {
       console.error("chats fetch fail:", e);
+      return;
     }
   }
 
@@ -79,22 +67,28 @@ class ChatService {
     title: string,
   ): Promise<CreateChatResponse | undefined> {
     try {
-      return await ChatAPI.createChat({ title });
+      const chat = await ChatAPI.createChat({ title });
+      console.log(`chat ${title} create success !:`, chat);
+
+      return chat;
     } catch (e) {
       console.error("chat create failed:", e);
       return;
     }
   }
 
-  public async updateChatAvatar(chatId: ChatId, avatar: File) {
+  public async updateChatAvatar(
+    chatId: ChatId,
+    avatar: File,
+  ): Promise<UpdateChatAvatarResponse | undefined> {
     try {
       const updatedChat = await ChatAPI.updateChatAvatar(chatId, avatar);
-
       console.log("chat avatar update success:", updatedChat);
 
-      this.fetchChats();
+      return updatedChat;
     } catch (e) {
       console.error("chat avatar update fail:", e);
+      return;
     }
   }
 
@@ -103,10 +97,7 @@ class ChatService {
       const delRes = await ChatAPI.deleteChat({ chatId });
       this.ws.closeWS(chatId);
 
-      await this.fetchChats();
       console.log("chat delete success !:", delRes);
-
-      this.deselectChat();
     } catch (e) {
       console.error("chat delete failed:", e);
     }
@@ -126,9 +117,7 @@ class ChatService {
     try {
       const res = await ChatAPI.removeUsers({ chatId, users });
 
-      console.log("users-remove success:", res);
-
-      await this.fetchChats();
+      console.log("users-remove success:", res, chatId);
     } catch (e) {
       console.error("users-remove failed:", e);
     }
