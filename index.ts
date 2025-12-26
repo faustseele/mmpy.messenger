@@ -1,4 +1,5 @@
 import { bootstrapNavLinks, initApp } from "@/app/init/index.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 import Router from "@app/providers/router/Router.ts";
 import "@app/styles/index.css";
 import {
@@ -25,7 +26,7 @@ import { createSettingsPage } from "@pages/settings/model/factory.ts";
 try {
   await initApp();
 } catch (e) {
-  console.error("ininitialization failed", e);
+  lgg.error("ininitialization failed", e);
 } finally {
   Router
     /* SignIn route */

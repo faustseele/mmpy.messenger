@@ -7,6 +7,7 @@ import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
 import defaultAvatar from "../../../../static/avatar.png";
 import { MessengerProps } from "./types.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 
 export const mapMessengerState = (
   state: AppState,
@@ -34,7 +35,7 @@ export const mapMessengerState = (
   const messageNodesPatch = getMessagesGraph();
 
   if (!goToChatNodesPatch.nodes) {
-    console.error("goToChatNodesPatch is not defined");
+    lgg.error("goToChatNodesPatch is not defined");
   }
 
   const { nodes: goToChatNodes, edges: goToChatEdge } = goToChatNodesPatch;

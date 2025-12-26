@@ -18,7 +18,7 @@ export class AuthPage extends Page<AuthProps> {
     this.footerModifier =
       props.node.params.configs.type === "sign-up" ? css.authFooter_signUp : "";
 
-    // console.log(this);
+    // lgg.debug(this);
   }
 
   public componentDidMount(): void {

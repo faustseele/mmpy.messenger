@@ -1,5 +1,6 @@
 import { BaseProps } from "../Component/model/base.types.ts";
 import { ComponentId } from "../Component/model/types.ts";
+import { lgg } from "../logs/Logger.ts";
 import { TagNameType } from "./types.ts";
 
 /**
@@ -60,7 +61,7 @@ export default class DOMService<P extends BaseProps> {
 
   public insertFragmentIntoElement(fragment: DocumentFragment): void {
     if (!this._element) {
-      console.error("Cannot render: DOMService element is null.");
+      lgg.error("Cannot render: DOMService element is null.");
       return;
     }
 

@@ -1,4 +1,5 @@
-import { lsRemove_lastChatId } from "@/shared/lib/LocalStorage/chats.ts";
+import { lsRemove_lastChatId } from "@/shared/lib/LocalStorage/actions.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import { SignInRequest, SignUpRequest } from "@shared/api/model/types.ts";
 import AuthAPI from "../api/AuthAPI.ts";
@@ -17,7 +18,7 @@ class AuthService {
         Store.set("controllers.isLoggedIn", false);
       }
 
-      console.log(res, user, Store.getState());
+      lgg.debug('', res, user, Store.getState());
 
       return { ok: !!user };
     } catch (e) {
@@ -38,7 +39,7 @@ class AuthService {
         Store.set("controllers.isLoggedIn", false);
       }
 
-      console.log(res, user, Store.getState());
+      lgg.debug(res, user, Store.getState());
 
       return { ok: !!user };
     } catch (e) {
@@ -54,7 +55,7 @@ class AuthService {
       if (user) {
         Store.set("api.auth.user", user);
         Store.set("controllers.isLoggedIn", true);
-        console.log(user);
+        lgg.debug('', user);
         return { ok: true };
       } else {
         Store.set("api.auth.user", null);
@@ -82,7 +83,7 @@ class AuthService {
       /* remove last active chat */
       lsRemove_lastChatId();
 
-      console.log(res, Store.getState());
+      lgg.debug('', res, Store.getState());
       return { ok: !!res };
     } catch (e) {
       throw new Error("Logout failed", { cause: e });

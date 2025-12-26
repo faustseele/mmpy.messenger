@@ -1,3 +1,4 @@
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 import Component from "../../lib/Component/model/Component.ts";
 import { ComponentProps } from "../../lib/Component/model/types.ts";
 import { setTextSafe } from "../../lib/security/sanitize.ts";
@@ -28,7 +29,7 @@ export class Input extends Component<InputProps> {
 
   public getNameAndValue(): { name: FieldType | ""; value: string } {
     if (!this.input) {
-      console.error("input is not defined", this.input);
+      lgg.error("input is not defined", this.input);
       return { name: "", value: "" };
     }
 
@@ -37,7 +38,7 @@ export class Input extends Component<InputProps> {
 
   public cleanInput(): void {
     if (!this.input) {
-      console.error("input is not defined", this.input);
+      lgg.error("input is not defined", this.input);
       return;
     }
 
@@ -46,7 +47,7 @@ export class Input extends Component<InputProps> {
 
   public showError(message: string): void {
     if (!this.input || !this.errorLabel) {
-      console.error(
+      lgg.error(
         "input or error-labal is not defined",
         this.input,
         this.errorLabel,
@@ -61,7 +62,7 @@ export class Input extends Component<InputProps> {
 
   public hideError(): void {
     if (!this.input || !this.errorLabel) {
-      console.error(
+      lgg.error(
         "input or error-labal is not defined",
         this.input,
         this.errorLabel,

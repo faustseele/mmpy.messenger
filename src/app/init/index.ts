@@ -4,6 +4,7 @@ import AuthService from "@/features/authenticate/model/AuthService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
 import Store from "../providers/store/model/Store.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 
 /** initilizes application; keeps Router separate */
 export const initApp = async () => {
@@ -18,7 +19,7 @@ const bootstrapAuth = async () => {
     }
 
     const isLoggedIn = Store.getState().controllers.isLoggedIn;
-    console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
+    lgg.debug("bootstrapAuth: isLoggedIn?", isLoggedIn);
   } catch (error) {
     throw new Error("bootstrapAuth failed", { cause: error });
   }

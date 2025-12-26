@@ -1,3 +1,4 @@
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import UserAPI from "@entities/user/api/UserAPI.ts";
 import {
@@ -11,9 +12,9 @@ class UserService {
       const updatedUser = await UserAPI.updateProfile(data);
 
       Store.set("api.auth.user", updatedUser);
-      console.log("profile update success:", updatedUser);
+      lgg.debug("profile update success:", updatedUser);
     } catch (e) {
-      console.error("profile update fail:", e);
+      lgg.error("profile update fail:", e);
     }
   }
 
@@ -22,9 +23,9 @@ class UserService {
       const updatedUser = await UserAPI.updatePassword(data);
 
       Store.set("api.auth.user", updatedUser);
-      console.log("psw update success:", updatedUser);
+      lgg.debug("psw update success:", updatedUser);
     } catch (e) {
-      console.error("psw update fail:", e);
+      lgg.error("psw update fail:", e);
     }
   }
 
@@ -33,9 +34,9 @@ class UserService {
       const updatedUser = await UserAPI.updateAvatar(data);
 
       Store.set("api.auth.user", updatedUser);
-      console.log("avatar update success:", updatedUser);
+      lgg.debug("avatar update success:", updatedUser);
     } catch (e) {
-      console.error("avatar update fail:", e);
+      lgg.error("avatar update fail:", e);
     }
   }
 
@@ -43,10 +44,10 @@ class UserService {
     try {
       const users = await UserAPI.findUsers({ login });
       const res = users?.[0] ?? null;
-      console.log("findByLogin success:", res);
+      lgg.debug("findByLogin success:", res);
       return res;
     } catch (e) {
-      console.error("findByLogin fail:", e);
+      lgg.error("findByLogin fail:", e);
       return null;
     }
   }

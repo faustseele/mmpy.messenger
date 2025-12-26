@@ -3,6 +3,7 @@ import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { AuthStateType, RouteConfigs, RouteContract } from "./types.ts";
 import { matchPath } from "./utils.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 
 /**
  * @class Route Represents a single application route.
@@ -78,7 +79,7 @@ export default class Route<
       const element = this._pageInstance!.element;
 
       if (!root || !element) {
-        console.error("Root:", root, "Element:", element);
+        lgg.error("Root:", root, "Element:", element);
         return;
       }
 

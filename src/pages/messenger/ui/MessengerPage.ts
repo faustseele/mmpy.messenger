@@ -7,6 +7,7 @@ import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 
 export class MessengerPage extends Page<MessengerProps> {
   constructor(props: ComponentProps<MessengerProps, MessengerPage>) {
@@ -66,7 +67,7 @@ export class MessengerPage extends Page<MessengerProps> {
 
           const user = await this.on?.findUser?.(login);
           if (!user) {
-            console.error("User not found by login:", login);
+            lgg.error("User not found by login:", login);
             return;
           }
 
@@ -76,7 +77,7 @@ export class MessengerPage extends Page<MessengerProps> {
           );
 
           if (!newChatRes) {
-            console.error("Chat create failed");
+            lgg.error("Chat create failed");
             return;
           }
 
@@ -89,7 +90,7 @@ export class MessengerPage extends Page<MessengerProps> {
             this.on?.updateChatAvatar?.(newChatRes.id, avatar);
           }
 
-          console.log(
+          lgg.debug(
             `User ${user.login} (id=${user.id}) added to chat`,
             newChatRes.id,
           );
@@ -155,7 +156,7 @@ export class MessengerPage extends Page<MessengerProps> {
       const file = input.files?.[0];
 
       if (!id || !file) {
-        console.error("No active chat to update avatar or bad file");
+        lgg.error("No active chat to update avatar or bad file");
         return;
       }
 

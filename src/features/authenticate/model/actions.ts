@@ -3,6 +3,7 @@ import ChatService from "@/entities/chat/model/ChatService.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 
 export const handleSignUp = async (data: SignUpData) => {
   const res = await AuthService.signUp(data);
@@ -14,7 +15,7 @@ export const handleSignUp = async (data: SignUpData) => {
     /* generating one notes-chat */
     ChatService.createChat("Заметки 📃");
   } else {
-    console.error("SignUp failed");
+    lgg.error("SignUp failed");
   }
 };
 
@@ -26,7 +27,7 @@ export const handleSignIn = async (data: SignInData) => {
     ChatService.fetchChats();
     Router.go(RouteLink.Messenger);
   } else {
-    console.error("SignIn failed");
+    lgg.error("SignIn failed");
   }
 };
 
@@ -36,6 +37,6 @@ export const handleLogout = async () => {
     Router.go(RouteLink.SignIn);
   } else {
     Router.go(RouteLink.Error);
-    console.error("Logout failed");
+    lgg.error("Logout failed");
   }
 };

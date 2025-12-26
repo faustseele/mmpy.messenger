@@ -5,9 +5,10 @@ import {
   CreateChatResponse,
   GetChatsQuery,
 } from "@/shared/api/model/types.ts";
-import { lsGet_lastChatId } from "@/shared/lib/LocalStorage/chats.ts";
+import { lsGet_lastChatId } from "@/shared/lib/LocalStorage/actions.ts";
 import ChatService from "./ChatService.ts";
 import { isChatNotes } from "./utils.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 
 export const handleCreateChat = async (
   title: string,
@@ -22,7 +23,7 @@ export const handleCreateChat = async (
 
     return res;
   } else {
-    console.error("Chat create failed");
+    lgg.error("Chat create failed");
     return;
   }
 };
@@ -44,7 +45,7 @@ export const handleFetchChats = async (query?: GetChatsQuery) => {
     ChatService.selectChat(last);
 
   if (!list) {
-    console.warn("no chats fetched", list);
+    lgg.warn("no chats fetched", list);
     return;
   }
 
@@ -74,6 +75,6 @@ export const setChatsList = async (list: ChatResponse[]) => {
       isNotesList[chat.id] = is;
     }),
   );
-  console.log("isNotesList:", isNotesList);
+  lgg.debug("isNotesList:", isNotesList);
   Store.set("isNotes", isNotesList);
 };
