@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { handleCreateChat, handleDeleteChat, handleUpdateChatAvatar } from "@/entities/chat/model/actions.ts";
+import { handleAddUsers, handleCloseChat, handleCreateChat, handleDeleteChat, handleUpdateChatAvatar } from "@/entities/chat/model/actions.ts";
 import { RouteConfigs } from "@app/providers/router/types.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
 import { PageId } from "@pages/page/config/const.ts";
@@ -12,8 +12,6 @@ import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
 import { getInputNode } from "@shared/ui/Input/utils.ts";
 import participantAvatar from "../../../../static/avatar.png";
 import {
-  handleAddUsers,
-  handleCloseChat,
   handleFindUser,
   handleGoToSettings,
 } from "../model/actions.ts";

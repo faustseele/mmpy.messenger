@@ -6,9 +6,17 @@ import {
   GetChatsQuery,
 } from "@/shared/api/model/types.ts";
 import { lsGet_lastChatId } from "@/shared/lib/LocalStorage/actions.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 import ChatService from "./ChatService.ts";
 import { isChatNotes } from "./utils.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+
+export const handleAddUsers = async (id: ChatId, users: number[]) => {
+  await ChatService.addUsers(id, users);
+};
+
+export const handleCloseChat = () => {
+  ChatService.deselectChat();
+};
 
 export const handleCreateChat = async (
   title: string,
@@ -31,7 +39,7 @@ export const handleCreateChat = async (
 export const handleDeleteChat = async (id: number) => {
   await ChatService.deleteChat(id);
   ChatService.deselectChat();
-  
+
   const resChats = await ChatService.fetchChats();
   if (resChats) setChatsList(resChats);
 };
