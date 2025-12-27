@@ -1,4 +1,4 @@
-import { handleUpdatePassword, handleUpdateProfile } from "@/entities/user/model/actions.ts";
+import { handleUpdatePassword, handleUpdateProfile } from "@entities/user/model/actions.ts";
 
 export const onSubmitSuccess = async (formData: Record<string, string>, submitType: string) => {
   if (submitType === "change-password") {

@@ -8,8 +8,8 @@ import { InputProps } from "@shared/ui/Input/types.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
 import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./auth.module.css";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
-import { RouteLink } from "@/shared/types/universal.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 
 export class AuthPage extends Page<AuthProps> {
   private footerModifier: string = "";

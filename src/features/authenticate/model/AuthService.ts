@@ -1,5 +1,5 @@
-import { ls_removeLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import { SignInRequest, SignUpRequest, UserResponse } from "@shared/api/model/types.ts";
 import AuthAPI from "../api/AuthAPI.ts";

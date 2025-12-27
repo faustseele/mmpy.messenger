@@ -3,7 +3,7 @@ import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { AuthStateType, RouteConfigs, RouteContract } from "./types.ts";
 import { matchPath } from "./utils.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 
 /**
  * @class Route Represents a single application route.

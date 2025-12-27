@@ -1,4 +1,4 @@
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import Component from "../../lib/Component/model/Component.ts";
 import { ComponentProps } from "../../lib/Component/model/types.ts";
 import { setTextSafe } from "../../lib/security/sanitize.ts";

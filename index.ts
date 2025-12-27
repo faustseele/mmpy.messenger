@@ -1,5 +1,5 @@
-import { bootstrapNavLinks, initApp } from "@/app/init/index.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { bootstrapNavLinks, initApp } from "@app/init/index.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import Router from "@app/providers/router/Router.ts";
 import "@app/styles/index.css";
 import {

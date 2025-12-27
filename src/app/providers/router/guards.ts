@@ -1,4 +1,4 @@
-import { RouteLink } from "@/shared/types/universal.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 import { AppState } from "../store/model/Store.ts";
 import { RouteContract } from "./types.ts";
 

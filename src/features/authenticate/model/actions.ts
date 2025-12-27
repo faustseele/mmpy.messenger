@@ -1,12 +1,12 @@
-import Router from "@/app/providers/router/Router.ts";
+import Router from "@app/providers/router/Router.ts";
 import {
   handleCreateChat,
   handleFetchChats,
-} from "@/entities/chat/model/actions.ts";
-import { UserResponse } from "@/shared/api/model/types.ts";
-import { ls_removeLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
-import { RouteLink } from "@/shared/types/universal.ts";
+} from "@entities/chat/model/actions.ts";
+import { UserResponse } from "@shared/api/model/types.ts";
+import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
 

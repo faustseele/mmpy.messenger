@@ -1,6 +1,6 @@
-import { handleUpdateAvatar } from "@/entities/user/model/actions.ts";
-import { handleLogout } from "@/features/authenticate/model/actions.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { handleUpdateAvatar } from "@entities/user/model/actions.ts";
+import { handleLogout } from "@features/authenticate/model/actions.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";

@@ -1,12 +1,12 @@
-import Store from "@/app/providers/store/model/Store.ts";
+import Store from "@app/providers/store/model/Store.ts";
 import {
   ChatId,
   ChatResponse,
   CreateChatResponse,
   GetChatsQuery,
-} from "@/shared/api/model/types.ts";
-import { ls_getLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+} from "@shared/api/model/types.ts";
+import { ls_getLastChatId } from "@shared/lib/LocalStorage/actions.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import ChatService from "./ChatService.ts";
 import { isChatNotes } from "./utils.ts";
 

@@ -1,4 +1,4 @@
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import UserAPI from "@entities/user/api/UserAPI.ts";
 import {

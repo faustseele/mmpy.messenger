@@ -7,7 +7,7 @@ import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 
 export class MessengerPage extends Page<MessengerProps> {
   constructor(props: ComponentProps<MessengerProps, MessengerPage>) {

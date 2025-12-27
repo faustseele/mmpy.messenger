@@ -7,10 +7,10 @@ import {
   GetChatsQuery,
   UpdateChatAvatarResponse,
 } from "@shared/api/model/types.ts";
-import { ls_storeLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
+import { ls_storeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 
 class ChatService {
   private ws = new ChatWebsocket();

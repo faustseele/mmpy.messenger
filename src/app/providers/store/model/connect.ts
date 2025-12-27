@@ -1,4 +1,4 @@
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import { PageNode } from "@pages/page/model/types.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";

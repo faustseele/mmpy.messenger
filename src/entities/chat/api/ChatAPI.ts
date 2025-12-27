@@ -1,4 +1,4 @@
-import { lgg } from "@/shared/lib/logs/Logger.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import HTTPTransport from "@shared/api/http/HTTPTransport.ts";
 import { BaseAPI } from "@shared/api/model/BaseAPI.ts";
 import {
