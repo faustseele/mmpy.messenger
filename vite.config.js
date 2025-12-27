@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [],
   server: { port: 3000 },
   preview: { port: 3000 },
-  build: { outDir: "dist" },
+  build: { target: 'es2022', outDir: "dist" },
   css: {
     modules: {
       scopeBehaviour: "local",
