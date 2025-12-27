@@ -1,9 +1,20 @@
 import Router from "@/app/providers/router/Router.ts";
-import { handleCreateChat, handleFetchChats } from "@/entities/chat/model/actions.ts";
+import {
+  handleCreateChat,
+  handleFetchChats,
+} from "@/entities/chat/model/actions.ts";
+import { UserResponse } from "@/shared/api/model/types.ts";
+import { ls_removeLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
 import { lgg } from "@/shared/lib/logs/Logger.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
+
+export const handleFetchUser = async (): Promise<UserResponse | undefined> => {
+  const res = await AuthService.fetchUser();
+  if (!res) ls_removeLastChatId();
+  return res;
+};
 
 export const handleSignUp = async (data: SignUpData) => {
   const res = await AuthService.signUp(data);

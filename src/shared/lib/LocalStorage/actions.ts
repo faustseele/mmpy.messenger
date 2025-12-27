@@ -1,13 +1,13 @@
 import { ChatId } from "../../api/model/types.ts";
 
-export function lsStore_lastChatId(chatId: ChatId): void {
+export function ls_storeLastChatId(chatId: ChatId): void {
   localStorage.setItem("lastActiveChatId", String(chatId));
 }
 
-export function lsGet_lastChatId(): ChatId | null {
+export function ls_getLastChatId(): ChatId | null {
   return Number(localStorage.getItem("lastActiveChatId"));
 }
 
-export function lsRemove_lastChatId(): void {
+export function ls_removeLastChatId(): void {
   localStorage.removeItem("lastActiveChatId");
 }

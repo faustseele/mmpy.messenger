@@ -14,7 +14,7 @@ export const isChatNotes = async (id: ChatId | null): Promise<boolean> => {
     (user) => user.id !== userId,
   );
 
-  if (usersInChat.length === 0) {
+  if (!usersInChat.length) {
     return true;
   } else {
     return false;

@@ -1,10 +1,12 @@
 import { handleFetchChats } from "@/entities/chat/model/actions.ts";
-import { handleLogout } from "@/features/authenticate/model/actions.ts";
-import AuthService from "@/features/authenticate/model/AuthService.ts";
+import {
+  handleFetchUser,
+  handleLogout,
+} from "@/features/authenticate/model/actions.ts";
+import { lgg } from "@/shared/lib/logs/Logger.ts";
 import { RouteLink } from "@/shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
 import Store from "../providers/store/model/Store.ts";
-import { lgg } from "@/shared/lib/logs/Logger.ts";
 
 /** initilizes application; keeps Router separate */
 export const initApp = async () => {
@@ -13,10 +15,8 @@ export const initApp = async () => {
 
 const bootstrapAuth = async () => {
   try {
-    const res = await AuthService.fetchUser();
-    if (res.ok) {
-      await handleFetchChats();
-    }
+    const user = await handleFetchUser();
+    if (user) await handleFetchChats();
 
     const isLoggedIn = Store.getState().controllers.isLoggedIn;
     lgg.debug("bootstrapAuth: isLoggedIn?", isLoggedIn);

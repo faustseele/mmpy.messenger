@@ -52,7 +52,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
       }) as any,
       addNotesButton: getButtonNode({
         id: "addNotesButton",
-        label: "Заметки ✏️",
+        label: "Заметкa ✏️",
         tooltip: "Добавить новые заметки",
       }) as any,
       findUserChatButton: getButtonNode({

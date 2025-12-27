@@ -7,7 +7,7 @@ import {
   GetChatsQuery,
   UpdateChatAvatarResponse,
 } from "@shared/api/model/types.ts";
-import { lsStore_lastChatId } from "@/shared/lib/LocalStorage/actions.ts";
+import { ls_storeLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
 import { lgg } from "@/shared/lib/logs/Logger.ts";
@@ -33,7 +33,7 @@ class ChatService {
   public async selectChat(chatId: number) {
     try {
       Store.set("api.chats.activeId", chatId);
-      lsStore_lastChatId(chatId);
+      ls_storeLastChatId(chatId);
 
       const list = Store.getState().api.chats.list;
 

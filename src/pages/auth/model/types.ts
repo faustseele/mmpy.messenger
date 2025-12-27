@@ -1,4 +1,5 @@
 import FormValidator from "@/shared/lib/validation/FormValidator.ts";
+import { RouteLink } from "@/shared/types/universal.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
@@ -13,7 +14,7 @@ export interface AuthProps extends BaseProps {
     type: AuthType;
   };
   on: {
-    reroute: (type: AuthType) => void;
+    reroute: (link: RouteLink) => void;
     submit?: (e: Event, validator: FormValidator, type: AuthType) => void;
   };
 }

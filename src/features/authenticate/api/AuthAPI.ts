@@ -10,7 +10,13 @@ const authAPIInstance = new HTTPTransport("/auth");
 
 class AuthAPI extends BaseAPI {
   public signUp(data: SignUpRequest): Promise<{ id: number }> {
-    return authAPIInstance.post("/signUp", { data }) as Promise<{ id: number }>;
+    try {
+      return authAPIInstance.post("/signUp", { data }) as Promise<{
+        id: number;
+      }>;
+    } catch (error) {
+      throw new Error("AuthAPI: signUp failed", { cause: error });
+    }
   }
 
   public signIn(data: SignInRequest): Promise<string> {

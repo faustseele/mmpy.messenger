@@ -5,7 +5,7 @@ import {
   CreateChatResponse,
   GetChatsQuery,
 } from "@/shared/api/model/types.ts";
-import { lsGet_lastChatId } from "@/shared/lib/LocalStorage/actions.ts";
+import { ls_getLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
 import { lgg } from "@/shared/lib/logs/Logger.ts";
 import ChatService from "./ChatService.ts";
 import { isChatNotes } from "./utils.ts";
@@ -48,7 +48,7 @@ export const handleFetchChats = async (query?: GetChatsQuery) => {
   const list = await ChatService.fetchChats(query);
 
   /* auto-restore last active chat */
-  const last = Number(lsGet_lastChatId());
+  const last = Number(ls_getLastChatId());
   if (last && list?.some((chat) => chat.id === last))
     ChatService.selectChat(last);
 

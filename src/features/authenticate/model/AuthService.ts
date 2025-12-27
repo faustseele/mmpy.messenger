@@ -1,7 +1,7 @@
-import { lsRemove_lastChatId } from "@/shared/lib/LocalStorage/actions.ts";
+import { ls_removeLastChatId } from "@/shared/lib/LocalStorage/actions.ts";
 import { lgg } from "@/shared/lib/logs/Logger.ts";
 import Store from "@app/providers/store/model/Store.ts";
-import { SignInRequest, SignUpRequest } from "@shared/api/model/types.ts";
+import { SignInRequest, SignUpRequest, UserResponse } from "@shared/api/model/types.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
 class AuthService {
@@ -18,7 +18,7 @@ class AuthService {
         Store.set("controllers.isLoggedIn", false);
       }
 
-      lgg.debug('', res, user, Store.getState());
+      lgg.debug("", res, user, Store.getState());
 
       return { ok: !!user };
     } catch (e) {
@@ -47,25 +47,22 @@ class AuthService {
     }
   }
 
-  public async fetchUser(): Promise<{
-    ok: boolean;
-  }> {
+  public async fetchUser(): Promise<UserResponse | undefined> {
     try {
       const user = await AuthAPI.requestUser();
       if (user) {
         Store.set("api.auth.user", user);
         Store.set("controllers.isLoggedIn", true);
-        lgg.debug('', user);
-        return { ok: true };
+        lgg.debug('user-fetch success', user);
+        return user;
       } else {
         Store.set("api.auth.user", null);
         Store.set("controllers.isLoggedIn", false);
-        lsRemove_lastChatId()
-        return { ok: false };
+        return;
       }
     } catch (_) {
       /* user is not logged in, no error to throw */
-      return { ok: false };
+      return;
     }
   }
 
@@ -81,9 +78,9 @@ class AuthService {
       Store.set("controllers.isLoggedIn", false);
 
       /* remove last active chat */
-      lsRemove_lastChatId();
+      ls_removeLastChatId();
 
-      lgg.debug('', res, Store.getState());
+      lgg.debug("", res, Store.getState());
       return { ok: !!res };
     } catch (e) {
       throw new Error("Logout failed", { cause: e });
