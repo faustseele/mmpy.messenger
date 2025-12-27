@@ -1,17 +1,13 @@
-import Router from "../../../app/providers/router/Router.ts";
-import Store from "../../../app/providers/store/model/Store.ts";
-import ChatService from "../../../entities/chat/model/ChatService.ts";
-import UserService from "../../../entities/user/model/UserService.ts";
-import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
-import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
-import { urlToFile } from "../../../shared/lib/helpers/file.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
-import { Button } from "../../../shared/ui/Button/Button.ts";
-import { Heading } from "../../../shared/ui/Heading/Heading.ts";
-import { Page } from "../../page/ui/Page.ts";
+import { Page } from "@pages/page/ui/Page.ts";
+import { API_URL_RESOURCES } from "@shared/config/urls.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { urlToFile } from "@shared/lib/helpers/file.ts";
+import { Button } from "@shared/ui/Button/Button.ts";
+import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 
 export class MessengerPage extends Page<MessengerProps> {
   constructor(props: ComponentProps<MessengerProps, MessengerPage>) {
@@ -21,12 +17,6 @@ export class MessengerPage extends Page<MessengerProps> {
   public componentDidMount(): void {
     if (!this.children?.nodes) {
       throw new Error("MessengerPage: Children are not defined");
-    }
-
-    /* --- api-check 4 chats --- */
-    if (!Store.getState().api.chats.list) {
-      console.log("MessengerPage: fetching chats");
-      ChatService.fetchChats();
     }
 
     /* --- getting instances --- */
@@ -45,7 +35,7 @@ export class MessengerPage extends Page<MessengerProps> {
     const deleteNotes = deleteNotesButton.runtime?.instance as Button;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
 
-    /* --- setting events --- */
+    /* --- settings events --- */
     this._wireAddNotes(addChat);
     this._wireAddChat(addUser);
     this._wireDeleteChat(deleteChat);
@@ -53,7 +43,7 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireCloseChat(closeChat);
     headingToSettings.setProps({
       on: {
-        click: () => Router.go(headingToSettings.configs.link ?? RouteLink.Settings),
+        click: this.on?.goToSettings
       },
     });
   }
@@ -75,31 +65,32 @@ export class MessengerPage extends Page<MessengerProps> {
           const login = input.trim();
           if (!login) return;
 
-          const user = await UserService.findByLogin(login);
+          const user = await this.on?.findUser?.(login);
           if (!user) {
-            console.error("User not found by login:", login);
+            lgg.error("User not found by login:", login);
             return;
           }
 
-          const newChatRes = await ChatService.createChat(
-            `${user.first_name} ${user.second_name}`,
+          const newChatRes = await this.on?.addChatWithUser?.(
+            user.first_name,
+            user.second_name,
           );
 
           if (!newChatRes) {
-            console.error("Chat create failed");
+            lgg.error("Chat create failed");
             return;
           }
 
-          await ChatService.addUsers(newChatRes.id, [user.id]);
+          await this.on?.addUsers?.(newChatRes.id, [user.id]);
 
           if (user.avatar) {
             const avatar = await urlToFile(
               `${API_URL_RESOURCES}${user.avatar}`,
             );
-            ChatService.updateChatAvatar(newChatRes.id, avatar);
+            this.on?.updateChatAvatar?.(newChatRes.id, avatar);
           }
 
-          console.log(
+          lgg.debug(
             `User ${user.login} (id=${user.id}) added to chat`,
             newChatRes.id,
           );
@@ -119,7 +110,7 @@ export class MessengerPage extends Page<MessengerProps> {
           const title = input.trim();
           if (!title) return;
 
-          ChatService.createChat(title);
+          this.on?.addNotes?.(title);
         },
       },
     });
@@ -131,15 +122,14 @@ export class MessengerPage extends Page<MessengerProps> {
         click: async (e: Event) => {
           e.preventDefault();
 
-          const title = Store.getState().api.chats.currentChat?.title;
-
           const confirm = window.confirm(
-            `Вы уверены, что хотите удалить ${title}?`,
+            `Вы уверены, что хотите удалить ${this.configs.chatTitle}?`,
           );
           if (!confirm) return;
 
-          const id = Store.getState().api.chats.activeId;
-          if (id) await ChatService.deleteChat(id);
+          const id = this.configs.chatId;
+
+          if (id) this.on?.deleteChat?.(id);
         },
       },
     });
@@ -148,8 +138,8 @@ export class MessengerPage extends Page<MessengerProps> {
   private _wireCloseChat(closeChat: Button) {
     closeChat?.setProps({
       on: {
-        click: async () => {
-          ChatService.deselectChat();
+        click: () => {
+          this.on?.closeChat?.();
         },
       },
     });
@@ -162,24 +152,24 @@ export class MessengerPage extends Page<MessengerProps> {
     if (!input || input.dataset.bound) return;
 
     input.addEventListener("change", async () => {
-      const id = Store.getState().api.chats.activeId;
+      const id = this.configs.chatId;
+      const file = input.files?.[0];
 
-      if (!id) {
-        console.error("No active chat to update avatar");
+      if (!id || !file) {
+        lgg.error("No active chat to update avatar or bad file");
         return;
       }
 
-      const file = input.files?.[0];
+      await this.on?.updateChatAvatar?.(id, file);
 
-      if (!file) return;
-      await ChatService.updateChatAvatar(id, file);
       input.value = "";
     });
     input.dataset.bound = "true";
   }
 
   public getSourceMarkup(): string {
-    const chatId = Store.getState().api.chats.activeId;
+    const isNotes = this.configs.isNotes;
+
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: MessengerPage: Children are not defined</span>`;
 
@@ -193,8 +183,6 @@ export class MessengerPage extends Page<MessengerProps> {
       deleteChatButton,
       messageField,
     } = this.children.nodes as MessengerNodes;
-
-    const isNotes = Store.getState().isNotes[chatId ?? 0];
 
     return /*html*/ `
       <aside class="${css.catalogue}">

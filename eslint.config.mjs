@@ -22,6 +22,8 @@ export default tseslint.config(
       /* Adds support for global variables */
       globals: {
         ...globals.browser,
+        /* Is needed for __dirname in vite.config.js */
+        node: true,
       },
     },
     rules: {

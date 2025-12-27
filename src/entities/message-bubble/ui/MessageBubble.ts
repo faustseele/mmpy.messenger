@@ -1,5 +1,5 @@
-import Component from "../../../shared/lib/Component/model/Component.ts";
-import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import Component from "@shared/lib/Component/model/Component.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { MessageProps } from "../model/types.ts";
 import css from "./messageBubble.module.css";
 

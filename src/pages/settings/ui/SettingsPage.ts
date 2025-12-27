@@ -1,17 +1,16 @@
-import Router from "../../../app/providers/router/Router.ts";
-import Store from "../../../app/providers/store/model/Store.ts";
-import UserService from "../../../entities/user/model/UserService.ts";
-import AuthService from "../../../features/authenticate/model/AuthService.ts";
-import { InputEditor } from "../../../features/edit-profile/ui/InputEditor.ts";
-import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
-import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";
-import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
-import { Button } from "../../../shared/ui/Button/Button.ts";
-import { Heading } from "../../../shared/ui/Heading/Heading.ts";
-import { InputProps } from "../../../shared/ui/Input/types.ts";
-import { Page } from "../../page/ui/Page.ts";
+import { handleUpdateAvatar } from "@entities/user/model/actions.ts";
+import { handleLogout } from "@features/authenticate/model/actions.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
+import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
+import { Page } from "@pages/page/ui/Page.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
+import FormValidator from "@shared/lib/validation/FormValidator.ts";
+import { Button } from "@shared/ui/Button/Button.ts";
+import { Heading } from "@shared/ui/Heading/Heading.ts";
+import { InputProps } from "@shared/ui/Input/types.ts";
 import { SettingsNodes, SettingsProps } from "../model/types.ts";
+import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./settings.module.css";
 
 export class SettingsPage extends Page<SettingsProps> {
@@ -21,7 +20,7 @@ export class SettingsPage extends Page<SettingsProps> {
 
   public componentDidMount(): void {
     if (!this.children || !this.children.nodes) {
-      console.error("SettingsPage: Children are not defined", this);
+      lgg.error("SettingsPage: Children are not defined", this);
       return;
     }
 
@@ -35,7 +34,7 @@ export class SettingsPage extends Page<SettingsProps> {
     const heading = heading_backToChats.runtime?.instance as Heading;
     const editInfo = buttonEditInfo.runtime?.instance as Button;
     const editPassword = buttonEditPassword.runtime?.instance as Button;
-    const logout = buttonLogout.runtime?.instance as Button;
+    const logoutBtn = buttonLogout.runtime?.instance as Button;
 
     /* --- vivifying inputs --- */
     const validator = this._vivifyInputs();
@@ -44,9 +43,9 @@ export class SettingsPage extends Page<SettingsProps> {
 
     /* --- setting events --- */
     heading.setProps({
-      on: { click: () => Router.go(RouteLink.Messenger) },
+      on: { click: this.on?.messengerClick },
     });
-    this._wireButtonEvents(editInfo, editPassword, logout, validator);
+    this._wireButtonEvents(editInfo, editPassword, logoutBtn, validator);
   }
 
   public componentDidRender(): void {
@@ -57,8 +56,9 @@ export class SettingsPage extends Page<SettingsProps> {
   }
 
   private _hydrateInputPlaceholders(): void {
-    const user = Store.getState().api.auth.user;
-    if (!user || !this.children) return;
+    if (!this.configs.user || !this.children) return;
+
+    const user = this.configs.user;
 
     const inputs = getInstances<InputProps, InputEditor>(
       this.children,
@@ -101,7 +101,7 @@ export class SettingsPage extends Page<SettingsProps> {
   private _wireButtonEvents(
     editInfo: Button,
     editPassword: Button,
-    logout: Button,
+    logoutBtn: Button,
     validator: FormValidator,
   ) {
     editInfo.setProps({
@@ -114,11 +114,12 @@ export class SettingsPage extends Page<SettingsProps> {
         click: (e: Event) => validator.onFormSubmit(e, "change-password"),
       },
     });
-    logout.setProps({
+    logoutBtn.setProps({
       on: {
         click: async (event: Event) => {
           event.preventDefault();
-          await AuthService.logout();
+
+          handleLogout();
         },
       },
     });
@@ -133,7 +134,7 @@ export class SettingsPage extends Page<SettingsProps> {
       const file = input.files?.[0];
       if (!file) return;
 
-      await UserService.updateAvatar(file);
+      await handleUpdateAvatar(file);
       input.value = "";
     });
     input.dataset.bound = "true";
@@ -144,7 +145,7 @@ export class SettingsPage extends Page<SettingsProps> {
       this.children!,
       "inputsEditors",
     );
-    const validator = new FormValidator(inputs);
+    const validator = new FormValidator(inputs, { onSubmitSuccess });
     inputs.forEach((input) => {
       input!.setProps({
         on: { focusout: () => validator.onInputBlur(input) },

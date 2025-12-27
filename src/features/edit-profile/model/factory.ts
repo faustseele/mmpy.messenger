@@ -3,12 +3,12 @@ import {
   ComponentId,
   ComponentNode,
   ComponentParams
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
-import css from "../../../shared/ui/Input/input.module.css";
-import { FieldType, InputConfigs, InputProps } from "../../../shared/ui/Input/types.ts";
+} from "@shared/lib/Component/model/types.ts";
+import DOMService from "@shared/lib/DOM/DOMService.ts";
+import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
+import css from "@shared/ui/Input/input.module.css";
+import { FieldType, InputConfigs, InputProps } from "@shared/ui/Input/types.ts";
 import { InputEditor } from "../ui/InputEditor.ts";
 
 export const getEditorNode = (

@@ -1,10 +1,10 @@
-import { ChatId, ISODateString } from "../../../shared/api/model/types.ts";
+import { ChatId, ISODateString } from "@shared/api/model/types.ts";
 import {
   BaseAttributes,
   BaseConfigs,
   BaseProps,
-} from "../../../shared/lib/Component/model/base.types.ts";
-import { TagNameType } from "../../../shared/lib/DOM/types.ts";
+} from "@shared/lib/Component/model/base.types.ts";
+import { TagNameType } from "@shared/lib/DOM/types.ts";
 
 export interface GoToChatProps extends BaseProps {
   configs: GoToChatConfigs;

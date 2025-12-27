@@ -1,13 +1,13 @@
-import { connect } from "../../../app/providers/store/model/connect.ts";
+import { connect } from "@app/providers/store/model/connect.ts";
 import {
   ComponentDeps,
   ComponentNode,
   ComponentParams
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
-import { PageNode } from "../../page/model/types.ts";
+} from "@shared/lib/Component/model/types.ts";
+import DOMService from "@shared/lib/DOM/DOMService.ts";
+import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
+import { PageFactory } from "@shared/lib/helpers/factory/types.ts";
+import { PageNode } from "@pages/page/model/types.ts";
 import { messengerPageParams } from "../config/params.ts";
 import { MessengerPage } from "../ui/MessengerPage.ts";
 import { mapMessengerState } from "./map.ts";

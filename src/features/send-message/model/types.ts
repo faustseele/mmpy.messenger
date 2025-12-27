@@ -1,9 +1,13 @@
-import { BaseConfigs, BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import { TagNameType } from "../../../shared/lib/DOM/types.ts";
+import { BaseConfigs, BaseProps } from "@shared/lib/Component/model/base.types.ts";
+import { TagNameType } from "@shared/lib/DOM/types.ts";
 
 export interface MessageFieldProps extends BaseProps {
   configs: MessageFieldConfigs;
   attributes?: BaseProps["attributes"];
+  on: {
+    sendMessage: (text: string) => void;
+    submit?: (e: Event) => void;
+  }
 }
 
 export interface MessageFieldConfigs extends BaseConfigs {

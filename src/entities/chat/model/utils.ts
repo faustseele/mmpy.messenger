@@ -1,11 +1,12 @@
-import Store from "../../../app/providers/store/model/Store.ts";
-import { ChatId } from "../../../shared/api/model/types.ts";
+import Store from "@app/providers/store/model/Store.ts";
+import { ChatId } from "@shared/api/model/types.ts";
 import ChatService from "./ChatService.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 
 export const isChatNotes = async (id: ChatId | null): Promise<boolean> => {
   const userId = Store.getState().api.auth.user?.id;
   if (!userId || !id) {
-    console.error("No user found");
+    lgg.error("No user found");
     return false;
   }
 
@@ -13,7 +14,7 @@ export const isChatNotes = async (id: ChatId | null): Promise<boolean> => {
     (user) => user.id !== userId,
   );
 
-  if (usersInChat.length === 0) {
+  if (!usersInChat.length) {
     return true;
   } else {
     return false;

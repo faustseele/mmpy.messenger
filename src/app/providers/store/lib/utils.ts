@@ -1,4 +1,4 @@
-import { Indexed, PlainObject } from "../../../../shared/types/universal.ts";
+import { Indexed, PlainObject } from "@shared/types/universal.ts";
 
 /**
  * recursively merges two indexable objects;

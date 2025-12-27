@@ -2,6 +2,7 @@ import DOMService from "../../DOM/DOMService.ts";
 import EventBus from "../../EventBus/EventBus.ts";
 import FragmentService from "../../Fragment/FragmentService.ts";
 import { proxifyParams } from "../../helpers/proxy/functions.ts";
+import { lgg } from "../../logs/Logger.ts";
 import { BaseProps } from "./base.types.ts";
 import { ChildGraph, ChildrenFlat } from "./children.types.ts";
 import { ComponentEventBusEvents } from "./event.types.ts";
@@ -41,6 +42,9 @@ export default abstract class Component<P extends BaseProps> {
   }
   public get attributes(): P["attributes"] {
     return this._attrs;
+  }
+  public get on(): P["on"] {
+    return this._on;
   }
   public get element(): HTMLElement | null {
     return this.domService.element;
@@ -158,7 +162,7 @@ export default abstract class Component<P extends BaseProps> {
     /* recusively mounting children */
     Object.values(this.childrenFlat).forEach((child) => {
       if (!child.runtime?.instance) {
-        console.error("Child has no instance", child, this);
+        lgg.error("Child has no instance", child, this);
         return;
       }
       child.runtime.instance.bus.emit("flow:component-did-mount");
@@ -190,7 +194,7 @@ export default abstract class Component<P extends BaseProps> {
     /* using bus to fully unmount children */
     Object.values(this.childrenFlat).forEach((value) => {
       if (!value.runtime?.instance) {
-        console.error("Child has no instance", value, this);
+        lgg.error("Child has no instance", value, this);
       }
       value.runtime?.instance._bus.emit("flow:component-did-unmount");
     });

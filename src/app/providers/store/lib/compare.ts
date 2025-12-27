@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseProps } from "../../../../shared/lib/Component/model/base.types.ts";
-import { ComponentId, ComponentNode } from "../../../../shared/lib/Component/model/types.ts";
+import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
+import { ComponentId, ComponentNode } from "@shared/lib/Component/model/types.ts";
 import { isEqual } from "./utils.ts";
 
 export function ensureInstance<P extends BaseProps>(node: ComponentNode<P>) {

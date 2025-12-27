@@ -1,11 +1,12 @@
-import AuthService from "../../../features/authenticate/model/AuthService.ts";
-import { Page } from "../../../pages/page/ui/Page.ts";
-import { BaseProps } from "../../../shared/lib/Component/model/base.types.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
-import Store from "../store/model/Store.ts";
+import Store from "@app/providers/store/model/Store.ts";
+import { Page } from "@pages/page/ui/Page.ts";
+import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
+import { RouteLink } from "@shared/types/universal.ts";
+import { guardRoute } from "./guards.ts";
 import Route from "./Route.ts";
 import { RouteConfigs, RouteContract } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 
 /**
  * @class Router is a @mediator singleton class that listens
@@ -56,48 +57,31 @@ class Router {
 
   /* inits Router; sets root query to existing Routes */
   public async start(): Promise<void> {
-    try {
-      await AuthService.fetchUser();
-    } catch (_) {
-      console.error("Failed to fetch user on startup");
-    }
-
     /* adds listener that's triggered
       when the active history entry changes. */
     window.onpopstate = () => {
       this._onRouteChange(window.location.pathname);
     };
 
-    /* for the nav-<a> links */
-    this._handleNavLinks();
 
-    /* Initial page load. */
+    /* initial page load */
     this._onRouteChange(window.location.pathname);
   }
 
-  /* Is triggered when the URL changes. */
+  /** triggered when the URL changes */
   private _onRouteChange(path: RouteLink | string): void {
     const route = this._routes.find((route) => matchPath(path, route.path));
 
-    const isUserLoggedIn = Store.getState().controllers.isLoggedIn;
-
     if (!route) {
-      console.warn("Route not found", path);
+      lgg.warn("Route not found", path);
       this.go(RouteLink.NotFound);
       return;
     }
 
-    /* If user is not logged in and trying to access a protected route,leave the current route */
-    if (!isUserLoggedIn && route.authStatus === "protected") {
-      console.warn("Protected route accessed by a guest");
-      this.go(RouteLink.SignIn);
-      return;
-    }
+    const guardRes = guardRoute(route, Store.getState());
 
-    /* If a guest-only route is accessed by a user, leave the current route */
-    if (isUserLoggedIn && route.authStatus === "guest") {
-      console.warn("Guest-only route accessed by a user");
-      this.go(RouteLink.NotFound);
+    if (!guardRes.ok) {
+      this.go(guardRes.redirect!);
       return;
     }
 
@@ -107,8 +91,6 @@ class Router {
     this._currentRoute?.leave();
     this._currentRoute = route;
     this._currentRoute!.render();
-    // console.log(this._routes);
-    // console.log("CUR_ROUTE", this._currentRoute);
   }
 
   public go(path: RouteLink): void {
@@ -122,22 +104,6 @@ class Router {
 
   public forward(): void {
     this._history.forward();
-  }
-
-  private _handleNavLinks() {
-    const navs = document.getElementsByClassName(
-      "navButton",
-    ) as HTMLCollectionOf<HTMLAnchorElement>;
-
-    for (const a of Array.from(navs)) {
-      a.addEventListener("click", (e: MouseEvent) => {
-        e.preventDefault();
-
-        const path = a.getAttribute("href");
-        if (path === "/logout") AuthService.logout();
-        else this.go(path as RouteLink);
-      });
-    }
   }
 }
 

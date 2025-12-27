@@ -1,24 +1,24 @@
-import defaultAvatar from "../../../../static/avatar.png";
-import Store from "../../../app/providers/store/model/Store.ts";
-import ChatService from "../../../entities/chat/model/ChatService.ts";
-import { ChatResponse } from "../../../shared/api/model/types.ts";
-import { API_URL_RESOURCES } from "../../../shared/config/urls.ts";
+import { handleSelectChat } from "@entities/chat/model/actions.ts";
+import Store from "@app/providers/store/model/Store.ts";
+import { ChatResponse } from "@shared/api/model/types.ts";
+import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import {
   ChildGraph,
-  ChildrenNodes,
   ChildrenEdges,
-} from "../../../shared/lib/Component/model/children.types.ts";
+  ChildrenNodes,
+} from "@shared/lib/Component/model/children.types.ts";
 import {
   ComponentDeps,
   ComponentId,
   ComponentNode,
   ComponentParams,
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
-import { cx } from "../../../shared/lib/helpers/formatting/classnames.ts";
-import { tinyDate } from "../../../shared/lib/helpers/formatting/date.ts";
+} from "@shared/lib/Component/model/types.ts";
+import DOMService from "@shared/lib/DOM/DOMService.ts";
+import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
+import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
+import { tinyDate } from "@shared/lib/helpers/formatting/date.ts";
+import defaultAvatar from "../../../../static/avatar.png";
 import { GoToChat } from "../ui/GoToChat.ts";
 import css from "../ui/goToChat.module.css";
 import { GoToChatConfigs, GoToChatProps } from "./types.ts";
@@ -54,7 +54,7 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
       },
       {
         click: () => {
-          ChatService.selectChat(apiChat.id);
+          handleSelectChat(apiChat.id);
         },
       },
     );

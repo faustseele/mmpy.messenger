@@ -1,11 +1,11 @@
-import HTTPTransport from "../../../shared/api/http/HTTPTransport.ts";
-import { BaseAPI } from "../../../shared/api/model/BaseAPI.ts";
+import HTTPTransport from "@shared/api/http/HTTPTransport.ts";
+import { BaseAPI } from "@shared/api/model/BaseAPI.ts";
 import {
   FindUserRequest,
   FindUserResponse,
   UpdateUserPassword,
   UserResponse,
-} from "../../../shared/api/model/types.ts";
+} from "@shared/api/model/types.ts";
 
 const userAPIInstance = new HTTPTransport("/user");
 

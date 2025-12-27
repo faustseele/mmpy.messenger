@@ -1,16 +1,17 @@
-import ChatService from "../../../entities/chat/model/ChatService.ts";
+import ChatService from "@entities/chat/model/ChatService.ts";
 import {
   ComponentDeps,
   ComponentId,
   ComponentNode,
   ComponentParams,
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
+} from "@shared/lib/Component/model/types.ts";
+import DOMService from "@shared/lib/DOM/DOMService.ts";
+import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
 import css from "../ui/messageField.module.css";
 import { MessageField } from "../ui/MessageField.ts";
 import { MessageFieldProps } from "./types.ts";
+import { handleSendMessage } from "./actions.ts";
 
 export const getMessageFieldNode = (
   id: ComponentId
@@ -38,6 +39,9 @@ const getMessageFieldParams = (
     },
     attributes: {
       className: css.messageField,
+    },
+    on: {
+      sendMessage: handleSendMessage,
     },
   };
 };

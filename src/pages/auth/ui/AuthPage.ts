@@ -1,14 +1,15 @@
-import Router from "../../../app/providers/router/Router.ts";
-import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
-import { getInstances } from "../../../shared/lib/helpers/factory/functions.ts";
-import FormValidator from "../../../shared/lib/validation/FormValidator.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
-import { Button } from "../../../shared/ui/Button/Button.ts";
-import { Input } from "../../../shared/ui/Input/Input.ts";
-import { InputProps } from "../../../shared/ui/Input/types.ts";
-import { Page } from "../../page/ui/Page.ts";
+import { Page } from "@pages/page/ui/Page.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
+import FormValidator from "@shared/lib/validation/FormValidator.ts";
+import { Button } from "@shared/ui/Button/Button.ts";
+import { Input } from "@shared/ui/Input/Input.ts";
+import { InputProps } from "@shared/ui/Input/types.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
+import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./auth.module.css";
+import { lgg } from "@shared/lib/logs/Logger.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 
 export class AuthPage extends Page<AuthProps> {
   private footerModifier: string = "";
@@ -19,7 +20,7 @@ export class AuthPage extends Page<AuthProps> {
     this.footerModifier =
       props.node.params.configs.type === "sign-up" ? css.authFooter_signUp : "";
 
-    // console.log(this);
+    // lgg.debug(this);
   }
 
   public componentDidMount(): void {
@@ -31,7 +32,7 @@ export class AuthPage extends Page<AuthProps> {
     const { buttonReroute } = this.children.nodes as AuthNodes;
     const reroute = buttonReroute.runtime?.instance as Button;
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
-    const formValidator = new FormValidator(inputs);
+    const formValidator = new FormValidator(inputs, { onSubmitSuccess });
 
     /* --- setting events --- */
     this._wireSubmit(formValidator);
@@ -51,8 +52,10 @@ export class AuthPage extends Page<AuthProps> {
   private _wireReroute(buttonReroute: Button): void {
     buttonReroute.setProps({
       on: {
-        click: () =>
-          Router.go(buttonReroute.configs.link ?? RouteLink.NotFound),
+        click: () => {
+          lgg.debug('', this.configs.type);
+          this.on?.reroute?.(buttonReroute.configs.link ?? RouteLink.NotFound);
+        },
       },
     });
   }

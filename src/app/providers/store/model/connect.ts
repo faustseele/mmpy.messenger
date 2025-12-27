@@ -1,7 +1,8 @@
-import { PageNode } from "../../../../pages/page/model/types.ts";
-import { Page } from "../../../../pages/page/ui/Page.ts";
-import { BaseProps } from "../../../../shared/lib/Component/model/base.types.ts";
-import { ComponentPatch } from "../../../../shared/lib/Component/model/types.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
+import { PageNode } from "@pages/page/model/types.ts";
+import { Page } from "@pages/page/ui/Page.ts";
+import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
+import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
 import { getProjection } from "../lib/patch.ts";
 import { isEqual, merge } from "../lib/utils.ts";
 import Store from "./Store.ts";
@@ -56,7 +57,7 @@ export function connect<P extends BaseProps, C extends Page<P>>(
               instance: factory(params),
             };
           } catch (err) {
-            console.error("connect: failed to instantiate child", nodeId, err);
+            lgg.error("connect: failed to instantiate child", nodeId, err);
           }
         }
       });
@@ -97,7 +98,7 @@ export function connect<P extends BaseProps, C extends Page<P>>(
   });
 
   if (!connectedNode.runtime) {
-    console.error(connectedNode, blueprint);
+    lgg.error('', connectedNode, blueprint);
     throw new Error("connect: connectedNode.runtime is undefined");
   }
 

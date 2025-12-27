@@ -1,4 +1,4 @@
-import { Page } from "../../../../pages/page/ui/Page.ts";
+import { Page } from "@pages/page/ui/Page.ts";
 import { BaseProps } from "../../Component/model/base.types.ts";
 import Component from "../../Component/model/Component.ts";
 import { ComponentParams } from "../../Component/model/types.ts";

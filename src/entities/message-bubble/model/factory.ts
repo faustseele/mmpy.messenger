@@ -1,15 +1,15 @@
-import Store from "../../../app/providers/store/model/Store.ts";
-import { ChildGraph, ChildrenEdges, ChildrenNodes } from "../../../shared/lib/Component/model/children.types.ts";
+import Store from "@app/providers/store/model/Store.ts";
+import { ChildGraph, ChildrenEdges, ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
 import {
   ComponentDeps,
   ComponentId,
   ComponentNode,
   ComponentParams,
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { ComponentFactory } from "../../../shared/lib/helpers/factory/types.ts";
-import { hhmmDate } from "../../../shared/lib/helpers/formatting/date.ts";
+} from "@shared/lib/Component/model/types.ts";
+import DOMService from "@shared/lib/DOM/DOMService.ts";
+import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
+import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
+import { hhmmDate } from "@shared/lib/helpers/formatting/date.ts";
 import css from "../ui/messageBubble.module.css";
 import { MessageBubble } from "../ui/MessageBubble.ts";
 import { MessageConfigs, MessageProps } from "./types.ts";

@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RouteConfigs } from "../../../app/providers/router/types.ts";
-import { ROOT_QUERY } from "../../../shared/config/dom.ts";
+import { RouteConfigs } from "@app/providers/router/types.ts";
+import { PageId } from "@pages/page/config/const.ts";
+import cssPage from "@pages/page/ui/page.module.css";
+import { ROOT_QUERY } from "@shared/config/dom.ts";
 import {
   ComponentParams
-} from "../../../shared/lib/Component/model/types.ts";
-import { RouteLink } from "../../../shared/types/universal.ts";
+} from "@shared/lib/Component/model/types.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 import {
   getButtonNode
-} from "../../../shared/ui/Button/utils.ts";
+} from "@shared/ui/Button/utils.ts";
 import {
   getHeadingNode
-} from "../../../shared/ui/Heading/utils.ts";
-import { getSubheadingNode } from "../../../shared/ui/Subheading/utils.ts";
-import { PageId } from "../../page/config/const.ts";
-import cssPage from "../../page/ui/page.module.css";
+} from "@shared/ui/Heading/utils.ts";
+import { getSubheadingNode } from "@shared/ui/Subheading/utils.ts";
+import { handleBack } from "../model/actions.ts";
 import { ErrorProps } from "../model/types.ts";
 import cssErrors from "../ui/errors.module.css";
 
@@ -51,6 +52,9 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
       button_back: "button_back",
     },
   },
+  on: {
+    back: handleBack
+  }
 };
 
 export const errorPageParams_500: ComponentParams<ErrorProps> = {

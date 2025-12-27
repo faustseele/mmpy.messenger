@@ -1,6 +1,5 @@
-import ChatService from "../../../entities/chat/model/ChatService.ts";
-import Component from "../../../shared/lib/Component/model/Component.ts";
-import { ComponentProps } from "../../../shared/lib/Component/model/types.ts";
+import Component from "@shared/lib/Component/model/Component.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { MessageFieldProps } from "../model/types.ts";
 import css from "./messageField.module.css";
 
@@ -20,7 +19,7 @@ export class MessageField extends Component<MessageFieldProps> {
           const text = (input as HTMLInputElement)?.value?.trim();
 
           if (text) {
-            ChatService.sendMessage(text);
+            this.on?.sendMessage?.(text);
             (input as HTMLInputElement).value = "";
           }
         },

@@ -1,10 +1,10 @@
 import {
   ComponentDeps,
   ComponentParams,
-} from "../../../shared/lib/Component/model/types.ts";
-import DOMService from "../../../shared/lib/DOM/DOMService.ts";
-import FragmentService from "../../../shared/lib/Fragment/FragmentService.ts";
-import { PageFactory } from "../../../shared/lib/helpers/factory/types.ts";
+} from "@shared/lib/Component/model/types.ts";
+import DOMService from "@shared/lib/DOM/DOMService.ts";
+import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
+import { PageFactory } from "@shared/lib/helpers/factory/types.ts";
 import { errorPageParams_404, errorPageParams_500 } from "../config/params.ts";
 import { ErrorPage } from "../ui/ErrorPage.ts";
 import { ErrorProps } from "./types.ts";

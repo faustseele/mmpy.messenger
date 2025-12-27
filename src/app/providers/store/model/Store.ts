@@ -1,8 +1,8 @@
-import { PageNode } from "../../../../pages/page/model/types.ts";
-import { Page } from "../../../../pages/page/ui/Page.ts";
-import { BaseProps } from "../../../../shared/lib/Component/model/base.types.ts";
-import { ComponentId } from "../../../../shared/lib/Component/model/types.ts";
-import EventBus from "../../../../shared/lib/EventBus/EventBus.ts";
+import { PageNode } from "@pages/page/model/types.ts";
+import { Page } from "@pages/page/ui/Page.ts";
+import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
+import { ComponentId } from "@shared/lib/Component/model/types.ts";
+import EventBus from "@shared/lib/EventBus/EventBus.ts";
 import { apiInitialState } from "../config/init.ts";
 import { set } from "../lib/utils.ts";
 import { APIState, StoreEventBusEvents } from "./types.ts";
