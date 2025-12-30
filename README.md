@@ -1,11 +1,13 @@
-### Project *middle.messenger.praktikum.yandex*
-**Tech-Stack**
+**Pet-project** mmpy.messenger
+*Made for 'Middle Web-Developer' course by Y.Practicum*
+
+### Tech-Stack
 - Runs on: TypeScript + Handlebars + XHR
 - Styles: PostCSS + CSS-Modules
 - Code Style by: ESLint (Standard), Stylelint
 - Build + Preview: Vite
 
-### Architecture (одобрено менторами)
+### Architecture
 **Feature-based** structure (lightweight Feature‑Sliced Design): `src/app`, `src/pages`, `src/features`, `src/entities`, `src/shared`.
 
 Component dependencies (**DI**) are explicit and minimal:
