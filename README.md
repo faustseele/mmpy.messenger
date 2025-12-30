@@ -1,6 +1,6 @@
 **mmpy.messenger** — portfolio pet-project
 
-*Made for 'Middle Web-Developer' course by Y.Practicum*
+*Made for 'Middle Web-Developer' course by [Y.Praktikum](https://github.com/yandex-praktikum/middle.messenger.praktikum.yandex)*
 
 ### Tech-Stack
 - Runs on: TypeScript + Handlebars
