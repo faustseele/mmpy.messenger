@@ -1,4 +1,4 @@
-**mmpy.messenger** — portfolio pet-project
+**mmpy.messenger** 💌 — portfolio pet-project
 
 *Made for 'Middle Web-Developer' [course](https://github.com/yandex-praktikum/middle.messenger.praktikum.yandex) by [Y.Praktikum](practicum.yandex.ru/profile/middle-frontend)*
 
