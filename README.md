@@ -1,4 +1,5 @@
-**Pet-project** mmpy.messenger
+mmpy.messenger (portfolio pet-project) 
+
 *Made for 'Middle Web-Developer' course by Y.Practicum*
 
 ### Tech-Stack
