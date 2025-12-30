@@ -1,11 +1,12 @@
-mmpy.messenger (portfolio pet-project) 
+**mmpy.messenger** — portfolio pet-project
 
 *Made for 'Middle Web-Developer' course by Y.Practicum*
 
 ### Tech-Stack
-- Runs on: TypeScript + Handlebars + XHR
+- Runs on: TypeScript + Handlebars
+- API: https://ya-praktikum.tech/api/v2/swagger + XHR
 - Styles: PostCSS + CSS-Modules
-- Code Style by: ESLint (Standard), Stylelint
+- Code Style: ESLint (Standard), Stylelint
 - Build + Preview: Vite
 
 ### Architecture
