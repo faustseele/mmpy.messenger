@@ -16,6 +16,7 @@ export interface ButtonConfigs extends BaseConfigs {
   label: string;
   isSilent?: boolean;
   link?: RouteLink;
+  showSpinner?: boolean;
 }
 
 export interface ButtonAttributes extends BaseAttributes {

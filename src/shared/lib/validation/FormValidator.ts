@@ -16,6 +16,14 @@ export default class FormValidator {
     formData: Record<string, string>,
     submitType: string,
   ) => Promise<void>;
+  private _formIsValid: boolean = false;
+
+  get formIsValid(): boolean {
+    return this._formIsValid;
+  }
+  set formIsValid(value: boolean) {
+    this._formIsValid = value;
+  }
 
   constructor(
     inputs: Input[] | InputEditor[],
@@ -50,11 +58,6 @@ export default class FormValidator {
       const formData = this._getFormData(targetInputs);
       lgg.debug(logMessages.formIsValid, formData);
 
-      /* cleans up inputs */
-      targetInputs.forEach((input) => {
-        input.cleanInput();
-      });
-
       this.onSubmitSuccess?.(formData, submitType);
 
       return;
@@ -72,15 +75,17 @@ export default class FormValidator {
       return false;
     }
 
-    let formIsValid = true;
+    let valid = true;
 
     inputs.forEach((input) => {
       if (!this._handleFieldValidation(input)) {
-        formIsValid = false;
+        valid = false;
       }
     });
 
-    return formIsValid;
+    this._formIsValid = valid;
+    this.formIsValid = valid;
+    return valid;
   }
 
   /* validates a single input component

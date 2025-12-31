@@ -2,17 +2,18 @@ import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
 import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./auth.module.css";
-import { lgg } from "@shared/lib/logs/Logger.ts";
-import { RouteLink } from "@shared/types/universal.ts";
 
 export class AuthPage extends Page<AuthProps> {
   private footerModifier: string = "";
+  private validator: FormValidator | null = null;
+  private submit: Button | null = null;
 
   constructor(props: ComponentProps<AuthProps, AuthPage>) {
     super(props);
@@ -29,21 +30,52 @@ export class AuthPage extends Page<AuthProps> {
     }
 
     /* --- getting instances --- */
-    const { buttonReroute } = this.children.nodes as AuthNodes;
-    const reroute = buttonReroute.runtime?.instance as Button;
+    const { buttonReroute, buttonFormSubmit } = this.children
+      .nodes as AuthNodes;
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
-    const formValidator = new FormValidator(inputs, { onSubmitSuccess });
+    const reroute = buttonReroute.runtime?.instance as Button;
+    this.submit = buttonFormSubmit.runtime?.instance as Button;
+    this.validator = new FormValidator(inputs, { onSubmitSuccess });
 
     /* --- setting events --- */
-    this._wireSubmit(formValidator);
+    this._wireSubmit(this.validator, this.submit);
     this._wireReroute(reroute);
-    this._vivifyInputs(inputs, formValidator);
+    this._vivifyInputs(inputs, this.validator);
   }
 
-  private _wireSubmit(formValidator: FormValidator): void {
+  public componentDidUpdate(): void {
+    /* resetting formIsValid value */
+    if (this.validator) {
+      this.validator.formIsValid = false;
+
+      const { buttonFormSubmit } = this.children?.nodes as AuthNodes;
+      const submit = buttonFormSubmit.runtime?.instance as Button;
+      /* resetting submit-btn */
+      submit.setProps({
+        configs: {
+          showSpinner: this.validator?.formIsValid,
+        },
+      });
+    }
+  }
+
+  private _wireSubmit(validator: FormValidator, submit: Button): void {
     this.setProps({
       on: {
-        submit: (e: Event) => formValidator.onFormSubmit(e, this.configs.type),
+        submit: (e: Event) => validator?.onFormSubmit(e, this.configs.type),
+      },
+    });
+    submit?.setProps({
+      on: {
+        click: (e: Event) => {
+          /* ensure validator has the correct formIsValid value */
+          validator?.onFormSubmit(e, this.configs.type);
+          submit?.setProps({
+            configs: {
+              showSpinner: validator?.formIsValid,
+            },
+          });
+        },
       },
     });
   }
@@ -53,7 +85,6 @@ export class AuthPage extends Page<AuthProps> {
     buttonReroute.setProps({
       on: {
         click: () => {
-          lgg.debug('', this.configs.type);
           this.on?.reroute?.(buttonReroute.configs.link ?? RouteLink.NotFound);
         },
       },
@@ -61,11 +92,11 @@ export class AuthPage extends Page<AuthProps> {
   }
 
   /* blur-events for the input fields */
-  private _vivifyInputs(inputs: Input[], formValidator: FormValidator): void {
+  private _vivifyInputs(inputs: Input[], validator: FormValidator): void {
     inputs.forEach((input) => {
       input.setProps({
         on: {
-          focusout: () => formValidator.onInputBlur(input),
+          focusout: () => validator?.onInputBlur(input),
         },
       });
     });

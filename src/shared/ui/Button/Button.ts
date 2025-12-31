@@ -1,7 +1,6 @@
 import Component from "@shared/lib/Component/model/Component.ts";
-import {
-  ComponentProps
-} from "@shared/lib/Component/model/types.ts";
+import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import css from "./button.module.css";
 import { ButtonProps } from "./types.ts";
 
 export class Button extends Component<ButtonProps> {
@@ -11,8 +10,11 @@ export class Button extends Component<ButtonProps> {
 
   public getSourceMarkup(): string {
     return /*html*/ `
-        {{ label }}
+    {{#if showSpinner}}
+      <span class="${css.spinner}" />
+    {{else}}
+      {{ label }}
+    {{/if}}
     `;
   }
 }
-

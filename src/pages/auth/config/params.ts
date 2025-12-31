@@ -110,6 +110,7 @@ const authPageParams_in: ComponentParams<AuthProps> = {
         id: "buttonReroute",
         label: "Впервые?",
         link: RouteLink.SignUp,
+        isSilent: true,
       }) as any,
     },
     edges: {
