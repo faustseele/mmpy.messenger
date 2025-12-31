@@ -43,22 +43,6 @@ export class AuthPage extends Page<AuthProps> {
     this._vivifyInputs(inputs, this.validator);
   }
 
-  public componentDidUpdate(): void {
-    /* resetting formIsValid value */
-    if (this.validator) {
-      this.validator.formIsValid = false;
-
-      const { buttonFormSubmit } = this.children?.nodes as AuthNodes;
-      const submit = buttonFormSubmit.runtime?.instance as Button;
-      /* resetting submit-btn */
-      submit.setProps({
-        configs: {
-          showSpinner: this.validator?.formIsValid,
-        },
-      });
-    }
-  }
-
   private _wireSubmit(validator: FormValidator, submit: Button): void {
     this.setProps({
       on: {
@@ -67,12 +51,19 @@ export class AuthPage extends Page<AuthProps> {
     });
     submit?.setProps({
       on: {
-        click: (e: Event) => {
-          /* ensure validator has the correct formIsValid value */
-          validator?.onFormSubmit(e, this.configs.type);
+        click: async (e: Event) => {
+          const isFormValid = validator?.onFormCheck(this.configs.type);
           submit?.setProps({
             configs: {
-              showSpinner: validator?.formIsValid,
+              showSpinner: isFormValid,
+            },
+          });
+
+          await validator?.onFormSubmit(e, this.configs.type);
+
+          submit?.setProps({
+            configs: {
+              showSpinner: false,
             },
           });
         },

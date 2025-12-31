@@ -16,7 +16,9 @@ export const handleFetchUser = async (): Promise<UserResponse | undefined> => {
   return res;
 };
 
-export const handleSignUp = async (data: SignUpData) => {
+export const handleSignUp = async (
+  data: SignUpData,
+): Promise<{ ok: boolean }> => {
   const res = await AuthService.signUp(data);
   if (res.ok) {
     /* fetch chats on successful signup */
@@ -24,29 +26,41 @@ export const handleSignUp = async (data: SignUpData) => {
 
     /* generating one notes-chat */
     handleCreateChat("Заметки 📃");
+
+    return { ok: true };
   } else {
     lgg.error("SignUp failed");
+
+    return { ok: false };
   }
 };
 
-export const handleSignIn = async (data: SignInData) => {
+export const handleSignIn = async (
+  data: SignInData,
+): Promise<{ ok: boolean }> => {
   const res = await AuthService.signIn(data);
 
   if (res.ok) {
     /* fetch chats on successful login */
     handleFetchChats();
     Router.go(RouteLink.Messenger);
+
+    return { ok: true };
   } else {
     lgg.error("SignIn failed");
+
+    return { ok: false };
   }
 };
 
-export const handleLogout = async () => {
+export const handleLogout = async (): Promise<{ ok: boolean }> => {
   const res = await AuthService.logout();
   if (res.ok) {
     Router.go(RouteLink.SignIn);
+    return { ok: true };
   } else {
     Router.go(RouteLink.Error);
     lgg.error("Logout failed");
+    return { ok: false };
   }
 };

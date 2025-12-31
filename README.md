@@ -42,8 +42,8 @@ npm run dev
 npm run build
 ```
 **Available links**:
-- authentication: `/sign-up` `/sign-in`
-- app: `/chats` `/profile`
+- authentication: `/sign-up` `/`
+- app: `/messenger` `/settings`
 - error-pages: `/404` `/500`
 
 ---

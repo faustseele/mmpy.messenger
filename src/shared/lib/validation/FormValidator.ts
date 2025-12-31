@@ -15,15 +15,7 @@ export default class FormValidator {
   private onSubmitSuccess?: (
     formData: Record<string, string>,
     submitType: string,
-  ) => Promise<void>;
-  private _formIsValid: boolean = false;
-
-  get formIsValid(): boolean {
-    return this._formIsValid;
-  }
-  set formIsValid(value: boolean) {
-    this._formIsValid = value;
-  }
+  ) => Promise<{ok: boolean}>;
 
   constructor(
     inputs: Input[] | InputEditor[],
@@ -31,7 +23,7 @@ export default class FormValidator {
       onSubmitSuccess?: (
         formData: Record<string, string>,
         submitType: string,
-      ) => Promise<void>;
+      ) => Promise<{ok: boolean}>;
     },
   ) {
     this.inputs = inputs;
@@ -42,10 +34,20 @@ export default class FormValidator {
     this._handleFieldValidation(input);
   };
 
+  public onFormCheck = (
+    submitType: AuthType | "change-info" | "change-password",
+  ): boolean => {
+    const targetInputs = this._filterInputsBySubmitType(
+      submitType,
+      this.inputs,
+    );
+    return this._handleFormValidation(targetInputs);
+  };
+
   public onFormSubmit = async (
     event: Event,
     submitType: AuthType | "change-info" | "change-password",
-  ): Promise<void> => {
+  ): Promise<{ok: boolean}> => {
     event.preventDefault();
 
     const targetInputs = this._filterInputsBySubmitType(
@@ -54,16 +56,16 @@ export default class FormValidator {
     );
     const isFormValid = this._handleFormValidation(targetInputs);
 
-    if (isFormValid) {
+    if (isFormValid && this.onSubmitSuccess) {
       const formData = this._getFormData(targetInputs);
       lgg.debug(logMessages.formIsValid, formData);
 
-      this.onSubmitSuccess?.(formData, submitType);
-
-      return;
+      return await this.onSubmitSuccess?.(formData, submitType);
     } else {
       lgg.debug(logMessages.formHasErrors);
       event.stopPropagation();
+
+      return { ok: false };
     }
   };
 
@@ -83,8 +85,6 @@ export default class FormValidator {
       }
     });
 
-    this._formIsValid = valid;
-    this.formIsValid = valid;
     return valid;
   }
 

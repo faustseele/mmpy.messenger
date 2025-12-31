@@ -1,10 +1,10 @@
 import { handleUpdateAvatar } from "@entities/user/model/actions.ts";
 import { handleLogout } from "@features/authenticate/model/actions.ts";
-import { lgg } from "@shared/lib/logs/Logger.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
+import { lgg } from "@shared/lib/logs/Logger.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
@@ -35,9 +35,15 @@ export class SettingsPage extends Page<SettingsProps> {
     const editInfo = buttonEditInfo.runtime?.instance as Button;
     const editPassword = buttonEditPassword.runtime?.instance as Button;
     const logoutBtn = buttonLogout.runtime?.instance as Button;
+    const inputs = getInstances<InputProps, InputEditor>(
+      this.children!,
+      "inputsEditors",
+    );
 
     /* --- vivifying inputs --- */
-    const validator = this._vivifyInputs();
+    const validator = new FormValidator(inputs, { onSubmitSuccess });
+    this._vivifyInputs(inputs, validator);
+
     /* sets placeholders for inputs from user-res */
     this._hydrateInputPlaceholders();
 
@@ -106,7 +112,20 @@ export class SettingsPage extends Page<SettingsProps> {
   ) {
     editInfo.setProps({
       on: {
-        click: (e: Event) => validator.onFormSubmit(e, "change-info"),
+        click: async (e: Event) => {
+          const isFormValid = validator.onFormCheck("change-info");
+          editInfo.setProps({
+            configs: {
+              showSpinner: isFormValid,
+            },
+          });
+          await validator.onFormSubmit(e, "change-info");
+          editInfo.setProps({
+            configs: {
+              showSpinner: false,
+            },
+          });
+        },
       },
     });
     editPassword.setProps({
@@ -140,18 +159,12 @@ export class SettingsPage extends Page<SettingsProps> {
     input.dataset.bound = "true";
   }
 
-  private _vivifyInputs(): FormValidator {
-    const inputs = getInstances<InputProps, InputEditor>(
-      this.children!,
-      "inputsEditors",
-    );
-    const validator = new FormValidator(inputs, { onSubmitSuccess });
+  private _vivifyInputs(inputs: InputEditor[], validator: FormValidator) {
     inputs.forEach((input) => {
       input!.setProps({
         on: { focusout: () => validator.onInputBlur(input) },
       });
     });
-    return validator;
   }
 
   public getSourceMarkup(): string {

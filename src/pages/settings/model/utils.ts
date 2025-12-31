@@ -1,13 +1,13 @@
 import { handleUpdatePassword, handleUpdateProfile } from "@entities/user/model/actions.ts";
 
-export const onSubmitSuccess = async (formData: Record<string, string>, submitType: string) => {
+export const onSubmitSuccess = async (formData: Record<string, string>, submitType: string): Promise<{ok: boolean}> => {
   if (submitType === "change-password") {
-    await handleUpdatePassword({
+    return await handleUpdatePassword({
       oldPassword: formData.oldPassword,
       newPassword: formData.newPassword,
     });
   } else if (submitType === "change-info") {
-    await handleUpdateProfile({
+    return await handleUpdateProfile({
       first_name: formData.name,
       second_name: formData.surname,
       display_name: formData.display_name,
@@ -16,4 +16,5 @@ export const onSubmitSuccess = async (formData: Record<string, string>, submitTy
       phone: formData.phone,
     });
   }
+  return { ok: false };
 };

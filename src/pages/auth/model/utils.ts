@@ -1,13 +1,19 @@
-import { handleSignIn, handleSignUp } from "@features/authenticate/model/actions.ts";
+import {
+  handleSignIn,
+  handleSignUp,
+} from "@features/authenticate/model/actions.ts";
 
-export const onSubmitSuccess = async (formData: Record<string, string>, submitType: string) => {
+export const onSubmitSuccess = async (
+  formData: Record<string, string>,
+  submitType: string,
+): Promise<{ ok: boolean }> => {
   if (submitType === "sign-in") {
-    await handleSignIn({
+    return await handleSignIn({
       login: formData.login,
       password: formData.password,
     });
   } else if (submitType === "sign-up") {
-    await handleSignUp({
+    return await handleSignUp({
       first_name: formData.name,
       second_name: formData.surname,
       login: formData.login,
@@ -16,4 +22,6 @@ export const onSubmitSuccess = async (formData: Record<string, string>, submitTy
       phone: formData.phone,
     });
   }
+
+  return { ok: false };
 };

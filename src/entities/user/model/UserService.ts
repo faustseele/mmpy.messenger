@@ -1,31 +1,36 @@
 import { lgg } from "@shared/lib/logs/Logger.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import UserAPI from "@entities/user/api/UserAPI.ts";
-import {
-  UpdateUserPassword,
-  UserResponse,
-} from "@shared/api/model/types.ts";
+import { UpdateUserPassword, UserResponse } from "@shared/api/model/types.ts";
 
 class UserService {
-  public async updateProfile(data: Partial<UserResponse>) {
+  public async updateProfile(
+    data: Partial<UserResponse>,
+  ): Promise<{ ok: boolean }> {
     try {
       const updatedUser = await UserAPI.updateProfile(data);
 
       Store.set("api.auth.user", updatedUser);
       lgg.debug("profile update success:", updatedUser);
+      return { ok: true };
     } catch (e) {
       lgg.error("profile update fail:", e);
+      return { ok: false };
     }
   }
 
-  public async updatePassword(data: UpdateUserPassword) {
+  public async updatePassword(
+    data: UpdateUserPassword,
+  ): Promise<{ ok: boolean }> {
     try {
       const updatedUser = await UserAPI.updatePassword(data);
 
       Store.set("api.auth.user", updatedUser);
       lgg.debug("psw update success:", updatedUser);
+      return { ok: true };
     } catch (e) {
       lgg.error("psw update fail:", e);
+      return { ok: false };
     }
   }
 
