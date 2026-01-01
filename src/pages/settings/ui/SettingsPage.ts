@@ -4,7 +4,6 @@ import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
-import { lgg } from "@shared/lib/logs/Logger.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
@@ -20,7 +19,7 @@ export class SettingsPage extends Page<SettingsProps> {
 
   public componentDidMount(): void {
     if (!this.children || !this.children.nodes) {
-      lgg.error("SettingsPage: Children are not defined", this);
+      console.error("SettingsPage: Children are not defined", this);
       return;
     }
 

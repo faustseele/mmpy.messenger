@@ -2,7 +2,6 @@ import Handlebars from "handlebars";
 import { BaseConfigs, BaseProps } from "../Component/model/base.types.ts";
 import { ChildGraph } from "../Component/model/children.types.ts";
 import { ComponentNode } from "../Component/model/types.ts";
-import { lgg } from "../logs/Logger.ts";
 
 /**
  * @FragmentService – stateless feature-service.
@@ -110,7 +109,7 @@ export default class FragmentService<C extends BaseConfigs> {
 
     function findAndReplace(node: ComponentNode<BaseProps>) {
       if (!node?.runtime?.instance) {
-        lgg.error("Child has no instance", node);
+        console.error("Child has no instance", node);
         return;
       }
 
@@ -122,7 +121,7 @@ export default class FragmentService<C extends BaseConfigs> {
       if (placeholder && childElement) {
         placeholder.replaceWith(childElement);
       } /* else {
-        lgg.error(
+        console.error(
           `FragmentService Error: Could not replace child placeholder.
           Child ID: ${node.params.configs.id}.
           Placeholder found: ${!!placeholder}.

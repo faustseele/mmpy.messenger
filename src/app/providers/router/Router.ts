@@ -6,7 +6,6 @@ import { guardRoute } from "./guards.ts";
 import Route from "./Route.ts";
 import { RouteConfigs, RouteContract } from "./types.ts";
 import { extractParams, matchPath } from "./utils.ts";
-import { lgg } from "@shared/lib/logs/Logger.ts";
 
 /**
  * @class Router is a @mediator singleton class that listens
@@ -73,7 +72,7 @@ class Router {
     const route = this._routes.find((route) => matchPath(path, route.path));
 
     if (!route) {
-      lgg.warn("Route not found", path);
+      console.warn("Route not found", path);
       this.go(RouteLink.NotFound);
       return;
     }

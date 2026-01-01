@@ -3,7 +3,6 @@ import {
   handleFetchUser,
   handleLogout,
 } from "@features/authenticate/model/actions.ts";
-import { lgg } from "@shared/lib/logs/Logger.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
 import Store from "../providers/store/model/Store.ts";
@@ -19,7 +18,7 @@ const bootstrapAuth = async () => {
     if (user) await handleFetchChats();
 
     const isLoggedIn = Store.getState().controllers.isLoggedIn;
-    lgg.debug("bootstrapAuth: isLoggedIn?", isLoggedIn);
+    console.log("bootstrapAuth: isLoggedIn?", isLoggedIn);
   } catch (error) {
     throw new Error("bootstrapAuth failed", { cause: error });
   }

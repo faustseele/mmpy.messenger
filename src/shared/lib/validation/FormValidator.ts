@@ -2,7 +2,6 @@ import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
 import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
 import { FieldType } from "../../ui/Input/types.ts";
-import { lgg } from "../logs/Logger.ts";
 import { validateInputField } from "./utils.ts";
 
 const logMessages = {
@@ -58,11 +57,11 @@ export default class FormValidator {
 
     if (isFormValid && this.onSubmitSuccess) {
       const formData = this._getFormData(targetInputs);
-      lgg.debug(logMessages.formIsValid, formData);
+      console.log(logMessages.formIsValid, formData);
 
       return await this.onSubmitSuccess?.(formData, submitType);
     } else {
-      lgg.debug(logMessages.formHasErrors);
+      console.log(logMessages.formHasErrors);
       event.stopPropagation();
 
       return { ok: false };
@@ -73,7 +72,7 @@ export default class FormValidator {
     and returns if the form is valid */
   private _handleFormValidation(inputs?: Input[] | InputEditor[]): boolean {
     if (!inputs) {
-      lgg.error("FormValidator: Inputs are not defined");
+      console.error("FormValidator: Inputs are not defined");
       return false;
     }
 
@@ -92,7 +91,7 @@ export default class FormValidator {
     and shows/hides its error */
   private _handleFieldValidation(input: Input | InputEditor): boolean {
     if (!input) {
-      lgg.error("FormValidator: Input is not defined");
+      console.error("FormValidator: Input is not defined");
     }
     const { name, value } = input.getNameAndValue();
     const errorMessage = validateInputField(name, value);
@@ -102,7 +101,7 @@ export default class FormValidator {
     input.showError(errorMessage);
 
     /* Logging current invalid input fields */
-    if (!inputIsValid) lgg.debug(errorMessage);
+    if (!inputIsValid) console.log(errorMessage);
 
     return inputIsValid;
   }

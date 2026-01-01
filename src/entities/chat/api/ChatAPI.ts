@@ -1,4 +1,3 @@
-import { lgg } from "@shared/lib/logs/Logger.ts";
 import HTTPTransport from "@shared/api/http/HTTPTransport.ts";
 import { BaseAPI } from "@shared/api/model/BaseAPI.ts";
 import {
@@ -38,7 +37,7 @@ class ChatAPI extends BaseAPI {
     const form = new FormData();
     form.append("chatId", String(chatId));
     form.append("avatar", avatar);
-    lgg.debug('', form)
+    console.log('', form)
     return chatsAPIInstance.put("/avatar", {
       data: form,
     }) as Promise<UpdateChatAvatarResponse>;

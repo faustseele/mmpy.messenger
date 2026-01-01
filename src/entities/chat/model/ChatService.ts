@@ -10,7 +10,6 @@ import {
 import { ls_storeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
-import { lgg } from "@shared/lib/logs/Logger.ts";
 
 class ChatService {
   private ws = new ChatWebsocket();
@@ -21,11 +20,11 @@ class ChatService {
     try {
       const list = await ChatAPI.getChats(query);
       Store.set("api.chats.list", list);
-      lgg.debug("chats fetch success !:", list);
+      console.log("chats fetch success !:", list);
 
       return list;
     } catch (e) {
-      lgg.error("chats fetch fail:", e);
+      console.error("chats fetch fail:", e);
       return;
     }
   }
@@ -44,7 +43,7 @@ class ChatService {
       Store.set("api.chats.currentChat", current);
 
       if (!current) {
-        lgg.error("Current chat not found");
+        console.error("Current chat not found");
         return;
       }
 
@@ -58,9 +57,9 @@ class ChatService {
       const { token } = await ChatAPI.getToken(chatId);
       this.ws.openWS(user.id, chatId, token);
 
-      lgg.debug("chat select success !, token:", token);
+      console.log("chat select success !, token:", token);
     } catch (e) {
-      lgg.error("chat select failed:", e);
+      console.error("chat select failed:", e);
     }
   }
 
@@ -69,11 +68,11 @@ class ChatService {
   ): Promise<CreateChatResponse | undefined> {
     try {
       const chat = await ChatAPI.createChat({ title });
-      lgg.debug(`chat ${title} create success !:`, chat);
+      console.log(`chat ${title} create success !:`, chat);
 
       return chat;
     } catch (e) {
-      lgg.error("chat create failed:", e);
+      console.error("chat create failed:", e);
       return;
     }
   }
@@ -84,11 +83,11 @@ class ChatService {
   ): Promise<UpdateChatAvatarResponse | undefined> {
     try {
       const updatedChat = await ChatAPI.updateChatAvatar(chatId, avatar);
-      lgg.debug("chat avatar update success:", updatedChat);
+      console.log("chat avatar update success:", updatedChat);
 
       return updatedChat;
     } catch (e) {
-      lgg.error("chat avatar update fail:", e);
+      console.error("chat avatar update fail:", e);
       return;
     }
   }
@@ -98,9 +97,9 @@ class ChatService {
       const delRes = await ChatAPI.deleteChat({ chatId });
       this.ws.closeWS(chatId);
 
-      lgg.debug("chat delete success !:", delRes);
+      console.log("chat delete success !:", delRes);
     } catch (e) {
-      lgg.error("chat delete failed:", e);
+      console.error("chat delete failed:", e);
     }
   }
 
@@ -108,9 +107,9 @@ class ChatService {
     try {
       const res = await ChatAPI.addUsers({ chatId, users });
 
-      lgg.debug("users-add success:", res);
+      console.log("users-add success:", res);
     } catch (e) {
-      lgg.error("users-add failed:", e);
+      console.error("users-add failed:", e);
     }
   }
 
@@ -118,9 +117,9 @@ class ChatService {
     try {
       const res = await ChatAPI.removeUsers({ chatId, users });
 
-      lgg.debug("users-remove success:", res, chatId);
+      console.log("users-remove success:", res, chatId);
     } catch (e) {
-      lgg.error("users-remove failed:", e);
+      console.error("users-remove failed:", e);
     }
   }
 
@@ -128,10 +127,10 @@ class ChatService {
     try {
       const res = await ChatAPI.getUsers(chatId, query);
 
-      lgg.debug("users-get success:", res);
+      console.log("users-get success:", res);
       return res;
     } catch (e) {
-      lgg.error("users-get failed:", e);
+      console.error("users-get failed:", e);
       return [];
     }
   }

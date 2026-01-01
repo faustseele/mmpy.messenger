@@ -5,7 +5,6 @@ import {
 } from "@entities/chat/model/actions.ts";
 import { UserResponse } from "@shared/api/model/types.ts";
 import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
-import { lgg } from "@shared/lib/logs/Logger.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
@@ -29,7 +28,7 @@ export const handleSignUp = async (
 
     return { ok: true };
   } else {
-    lgg.error("SignUp failed");
+    console.error("SignUp failed");
 
     return { ok: false };
   }
@@ -47,7 +46,7 @@ export const handleSignIn = async (
 
     return { ok: true };
   } else {
-    lgg.error("SignIn failed");
+    console.error("SignIn failed");
 
     return { ok: false };
   }
@@ -60,7 +59,7 @@ export const handleLogout = async (): Promise<{ ok: boolean }> => {
     return { ok: true };
   } else {
     Router.go(RouteLink.Error);
-    lgg.error("Logout failed");
+    console.error("Logout failed");
     return { ok: false };
   }
 };

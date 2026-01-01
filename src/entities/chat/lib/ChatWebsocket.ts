@@ -1,4 +1,3 @@
-import { lgg } from "@shared/lib/logs/Logger.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import { ChatId, ChatMessage } from "@shared/api/model/types.ts";
 import { WSS_CHATS } from "@shared/config/urls.ts";
@@ -47,12 +46,12 @@ export class ChatWebsocket {
         if (data?.type === "pong") return;
 
         if (data?.type === "error") {
-          lgg.error("WS error:", data);
+          console.error("WS error:", data);
           return;
         }
 
       } catch (err) {
-        lgg.error("WS parse error:", err);
+        console.error("WS parse error:", err);
       }
     });
 
@@ -62,7 +61,7 @@ export class ChatWebsocket {
     });
 
     ws.addEventListener("error", (err) => {
-      lgg.error("WS socket error:", err);
+      console.error("WS socket error:", err);
     });
   }
 
@@ -93,7 +92,7 @@ export class ChatWebsocket {
     const ws = this.sockets.get(chatId);
 
     if (!ws || ws.readyState !== WebSocket.OPEN) {
-      lgg.error("WS is not open");
+      console.error("WS is not open");
       return;
     }
 
