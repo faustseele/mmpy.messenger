@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ComponentDeps,
   ComponentId,
@@ -8,6 +9,7 @@ import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import { RouteLink } from "../../types/universal.ts";
+import { getSpinnerNode } from "../Spinner/factory.ts";
 import css from "./button.module.css";
 import { Button } from "./Button.ts";
 import { ButtonProps } from "./types.ts";
@@ -64,6 +66,14 @@ const getButtonProps = ({
       className: `${css.button} ${isSilent ? css.button_silent : ""}`.trim(),
       type: type ?? "button",
       title: tooltip ?? "",
+    },
+    children: {
+      nodes: {
+        spinner: getSpinnerNode() as any,
+      },
+      edges: {
+        spinner: "spinner",
+      },
     },
   };
 };

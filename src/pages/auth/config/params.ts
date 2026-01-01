@@ -6,7 +6,7 @@ import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { getButtonNode } from "@shared/ui/Button/utils.ts";
+import { getButtonNode } from "@/shared/ui/Button/factory.ts";
 import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
 import { getInputNode } from "@shared/ui/Input/utils.ts";
 import { handleReroute, } from "../model/actions.ts";

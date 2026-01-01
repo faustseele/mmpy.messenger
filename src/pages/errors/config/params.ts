@@ -9,7 +9,7 @@ import {
 import { RouteLink } from "@shared/types/universal.ts";
 import {
   getButtonNode
-} from "@shared/ui/Button/utils.ts";
+} from "@/shared/ui/Button/factory.ts";
 import {
   getHeadingNode
 } from "@shared/ui/Heading/utils.ts";

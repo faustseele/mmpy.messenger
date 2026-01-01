@@ -1,3 +1,4 @@
+import { ChildrenNodes } from "@/shared/lib/Component/model/children.types.ts";
 import {
   BaseAttributes,
   BaseConfigs,
@@ -25,3 +26,5 @@ export interface ButtonAttributes extends BaseAttributes {
 }
 
 type ButtonType = "button" | "submit";
+
+export type ButtonNodes = ChildrenNodes<'spinner'>;

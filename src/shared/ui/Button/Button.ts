@@ -1,7 +1,6 @@
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
-import css from "./button.module.css";
-import { ButtonProps } from "./types.ts";
+import { ButtonNodes, ButtonProps } from "./types.ts";
 
 export class Button extends Component<ButtonProps> {
   constructor(props: ComponentProps<ButtonProps, Button>) {
@@ -9,9 +8,11 @@ export class Button extends Component<ButtonProps> {
   }
 
   public getSourceMarkup(): string {
+    const nodes = this.children?.nodes as ButtonNodes;
+
     return /*html*/ `
     {{#if showSpinner}}
-      <span class="${css.spinner}" />
+      {{{ ${nodes.spinner.params.configs.id} }}}
     {{else}}
       {{ label }}
     {{/if}}
