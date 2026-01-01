@@ -17,6 +17,7 @@ import {
 } from "../model/actions.ts";
 import { MessengerProps } from "../model/types.ts";
 import cssMessenger from "../ui/messenger.module.css";
+import { getSpinnerNode } from "@/shared/ui/Spinner/factory.ts";
 
 export const messengerPageParams: ComponentParams<MessengerProps> = {
   configs: {
@@ -79,6 +80,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
         tooltip: "Удалить чат с пользователем",
       }) as any,
       messageField: getMessageFieldNode("messageField") as any,
+      spinner: getSpinnerNode(true) as any,
     },
     edges: {
       heading_chats: "heading_chats",
@@ -92,6 +94,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
       messageField: "messageField",
       goToChatItems: [],
       messages: [],
+      spinner: "spinner",
     },
   },
   on: {

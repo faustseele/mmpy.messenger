@@ -10,4 +10,5 @@ export interface SpinnerProps extends BaseProps {
 
 export interface SpinnerConfigs extends BaseConfigs {
   tagName: Extract<TagNameType, "span">;
+  isBig?: boolean;
 }

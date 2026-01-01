@@ -7,7 +7,8 @@ import { ComponentId } from "./types.ts";
 export interface BaseProps {
   /* basic Component configuration */
   configs: BaseConfigs;
-  /* DOM-attributes for the generated in DOMService root tag */
+  /* DOM-attributes for the generated in DOMService root tag 
+    generated in factory based on configs */
   attributes?: BaseAttributes;
   /* event handlers */
   on?: BaseOn;

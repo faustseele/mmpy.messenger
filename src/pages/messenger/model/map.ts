@@ -11,13 +11,16 @@ import { MessengerProps } from "./types.ts";
 export const mapMessengerState = (
   state: AppState,
 ): ComponentPatch<MessengerProps> => {
-  const { currentChat, list } = state.api.chats;
+  const { currentChat, list, activeId, messagesByChatId } = state.api.chats;
 
   const avatar = currentChat
     ? currentChat.avatar
       ? `${API_URL_RESOURCES}${currentChat.avatar}`
       : defaultAvatar
     : "";
+
+  /* loading if there's an active chat but no msgs loaded yet */
+  const isLoadingMessages = activeId ? !messagesByChatId[activeId] : false;
 
   const configs: MessengerProps["configs"] = {
     id: PageId.Messenger,
@@ -27,6 +30,7 @@ export const mapMessengerState = (
     chatTitle: currentChat?.title,
     participantName: currentChat?.title ?? "",
     participantAvatar: avatar,
+    isLoadingMessages,
   };
 
   const goToChatNodesPatch = getGoToChatGraph(list ?? []);

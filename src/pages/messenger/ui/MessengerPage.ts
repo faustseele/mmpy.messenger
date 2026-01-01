@@ -181,6 +181,7 @@ export class MessengerPage extends Page<MessengerProps> {
       deleteNotesButton,
       deleteChatButton,
       messageField,
+      spinner,
     } = this.children.nodes as MessengerNodes;
 
     return /*html*/ `
@@ -228,7 +229,11 @@ export class MessengerPage extends Page<MessengerProps> {
 
         <div class="${css.chat__feed}">
           {{#if participantName}}
-            {{{ messages }}}
+            {{#if isLoadingMessages}}
+              {{{ ${spinner.params.configs.id} }}}
+            {{else}}
+              {{{ messages }}}
+            {{/if}}
           {{/if}}
         </div>
 
