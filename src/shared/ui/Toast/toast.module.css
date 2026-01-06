@@ -1,10 +1,17 @@
 .toast {
   position: absolute;
+
+  padding: 8px 16px;
+  
   background-color: var(--color-panel);
   color: var(--color-content-dark);
+  
   border: 1px solid var(--color-universal-br);
   border-radius: 8px;
-  padding: 8px 16px;
+
+  opacity: 0;
+
+  transition: var(--transition);
 }
 
 .toast_visible {
@@ -16,11 +23,6 @@
   word-wrap: break-word;
 }
 
-/* modificators */
 .toast_error {
-  color: var(--color-alert);
-}
-
-.toast_warning {
   color: var(--color-alert);
 }

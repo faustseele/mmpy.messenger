@@ -4,65 +4,40 @@ import css from "./toast.module.css";
 import { ToastProps, ToastType } from "./types.ts";
 
 export class Toast extends Component<ToastProps> {
-  private timeoutId: number | null = null;
-
   constructor(props: ComponentProps<ToastProps, Toast>) {
     super(props);
   }
 
-  public componentDidMount(): void {
-    this.showToast();
-    this.scheduleHide();
-  }
+  public componentDidMount(): void {}
 
   public componentDidRender(): void {
-    this.showToast();
-    this.scheduleHide();
+    if (!this.element) {
+      console.error("Toast: element is not defined", this.domService);
+      return;
+    }
+    this.element.textContent = this.configs.message;
   }
 
-  private showToast(): void {
+  public showToast(message: string, type: ToastType = "info"): void {
     if (!this.element) return;
+    console.log(
+      `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
+    );
 
-    /* reflow to ensure animation plays */
-    this.show();
-  }
-
-  private scheduleHide(): void {
-    const duration = this.getDuration();
-    this.timeoutId = window.setTimeout(() => {
-      this.hideToast();
-    }, duration);
-  }
-
-  private hideToast(): void {
-    if (!this.element) return;
-
-    this.element.classList.remove(css.toast_visible);
-    /* rm from DOM after animation */
-    setTimeout(() => {
-      this.hide();
-    }, 300); /* match CSS transition duration */
-  }
-
-  private getDuration(): number {
-    const type = this.configs.type;
-    if (type === "success") return 1000;
-    return 2000; /* def for info */
-  }
-
-  public updateMessage(message: string, type: ToastType = "info"): void {
     this.setProps({
       configs: {
+        ...this.configs,
         message,
         type,
+        classNames:
+          `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
       },
     });
 
-    /* clear existing timeout and reschedule */
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-    }
-    this.scheduleHide();
+    this.element.classList.add(css.toast_visible);
+    // setTimeout(() => {
+    //   this.element?.classList.remove(css.toast_visible);
+    // }, 2000); /* match CSS transition duration */
   }
 
   /*   private getToastTypeClass(type: ToastType): string {
@@ -78,10 +53,6 @@ export class Toast extends Component<ToastProps> {
   }
  */
   public getSourceMarkup(): string {
-    const message = this.configs.message;
-
-    return /*html*/ `
-        <span class="${css.toast}"">${message}</span>
-    `;
+    return /*html*/ ``;
   }
 }

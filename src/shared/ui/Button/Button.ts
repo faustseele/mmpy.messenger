@@ -5,12 +5,15 @@ import { ButtonNodes, ButtonProps } from "./types.ts";
 export class Button extends Component<ButtonProps> {
   constructor(props: ComponentProps<ButtonProps, Button>) {
     super(props);
+  }
 
-    if (this.element) {
-      this.element.setAttribute("type", this.configs.type);
-    } else {
+  public componentDidRender(): void {
+    if (!this.element) {
       console.error("Button element is null");
+      return;
     }
+
+    this.element.setAttribute("type", this.configs.type);
   }
 
   public getSourceMarkup(): string {

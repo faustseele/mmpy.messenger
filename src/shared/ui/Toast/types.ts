@@ -9,7 +9,7 @@ export interface ToastProps extends BaseProps {
 }
 
 interface ToastConfigs extends BaseConfigs {
-  tagName: Extract<TagNameType, "div">;
+  tagName: Extract<TagNameType, "span">;
   type: ToastType;
   message: string;
   /* in ms */
