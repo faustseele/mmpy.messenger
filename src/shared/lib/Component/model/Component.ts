@@ -4,7 +4,7 @@ import FragmentService from "../../Fragment/FragmentService.ts";
 import { proxifyParams } from "../../helpers/proxy/functions.ts";
 import { BaseProps } from "./base.types.ts";
 import { ChildGraph, ChildrenFlat } from "./children.types.ts";
-import { ComponentEventBusEvents } from "./event.types.ts";
+import { ComponentEvents } from "./event.types.ts";
 import { ComponentId, ComponentPatch, ComponentProps } from "./types.ts";
 
 /**
@@ -33,7 +33,7 @@ export default abstract class Component<P extends BaseProps> {
   private _children?: ChildGraph;
 
   /* --- Helpers --- */
-  private _bus: EventBus<ComponentEventBusEvents> = new EventBus();
+  private _bus: EventBus<ComponentEvents> = new EventBus();
 
   /* --- Getters --- */
   public get configs(): P["configs"] {
@@ -48,7 +48,7 @@ export default abstract class Component<P extends BaseProps> {
   public get element(): HTMLElement | null {
     return this.domService.element;
   }
-  public get bus(): EventBus<ComponentEventBusEvents> {
+  public get bus(): EventBus<ComponentEvents> {
     return this._bus;
   }
   public get children(): ChildGraph | undefined {

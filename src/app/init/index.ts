@@ -7,9 +7,10 @@ import { RouteLink } from "@shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
 import Store from "../providers/store/model/Store.ts";
 
-/** initilizes application; keeps Router separate */
+/* initilizes application; keeps Router separate */
 export const initApp = async () => {
   await bootstrapAuth();
+
 };
 
 const bootstrapAuth = async () => {

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getButtonNode } from "@/shared/ui/Button/factory.ts";
 import { RouteConfigs } from "@app/providers/router/types.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import { PageNode } from "@pages/page/model/types.ts";
@@ -6,13 +7,13 @@ import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { getButtonNode } from "@/shared/ui/Button/factory.ts";
 import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
 import { getInputNode } from "@shared/ui/Input/utils.ts";
-import { handleReroute, } from "../model/actions.ts";
+import { handleReroute } from "../model/actions.ts";
 import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
 import type { AuthPage } from "../ui/AuthPage.ts";
+import { getToastNode } from "@/shared/ui/Toast/factory.ts";
 
 const iptIds = [
   "input-name",
@@ -112,12 +113,18 @@ const authPageParams_in: ComponentParams<AuthProps> = {
         link: RouteLink.SignUp,
         isSilent: true,
       }) as any,
+      toast: getToastNode({
+        message: "Вход успешно",
+        type: "info",
+        duration: 4000,
+      }) as any,
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
       buttonReroute: "buttonReroute",
       inputs: [iptIds[2], iptIds[4]],
+      toast: "toast",
     },
   },
   on: {

@@ -8,11 +8,12 @@ export interface ToastProps extends BaseProps {
   configs: ToastConfigs;
 }
 
-export interface ToastConfigs extends BaseConfigs {
+interface ToastConfigs extends BaseConfigs {
   tagName: Extract<TagNameType, "div">;
+  type: ToastType;
   message: string;
-  type: "success" | "error" | "warning" | "info";
-  duration?: number; // in milliseconds
+  /* in ms */
+  duration?: number;
 }
 
-export type ToastType = ToastConfigs["type"];
+export type ToastType = "success" | "error" | "info";

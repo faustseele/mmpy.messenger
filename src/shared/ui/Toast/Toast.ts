@@ -24,10 +24,7 @@ export class Toast extends Component<ToastProps> {
     if (!this.element) return;
 
     /* reflow to ensure animation plays */
-    this.element.style.display = "flex";
-    /* Force reflow */
-    void this.element.offsetHeight;
-    this.element.classList.add(css.toast_visible);
+    this.show();
   }
 
   private scheduleHide(): void {
@@ -43,23 +40,19 @@ export class Toast extends Component<ToastProps> {
     this.element.classList.remove(css.toast_visible);
     /* rm from DOM after animation */
     setTimeout(() => {
-      if (this.element) {
-        this.element.style.display = "none";
-      }
+      this.hide();
     }, 300); /* match CSS transition duration */
   }
 
   private getDuration(): number {
     const type = this.configs.type;
     if (type === "success") return 1000;
-    if (type === "error" || type === "warning") return 3000;
     return 2000; /* def for info */
   }
 
   public updateMessage(message: string, type: ToastType = "info"): void {
     this.setProps({
       configs: {
-        ...this.configs,
         message,
         type,
       },
@@ -72,15 +65,12 @@ export class Toast extends Component<ToastProps> {
     this.scheduleHide();
   }
 
-  private getTypeClass(): string {
-    const type = this.configs.type;
+  private getToastTypeClass(type: ToastType): string {
     switch (type) {
       case "success":
         return css.toast_success;
       case "error":
         return css.toast_error;
-      case "warning":
-        return css.toast_warning;
       case "info":
       default:
         return css.toast_info;
@@ -88,12 +78,10 @@ export class Toast extends Component<ToastProps> {
   }
 
   public getSourceMarkup(): string {
-    const typeClass = this.getTypeClass();
+    const message = this.configs.message;
 
     return /*html*/ `
-      <div class="${css.toast} ${typeClass}">
-        <span class="${css.toast__message}"></span>
-      </div>
+        <span class="${css.toast}"">${message}</span>
     `;
   }
 }

@@ -20,8 +20,6 @@ export class AuthPage extends Page<AuthProps> {
 
     this.footerModifier =
       props.node.params.configs.type === "sign-up" ? css.authFooter_signUp : "";
-
-    // console.log(this);
   }
 
   public componentDidMount(): void {
@@ -97,11 +95,13 @@ export class AuthPage extends Page<AuthProps> {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonReroute } = this.children
+    const { heading, buttonFormSubmit, buttonReroute, toast } = this.children
       .nodes as AuthNodes;
 
     return /*html*/ `
+
       <header class="${css.authHeading}">
+        {{{ ${toast.params.configs.id} }}}
         {{{ ${heading.params.configs.id} }}}
       </header>
 

@@ -10,14 +10,18 @@ import css from "./toast.module.css";
 import { Toast } from "./Toast.ts";
 import { ToastProps, ToastType } from "./types.ts";
 
-export const getToastNode = (
-  message: string,
-  type: ToastType = "info",
-  duration?: number,
-): ComponentNode<ToastProps> => {
+export const getToastNode = ({
+  message,
+  type = "info",
+  duration,
+}: {
+  message: string;
+  type: ToastType;
+  duration?: number;
+}): ComponentNode<ToastProps> => {
   const params: ComponentParams<ToastProps> = {
     configs: {
-      id: `toast_${Date.now()}`, // Unique ID for each toast
+      id: 'toast',
       tagName: "div",
       message,
       type,
