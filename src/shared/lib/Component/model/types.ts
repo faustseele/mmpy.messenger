@@ -17,7 +17,6 @@ export type ComponentId = string;
  */
 export type ComponentParams<P extends BaseProps> = {
   configs: P["configs"];
-  attributes?: P["attributes"];
   on?: P["on"];
   children?: ChildGraph;
 };

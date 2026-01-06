@@ -65,7 +65,7 @@ export class Toast extends Component<ToastProps> {
     this.scheduleHide();
   }
 
-  private getToastTypeClass(type: ToastType): string {
+  /*   private getToastTypeClass(type: ToastType): string {
     switch (type) {
       case "success":
         return css.toast_success;
@@ -76,7 +76,7 @@ export class Toast extends Component<ToastProps> {
         return css.toast_info;
     }
   }
-
+ */
   public getSourceMarkup(): string {
     const message = this.configs.message;
 

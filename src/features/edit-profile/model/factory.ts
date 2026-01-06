@@ -2,7 +2,7 @@ import {
   ComponentDeps,
   ComponentId,
   ComponentNode,
-  ComponentParams
+  ComponentParams,
 } from "@shared/lib/Component/model/types.ts";
 import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
@@ -22,7 +22,17 @@ export const getEditorNode = (
   autocomplete?: InputConfigs["autocomplete"],
   errorMessage?: string,
 ): ComponentNode<InputProps, InputEditor> => {
-  const params = getEditorProps(id, fieldId, label, placeholder, type, isError, isSearch, autocomplete, errorMessage);
+  const params = getEditorProps(
+    id,
+    fieldId,
+    label,
+    placeholder,
+    type,
+    isError,
+    isSearch,
+    autocomplete,
+    errorMessage,
+  );
   return {
     params,
     factory: buildInputEditor,
@@ -46,6 +56,8 @@ const getEditorProps = (
   configs: {
     id,
     tagName: "label",
+    classNames: css.inputLabelWrap,
+    for: fieldId,
     fieldId,
     label,
     type,
@@ -55,17 +67,15 @@ const getEditorProps = (
     autocomplete: autocomplete ?? "off",
     errorMessage: errorMessage ?? "",
   },
-  attributes: {
-    className: css.inputLabelWrap,
-    for: fieldId,
-  },
 });
 
 const buildInputEditor: ComponentFactory<InputProps, InputEditor> = (
   params: ComponentParams<InputProps>,
 ): InputEditor => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<InputProps> = {
-    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

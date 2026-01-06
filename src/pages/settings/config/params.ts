@@ -15,7 +15,7 @@ import {
 } from "@/shared/ui/Button/factory.ts";
 import {
   getHeadingNode
-} from "@shared/ui/Heading/utils.ts";
+} from "@/shared/ui/Heading/factory.ts";
 import profileAvatar from "../../../../static/profile-avatar.png";
 import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
@@ -95,12 +95,10 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
   configs: {
     id: PageId.Settings,
     tagName: "div",
+    classNames: `${cssPage.moduleWindow} ${cssSettings.moduleWindow_profile}`,
     profileName: "Loading..",
     profileAvatar,
     user: null,
-  },
-  attributes: {
-    className: `${cssPage.moduleWindow} ${cssSettings.moduleWindow_profile}`,
   },
   children: {
     nodes: {

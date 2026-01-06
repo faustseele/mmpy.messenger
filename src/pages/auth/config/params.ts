@@ -7,8 +7,8 @@ import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { getHeadingNode } from "@shared/ui/Heading/utils.ts";
-import { getInputNode } from "@shared/ui/Input/utils.ts";
+import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
+import { getInputNode } from "@/shared/ui/Input/factory.ts";
 import { handleReroute } from "../model/actions.ts";
 import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
@@ -90,10 +90,8 @@ const authPageParams_in: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignIn,
     tagName: "form",
+    classNames: cssPage.moduleWindow,
     type: "sign-in",
-  },
-  attributes: {
-    className: cssPage.moduleWindow,
   },
   children: {
     nodes: {
@@ -136,10 +134,8 @@ const authPageParams_up: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignUp,
     tagName: "form",
+    classNames: cssPage.moduleWindow,
     type: "sign-up",
-  },
-  attributes: {
-    className: cssPage.moduleWindow,
   },
   children: {
     nodes: {

@@ -2,7 +2,7 @@ import { connect } from "@app/providers/store/model/connect.ts";
 import {
   ComponentDeps,
   ComponentNode,
-  ComponentParams
+  ComponentParams,
 } from "@shared/lib/Component/model/types.ts";
 import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
@@ -13,7 +13,10 @@ import { MessengerPage } from "../ui/MessengerPage.ts";
 import { mapMessengerState } from "./map.ts";
 import { MessengerProps } from "./types.ts";
 
-export function getMessengerPageNode(): PageNode<MessengerProps, MessengerPage> {
+export function getMessengerPageNode(): PageNode<
+  MessengerProps,
+  MessengerPage
+> {
   return {
     params: messengerPageParams,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,12 +27,10 @@ export function getMessengerPageNode(): PageNode<MessengerProps, MessengerPage> 
 const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   params: ComponentParams<MessengerProps>,
 ): MessengerPage => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<MessengerProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

@@ -13,7 +13,6 @@ export function proxifyParams<P extends BaseProps>(
 
   const {
     configs,
-    attributes = {},
     on = {},
     children = { nodes: {}, edges: {} },
   } = params;
@@ -33,30 +32,6 @@ export function proxifyParams<P extends BaseProps>(
       return true;
     },
     deleteProperty: (target: typeof configs, prop: keyof BaseConfigs) => {
-      if (typeof prop === "string" && prop.startsWith("_")) return false;
-
-      delete (target as Record<PropertyKey, unknown>)[prop];
-      bus.emit("flow:component-did-update");
-
-      return true;
-    },
-  });
-
-  const proxifiedAttributes = new Proxy(attributes, {
-    set: (
-      target: typeof attributes,
-      prop: PropertyKey,
-      value: (typeof attributes)[keyof typeof attributes],
-    ): boolean => {
-      if (typeof prop !== "string") return false;
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (target as any)[prop] = value;
-
-      bus.emit("flow:component-did-update");
-      return true;
-    },
-    deleteProperty: (target: typeof attributes, prop: keyof BaseProps) => {
       if (typeof prop === "string" && prop.startsWith("_")) return false;
 
       delete (target as Record<PropertyKey, unknown>)[prop];
@@ -117,7 +92,6 @@ export function proxifyParams<P extends BaseProps>(
 
   return {
     configs: proxifiedConfigs,
-    attributes: proxifiedAttributes,
     on: proxifiedOn,
     children: proxifiedChildren,
   };

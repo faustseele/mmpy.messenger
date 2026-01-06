@@ -12,10 +12,18 @@ import { Heading } from "./Heading.ts";
 import { HeadingConfigs, HeadingOn, HeadingProps } from "./types.ts";
 
 export const getHeadingNode = (
-  configs: Omit<HeadingConfigs, "tagName">,
-  on?: HeadingOn
+  configs: Omit<HeadingConfigs, "tagName" | "classNames">,
+  on?: HeadingOn,
 ): ComponentNode<HeadingProps, Heading> => {
-  const params = getHeadingProps(configs, on);
+  const params = getHeadingProps(
+    {
+      tagName: "h1",
+      classNames: cx(`${css.heading}`),
+      ...configs,
+    },
+    on,
+  );
+
   return {
     params,
     factory: buildHeading,
@@ -26,30 +34,24 @@ export const getHeadingNode = (
 };
 
 const getHeadingProps = (
-  configs: Omit<HeadingConfigs, "tagName">,
+  configs: HeadingConfigs,
   on?: HeadingOn,
 ): ComponentParams<HeadingProps> => {
   return {
-    configs: {
-      tagName: "h1",
-      ...configs,
-    },
-    attributes: {
-      className: cx(
-        `${css.heading}`,
-      ),
-    },
+    configs,
     on: {
       ...on,
-    }
+    },
   };
 };
 
 const buildHeading: ComponentFactory<HeadingProps, Heading> = (
   params: ComponentParams<HeadingProps>,
 ): Heading => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<HeadingProps> = {
-    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
   const node = {

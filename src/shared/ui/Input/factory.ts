@@ -12,9 +12,10 @@ import { Input } from "./Input.ts";
 import { InputConfigs, InputProps } from "./types.ts";
 
 export const getInputNode = (
-  configs: Omit<InputConfigs, "tagName">,
+  configs: Omit<InputConfigs, "tagName" | "classNames" | "for">,
 ): ComponentNode<InputProps, Input> => {
   const params = getInputProps(configs);
+
   return {
     params,
     factory: buildInput,
@@ -25,16 +26,14 @@ export const getInputNode = (
 };
 
 const getInputProps = (
-  configs: Omit<InputConfigs, "tagName">,
+  configs: Omit<InputConfigs, "tagName" | "classNames" | "for">,
 ): ComponentParams<InputProps> => {
   return {
     configs: {
       tagName: "label",
-      ...configs,
-    },
-    attributes: {
-      className: cx(`${cssInput.inputLabelWrap}`),
+      classNames: cx(`${cssInput.inputLabelWrap}`),
       for: configs.fieldId,
+      ...configs,
     },
   };
 };
@@ -42,12 +41,10 @@ const getInputProps = (
 const buildInput: ComponentFactory<InputProps, Input> = (
   params: ComponentParams<InputProps>,
 ): Input => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<InputProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

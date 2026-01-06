@@ -5,6 +5,7 @@ export interface SubheadingProps extends BaseProps {
   configs: {
     id: string;
     tagName: Extract<TagNameType, "h2">;
+    classNames: string;
     text: string;
   };
 }

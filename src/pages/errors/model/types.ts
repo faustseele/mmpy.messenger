@@ -11,6 +11,7 @@ export interface ErrorProps extends BaseProps {
   configs: {
     id: PageId.Error404 | PageId.Error500;
     tagName: Extract<TagNameType, "div">;
+    classNames: string;
     code: ErrorCodeType;
   };
   on: {

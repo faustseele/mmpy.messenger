@@ -5,7 +5,6 @@ export type MessageType = "incoming" | "outgoing" | "date";
 
 export interface MessageProps extends BaseProps {
   configs: MessageConfigs;
-  attributes?: BaseProps["attributes"];
 }
 
 export interface MessageConfigs extends BaseConfigs {

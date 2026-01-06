@@ -8,6 +8,7 @@ export interface MessengerProps extends BaseProps {
   configs: {
     id: PageId.Messenger;
     tagName: Extract<TagNameType, "div">;
+    classNames: string;
     isNotes?: boolean;
     chatId?: ChatId;
     chatTitle?: string;

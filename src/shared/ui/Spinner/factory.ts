@@ -17,10 +17,8 @@ export const getSpinnerNode = (
     configs: {
       id: "spinner",
       tagName: "span",
+      classNames: `${css.spinner} ${isBig ? css.spinner_big : ""}`.trim(),
       isBig,
-    },
-    attributes: {
-      className: `${css.spinner} ${isBig ? css.spinner_big : ""}`.trim(),
     },
   };
   return {
@@ -35,12 +33,10 @@ export const getSpinnerNode = (
 const buildSpinner: ComponentFactory<SpinnerProps, Spinner> = (
   params: ComponentParams<SpinnerProps>,
 ): Spinner => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<SpinnerProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

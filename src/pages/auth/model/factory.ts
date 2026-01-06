@@ -1,7 +1,7 @@
 import { connect } from "@app/providers/store/model/connect.ts";
 import {
   ComponentDeps,
-  ComponentParams
+  ComponentParams,
 } from "@shared/lib/Component/model/types.ts";
 import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
@@ -15,8 +15,10 @@ import { AuthProps } from "./types.ts";
 export const buildAuthPage: PageFactory<AuthProps, AuthPage> = (
   params: ComponentParams<AuthProps>,
 ): AuthPage => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<AuthProps> = {
-    domService: new DOMService(params.configs.id, params.configs.tagName, params.attributes),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

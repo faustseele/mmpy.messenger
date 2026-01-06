@@ -69,7 +69,7 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
 }
 
 const getGoToChatNode = (
-  configs: Omit<GoToChatConfigs, "tagName">,
+  configs: Omit<GoToChatConfigs, "tagName" | "classNames">,
   on?: GoToChatProps["on"],
 ): ComponentNode<GoToChatProps, GoToChat> => {
   const params = getGoToChatParams(configs, on);
@@ -83,27 +83,23 @@ const getGoToChatNode = (
 };
 
 const getGoToChatParams = (
-  configs: Omit<GoToChatConfigs, "tagName">,
+  configs: Omit<GoToChatConfigs, "tagName" | "classNames">,
   on?: GoToChatProps["on"],
 ): ComponentParams<GoToChatProps> => {
   const avatar = configs.avatar
     ? `${API_URL_RESOURCES}${configs.avatar}`
     : defaultAvatar;
 
-  const date = tinyDate(configs.date);
-
   return {
     configs: {
       tagName: "li",
-      ...configs,
-      avatar: avatar,
-      date: date,
-    },
-    attributes: {
-      className: cx(
+      classNames: cx(
         `${css.goToChat} ${configs.isNotes ? css.goToChat_note : ""}`,
-      ),
-      tabindex: "0",
+      ).trim(),
+      tabIndex: "0",
+      ...configs,
+      avatar,
+      date: tinyDate(configs.date),
     },
     on: {
       ...on,
@@ -114,12 +110,10 @@ const getGoToChatParams = (
 const buildGoToChat: ComponentFactory<GoToChatProps, GoToChat> = (
   params: ComponentParams<GoToChatProps>,
 ): GoToChat => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<GoToChatProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
   const node: ComponentNode<GoToChatProps, GoToChat> = {

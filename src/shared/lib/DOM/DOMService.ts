@@ -12,50 +12,48 @@ import { TagNameType } from "./types.ts";
 
 export default class DOMService<P extends BaseProps> {
   private readonly _tagName: P["configs"]["tagName"];
-  private _attrs?: P["attributes"] = undefined;
+  private _classNames: P["configs"]["classNames"] = "";
   private _element: HTMLElement | null = null;
   private _id: ComponentId;
-
   public get element(): HTMLElement | null {
     return this._element;
   }
 
-  constructor(id: ComponentId, tagName: TagNameType, attrs?: P["attributes"]) {
+  constructor(id: ComponentId, tagName: TagNameType, classNames: string = "") {
     this._id = id;
     this._tagName = tagName;
-    this._attrs = attrs;
+    this._classNames = classNames;
   }
 
   public createElement() {
-    if (!this._element) {
-      /* creates an empty tag-element */
-      this._element = document.createElement(this._tagName);
-      if (this._attrs) this._addAttributes(this._element, this._attrs);
-    }
-  }
+    if (this._element) return;
 
-  private _addAttributes(
-    element: HTMLElement,
-    attrs?: P["attributes"],
-  ): HTMLElement {
-    if (!attrs) return element;
+    /* creates an empty tag-element */
+    const element = document.createElement(this._tagName);
 
+    /* sets identifier for el-search */
     element.setAttribute("data-id", this._id);
 
-    /* Handling Elements attrs */
-    Object.entries(attrs).forEach(([key, value]) => {
-      if (!value || typeof value !== "string") return;
+    this._element = this._setClassNames(element);
+  }
 
-      /* Handling special 'className' field */
-      if (key === "className") {
-        element.classList.add(...value.split(" "));
-        return;
-      }
+  private _setClassNames(element: HTMLElement): HTMLElement {
+    if (!this._classNames) return element;
 
-      element.setAttribute(key, String(value));
-    });
-
+    /* adding classes to the element */
+    element.className = "";
+    element.classList.add(...this._classNames.split(" "));
     return element;
+  }
+
+  public updateClassNames(classNames: string): void {
+    if (!this._element) {
+      console.warn("Cannot update classNames: DOMService element is null.");
+      return;
+    }
+
+    this._element.className = "";
+    this._element.classList.add(...classNames.split(" "));
   }
 
   public insertFragmentIntoElement(fragment: DocumentFragment): void {

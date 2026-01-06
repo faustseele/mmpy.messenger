@@ -14,7 +14,7 @@ import { MessageFieldProps } from "./types.ts";
 import { handleSendMessage } from "./actions.ts";
 
 export const getMessageFieldNode = (
-  id: ComponentId
+  id: ComponentId,
 ): ComponentNode<MessageFieldProps, MessageField> => {
   const params = getMessageFieldParams(id);
   return {
@@ -33,12 +33,12 @@ const getMessageFieldParams = (
     configs: {
       id,
       tagName: "form",
+      classNames: css.messageField,
       type: "text",
       label: "Message Input",
-      placeholder: ChatService.isCurrentChatNotes() ? "Заметка:" : "Cообщение...",
-    },
-    attributes: {
-      className: css.messageField,
+      placeholder: ChatService.isCurrentChatNotes()
+        ? "Заметка:"
+        : "Cообщение...",
     },
     on: {
       sendMessage: handleSendMessage,
@@ -46,16 +46,13 @@ const getMessageFieldParams = (
   };
 };
 
-const buildMessageField: ComponentFactory<
-  MessageFieldProps,
-  MessageField
-> = (params: ComponentParams<MessageFieldProps>): MessageField => {
+const buildMessageField: ComponentFactory<MessageFieldProps, MessageField> = (
+  params: ComponentParams<MessageFieldProps>,
+): MessageField => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<MessageFieldProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 
