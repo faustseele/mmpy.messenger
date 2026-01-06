@@ -7,9 +7,6 @@ import { ComponentId } from "./types.ts";
 export interface BaseProps {
   /* basic Component configuration */
   configs: BaseConfigs;
-  /* DOM-attributes for the generated in DOMService root tag 
-    generated in factory based on configs */
-  attributes?: BaseAttributes;
   /* event handlers */
   on?: BaseOn;
 }
@@ -18,14 +15,9 @@ export type BaseConfigs = {
   readonly id: ComponentId;
   /* Component's root tag */
   readonly tagName: TagNameType;
+  /* classes separated by space */
+  classNames: string;
   type?: string;
-};
-
-export type BaseAttributes = {
-  className?: string;
-  type?: string;
-  style?: string;
-  for?: string;
 };
 
 export type BaseOn = {

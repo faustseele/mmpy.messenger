@@ -61,10 +61,8 @@ const getButtonProps = ({
       label,
       isSilent: isSilent ?? false,
       link,
-    },
-    attributes: {
-      className: `${css.button} ${isSilent ? css.button_silent : ""}`.trim(),
       type: type ?? "button",
+      classNames: `${css.button} ${isSilent ? css.button_silent : ""}`.trim(),
       title: tooltip ?? "",
     },
     children: {
@@ -81,12 +79,10 @@ const getButtonProps = ({
 const buildButton: ComponentFactory<ButtonProps, Button> = (
   params: ComponentParams<ButtonProps>,
 ): Button => {
+  const { id, tagName, classNames} = params.configs;
+
   const deps: ComponentDeps<ButtonProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

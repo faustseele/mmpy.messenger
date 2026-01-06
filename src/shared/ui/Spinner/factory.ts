@@ -17,6 +17,7 @@ export const getSpinnerNode = (
     configs: {
       id: "spinner",
       tagName: "span",
+      classNames: "",
       isBig,
     },
     attributes: {
@@ -39,7 +40,6 @@ const buildSpinner: ComponentFactory<SpinnerProps, Spinner> = (
     domService: new DOMService(
       params.configs.id,
       params.configs.tagName,
-      params.attributes,
     ),
     fragmentService: new FragmentService(),
   };

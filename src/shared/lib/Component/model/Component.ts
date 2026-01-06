@@ -28,7 +28,6 @@ export default abstract class Component<P extends BaseProps> {
   /* --- Node --- */
   public readonly id: ComponentId;
   private _configs: P["configs"];
-  private _attrs?: P["attributes"];
   private _on?: P["on"];
   private _children?: ChildGraph;
 
@@ -38,9 +37,6 @@ export default abstract class Component<P extends BaseProps> {
   /* --- Getters --- */
   public get configs(): P["configs"] {
     return this._configs;
-  }
-  public get attributes(): P["attributes"] {
-    return this._attrs;
   }
   public get on(): P["on"] {
     return this._on;
@@ -75,13 +71,9 @@ export default abstract class Component<P extends BaseProps> {
     node: { params },
   }: ComponentProps<P, Component<P>>) {
     /* --- Node --- */
-    const { configs, attributes, on, children } = proxifyParams(
-      params,
-      this._bus,
-    );
+    const { configs, on, children } = proxifyParams(params, this._bus);
     this.id = configs.id;
     this._configs = configs;
-    this._attrs = attributes ?? {};
     this._on = (on as P["on"]) ?? {};
     this._children = children ?? {
       edges: {},
@@ -205,10 +197,11 @@ export default abstract class Component<P extends BaseProps> {
   /* invokes Proxy-setters */
   public setProps(patch: ComponentPatch<P>): void {
     if (!patch) return;
+    
     Object.assign(this._configs, patch.configs);
-    const { configs, attributes, on, children } = patch;
+
+    const { configs, on, children } = patch;
     if (configs) Object.assign(this._configs, configs);
-    if (attributes) Object.assign(this._attrs!, attributes);
     if (on) Object.assign(this._on!, on);
     if (children) Object.assign(this._children as object, children);
   }

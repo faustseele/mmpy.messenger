@@ -25,16 +25,13 @@ export const getInputNode = (
 };
 
 const getInputProps = (
-  configs: Omit<InputConfigs, "tagName">,
+  configs: Omit<InputConfigs, "tagName" | "classNames">,
 ): ComponentParams<InputProps> => {
   return {
     configs: {
       tagName: "label",
+      classNames: cx(`${cssInput.inputLabelWrap}`),
       ...configs,
-    },
-    attributes: {
-      className: cx(`${cssInput.inputLabelWrap}`),
-      for: configs.fieldId,
     },
   };
 };
@@ -42,12 +39,10 @@ const getInputProps = (
 const buildInput: ComponentFactory<InputProps, Input> = (
   params: ComponentParams<InputProps>,
 ): Input => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<InputProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

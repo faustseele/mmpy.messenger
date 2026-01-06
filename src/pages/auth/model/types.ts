@@ -11,6 +11,7 @@ export interface AuthProps extends BaseProps {
   configs: {
     id: PageId.SignIn | PageId.SignUp;
     tagName: Extract<TagNameType, "form">;
+    classNames: string;
     type: AuthType;
   };
   on: {

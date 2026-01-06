@@ -21,14 +21,12 @@ export const getToastNode = ({
 }): ComponentNode<ToastProps> => {
   const params: ComponentParams<ToastProps> = {
     configs: {
-      id: 'toast',
+      id: "toast",
       tagName: "div",
+      classNames: css.toast,
       message,
       type,
       duration,
-    },
-    attributes: {
-      className: css.toast,
     },
   };
   return {
@@ -43,12 +41,10 @@ export const getToastNode = ({
 const buildToast: ComponentFactory<ToastProps, Toast> = (
   params: ComponentParams<ToastProps>,
 ): Toast => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<ToastProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

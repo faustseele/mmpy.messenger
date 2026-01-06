@@ -10,6 +10,8 @@ export class Input extends Component<InputProps> {
 
   constructor({ deps, node }: ComponentProps<InputProps, Input>) {
     super({ deps, node });
+
+    this.element?.setAttribute("for", this.configs.for);
   }
 
   private _getElements(): void {
