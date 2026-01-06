@@ -21,7 +21,7 @@ export class ErrorPage extends Page<ErrorProps> {
     /* --- setting events --- */
     backBtn.setProps({
       on: {
-        click: this.on?.back
+        click: this.on?.back,
       },
     });
   }

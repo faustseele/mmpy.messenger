@@ -51,7 +51,7 @@ export function getMessagesGraph(): ChildGraph {
 }
 
 export const getMessageNode = (
-  configs: Omit<MessageConfigs, "tagName">,
+  configs: Omit<MessageConfigs, "tagName" | "classNames">,
 ): ComponentNode<MessageProps, MessageBubble> => {
   const params = getMessageParams(configs);
   return {
@@ -64,15 +64,13 @@ export const getMessageNode = (
 };
 
 const getMessageParams = (
-  configs: Omit<MessageConfigs, "tagName">,
+  configs: Omit<MessageConfigs, "tagName" | "classNames">,
 ): ComponentParams<MessageProps> => {
   return {
     configs: {
       tagName: "article",
+      classNames: css.message,
       ...configs,
-    },
-    attributes: {
-      className: css.message,
     },
   };
 };
@@ -81,7 +79,7 @@ const buildMessage: ComponentFactory<MessageProps, MessageBubble> = (
   params: ComponentParams<MessageProps>,
 ): MessageBubble => {
   const messageClasses = [
-    css.message,
+    params.configs.classNames || '',
     params.configs.type === "outgoing" ? css.message_outgoing : "",
     params.configs.type === "incoming" ? css.message_incoming : "",
     params.configs.type === "date" ? css.message_dateBubble : "",
@@ -90,16 +88,11 @@ const buildMessage: ComponentFactory<MessageProps, MessageBubble> = (
     .filter(Boolean)
     .join(" ");
 
-  const attributes = {
-    ...params.attributes,
-    className: `${params.attributes?.className || ""} ${messageClasses}`.trim(),
-  };
-
   const deps: ComponentDeps<MessageProps> = {
     domService: new DOMService(
       params.configs.id,
       params.configs.tagName,
-      attributes,
+      messageClasses,
     ),
     fragmentService: new FragmentService(),
   };

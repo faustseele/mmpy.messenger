@@ -42,11 +42,9 @@ const getSubheadingProps = ({
     configs: {
       id,
       tagName: "h2",
-      text,
-    },
-    attributes: {
-      className:
+      classNames:
         `${cssSubheading.subheading} ${isDrama ? cssSubheading.subheading_drama : ""}`.trim(),
+      text,
     },
   };
 };
@@ -54,12 +52,10 @@ const getSubheadingProps = ({
 const buildSubheading: ComponentFactory<SubheadingProps, Subheading> = (
   params: ComponentParams<SubheadingProps>,
 ): Subheading => {
+  const { id, tagName, classNames } = params.configs;
+
   const deps: ComponentDeps<SubheadingProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 

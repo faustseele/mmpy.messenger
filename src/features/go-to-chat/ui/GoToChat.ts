@@ -8,6 +8,11 @@ export class GoToChat extends Component<GoToChatProps> {
     super(props);
   }
 
+  public componentDidMount(): void {
+    this.element?.setAttribute('tabindex', '0');
+    this.element?.focus();
+  }
+
   public getSourceMarkup(): string {
     return /*html*/ `
       <img class="${css.avatar}" alt="User's avatar from catalogue" src="{{ avatar }}" />

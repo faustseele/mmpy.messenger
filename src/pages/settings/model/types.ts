@@ -8,6 +8,7 @@ export interface SettingsProps extends BaseProps {
   configs: {
     id: PageId.Settings;
     tagName: Extract<TagNameType, "div">;
+    classNames: string;
     profileName: string;
     profileAvatar: string;
     user: UserResponse | null;

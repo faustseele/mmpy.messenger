@@ -12,9 +12,10 @@ import { Input } from "./Input.ts";
 import { InputConfigs, InputProps } from "./types.ts";
 
 export const getInputNode = (
-  configs: Omit<InputConfigs, "tagName">,
+  configs: Omit<InputConfigs, "tagName" | "classNames" | "for">,
 ): ComponentNode<InputProps, Input> => {
   const params = getInputProps(configs);
+
   return {
     params,
     factory: buildInput,
@@ -25,12 +26,13 @@ export const getInputNode = (
 };
 
 const getInputProps = (
-  configs: Omit<InputConfigs, "tagName" | "classNames">,
+  configs: Omit<InputConfigs, "tagName" | "classNames" | "for">,
 ): ComponentParams<InputProps> => {
   return {
     configs: {
       tagName: "label",
       classNames: cx(`${cssInput.inputLabelWrap}`),
+      for: configs.fieldId,
       ...configs,
     },
   };

@@ -7,6 +7,8 @@ import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
 import defaultAvatar from "../../../../static/avatar.png";
 import { MessengerProps } from "./types.ts";
+import cssMessenger from "../ui/messenger.module.css";
+import cssPage from "@pages/page/ui/page.module.css";
 
 export const mapMessengerState = (
   state: AppState,
@@ -25,6 +27,7 @@ export const mapMessengerState = (
   const configs: MessengerProps["configs"] = {
     id: PageId.Messenger,
     tagName: "div",
+    classNames: `${cssPage.moduleWindow} ${cssMessenger.moduleWindow_messenger}`,
     isNotes: state.isNotes[currentChat?.id ?? 0],
     chatId: currentChat?.id,
     chatTitle: currentChat?.title,

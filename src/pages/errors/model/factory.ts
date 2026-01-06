@@ -12,12 +12,9 @@ import { ErrorProps } from "./types.ts";
 export const buildErrorPage: PageFactory<ErrorProps, ErrorPage> = (
   params: ComponentParams<ErrorProps>,
 ): ErrorPage => {
+  const { id, tagName, classNames } = params.configs;
   const deps: ComponentDeps<ErrorProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      params.attributes,
-    ),
+    domService: new DOMService(id, tagName, classNames),
     fragmentService: new FragmentService(),
   };
 
