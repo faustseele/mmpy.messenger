@@ -22,8 +22,9 @@ export const getToastNode = ({
   const params: ComponentParams<ToastProps> = {
     configs: {
       id: "toast",
-      tagName: "div",
-      classNames: css.toast,
+      tagName: "span",
+      classNames:
+        `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
       message,
       type,
       duration,

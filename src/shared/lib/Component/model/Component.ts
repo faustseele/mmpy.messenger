@@ -142,6 +142,8 @@ export default abstract class Component<P extends BaseProps> {
 
     this.domService.addListeners(this._on);
 
+    this.domService.updateClassNames(this.configs.classNames ?? '')
+
     /* allows components to run post-render logic */
     this.componentDidRender();
   }

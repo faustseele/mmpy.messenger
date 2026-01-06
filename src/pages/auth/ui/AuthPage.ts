@@ -75,6 +75,7 @@ export class AuthPage extends Page<AuthProps> {
       on: {
         click: () => {
           this.on?.reroute?.(buttonReroute.configs.link ?? RouteLink.NotFound);
+          // this.children?.nodes?.toast?.runtime?.instance.showToast("Вы вошли успешно!!!!", "error");
         },
       },
     });
@@ -95,11 +96,12 @@ export class AuthPage extends Page<AuthProps> {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonReroute } = this.children
+    const { heading, buttonFormSubmit, buttonReroute, toast } = this.children
       .nodes as AuthNodes;
 
     return /*html*/ `
-
+      {{{ ${toast.params.configs.id} }}}
+      
       <header class="${css.authHeading}">
         {{{ ${heading.params.configs.id} }}}
       </header>

@@ -155,12 +155,18 @@ const authPageParams_up: ComponentParams<AuthProps> = {
         link: RouteLink.SignIn,
         isSilent: true,
       }) as any,
+      toast: getToastNode({
+        message: "Вход успешно",
+        type: "info",
+        duration: 4000,
+      }) as any,
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
       buttonReroute: "buttonReroute",
       inputs: iptIds,
+      toast: "toast",
     },
   },
   on: {
