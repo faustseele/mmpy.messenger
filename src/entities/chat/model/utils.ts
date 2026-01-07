@@ -1,5 +1,5 @@
 import Store from "@app/providers/store/model/Store.ts";
-import { ChatId } from "@shared/api/model/types.ts";
+import { ChatId } from "@/shared/api/model/api.types.ts";
 import ChatService from "./ChatService.ts";
 
 export const isChatNotes = async (id: ChatId | null): Promise<boolean> => {

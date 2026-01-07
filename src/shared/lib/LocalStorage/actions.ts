@@ -1,4 +1,4 @@
-import { ChatId } from "../../api/model/types.ts";
+import { ChatId } from "../../api/model/api.types.ts";
 
 export function ls_storeLastChatId(chatId: ChatId): void {
   localStorage.setItem("lastActiveChatId", String(chatId));

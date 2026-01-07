@@ -6,7 +6,7 @@ import {
   CreateChatResponse,
   GetChatsQuery,
   UpdateChatAvatarResponse,
-} from "@shared/api/model/types.ts";
+} from "@/shared/api/model/api.types.ts";
 import { ls_storeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";

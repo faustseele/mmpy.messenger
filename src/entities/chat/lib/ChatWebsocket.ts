@@ -1,5 +1,5 @@
 import Store from "@app/providers/store/model/Store.ts";
-import { ChatId, ChatMessage } from "@shared/api/model/types.ts";
+import { ChatId, ChatMessage } from "@/shared/api/model/api.types";
 import { WSS_CHATS } from "@shared/config/urls.ts";
 
 export class ChatWebsocket {

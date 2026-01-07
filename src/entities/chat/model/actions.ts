@@ -4,7 +4,7 @@ import {
   ChatResponse,
   CreateChatResponse,
   GetChatsQuery,
-} from "@shared/api/model/types.ts";
+} from "@/shared/api/model/api.types.ts";
 import { ls_getLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatService from "./ChatService.ts";
 import { isChatNotes } from "./utils.ts";

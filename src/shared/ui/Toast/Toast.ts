@@ -20,24 +20,19 @@ export class Toast extends Component<ToastProps> {
 
   public showToast(message: string, type: ToastType = "info"): void {
     if (!this.element) return;
-    console.log(
-      `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
-    );
 
     this.setProps({
       configs: {
-        ...this.configs,
         message,
         type,
         classNames:
-          `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
+          `${css.toast} ${css.toast_visible} ${type === "error" ? css.toast_error : ""}`.trim(),
       },
     });
 
-    this.element.classList.add(css.toast_visible);
-    // setTimeout(() => {
-    //   this.element?.classList.remove(css.toast_visible);
-    // }, 2000); /* match CSS transition duration */
+    setTimeout(() => {
+      this.setProps({ configs: { classNames: css.toast } });
+    }, 2000);
   }
 
   /*   private getToastTypeClass(type: ToastType): string {

@@ -3,56 +3,45 @@ import {
   handleCreateChat,
   handleFetchChats,
 } from "@entities/chat/model/actions.ts";
-import { UserResponse } from "@shared/api/model/types.ts";
+import { UserResponse } from "@/shared/api/model/api.types.ts";
 import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
+import { ApiResponse } from "@/shared/api/model/types.ts";
 
-export const handleFetchUser = async (): Promise<UserResponse | undefined> => {
+export const handleFetchUser = async (): Promise<UserResponse | ApiResponse> => {
   const res = await AuthService.fetchUser();
   if (!res) ls_removeLastChatId();
-  return res;
+  return res as UserResponse;
 };
 
-export const handleSignUp = async (
-  data: SignUpData,
-): Promise<{ ok: boolean }> => {
+export const handleSignUp = async (data: SignUpData): Promise<ApiResponse> => {
   const res = await AuthService.signUp(data);
+
   if (res.ok) {
     /* fetch chats on successful signup */
     Router.go(RouteLink.Messenger);
 
     /* generating one notes-chat */
     handleCreateChat("Заметки 📃");
-
-    return { ok: true };
-  } else {
-    console.error("SignUp failed");
-
-    return { ok: false };
   }
+
+  return res;
 };
 
-export const handleSignIn = async (
-  data: SignInData,
-): Promise<{ ok: boolean }> => {
+export const handleSignIn = async (data: SignInData): Promise<ApiResponse> => {
   const res = await AuthService.signIn(data);
 
   if (res.ok) {
     /* fetch chats on successful login */
     handleFetchChats();
     Router.go(RouteLink.Messenger);
-
-    return { ok: true };
-  } else {
-    console.error("SignIn failed");
-
-    return { ok: false };
   }
+  return res;
 };
 
-export const handleLogout = async (): Promise<{ ok: boolean }> => {
+export const handleLogout = async (): Promise<ApiResponse> => {
   const res = await AuthService.logout();
   if (res.ok) {
     Router.go(RouteLink.SignIn);

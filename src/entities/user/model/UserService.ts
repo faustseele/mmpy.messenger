@@ -1,11 +1,11 @@
 import Store from "@app/providers/store/model/Store.ts";
 import UserAPI from "@entities/user/api/UserAPI.ts";
-import { UpdateUserPassword, UserResponse } from "@shared/api/model/types.ts";
+import { UpdateUserPassword, UserResponse } from "@/shared/api/model/api.types";
 
 class UserService {
   public async updateProfile(
     data: Partial<UserResponse>,
-  ): Promise<{ ok: boolean }> {
+  ): Promise<ApiResponse> {
     try {
       const updatedUser = await UserAPI.updateProfile(data);
 
@@ -20,7 +20,7 @@ class UserService {
 
   public async updatePassword(
     data: UpdateUserPassword,
-  ): Promise<{ ok: boolean }> {
+  ): Promise<ApiResponse> {
     try {
       const updatedUser = await UserAPI.updatePassword(data);
 

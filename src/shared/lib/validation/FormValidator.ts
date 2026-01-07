@@ -3,6 +3,7 @@ import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
 import { FieldType } from "../../ui/Input/types.ts";
 import { validateInputField } from "./utils.ts";
+import { ApiResponse } from "@/shared/api/model/types.ts";
 
 const logMessages = {
   formIsValid: "✅ Form is valid! Here it is 👇",
@@ -14,7 +15,7 @@ export default class FormValidator {
   private onSubmitSuccess?: (
     formData: Record<string, string>,
     submitType: string,
-  ) => Promise<{ok: boolean}>;
+  ) => Promise<ApiResponse>;
 
   constructor(
     inputs: Input[] | InputEditor[],
@@ -22,7 +23,7 @@ export default class FormValidator {
       onSubmitSuccess?: (
         formData: Record<string, string>,
         submitType: string,
-      ) => Promise<{ok: boolean}>;
+      ) => Promise<ApiResponse>;
     },
   ) {
     this.inputs = inputs;
@@ -46,7 +47,7 @@ export default class FormValidator {
   public onFormSubmit = async (
     event: Event,
     submitType: AuthType | "change-info" | "change-password",
-  ): Promise<{ok: boolean}> => {
+  ): Promise<ApiResponse> => {
     event.preventDefault();
 
     const targetInputs = this._filterInputsBySubmitType(
@@ -99,9 +100,6 @@ export default class FormValidator {
     /* No error message -> input is valid */
     const inputIsValid = !errorMessage;
     input.showError(errorMessage);
-
-    /* Logging current invalid input fields */
-    if (!inputIsValid) console.log(errorMessage);
 
     return inputIsValid;
   }

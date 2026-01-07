@@ -9,7 +9,7 @@ export const handleUpdateProfile = async (
 
 export const handleUpdatePassword = async (
   data: UpdatePasswordData,
-): Promise<{ ok: boolean }> => {
+): Promise<ApiResponse> => {
   return await UserService.updatePassword(data);
 };
 

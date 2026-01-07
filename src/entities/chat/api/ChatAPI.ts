@@ -14,7 +14,7 @@ import {
   DeleteChatResponse,
   GetChatsQuery,
   UpdateChatAvatarResponse,
-} from "@shared/api/model/types.ts";
+} from "@/shared/api/model/api.types";
 
 const chatsAPIInstance = new HTTPTransport("/chats");
 

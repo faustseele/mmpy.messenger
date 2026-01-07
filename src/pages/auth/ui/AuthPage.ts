@@ -9,6 +9,7 @@ import { InputProps } from "@shared/ui/Input/types.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
 import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./auth.module.css";
+import { Toast } from "@/shared/ui/Toast/Toast.ts";
 
 export class AuthPage extends Page<AuthProps> {
   private footerModifier: string = "";
@@ -57,7 +58,18 @@ export class AuthPage extends Page<AuthProps> {
             },
           });
 
-          await validator?.onFormSubmit(e, this.configs.type);
+          const res = await validator?.onFormSubmit(e, this.configs.type);
+
+          if (!res.ok && res.err) {
+            const nodes = this.children?.nodes as AuthNodes;
+            const toast = nodes.toast.runtime?.instance as Toast;
+            const err = res.err;
+
+            const msg = `${err?.reason}`;
+
+            if (this.configs.type === "sign-in") toast.showToast(msg, "error");
+            if (this.configs.type === "sign-up") toast.showToast(msg, "error");
+          }
 
           submit?.setProps({
             configs: {
@@ -75,7 +87,6 @@ export class AuthPage extends Page<AuthProps> {
       on: {
         click: () => {
           this.on?.reroute?.(buttonReroute.configs.link ?? RouteLink.NotFound);
-          // this.children?.nodes?.toast?.runtime?.instance.showToast("Вы вошли успешно!!!!", "error");
         },
       },
     });

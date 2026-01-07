@@ -1,4 +1,4 @@
-import { ChatId, ISODateString } from "@shared/api/model/types.ts";
+import { ChatId, ISODateString } from "@/shared/api/model/api.types";
 import {
   BaseConfigs,
   BaseProps,
