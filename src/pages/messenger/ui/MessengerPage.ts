@@ -42,7 +42,7 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireCloseChat(closeChat);
     headingToSettings.setProps({
       on: {
-        click: this.on?.goToSettings
+        click: this.on?.goToSettings,
       },
     });
   }
@@ -56,6 +56,11 @@ export class MessengerPage extends Page<MessengerProps> {
     addUser?.setProps({
       on: {
         click: async () => {
+          if (!this.on.addUsers || !this.on.addChatWithUser) {
+            console.error("MessengerPage: params.on is bad", this.on);
+            return;
+          }
+
           const explanation = `Логин пользователя:\n\n Доступные сейчас: \n• emil\n• LevTolstoy\n• yandex\n• LeUser\n• mishima\n• tolkien\n• baudrillard\n• foucault\n• shakespear`;
 
           const input = window.prompt(explanation, "");
@@ -64,34 +69,29 @@ export class MessengerPage extends Page<MessengerProps> {
           const login = input.trim();
           if (!login) return;
 
-          const user = await this.on?.findUser?.(login);
-          if (!user) {
-            console.error("User not found by login:", login);
-            return;
-          }
+          const resUser = await this.on.findUser(login);
+          if (!resUser.ok) return;
+          const user = resUser.data!;
 
-          const newChatRes = await this.on?.addChatWithUser?.(
+          const newChatRes = await this.on.addChatWithUser(
             user.first_name,
             user.second_name,
           );
+          if (!newChatRes.ok) return;
+          const chatId = newChatRes.data!.id;
 
-          if (!newChatRes) {
-            console.error("Chat create failed");
-            return;
-          }
-
-          await this.on?.addUsers?.(newChatRes.id, [user.id]);
+          await this.on.addUsers(chatId, [user.id]);
 
           if (user.avatar) {
             const avatar = await urlToFile(
               `${API_URL_RESOURCES}${user.avatar}`,
             );
-            this.on?.updateChatAvatar?.(newChatRes.id, avatar);
+            this.on.updateChatAvatar(chatId, avatar);
           }
 
           console.log(
             `User ${user.login} (id=${user.id}) added to chat`,
-            newChatRes.id,
+            chatId,
           );
         },
       },

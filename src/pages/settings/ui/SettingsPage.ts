@@ -9,7 +9,7 @@ import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
 import { SettingsNodes, SettingsProps } from "../model/types.ts";
-import { onSubmitSuccess } from "../model/utils.ts";
+import { onFormSubmitSuccess } from "../model/utils.ts";
 import css from "./settings.module.css";
 
 export class SettingsPage extends Page<SettingsProps> {
@@ -36,11 +36,11 @@ export class SettingsPage extends Page<SettingsProps> {
     const logoutBtn = buttonLogout.runtime?.instance as Button;
     const inputs = getInstances<InputProps, InputEditor>(
       this.children!,
-      "inputsEditors",
+      "inputsEditors_profile",
     );
 
     /* --- vivifying inputs --- */
-    const validator = new FormValidator(inputs, { onSubmitSuccess });
+    const validator = new FormValidator(inputs, { onFormSubmitSuccess });
     this._vivifyInputs(inputs, validator);
 
     /* sets placeholders for inputs from user-res */
@@ -67,7 +67,7 @@ export class SettingsPage extends Page<SettingsProps> {
 
     const inputs = getInstances<InputProps, InputEditor>(
       this.children,
-      "inputsEditors",
+      "inputsEditors_profile",
     );
 
     inputs.forEach((input) => {
@@ -111,14 +111,16 @@ export class SettingsPage extends Page<SettingsProps> {
   ) {
     editInfo.setProps({
       on: {
-        click: async (e: Event) => {
+        click: async (event: Event) => {
+          event.preventDefault();
+
           const isFormValid = validator.onFormCheck("change-info");
           editInfo.setProps({
             configs: {
               showSpinner: isFormValid,
             },
           });
-          await validator.onFormSubmit(e, "change-info");
+          await validator.onFormSubmit("change-info");
           editInfo.setProps({
             configs: {
               showSpinner: false,
@@ -129,7 +131,11 @@ export class SettingsPage extends Page<SettingsProps> {
     });
     editPassword.setProps({
       on: {
-        click: (e: Event) => validator.onFormSubmit(e, "change-password"),
+        click: (event: Event) => {
+          event.preventDefault();
+          
+          validator.onFormSubmit("change-password")
+        },
       },
     });
     logoutBtn.setProps({
@@ -191,8 +197,10 @@ export class SettingsPage extends Page<SettingsProps> {
         </div>
 
         <div class="${css.settingsInputs}">
+          {{{ ${nodes["subheading_form"].params.configs.id} }}}
+
           <div class="${css.settingsInputs__list}">
-            {{{ inputsEditors }}}
+            {{{ inputsEditors_profile }}}
           </div>
         </div>
       </main>

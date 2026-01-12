@@ -1,9 +1,9 @@
+import { ApiResponse } from "@/shared/api/model/types.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
-import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
 import { FieldType } from "../../ui/Input/types.ts";
+import { SubmitTypes } from "./types.ts";
 import { validateInputField } from "./utils.ts";
-import { ApiResponse } from "@/shared/api/model/types.ts";
 
 const logMessages = {
   formIsValid: "✅ Form is valid! Here it is 👇",
@@ -12,22 +12,22 @@ const logMessages = {
 
 export default class FormValidator {
   private inputs: Input[] | InputEditor[];
-  private onSubmitSuccess?: (
+  private onFormSubmitSuccess?: (
     formData: Record<string, string>,
-    submitType: string,
-  ) => Promise<ApiResponse>;
+    submitType: SubmitTypes,
+  ) => Promise<ApiResponse<unknown>>;
 
   constructor(
     inputs: Input[] | InputEditor[],
     options: {
-      onSubmitSuccess?: (
+      onFormSubmitSuccess?: (
         formData: Record<string, string>,
-        submitType: string,
-      ) => Promise<ApiResponse>;
+        submitType: SubmitTypes,
+      ) => Promise<ApiResponse<unknown>>;
     },
   ) {
     this.inputs = inputs;
-    this.onSubmitSuccess = options.onSubmitSuccess;
+    this.onFormSubmitSuccess = options.onFormSubmitSuccess;
   }
 
   public onInputBlur = (input: Input): void => {
@@ -35,7 +35,7 @@ export default class FormValidator {
   };
 
   public onFormCheck = (
-    submitType: AuthType | "change-info" | "change-password",
+    submitType: SubmitTypes,
   ): boolean => {
     const targetInputs = this._filterInputsBySubmitType(
       submitType,
@@ -45,25 +45,21 @@ export default class FormValidator {
   };
 
   public onFormSubmit = async (
-    event: Event,
-    submitType: AuthType | "change-info" | "change-password",
-  ): Promise<ApiResponse> => {
-    event.preventDefault();
-
+    submitType: SubmitTypes,
+  ): Promise<ApiResponse<unknown>> => {
     const targetInputs = this._filterInputsBySubmitType(
       submitType,
       this.inputs,
     );
     const isFormValid = this._handleFormValidation(targetInputs);
 
-    if (isFormValid && this.onSubmitSuccess) {
+    if (isFormValid && this.onFormSubmitSuccess) {
       const formData = this._getFormData(targetInputs);
       console.log(logMessages.formIsValid, formData);
 
-      return await this.onSubmitSuccess?.(formData, submitType);
+      return await this.onFormSubmitSuccess?.(formData, submitType);
     } else {
       console.log(logMessages.formHasErrors);
-      event.stopPropagation();
 
       return { ok: false };
     }
@@ -120,7 +116,7 @@ export default class FormValidator {
 
   /* narrows inputs for validation/submission based on submitType */
   private _filterInputsBySubmitType(
-    submitType: AuthType | "change-info" | "change-password",
+    submitType: SubmitTypes,
     inputs: Array<Input | InputEditor>,
   ): Array<Input | InputEditor> {
     const PASSWORD_ONLY = new Set(["oldPassword", "newPassword"]);

@@ -1,14 +1,19 @@
+import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import css from "./toast.module.css";
-import { ToastProps, ToastType } from "./types.ts";
+import { ToastPayload, ToastProps } from "./types.ts";
 
 export class Toast extends Component<ToastProps> {
   constructor(props: ComponentProps<ToastProps, Toast>) {
     super(props);
   }
 
-  public componentDidMount(): void {}
+  public componentDidMount(): void {
+    globalBus.on("show-toast", (payload: ToastPayload) =>
+      this.showToast(payload),
+    );
+  }
 
   public componentDidRender(): void {
     if (!this.element) {
@@ -18,7 +23,7 @@ export class Toast extends Component<ToastProps> {
     this.element.textContent = this.configs.message;
   }
 
-  public showToast(message: string, type: ToastType = "info"): void {
+  public showToast({ message, type = "info" }: ToastPayload): void {
     if (!this.element) return;
 
     this.setProps({

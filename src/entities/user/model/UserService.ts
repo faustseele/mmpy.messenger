@@ -1,58 +1,62 @@
+import { UpdateUserPassword, UserResponse } from "@/shared/api/model/api.types";
+import { ApiError, ApiResponse } from "@/shared/api/model/types.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import UserAPI from "@entities/user/api/UserAPI.ts";
-import { UpdateUserPassword, UserResponse } from "@/shared/api/model/api.types";
 
 class UserService {
   public async updateProfile(
     data: Partial<UserResponse>,
-  ): Promise<ApiResponse> {
+  ): Promise<ApiResponse<UserResponse>> {
     try {
       const updatedUser = await UserAPI.updateProfile(data);
 
       Store.set("api.auth.user", updatedUser);
       console.log("profile update success:", updatedUser);
-      return { ok: true };
+      return { ok: true, data: updatedUser };
     } catch (e) {
-      console.error("profile update fail:", e);
-      return { ok: false };
+      console.error(`profile update fail, data=${data}`, e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
   public async updatePassword(
     data: UpdateUserPassword,
-  ): Promise<ApiResponse> {
+  ): Promise<ApiResponse<string>> {
     try {
       const updatedUser = await UserAPI.updatePassword(data);
 
       Store.set("api.auth.user", updatedUser);
       console.log("psw update success:", updatedUser);
-      return { ok: true };
+      return { ok: true, data: updatedUser };
     } catch (e) {
-      console.error("psw update fail:", e);
-      return { ok: false };
+      console.error(`psw update fail, data=${data}`, e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public async updateAvatar(data: File) {
+  public async updateAvatar(data: File): Promise<ApiResponse<UserResponse>> {
     try {
       const updatedUser = await UserAPI.updateAvatar(data);
 
       Store.set("api.auth.user", updatedUser);
       console.log("avatar update success:", updatedUser);
+
+      return { ok: true, data: updatedUser };
     } catch (e) {
-      console.error("avatar update fail:", e);
+      console.error(`avatar update fail, file=${data}`, e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public async findByLogin(login: string): Promise<UserResponse | null> {
+  public async findByLogin(login: string): Promise<ApiResponse<UserResponse>> {
     try {
       const users = await UserAPI.findUsers({ login });
       const res = users?.[0] ?? null;
       console.log("findByLogin success:", res);
-      return res;
+      return { ok: true, data: res };
     } catch (e) {
-      console.error("findByLogin fail:", e);
-      return null;
+      console.error(`findByLogin fail, login=${login}`, e);
+      return { ok: false, err: e as ApiError };
     }
   }
 }

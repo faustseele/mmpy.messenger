@@ -13,10 +13,10 @@ import { ToastProps, ToastType } from "./types.ts";
 export const getToastNode = ({
   message,
   type = "info",
-  duration,
+  duration = 3000,
 }: {
   message: string;
-  type: ToastType;
+  type?: ToastType;
   duration?: number;
 }): ComponentNode<ToastProps> => {
   const params: ComponentParams<ToastProps> = {

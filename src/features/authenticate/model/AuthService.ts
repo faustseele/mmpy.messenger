@@ -9,7 +9,7 @@ import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
 class AuthService {
-  public async signUp(data: SignUpRequest): Promise<ApiResponse> {
+  public async signUp(data: SignUpRequest): Promise<ApiResponse<UserResponse>> {
     try {
       const res = await AuthAPI.signUp(data);
       const user = await AuthAPI.requestUser();
@@ -22,14 +22,14 @@ class AuthService {
 
       console.log("", res, user, Store.getState());
 
-      return { ok: !!user };
+      return { ok: !!user, data: user };
     } catch (e) {
       console.error("signUp failed", e);
       return { ok: false, err: e as ApiError };
     }
   }
 
-  public async signIn(data: SignInRequest): Promise<ApiResponse> {
+  public async signIn(data: SignInRequest): Promise<ApiResponse<UserResponse>> {
     try {
       const res = await AuthAPI.signIn(data);
       const user = await AuthAPI.requestUser();
@@ -43,21 +43,21 @@ class AuthService {
 
       console.log(res, user, Store.getState());
 
-      return { ok: !!user };
+      return { ok: !!user, data: user };
     } catch (e: unknown) {
       console.error("signIn failed", e);
       return { ok: false, err: e as ApiError };
     }
   }
 
-  public async fetchUser(): Promise<UserResponse | ApiResponse> {
+  public async fetchUser(): Promise<ApiResponse<UserResponse>> {
     try {
       const user = await AuthAPI.requestUser();
       if (user) {
         Store.set("api.auth.user", user);
         Store.set("controllers.isLoggedIn", true);
         console.log("user-fetch success", user);
-        return user;
+        return { ok: true, data: user };
       } else {
         Store.set("api.auth.user", null);
         Store.set("controllers.isLoggedIn", false);
@@ -71,12 +71,19 @@ class AuthService {
         };
       }
     } catch (e) {
-      console.error("fetchUser failed, probably not logged in", e);
+      const badCookie = (e as ApiError).status === 401;
+
+      if (badCookie) {
+        console.info("fetchUser failed, probably not logged in", e);
+      } else {
+        console.error("fetchUser failed", e);
+      }
+
       return { ok: false, err: e as ApiError };
     }
   }
 
-  public async logout(): Promise<ApiResponse> {
+  public async logout(): Promise<ApiResponse<boolean>> {
     try {
       const res = await AuthAPI.logout();
       Store.set("api.chats.activeId", null);
@@ -89,7 +96,7 @@ class AuthService {
       ls_removeLastChatId();
 
       console.log("", res, Store.getState());
-      return { ok: !!res };
+      return { ok: !!res, data: res };
     } catch (e) {
       console.error("logout failed", e);
       return { ok: false, err: e as ApiError };

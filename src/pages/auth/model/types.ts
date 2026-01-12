@@ -20,6 +20,6 @@ export interface AuthProps extends BaseProps {
   };
 }
 
-type AuthMap = "heading" | "buttonFormSubmit" | "buttonReroute" | "inputs" | "toast";
+type AuthMap = "heading" | "buttonFormSubmit" | "buttonReroute" | "inputs";
 
 export type AuthNodes = ChildrenNodes<AuthMap>;

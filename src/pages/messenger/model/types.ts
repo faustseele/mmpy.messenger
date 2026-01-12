@@ -1,4 +1,5 @@
 import { ChatId, CreateChatResponse, UserResponse } from "@/shared/api/model/api.types";
+import { ApiResponse } from "@/shared/api/model/types.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
@@ -20,12 +21,12 @@ export interface MessengerProps extends BaseProps {
     addChatWithUser?: (
       firstName: string,
       secondName: string,
-    ) => Promise<CreateChatResponse | undefined>;
+    ) => Promise<ApiResponse<CreateChatResponse>>;
     addNotes: (title: string) => void;
     addUsers: (chatId: ChatId, users: number[]) => Promise<void>;
     closeChat: () => void;
     deleteChat: (chatId: ChatId) => Promise<void>;
-    findUser: (login: string) => Promise<UserResponse | null>;
+    findUser: (login: string) => Promise<ApiResponse<UserResponse>>;
     updateChatAvatar: (chatId: ChatId, file: File) => Promise<void>;
     goToSettings: () => void;
   };

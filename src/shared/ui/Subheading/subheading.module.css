@@ -1,10 +1,12 @@
 .subheading {
+ padding: 6px 0px 12px 6px;
+ margin: 0;
+ 
  font-size: 16px;
  line-height: 15px;
- margin-top: 6px;
- margin-bottom: 12px;
  font-weight: 500;
  color: var(--color-acc);
+
  opacity: 0.8;
 }
 

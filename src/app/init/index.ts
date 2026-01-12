@@ -6,11 +6,22 @@ import {
 import { RouteLink } from "@shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
 import Store from "../providers/store/model/Store.ts";
+import { getToastNode } from "@/shared/ui/Toast/factory.ts";
 
 /* initilizes application; keeps Router separate */
 export const initApp = async () => {
   await bootstrapAuth();
 
+  const root = document.getElementsByTagName("body")[0];
+
+  const toast = getToastNode({
+    message: "Hello World!",
+  });
+
+  if (!root || !toast.runtime?.instance.element)
+    throw new Error("root element not found");
+
+  root.prepend(toast.runtime.instance.element);
 };
 
 const bootstrapAuth = async () => {

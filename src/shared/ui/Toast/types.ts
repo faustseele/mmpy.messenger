@@ -16,4 +16,9 @@ interface ToastConfigs extends BaseConfigs {
   duration?: number;
 }
 
+export type ToastPayload = {
+  message: string;
+  type: ToastType;
+}
+
 export type ToastType = "success" | "error" | "info";

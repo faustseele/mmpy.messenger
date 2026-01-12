@@ -18,12 +18,16 @@ export interface SettingsProps extends BaseProps {
   }
 }
 
+export type SettingsType = "change-password" | "change-info";
+
 type SettingsMap =
   | "heading_backToChats"
   | "heading_profile"
+  | "subheading_form"
   | "buttonEditInfo"
   | "buttonEditPassword"
   | "buttonLogout"
-  | "inputsEditors";
+  | "inputsEditors_profile"
+  | "inputsEditors_password";
 
 export type SettingsNodes = ChildrenNodes<SettingsMap>;

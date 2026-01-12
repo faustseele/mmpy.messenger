@@ -1,3 +1,4 @@
+import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
@@ -7,9 +8,8 @@ import { Button } from "@shared/ui/Button/Button.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
-import { onSubmitSuccess } from "../model/utils.ts";
+import { onFormSubmitSuccess } from "../model/utils.ts";
 import css from "./auth.module.css";
-import { Toast } from "@/shared/ui/Toast/Toast.ts";
 
 export class AuthPage extends Page<AuthProps> {
   private footerModifier: string = "";
@@ -34,7 +34,7 @@ export class AuthPage extends Page<AuthProps> {
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
     const reroute = buttonReroute.runtime?.instance as Button;
     this.submit = buttonFormSubmit.runtime?.instance as Button;
-    this.validator = new FormValidator(inputs, { onSubmitSuccess });
+    this.validator = new FormValidator(inputs, { onFormSubmitSuccess });
 
     /* --- setting events --- */
     this._wireSubmit(this.validator, this.submit);
@@ -43,33 +43,29 @@ export class AuthPage extends Page<AuthProps> {
   }
 
   private _wireSubmit(validator: FormValidator, submit: Button): void {
-    this.setProps({
+    submit.setProps({
       on: {
-        submit: (e: Event) => validator?.onFormSubmit(e, this.configs.type),
-      },
-    });
-    submit?.setProps({
-      on: {
-        click: async (e: Event) => {
-          const isFormValid = validator?.onFormCheck(this.configs.type);
+        click: async (event: Event) => {
+          event.preventDefault();
+
+          const formIsValid = validator?.onFormCheck(this.configs.type);
+
+          /* guard clause */
+          if (!formIsValid) {
+            globalBus.emit("show-toast", {
+              message: "Please fill all the fields.",
+              type: "error",
+            });
+            return;
+          }
+
           submit?.setProps({
             configs: {
-              showSpinner: isFormValid,
+              showSpinner: formIsValid,
             },
           });
 
-          const res = await validator?.onFormSubmit(e, this.configs.type);
-
-          if (!res.ok && res.err) {
-            const nodes = this.children?.nodes as AuthNodes;
-            const toast = nodes.toast.runtime?.instance as Toast;
-            const err = res.err;
-
-            const msg = `${err?.reason}`;
-
-            if (this.configs.type === "sign-in") toast.showToast(msg, "error");
-            if (this.configs.type === "sign-up") toast.showToast(msg, "error");
-          }
+          await validator?.onFormSubmit(this.configs.type);
 
           submit?.setProps({
             configs: {
@@ -79,6 +75,8 @@ export class AuthPage extends Page<AuthProps> {
         },
       },
     });
+
+    this.setProps({ on: { submit } });
   }
 
   /* event for the auth-reroute button */
@@ -107,12 +105,10 @@ export class AuthPage extends Page<AuthProps> {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonReroute, toast } = this.children
+    const { heading, buttonFormSubmit, buttonReroute } = this.children
       .nodes as AuthNodes;
 
     return /*html*/ `
-      {{{ ${toast.params.configs.id} }}}
-      
       <header class="${css.authHeading}">
         {{{ ${heading.params.configs.id} }}}
       </header>
