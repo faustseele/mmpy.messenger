@@ -1,3 +1,4 @@
+import { Spinner } from "@/shared/ui/Spinner/Spinner.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -50,6 +51,20 @@ export class MessengerPage extends Page<MessengerProps> {
   public componentDidRender(): void {
     /* re-binding avatar change event */
     this._wireAvatar();
+  }
+
+  public componentDidUpdate(): void {
+    if (!this.configs.isLoadingMessages) {
+
+      const spinner = this.children?.nodes["spinner"].runtime?.instance as Spinner;
+      spinner.setProps({
+        configs: {
+          isOn: false,
+        },
+      });
+
+    }
+
   }
 
   private _wireAddChat(addUser: Button) {
@@ -166,7 +181,7 @@ export class MessengerPage extends Page<MessengerProps> {
     input.dataset.bound = "true";
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     const isNotes = this.configs.isNotes;
 
     if (!this.children?.nodes)
@@ -229,8 +244,8 @@ export class MessengerPage extends Page<MessengerProps> {
 
         <div class="${css.chat__feed}">
           {{#if participantName}}
+            {{{ ${spinner.params.configs.id} }}}
             {{#if isLoadingMessages}}
-              {{{ ${spinner.params.configs.id} }}}
             {{else}}
               {{{ messages }}}
             {{/if}}

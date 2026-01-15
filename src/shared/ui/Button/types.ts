@@ -3,7 +3,7 @@ import {
   BaseConfigs,
   BaseProps,
 } from "../../lib/Component/model/base.types.ts";
-import { TagNameType } from "../../lib/DOM/types.ts";
+import { RootTag } from "../../lib/DOM/types.ts";
 import { RouteLink } from "../../types/universal.ts";
 
 export interface ButtonProps extends BaseProps {
@@ -11,7 +11,7 @@ export interface ButtonProps extends BaseProps {
 }
 
 export interface ButtonConfigs extends BaseConfigs {
-  tagName: Extract<TagNameType, "button">;
+  rootTag: Extract<RootTag, "button">;
   type: ButtonType;
   classNames: string;
   label: string;

@@ -86,7 +86,6 @@ export const setChatsList = async (
       isNotesList[chat.id] = is;
     }),
   );
-  console.log("isNotesList:", isNotesList);
   Store.set("isNotes", isNotesList);
 
   return { ok: true, data: isNotesList };

@@ -56,13 +56,24 @@ export default abstract class Component<P extends BaseProps> {
       : undefined;
   }
 
-  /* get overridden */
+  /* --- Concrete Methods --- */
   public componentDidRender(): void {}
   public componentDidMount(): void {}
   public componentDidUpdate(): void {}
   public componentDidUnmount(): void {}
-  public getSourceMarkup(): string {
-    /* spits html-structure as a string */
+
+  /**
+   * @param configs to conditionally format classNames
+   * @returns classNames string
+   */
+  public updateRootTagCx(configs: P["configs"]): string {
+    return configs.classNames;
+  }
+
+  /**
+   * @returns inner-html from inside the root tag (excludes Component's root-tag)
+   */
+  public getInnerMarkup(): string {
     return ``;
   }
 
@@ -123,7 +134,11 @@ export default abstract class Component<P extends BaseProps> {
     /* checks if Element alive */
     if (!this.domService.element) return;
 
-    const markup = this.getSourceMarkup();
+    /* sets classNames */
+    const cx = this.updateRootTagCx(this._configs);
+    this.domService.setRootTagCx(cx);
+
+    const markup = this.getInnerMarkup();
     const deproxifiedConfigs = { ...this._configs };
 
     /* get a compiled (innerHTML) DocumentFragment from FragmentService */
@@ -141,8 +156,6 @@ export default abstract class Component<P extends BaseProps> {
     this.domService.insertFragmentIntoElement(innerFragment);
 
     this.domService.addListeners(this._on);
-
-    this.domService.updateClassNames(this.configs.classNames ?? '')
 
     /* allows components to run post-render logic */
     this.componentDidRender();
@@ -168,6 +181,10 @@ export default abstract class Component<P extends BaseProps> {
   /* emits -> CDR */
   private _componentDidUpdate(): void {
     this._bus.emit("flow:render");
+
+    /* updates classNames */
+    const newCx = this.updateRootTagCx(this._configs);
+    this.domService.setRootTagCx(newCx);
 
     /* allows components to run post-update logic */
     this.componentDidUpdate();
@@ -199,7 +216,7 @@ export default abstract class Component<P extends BaseProps> {
   /* invokes Proxy-setters */
   public setProps(patch: ComponentPatch<P>): void {
     if (!patch) return;
-    
+
     Object.assign(this._configs, patch.configs);
 
     const { configs, on, children } = patch;

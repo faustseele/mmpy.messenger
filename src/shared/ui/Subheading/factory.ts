@@ -41,7 +41,7 @@ const getSubheadingProps = ({
   return {
     configs: {
       id,
-      tagName: "h2",
+      rootTag: "h2",
       classNames:
         `${cssSubheading.subheading} ${isDrama ? cssSubheading.subheading_drama : ""}`.trim(),
       text,
@@ -52,10 +52,10 @@ const getSubheadingProps = ({
 const buildSubheading: ComponentFactory<SubheadingProps, Subheading> = (
   params: ComponentParams<SubheadingProps>,
 ): Subheading => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<SubheadingProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

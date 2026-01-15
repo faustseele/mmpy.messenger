@@ -2,7 +2,7 @@ import {
   BaseConfigs,
   BaseProps,
 } from "../../lib/Component/model/base.types.ts";
-import { TagNameType } from "../../lib/DOM/types.ts";
+import { RootTag } from "../../lib/DOM/types.ts";
 
 export interface InputProps extends BaseProps {
   /* Configurations are used for <input> tag inside <label>-wrapper */
@@ -11,7 +11,7 @@ export interface InputProps extends BaseProps {
 }
 
 export interface InputConfigs extends BaseConfigs {
-  tagName: Extract<TagNameType, "label">;
+  rootTag: Extract<RootTag, "label">;
   fieldId: FieldType;
   label: string;
   type: InputType;

@@ -22,7 +22,7 @@ export const getToastNode = ({
   const params: ComponentParams<ToastProps> = {
     configs: {
       id: "toast",
-      tagName: "span",
+      rootTag: "span",
       classNames:
         `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
       message,
@@ -42,10 +42,10 @@ export const getToastNode = ({
 const buildToast: ComponentFactory<ToastProps, Toast> = (
   params: ComponentParams<ToastProps>,
 ): Toast => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<ToastProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

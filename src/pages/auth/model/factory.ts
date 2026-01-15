@@ -15,10 +15,10 @@ import { AuthProps } from "./types.ts";
 export const buildAuthPage: PageFactory<AuthProps, AuthPage> = (
   params: ComponentParams<AuthProps>,
 ): AuthPage => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<AuthProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

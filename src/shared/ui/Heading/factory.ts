@@ -6,19 +6,18 @@ import {
 import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
-import { cx } from "../../lib/helpers/formatting/classnames.ts";
 import css from "./heading.module.css";
 import { Heading } from "./Heading.ts";
 import { HeadingConfigs, HeadingOn, HeadingProps } from "./types.ts";
 
 export const getHeadingNode = (
-  configs: Omit<HeadingConfigs, "tagName" | "classNames">,
+  configs: Omit<HeadingConfigs, "rootTag" | "classNames">,
   on?: HeadingOn,
 ): ComponentNode<HeadingProps, Heading> => {
   const params = getHeadingProps(
     {
-      tagName: "h1",
-      classNames: cx(`${css.heading}`),
+      rootTag: "h1",
+      classNames: css.heading,
       ...configs,
     },
     on,
@@ -48,10 +47,10 @@ const getHeadingProps = (
 const buildHeading: ComponentFactory<HeadingProps, Heading> = (
   params: ComponentParams<HeadingProps>,
 ): Heading => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<HeadingProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
   const node = {

@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getButtonNode } from "@/shared/ui/Button/factory.ts";
+import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
+import { getInputNode } from "@/shared/ui/Input/factory.ts";
+import { getSpinnerNode } from "@/shared/ui/Spinner/factory.ts";
+import { RouteConfigs } from "@app/providers/router/types.ts";
 import {
   handleAddUsers,
   handleCloseChat,
@@ -6,27 +11,23 @@ import {
   handleDeleteChat,
   handleUpdateChatAvatar,
 } from "@entities/chat/model/actions.ts";
-import { RouteConfigs } from "@app/providers/router/types.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { getButtonNode } from "@/shared/ui/Button/factory.ts";
-import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
-import { getInputNode } from "@/shared/ui/Input/factory.ts";
 import participantAvatar from "../../../../static/avatar.png";
 import { handleFindUser, handleGoToSettings } from "../model/actions.ts";
 import { MessengerProps } from "../model/types.ts";
-import cssMessenger from "../ui/messenger.module.css";
-import { getSpinnerNode } from "@/shared/ui/Spinner/factory.ts";
+import css from "../ui/messenger.module.css";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 export const messengerPageParams: ComponentParams<MessengerProps> = {
   configs: {
     id: PageId.Messenger,
-    tagName: "div",
-    classNames: `${cssPage.moduleWindow} ${cssMessenger.moduleWindow_messenger}`,
+    rootTag: "div",
+    classNames: cx(cssPage.moduleWindow, css.moduleWindow_messenger),
     participantAvatar,
     participantName: "",
   },

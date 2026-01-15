@@ -3,14 +3,14 @@ import {
   BaseConfigs,
   BaseProps,
 } from "@shared/lib/Component/model/base.types.ts";
-import { TagNameType } from "@shared/lib/DOM/types.ts";
+import { RootTag } from "@shared/lib/DOM/types.ts";
 
 export interface GoToChatProps extends BaseProps {
   configs: GoToChatConfigs;
 }
 
 export interface GoToChatConfigs extends BaseConfigs {
-  tagName: Extract<TagNameType, "li">;
+  rootTag: Extract<RootTag, "li">;
   classNames: string;
   avatar: string;
   userName: string;

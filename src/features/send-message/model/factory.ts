@@ -32,7 +32,7 @@ const getMessageFieldParams = (
   return {
     configs: {
       id,
-      tagName: "form",
+      rootTag: "form",
       classNames: css.messageField,
       type: "text",
       label: "Message Input",
@@ -49,10 +49,10 @@ const getMessageFieldParams = (
 const buildMessageField: ComponentFactory<MessageFieldProps, MessageField> = (
   params: ComponentParams<MessageFieldProps>,
 ): MessageField => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<MessageFieldProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

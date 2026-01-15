@@ -1,5 +1,9 @@
 import Store from "@app/providers/store/model/Store.ts";
-import { ChildGraph, ChildrenEdges, ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
+import {
+  ChildGraph,
+  ChildrenEdges,
+  ChildrenNodes,
+} from "@shared/lib/Component/model/children.types.ts";
 import {
   ComponentDeps,
   ComponentId,
@@ -51,7 +55,7 @@ export function getMessagesGraph(): ChildGraph {
 }
 
 export const getMessageNode = (
-  configs: Omit<MessageConfigs, "tagName" | "classNames">,
+  configs: Omit<MessageConfigs, "rootTag" | "classNames">,
 ): ComponentNode<MessageProps, MessageBubble> => {
   const params = getMessageParams(configs);
   return {
@@ -64,11 +68,11 @@ export const getMessageNode = (
 };
 
 const getMessageParams = (
-  configs: Omit<MessageConfigs, "tagName" | "classNames">,
+  configs: Omit<MessageConfigs, "rootTag" | "classNames">,
 ): ComponentParams<MessageProps> => {
   return {
     configs: {
-      tagName: "article",
+      rootTag: "article",
       classNames: css.message,
       ...configs,
     },
@@ -78,22 +82,9 @@ const getMessageParams = (
 const buildMessage: ComponentFactory<MessageProps, MessageBubble> = (
   params: ComponentParams<MessageProps>,
 ): MessageBubble => {
-  const messageClasses = [
-    params.configs.classNames || '',
-    params.configs.type === "outgoing" ? css.message_outgoing : "",
-    params.configs.type === "incoming" ? css.message_incoming : "",
-    params.configs.type === "date" ? css.message_dateBubble : "",
-  ]
-    /* cleans up the array of falsy elements */
-    .filter(Boolean)
-    .join(" ");
-
+  const { id, rootTag } = params.configs;
   const deps: ComponentDeps<MessageProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      messageClasses,
-    ),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

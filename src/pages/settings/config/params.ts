@@ -12,7 +12,8 @@ import { RouteLink } from "@shared/types/universal.ts";
 import profileAvatar from "../../../../static/profile-avatar.png";
 import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
-import cssSettings from "../ui/settings.module.css";
+import css from "../ui/settings.module.css";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 const inputsEditors_profile = [
   "inputEditor-email",
@@ -64,15 +65,15 @@ const inputsEditorsNodes_profile = {
 };
 
 const inputsEditorsNodes_password = {
-  [iptPsw[6]]: getEditorNode(
-    iptPsw[6],
+  [iptPsw[0]]: getEditorNode(
+    iptPsw[0],
     "oldPassword",
     "Старый пароль",
     "***",
     "password",
   ),
-  [iptPsw[7]]: getEditorNode(
-    iptPsw[7],
+  [iptPsw[1]]: getEditorNode(
+    iptPsw[1],
     "newPassword",
     "Новый пароль",
     "***",
@@ -83,8 +84,8 @@ const inputsEditorsNodes_password = {
 export const settingsPageParams: ComponentParams<SettingsProps> = {
   configs: {
     id: PageId.Settings,
-    tagName: "div",
-    classNames: `${cssPage.moduleWindow} ${cssSettings.moduleWindow_profile}`,
+    rootTag: "div",
+    classNames: cx(cssPage.moduleWindow, css.moduleWindow_profile),
     profileName: "Loading..",
     profileAvatar,
     user: null,
@@ -130,6 +131,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       heading_profile: "heading_profile",
       subheading_form: "subheading_form",
       inputsEditors_profile,
+      inputsEditors_password,
       buttonEditInfo: "buttonEditInfo",
       buttonEditPassword: "buttonEditPassword",
       buttonLogout: "buttonLogout",

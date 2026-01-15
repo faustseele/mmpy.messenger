@@ -39,43 +39,55 @@ const emitToast = (res: ApiResponse<UserResponse>, type: SubmitTypes) => {
   console.error("AuthPage: unhandled condition.", this);
 };
 
-export const onFormSubmitSuccess = async (
-  formData: Record<string, string>,
+export const onBadForm = () => {
+  globalBus.emit("show-toast", {
+    message: "Please fill all the fields.",
+    type: "error",
+  });
+};
+
+export const onGoodForm = (
   submitType: SubmitTypes,
-): Promise<ApiResponse<UserResponse>> => {
+): ((
+  formData: Record<string, string>,
+) => Promise<ApiResponse<UserResponse>>) => {
   if (submitType === "sign-in") {
-    const res = await handleSignIn({
-      login: formData.login,
-      password: formData.password,
-    });
+    return async (formData: Record<string, string>) => {
+      const res = await handleSignIn({
+        login: formData.login,
+        password: formData.password,
+      });
 
-    emitToast(res, submitType);
-
-    return res;
+      emitToast(res, submitType);
+      return res;
+    };
   }
 
   if (submitType === "sign-up") {
-    const res = await handleSignUp({
-      first_name: formData.name,
-      second_name: formData.surname,
-      login: formData.login,
-      email: formData.email,
-      password: formData.password,
-      phone: formData.phone,
-    });
+    return async (formData: Record<string, string>) => {
+      const res = await handleSignUp({
+        first_name: formData.name,
+        second_name: formData.surname,
+        login: formData.login,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+      });
 
-    emitToast(res, submitType);
-
-    return res;
+      emitToast(res, submitType);
+      return res;
+    };
   }
 
-  console.error("AuthPage: Unknown submitType", submitType);
-  return {
-    ok: false,
-    err: {
-      status: 400,
-      reason: "Bad submitType",
-      response: "Non-API response",
-    },
+  return async () => {
+    console.error("AuthPage: Unknown submitType", submitType);
+    return {
+      ok: false,
+      err: {
+        status: 400,
+        reason: "Bad submitType",
+        response: "Non-API response",
+      },
+    };
   };
 };

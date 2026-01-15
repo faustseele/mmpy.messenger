@@ -3,12 +3,12 @@ import { ApiResponse } from "@/shared/api/model/types.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
-import { TagNameType } from "@shared/lib/DOM/types.ts";
+import { RootTag } from "@shared/lib/DOM/types.ts";
 
 export interface MessengerProps extends BaseProps {
   configs: {
     id: PageId.Messenger;
-    tagName: Extract<TagNameType, "div">;
+    rootTag: Extract<RootTag, "div">;
     classNames: string;
     isNotes?: boolean;
     chatId?: ChatId;

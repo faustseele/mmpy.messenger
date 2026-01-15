@@ -43,7 +43,7 @@ export type ComponentNode<
   */
   metadata?: {
     readonly id: ComponentId;
-    readonly tagName: P["configs"]["tagName"];
+    readonly rootTag: P["configs"]["rootTag"];
   };
   params: ComponentParams<P>;
   runtime?: { instance: C };

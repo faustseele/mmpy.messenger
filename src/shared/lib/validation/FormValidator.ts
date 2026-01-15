@@ -12,22 +12,9 @@ const logMessages = {
 
 export default class FormValidator {
   private inputs: Input[] | InputEditor[];
-  private onFormSubmitSuccess?: (
-    formData: Record<string, string>,
-    submitType: SubmitTypes,
-  ) => Promise<ApiResponse<unknown>>;
 
-  constructor(
-    inputs: Input[] | InputEditor[],
-    options: {
-      onFormSubmitSuccess?: (
-        formData: Record<string, string>,
-        submitType: SubmitTypes,
-      ) => Promise<ApiResponse<unknown>>;
-    },
-  ) {
+  constructor(inputs: Input[] | InputEditor[]) {
     this.inputs = inputs;
-    this.onFormSubmitSuccess = options.onFormSubmitSuccess;
   }
 
   public onInputBlur = (input: Input): void => {
@@ -36,16 +23,24 @@ export default class FormValidator {
 
   public onFormCheck = (
     submitType: SubmitTypes,
+    badFormCb?: () => void,
   ): boolean => {
     const targetInputs = this._filterInputsBySubmitType(
       submitType,
       this.inputs,
     );
-    return this._handleFormValidation(targetInputs);
+    const formValid = this._handleFormValidation(targetInputs);
+
+    if (!formValid) badFormCb?.();
+
+    return formValid;
   };
 
   public onFormSubmit = async (
     submitType: SubmitTypes,
+    onGoodForm: (
+      formData: Record<string, string>,
+    ) => Promise<ApiResponse<unknown>>,
   ): Promise<ApiResponse<unknown>> => {
     const targetInputs = this._filterInputsBySubmitType(
       submitType,
@@ -53,11 +48,11 @@ export default class FormValidator {
     );
     const isFormValid = this._handleFormValidation(targetInputs);
 
-    if (isFormValid && this.onFormSubmitSuccess) {
+    if (isFormValid) {
       const formData = this._getFormData(targetInputs);
       console.log(logMessages.formIsValid, formData);
 
-      return await this.onFormSubmitSuccess?.(formData, submitType);
+      return await onGoodForm(formData);
     } else {
       console.log(logMessages.formHasErrors);
 

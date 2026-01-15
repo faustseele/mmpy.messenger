@@ -55,7 +55,7 @@ const getEditorProps = (
 ): ComponentParams<InputProps> => ({
   configs: {
     id,
-    tagName: "label",
+    rootTag: "label",
     classNames: css.inputLabelWrap,
     for: fieldId,
     fieldId,
@@ -72,10 +72,10 @@ const getEditorProps = (
 const buildInputEditor: ComponentFactory<InputProps, InputEditor> = (
   params: ComponentParams<InputProps>,
 ): InputEditor => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<InputProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

@@ -10,9 +10,9 @@ import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import { RouteLink } from "../../types/universal.ts";
 import { getSpinnerNode } from "../Spinner/factory.ts";
-import css from "./button.module.css";
 import { Button } from "./Button.ts";
 import { ButtonProps } from "./types.ts";
+import css from "./button.module.css";
 
 export const getButtonNode = ({
   id,
@@ -42,10 +42,10 @@ export const getButtonNode = ({
 const getButtonProps = ({
   id,
   label,
-  type,
+  type = "button",
   link,
-  isSilent,
-  tooltip,
+  isSilent = false,
+  tooltip = "",
 }: {
   id: ComponentId;
   label: string;
@@ -57,13 +57,13 @@ const getButtonProps = ({
   return {
     configs: {
       id,
-      tagName: "button",
+      rootTag: "button",
       label,
-      isSilent: isSilent ?? false,
+      isSilent,
       link,
-      type: type ?? "button",
-      classNames: `${css.button} ${isSilent ? css.button_silent : ""}`.trim(),
-      title: tooltip ?? "",
+      type,
+      classNames: css.button,
+      title: tooltip,
     },
     children: {
       nodes: {
@@ -79,10 +79,10 @@ const getButtonProps = ({
 const buildButton: ComponentFactory<ButtonProps, Button> = (
   params: ComponentParams<ButtonProps>,
 ): Button => {
-  const { id, tagName, classNames} = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<ButtonProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

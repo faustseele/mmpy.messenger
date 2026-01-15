@@ -1,5 +1,5 @@
 import { BaseConfigs, BaseProps } from "@shared/lib/Component/model/base.types.ts";
-import { TagNameType } from "@shared/lib/DOM/types.ts";
+import { RootTag } from "@shared/lib/DOM/types.ts";
 
 export interface MessageFieldProps extends BaseProps {
   configs: MessageFieldConfigs;
@@ -11,7 +11,7 @@ export interface MessageFieldProps extends BaseProps {
 
 export interface MessageFieldConfigs extends BaseConfigs {
   id: string;
-  tagName: Extract<TagNameType, "form">;
+  rootTag: Extract<RootTag, "form">;
   classNames: string;
   label: string;
   type: "text";

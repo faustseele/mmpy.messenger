@@ -9,7 +9,7 @@ export class Subheading extends Component<SubheadingProps> {
     super(props);
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return `{{text}}`;
   }
 }

@@ -1,6 +1,6 @@
-import { handleSelectChat } from "@entities/chat/model/actions.ts";
-import Store from "@app/providers/store/model/Store.ts";
 import { ChatResponse } from "@/shared/api/model/api.types.ts";
+import Store from "@app/providers/store/model/Store.ts";
+import { handleSelectChat } from "@entities/chat/model/actions.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import {
   ChildGraph,
@@ -16,7 +16,6 @@ import {
 import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
-import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import { tinyDate } from "@shared/lib/helpers/formatting/date.ts";
 import defaultAvatar from "../../../../static/avatar.png";
 import { GoToChat } from "../ui/GoToChat.ts";
@@ -69,7 +68,7 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
 }
 
 const getGoToChatNode = (
-  configs: Omit<GoToChatConfigs, "tagName" | "classNames">,
+  configs: Omit<GoToChatConfigs, "rootTag" | "classNames">,
   on?: GoToChatProps["on"],
 ): ComponentNode<GoToChatProps, GoToChat> => {
   const params = getGoToChatParams(configs, on);
@@ -83,7 +82,7 @@ const getGoToChatNode = (
 };
 
 const getGoToChatParams = (
-  configs: Omit<GoToChatConfigs, "tagName" | "classNames">,
+  configs: Omit<GoToChatConfigs, "rootTag" | "classNames">,
   on?: GoToChatProps["on"],
 ): ComponentParams<GoToChatProps> => {
   const avatar = configs.avatar
@@ -92,10 +91,9 @@ const getGoToChatParams = (
 
   return {
     configs: {
-      tagName: "li",
-      classNames: cx(
-        `${css.goToChat} ${configs.isNotes ? css.goToChat_note : ""}`,
-      ).trim(),
+      rootTag: "li",
+      /* TODO: make optional, def is "" */
+      classNames: css.goToChat,
       tabIndex: "0",
       ...configs,
       avatar,
@@ -110,10 +108,10 @@ const getGoToChatParams = (
 const buildGoToChat: ComponentFactory<GoToChatProps, GoToChat> = (
   params: ComponentParams<GoToChatProps>,
 ): GoToChat => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<GoToChatProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
   const node: ComponentNode<GoToChatProps, GoToChat> = {

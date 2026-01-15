@@ -1,3 +1,4 @@
+import { Subheading } from "@/shared/ui/Subheading/Subheading.ts";
 import { handleUpdateAvatar } from "@entities/user/model/actions.ts";
 import { handleLogout } from "@features/authenticate/model/actions.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
@@ -8,11 +9,13 @@ import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
-import { SettingsNodes, SettingsProps } from "../model/types.ts";
-import { onFormSubmitSuccess } from "../model/utils.ts";
+import { SettingsNodes, SettingsProps, SettingsType } from "../model/types.ts";
+import { onBadForm, onGoodForm } from "../model/utils.ts";
 import css from "./settings.module.css";
 
 export class SettingsPage extends Page<SettingsProps> {
+  private _type: SettingsType = "change-info";
+
   constructor(props: ComponentProps<SettingsProps, SettingsPage>) {
     super(props);
   }
@@ -40,7 +43,7 @@ export class SettingsPage extends Page<SettingsProps> {
     );
 
     /* --- vivifying inputs --- */
-    const validator = new FormValidator(inputs, { onFormSubmitSuccess });
+    const validator = new FormValidator(inputs);
     this._vivifyInputs(inputs, validator);
 
     /* sets placeholders for inputs from user-res */
@@ -114,13 +117,28 @@ export class SettingsPage extends Page<SettingsProps> {
         click: async (event: Event) => {
           event.preventDefault();
 
-          const isFormValid = validator.onFormCheck("change-info");
+          /* guard-clauses */
+          const notInfo = this._type !== "change-info";
+          if (notInfo) {
+            this._switchType("change-info");
+            return;
+          }
+          const formValid = validator.onFormCheck("change-info", () =>
+            onBadForm("change-info"),
+          );
+          if (!formValid) return;
+
           editInfo.setProps({
             configs: {
-              showSpinner: isFormValid,
+              showSpinner: true,
             },
           });
-          await validator.onFormSubmit("change-info");
+
+          await validator.onFormSubmit(
+            "change-info",
+            onGoodForm("change-info"),
+          );
+
           editInfo.setProps({
             configs: {
               showSpinner: false,
@@ -133,8 +151,22 @@ export class SettingsPage extends Page<SettingsProps> {
       on: {
         click: (event: Event) => {
           event.preventDefault();
-          
-          validator.onFormSubmit("change-password")
+
+          const notPsw = this._type !== "change-password";
+          if (notPsw) {
+            this._switchType("change-password");
+            return;
+          }
+          const formValid = validator.onFormCheck(
+            "change-password",
+            onBadForm("change-password"),
+          );
+          if (!formValid) return;
+
+          validator.onFormSubmit(
+            "change-password",
+            onGoodForm("change-password"),
+          );
         },
       },
     });
@@ -172,7 +204,42 @@ export class SettingsPage extends Page<SettingsProps> {
     });
   }
 
-  public getSourceMarkup(): string {
+  private _switchType(type: SettingsType) {
+    if (!this.children) {
+      console.error("SettingsPage: Children are not defined", this);
+      return;
+    }
+
+    this._type = type;
+
+    const { subheading_form, buttonEditInfo, buttonEditPassword } = this
+      .children.nodes as SettingsNodes;
+
+    const subheading = subheading_form.runtime?.instance as Subheading;
+    const editInfo = buttonEditInfo.runtime?.instance as Button;
+    const editPassword = buttonEditPassword.runtime?.instance as Button;
+
+    const isInfo = type === "change-info";
+    subheading.setProps({
+      configs: {
+        text: isInfo ? "Ваши данные:" : "Ваш пароль:",
+      },
+    });
+    editInfo.setProps({
+      configs: {
+        isSilent: !isInfo,
+        showSpinner: false,
+      },
+    });
+    editPassword.setProps({
+      configs: {
+        isSilent: isInfo,
+        showSpinner: false,
+      },
+    });
+  }
+
+  public getInnerMarkup(): string {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: SettingsPage: Children are not defined</span>`;
 
@@ -201,13 +268,16 @@ export class SettingsPage extends Page<SettingsProps> {
 
           <div class="${css.settingsInputs__list}">
             {{{ inputsEditors_profile }}}
+            {{{ inputsEditors_password }}}
           </div>
         </div>
       </main>
 
       <footer class="${css.settingsFooter}">
-        {{{ ${nodes["buttonEditInfo"].params.configs.id} }}}
-        {{{ ${nodes["buttonEditPassword"].params.configs.id} }}}
+        <div class="${css.settingsFooter__horBtns}">
+          {{{ ${nodes["buttonEditInfo"].params.configs.id} }}}
+          {{{ ${nodes["buttonEditPassword"].params.configs.id} }}}
+        </div>
         {{{ ${nodes["buttonLogout"].params.configs.id} }}}
       </footer>
     `;

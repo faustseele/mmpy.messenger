@@ -27,7 +27,7 @@ export class MessageField extends Component<MessageFieldProps> {
     });
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return /*html*/ `
       <input
         class="${css.input}"

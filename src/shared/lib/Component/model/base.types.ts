@@ -1,4 +1,4 @@
-import { TagNameType } from "../../DOM/types.ts";
+import { RootTag } from "../../DOM/types.ts";
 import { ComponentId } from "./types.ts";
 
 /**
@@ -14,7 +14,7 @@ export interface BaseProps {
 export type BaseConfigs = {
   readonly id: ComponentId;
   /* Component's root tag */
-  readonly tagName: TagNameType;
+  readonly rootTag: RootTag;
   /* classes separated by space */
   classNames: string;
   type?: string;

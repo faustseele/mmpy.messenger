@@ -52,7 +52,7 @@ export class Toast extends Component<ToastProps> {
     }
   }
  */
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return /*html*/ ``;
   }
 }

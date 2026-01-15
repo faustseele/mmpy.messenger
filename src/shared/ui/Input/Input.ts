@@ -75,7 +75,7 @@ export class Input extends Component<InputProps> {
     this.input.classList.remove("class", css.input_error);
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return /*html*/ `
         <input
           class="${css.input} {{#if isSearch}}${css.input_search} {{/if}}"

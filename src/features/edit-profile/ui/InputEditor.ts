@@ -8,7 +8,7 @@ export class InputEditor extends Input {
     super(props);
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return /*html*/ `
     <span class="${css.labelSpan}">
       {{ label }}

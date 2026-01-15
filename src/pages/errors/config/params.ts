@@ -1,22 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
+import { getButtonNode } from "@/shared/ui/Button/factory.ts";
+import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
+import { getSubheadingNode } from "@/shared/ui/Subheading/factory.ts";
 import { RouteConfigs } from "@app/providers/router/types.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { getButtonNode } from "@/shared/ui/Button/factory.ts";
-import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
-import { getSubheadingNode } from "@/shared/ui/Subheading/factory.ts";
 import { handleBack } from "../model/actions.ts";
 import { ErrorProps } from "../model/types.ts";
-import cssErrors from "../ui/errors.module.css";
+import css from "../ui/errors.module.css";
 
 export const errorPageParams_404: ComponentParams<ErrorProps> = {
   configs: {
     id: PageId.Error404,
-    tagName: "div",
-    classNames: `${cssPage.moduleWindow} ${cssErrors.moduleWindow_errors}`,
+    rootTag: "div",
+    classNames: cx(cssPage.moduleWindow, css.moduleWindow_errors),
     code: "404",
   },
   children: {
@@ -52,8 +53,8 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
 export const errorPageParams_500: ComponentParams<ErrorProps> = {
   configs: {
     id: PageId.Error500,
-    tagName: "div",
-    classNames: `${cssPage.moduleWindow} ${cssErrors.moduleWindow_errors}`,
+    rootTag: "div",
+    classNames: cx(cssPage.moduleWindow, css.moduleWindow_errors),
     code: "500",
   },
   children: {

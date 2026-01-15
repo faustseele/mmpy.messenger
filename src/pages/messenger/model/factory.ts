@@ -27,10 +27,10 @@ export function getMessengerPageNode(): PageNode<
 const buildMessengerPage: PageFactory<MessengerProps, MessengerPage> = (
   params: ComponentParams<MessengerProps>,
 ): MessengerPage => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<MessengerProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

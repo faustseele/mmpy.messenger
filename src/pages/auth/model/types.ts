@@ -3,14 +3,14 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
-import { TagNameType } from "@shared/lib/DOM/types.ts";
+import { RootTag } from "@shared/lib/DOM/types.ts";
 
 export type AuthType = "sign-up" | "sign-in";
 
 export interface AuthProps extends BaseProps {
   configs: {
     id: PageId.SignIn | PageId.SignUp;
-    tagName: Extract<TagNameType, "form">;
+    rootTag: Extract<RootTag, "form">;
     classNames: string;
     type: AuthType;
   };

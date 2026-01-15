@@ -88,7 +88,7 @@ const inputNodes_in = {
 const authPageParams_in: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignIn,
-    tagName: "form",
+    rootTag: "form",
     classNames: cssPage.moduleWindow,
     type: "sign-in",
   },
@@ -126,7 +126,7 @@ const authPageParams_in: ComponentParams<AuthProps> = {
 const authPageParams_up: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignUp,
-    tagName: "form",
+    rootTag: "form",
     classNames: cssPage.moduleWindow,
     type: "sign-up",
   },

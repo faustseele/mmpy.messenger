@@ -1,6 +1,6 @@
 import { BaseProps } from "../Component/model/base.types.ts";
 import { ComponentId } from "../Component/model/types.ts";
-import { TagNameType } from "./types.ts";
+import { RootTag } from "./types.ts";
 
 /**
  * @DOMService ­– owns the DOM-related logic
@@ -11,18 +11,16 @@ import { TagNameType } from "./types.ts";
  */
 
 export default class DOMService<P extends BaseProps> {
-  private readonly _tagName: P["configs"]["tagName"];
-  private _classNames: P["configs"]["classNames"] = "";
+  private readonly _tagName: P["configs"]["rootTag"];
   private _element: HTMLElement | null = null;
   private _id: ComponentId;
   public get element(): HTMLElement | null {
     return this._element;
   }
 
-  constructor(id: ComponentId, tagName: TagNameType, classNames: string = "") {
+  constructor(id: ComponentId, rootTag: RootTag) {
     this._id = id;
-    this._tagName = tagName;
-    this._classNames = classNames;
+    this._tagName = rootTag;
   }
 
   public createElement() {
@@ -34,23 +32,18 @@ export default class DOMService<P extends BaseProps> {
     /* sets identifier for el-search */
     element.setAttribute("data-id", this._id);
 
-    this._element = this._setClassNames(element);
+    this._element = element;
   }
 
-  private _setClassNames(element: HTMLElement): HTMLElement {
-    if (!this._classNames) return element;
-
-    /* adding classes to the element */
-    element.className = "";
-    element.classList.add(...this._classNames.split(" "));
-    return element;
-  }
-
-  public updateClassNames(classNames: string): void {
+  public setRootTagCx(classNames: string): void {
     if (!this._element) {
       console.warn("Cannot update classNames: DOMService element is null.");
       return;
     }
+
+    const oldCx = this._element.className;
+    /* skip if same */
+    if (oldCx === classNames) return;
 
     this._element.className = "";
     this._element.classList.add(...classNames.split(" "));

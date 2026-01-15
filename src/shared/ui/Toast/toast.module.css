@@ -2,7 +2,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, 200%);
+  transform: translate(-50%, 50%);
   z-index: 3;
 
   padding: 8px 16px;
@@ -21,7 +21,7 @@
 }
 
 .toast_visible {
-  transform: translate(-50%, 250%) scale(1);
+  transform: translate(-50%, 100%) scale(1);
   opacity: 1;
 }
 

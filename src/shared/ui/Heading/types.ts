@@ -2,7 +2,7 @@ import {
   BaseConfigs,
   BaseProps,
 } from "../../lib/Component/model/base.types.ts";
-import { TagNameType } from "../../lib/DOM/types.ts";
+import { RootTag } from "../../lib/DOM/types.ts";
 import { RouteLink } from "../../types/universal.ts";
 
 export interface HeadingProps extends BaseProps {
@@ -10,7 +10,7 @@ export interface HeadingProps extends BaseProps {
 }
 
 export interface HeadingConfigs extends BaseConfigs {
-  tagName: Extract<TagNameType, "h1">;
+  rootTag: Extract<RootTag, "h1">;
   text: string;
   isClickable?: boolean;
   isDrama?: boolean;

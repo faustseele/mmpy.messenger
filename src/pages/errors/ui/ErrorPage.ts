@@ -26,7 +26,7 @@ export class ErrorPage extends Page<ErrorProps> {
     });
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return /*html*/ `
       <header class="${css.errorsHeadings}">
         {{{ heading }}}

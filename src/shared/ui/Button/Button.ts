@@ -1,10 +1,17 @@
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import css from "./button.module.css";
 import { ButtonNodes, ButtonProps } from "./types.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 export class Button extends Component<ButtonProps> {
   constructor(props: ComponentProps<ButtonProps, Button>) {
     super(props);
+  }
+
+  public updateRootTagCx(): string {
+    const { isSilent } = this.configs;
+    return cx(css.button, isSilent && css.button_silent);
   }
 
   public componentDidRender(): void {
@@ -16,7 +23,7 @@ export class Button extends Component<ButtonProps> {
     this.element.setAttribute("type", this.configs.type);
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     const nodes = this.children?.nodes as ButtonNodes;
 
     return /*html*/ `
