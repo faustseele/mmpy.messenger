@@ -54,17 +54,16 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   public componentDidUpdate(): void {
-    if (!this.configs.isLoadingMessages) {
+    const spinner = this.children?.nodes["spinner"].runtime
+      ?.instance as Spinner;
 
-      const spinner = this.children?.nodes["spinner"].runtime?.instance as Spinner;
-      spinner.setProps({
-        configs: {
-          isOn: false,
-        },
-      });
+    const isLoadingMessages = this.configs.isLoadingMessages;
 
-    }
-
+    spinner.setProps({
+      configs: {
+        isOn: isLoadingMessages,
+      },
+    });
   }
 
   private _wireAddChat(addUser: Button) {
@@ -245,9 +244,15 @@ export class MessengerPage extends Page<MessengerProps> {
         <div class="${css.chat__feed}">
           {{#if participantName}}
             {{{ ${spinner.params.configs.id} }}}
-            {{#if isLoadingMessages}}
-            {{else}}
+
+            {{#if hasMessages}}
               {{{ messages }}}
+            {{else}}
+
+              {{#unless isLoadingMessages}}
+                <p class="${css.noMessages}">${isNotes ? "Нет заметок" : "Нет сообщений"}</p>
+              {{/unless}}
+              
             {{/if}}
           {{/if}}
         </div>

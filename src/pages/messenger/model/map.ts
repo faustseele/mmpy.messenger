@@ -24,6 +24,7 @@ export const mapMessengerState = (
 
   /* loading if there's an active chat but no msgs loaded yet */
   const isLoadingMessages = activeId ? !messagesByChatId[activeId] : false;
+  const hasMessages = activeId ? (messagesByChatId[activeId]?.length ?? 0) > 0 : false;
 
   /* TODO: duplicates params, refactor */
   const configs: MessengerProps["configs"] = {
@@ -36,6 +37,7 @@ export const mapMessengerState = (
     participantName: currentChat?.title ?? "",
     participantAvatar: avatar,
     isLoadingMessages,
+    hasMessages,
   };
 
   const goToChatNodesPatch = getGoToChatGraph(list ?? []);

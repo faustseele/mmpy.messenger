@@ -16,6 +16,7 @@ export interface MessengerProps extends BaseProps {
     participantName?: string;
     participantAvatar?: string;
     isLoadingMessages?: boolean;
+    hasMessages?: boolean;
   };
   on: {
     addChatWithUser?: (
@@ -43,6 +44,8 @@ export type MessengerMap =
   | "deleteNotesButton"
   | "goToChatItems"
   | "messages"
+  | "isLoadingMessages"
+  | "hasMessages"
   | "messageField"
   | "spinner";
 

@@ -12,7 +12,7 @@ import { SpinnerProps } from "./types.ts";
 import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 export const getSpinnerNode = (
-  isBig: boolean = true,
+  isBig: boolean = false,
 ): ComponentNode<SpinnerProps> => {
   const params: ComponentParams<SpinnerProps> = {
     configs: {

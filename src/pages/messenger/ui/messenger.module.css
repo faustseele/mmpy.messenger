@@ -177,6 +177,14 @@
   -ms-overflow-style: none;
 }
 
+.noMessages {
+  font-family: inherit;
+  color: var(--color-acc-light);
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
 /* --- avatar --- */
 
 .avatar {
