@@ -26,6 +26,7 @@
 
 .button_silent {
  border: 1px solid var(--color-universal-br);
+ color: var(--color-content-darkest);
  background-color: transparent;
 }
 
