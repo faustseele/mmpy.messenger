@@ -9,13 +9,14 @@ export interface SettingsProps extends BaseProps {
     id: PageId.Settings;
     rootTag: Extract<RootTag, "div">;
     classNames: string;
+    type: SettingsType;
     profileName: string;
     profileAvatar: string;
     user: UserResponse | null;
   };
   on: {
     messengerClick: () => void;
-  }
+  };
 }
 
 export type SettingsType = "change-password" | "change-info";

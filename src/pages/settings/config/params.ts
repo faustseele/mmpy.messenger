@@ -86,6 +86,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
     id: PageId.Settings,
     rootTag: "div",
     classNames: cx(cssPage.moduleWindow, css.moduleWindow_profile),
+    type: "change-info",
     profileName: "Loading..",
     profileAvatar,
     user: null,

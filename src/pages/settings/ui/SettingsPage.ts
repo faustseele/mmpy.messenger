@@ -14,7 +14,9 @@ import { onBadForm, onGoodForm } from "../model/utils.ts";
 import css from "./settings.module.css";
 
 export class SettingsPage extends Page<SettingsProps> {
-  private _type: SettingsType = "change-info";
+  protected get isInfo(): boolean {
+    return this.configs.type === "change-info";
+  }
 
   constructor(props: ComponentProps<SettingsProps, SettingsPage>) {
     super(props);
@@ -118,7 +120,7 @@ export class SettingsPage extends Page<SettingsProps> {
           event.preventDefault();
 
           /* guard-clauses */
-          const notInfo = this._type !== "change-info";
+          const notInfo = this.configs.type !== "change-info";
           if (notInfo) {
             this._switchType("change-info");
             return;
@@ -152,7 +154,7 @@ export class SettingsPage extends Page<SettingsProps> {
         click: (event: Event) => {
           event.preventDefault();
 
-          const notPsw = this._type !== "change-password";
+          const notPsw = this.configs.type !== "change-password";
           if (notPsw) {
             this._switchType("change-password");
             return;
@@ -210,7 +212,7 @@ export class SettingsPage extends Page<SettingsProps> {
       return;
     }
 
-    this._type = type;
+    this.configs.type = type;
 
     const { subheading_form, buttonEditInfo, buttonEditPassword } = this
       .children.nodes as SettingsNodes;
@@ -267,14 +269,17 @@ export class SettingsPage extends Page<SettingsProps> {
           {{{ ${nodes["subheading_form"].params.configs.id} }}}
 
           <div class="${css.settingsInputs__list}">
-            {{{ inputsEditors_profile }}}
-            {{{ inputsEditors_password }}}
+            {{#if ${this.isInfo}}}
+              {{{ inputsEditors_profile }}}
+            {{else}}
+              {{{ inputsEditors_password }}}  
+            {{/if}}
           </div>
         </div>
       </main>
 
-      <footer class="${css.settingsFooter}">
-        <div class="${css.settingsFooter__horBtns}">
+      <footer class="${css.footer}">
+        <div class="${css.footer__horBtns}">
           {{{ ${nodes["buttonEditInfo"].params.configs.id} }}}
           {{{ ${nodes["buttonEditPassword"].params.configs.id} }}}
         </div>
