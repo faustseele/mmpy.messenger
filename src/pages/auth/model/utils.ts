@@ -39,9 +39,9 @@ const emitToast = (res: ApiResponse<UserResponse>, type: SubmitTypes) => {
   console.error("AuthPage: unhandled condition.", this);
 };
 
-export const onBadForm = () => {
+export const onBadForm = (msg?: string) => {
   globalBus.emit("show-toast", {
-    message: "Please fill all the fields.",
+    message: msg ?? "Please fill all the fields correctly.",
     type: "error",
   });
 };

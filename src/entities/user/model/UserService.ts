@@ -25,7 +25,7 @@ class UserService {
     try {
       const updatedUser = await UserAPI.updatePassword(data);
 
-      Store.set("api.auth.user", updatedUser);
+      /* updatedUser is null by default */
       console.log("psw update success:", updatedUser);
       return { ok: true, data: updatedUser };
     } catch (e) {

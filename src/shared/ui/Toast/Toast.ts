@@ -1,4 +1,5 @@
 import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import css from "./toast.module.css";
@@ -9,7 +10,17 @@ export class Toast extends Component<ToastProps> {
     super(props);
   }
 
+  public getRootTagCx(configs?: ToastProps["configs"]): string {
+    const { type, show } = configs ?? this.configs;
+    return cx(
+      css.toast,
+      type === "error" && css.toast_error,
+      show && css.toast_visible,
+    );
+  }
+
   public componentDidMount(): void {
+    /* mounting Toast to globalBus */
     globalBus.on("show-toast", (payload: ToastPayload) =>
       this.showToast(payload),
     );
@@ -30,28 +41,15 @@ export class Toast extends Component<ToastProps> {
       configs: {
         message,
         type,
-        classNames:
-          `${css.toast} ${css.toast_visible} ${type === "error" ? css.toast_error : ""}`.trim(),
+        show: true,
       },
     });
 
     setTimeout(() => {
-      this.setProps({ configs: { classNames: css.toast } });
+      this.setProps({ configs: { show: false } });
     }, 2000);
   }
 
-  /*   private getToastTypeClass(type: ToastType): string {
-    switch (type) {
-      case "success":
-        return css.toast_success;
-      case "error":
-        return css.toast_error;
-      case "info":
-      default:
-        return css.toast_info;
-    }
-  }
- */
   public getInnerMarkup(): string {
     return /*html*/ ``;
   }

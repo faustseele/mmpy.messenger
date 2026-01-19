@@ -95,6 +95,28 @@ export default class FormValidator {
     return inputIsValid;
   }
 
+  /* narrows inputs for validation/submission based on submitType */
+  private _filterInputsBySubmitType(
+    submitType: SubmitTypes,
+    inputs: Array<Input | InputEditor>,
+  ): Array<Input | InputEditor> {
+    const getMeta = (inp: Input | InputEditor) => {
+      const { name, value } = inp.getNameAndValue();
+      return { name: String(name || ""), value: (value ?? "").trim() };
+    };
+
+    if (submitType === "change-info") {
+      return inputs.filter((input) => {
+        const { name, value } = getMeta(input);
+        if (!name) return false;
+        return value.length > 0;
+      });
+    }
+
+    /* default (sign-in/sign-up/edit-info): validate everything */
+    return inputs;
+  }
+
   /* collects data from all inputs into a single object */
   private _getFormData(
     inputs: Input[] | InputEditor[],
@@ -107,38 +129,5 @@ export default class FormValidator {
     });
 
     return formData;
-  }
-
-  /* narrows inputs for validation/submission based on submitType */
-  private _filterInputsBySubmitType(
-    submitType: SubmitTypes,
-    inputs: Array<Input | InputEditor>,
-  ): Array<Input | InputEditor> {
-    const PASSWORD_ONLY = new Set(["oldPassword", "newPassword"]);
-    const EXCLUDE_FOR_INFO = new Set([
-      "password",
-      "oldPassword",
-      "newPassword",
-    ]);
-
-    const getMeta = (inp: Input | InputEditor) => {
-      const { name, value } = inp.getNameAndValue();
-      return { name: String(name || ""), value: (value ?? "").trim() };
-    };
-
-    if (submitType === "change-password") {
-      return inputs.filter((inp) => PASSWORD_ONLY.has(getMeta(inp).name));
-    }
-
-    if (submitType === "change-info") {
-      return inputs.filter((inp) => {
-        const { name, value } = getMeta(inp);
-        if (!name || EXCLUDE_FOR_INFO.has(name)) return false;
-        return value.length > 0;
-      });
-    }
-
-    /* default (sign-in/sign-up): validate everything */
-    return inputs;
   }
 }

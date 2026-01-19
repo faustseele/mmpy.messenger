@@ -5,7 +5,7 @@ import UserService from "./UserService.ts";
 
 export const handleUpdateProfile = async (
   data: UpdateProfileData,
-): Promise<{ok: boolean}> => {
+): Promise<Promise<ApiResponse<Partial<UserResponse>>>> => {
   return await UserService.updateProfile(data);
 };
 

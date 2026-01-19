@@ -69,8 +69,8 @@ export default abstract class Component<P extends BaseProps> {
    * @param configs to conditionally format classNames
    * @returns classNames string
    */
-  public getRootTagCx(configs: P["configs"]): string {
-    return configs.classNames;
+  public getRootTagCx(configs?: P["configs"]): string {
+    return configs?.classNames ?? this._configs.classNames;
   }
 
   /**
@@ -186,7 +186,10 @@ export default abstract class Component<P extends BaseProps> {
 
     /* updates classNames if !eq */
     const newCx = this.getRootTagCx(this._configs);
-    if (this._cx !== newCx) this.domService.setRootTagCx(newCx);
+    if (this._cx !== newCx) {
+      this._cx = newCx;
+      this.domService.setRootTagCx(newCx);
+    }
 
     /* concrete component logic */
     this.componentDidUpdate();

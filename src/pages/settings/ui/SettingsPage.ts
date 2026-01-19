@@ -39,14 +39,20 @@ export class SettingsPage extends Page<SettingsProps> {
     const editInfo = buttonEditInfo.runtime?.instance as Button;
     const editPassword = buttonEditPassword.runtime?.instance as Button;
     const logoutBtn = buttonLogout.runtime?.instance as Button;
-    const inputs = getInstances<InputProps, InputEditor>(
+    const inputs_info = getInstances<InputProps, InputEditor>(
       this.children!,
-      "inputsEditors_profile",
+      "inputsEditors_info",
+    );
+    const inputs_psw = getInstances<InputProps, InputEditor>(
+      this.children!,
+      "inputsEditors_password",
     );
 
     /* --- vivifying inputs --- */
-    const validator = new FormValidator(inputs);
-    this._vivifyInputs(inputs, validator);
+    const validator_info = new FormValidator(inputs_info);
+    this._vivifyInputs(inputs_info, validator_info);
+    const validator_psw = new FormValidator(inputs_psw);
+    this._vivifyInputs(inputs_psw, validator_psw);
 
     /* sets placeholders for inputs from user-res */
     this._hydrateInputPlaceholders();
@@ -55,7 +61,13 @@ export class SettingsPage extends Page<SettingsProps> {
     heading.setProps({
       on: { click: this.on?.messengerClick },
     });
-    this._wireButtonEvents(editInfo, editPassword, logoutBtn, validator);
+    this._wireButtonEvents(
+      editInfo,
+      editPassword,
+      logoutBtn,
+      validator_info,
+      validator_psw,
+    );
   }
 
   public componentDidRender(): void {
@@ -72,7 +84,7 @@ export class SettingsPage extends Page<SettingsProps> {
 
     const inputs = getInstances<InputProps, InputEditor>(
       this.children,
-      "inputsEditors_profile",
+      "inputsEditors_info",
     );
 
     inputs.forEach((input) => {
@@ -112,7 +124,8 @@ export class SettingsPage extends Page<SettingsProps> {
     editInfo: Button,
     editPassword: Button,
     logoutBtn: Button,
-    validator: FormValidator,
+    validator_info: FormValidator,
+    validator_psw: FormValidator,
   ) {
     editInfo.setProps({
       on: {
@@ -120,7 +133,7 @@ export class SettingsPage extends Page<SettingsProps> {
           e.preventDefault();
 
           if (this.configs.type === "change-info") {
-            this._validateAndSubmit("change-info", validator, editInfo);
+            this._validateAndSubmit("change-info", validator_info, editInfo);
           } else {
             this._switchType("change-info", editInfo, editPassword);
           }
@@ -133,7 +146,11 @@ export class SettingsPage extends Page<SettingsProps> {
           e.preventDefault();
 
           if (this.configs.type === "change-password") {
-            this._validateAndSubmit("change-password", validator, editPassword);
+            this._validateAndSubmit(
+              "change-password",
+              validator_psw,
+              editPassword,
+            );
           } else {
             this._switchType("change-password", editPassword, editInfo);
           }
@@ -197,14 +214,14 @@ export class SettingsPage extends Page<SettingsProps> {
     });
     btn.setProps({
       configs: {
-        type: 'button',
+        type: "button",
         isSilent: true,
         showSpinner: false,
       },
     });
     newBtn.setProps({
       configs: {
-        type: 'submit',
+        type: "submit",
         isSilent: false,
         showSpinner: false,
       },
@@ -267,7 +284,7 @@ export class SettingsPage extends Page<SettingsProps> {
 
           <div class="${css.settingsInputs__list}">
             {{#if ${this.isInfo}}}
-              {{{ inputsEditors_profile }}}
+              {{{ inputsEditors_info }}}
             {{else}}
               {{{ inputsEditors_password }}}  
             {{/if}}

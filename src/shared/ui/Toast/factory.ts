@@ -23,8 +23,8 @@ export const getToastNode = ({
     configs: {
       id: "toast",
       rootTag: "span",
-      classNames:
-        `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
+      show: false,
+      classNames: css.toast,
       message,
       type,
       duration,

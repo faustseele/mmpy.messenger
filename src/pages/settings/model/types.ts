@@ -29,7 +29,7 @@ type SettingsMap =
   | "buttonEditInfo"
   | "buttonEditPassword"
   | "buttonLogout"
-  | "inputsEditors_profile"
+  | "inputsEditors_info"
   | "inputsEditors_password";
 
 export type SettingsNodes = ChildrenNodes<SettingsMap>;

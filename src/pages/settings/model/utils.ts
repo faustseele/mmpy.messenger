@@ -1,5 +1,7 @@
+import { UserResponse } from "@/shared/api/model/api.types.ts";
 import { ApiResponse } from "@/shared/api/model/types.ts";
 import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
+import { ToastType } from "@/shared/ui/Toast/types.ts";
 import {
   handleUpdatePassword,
   handleUpdateProfile,
@@ -10,21 +12,17 @@ export const onGoodForm = (
   submitType: SettingsType,
 ): ((
   formData: Record<string, string>,
-) => Promise<ApiResponse<string | boolean>>) => {
-  if (submitType === "change-password") {
-    return async (formData: Record<string, string>) => {
-      const res = await handleUpdatePassword({
-        oldPassword: formData.oldPassword,
-        newPassword: formData.newPassword,
-      });
-
-      return res;
-    };
+) => Promise<ApiResponse<Partial<UserResponse> | string>>) => {
+  function dispatchToast(message: string, type: ToastType = "info") {
+    globalBus.emit("show-toast", {
+      message,
+      type,
+    });
   }
 
   if (submitType === "change-info") {
-    return async (formData: Record<string, string>) => {
-      const res = await handleUpdateProfile({
+    const res = async (formData: Record<string, string>) => {
+      const resApi = await handleUpdateProfile({
         first_name: formData.name,
         second_name: formData.surname,
         display_name: formData.display_name,
@@ -33,8 +31,36 @@ export const onGoodForm = (
         phone: formData.phone,
       });
 
-      return res;
+      if (resApi.ok) {
+        dispatchToast("Your profile has been changed successfully.");
+      } else {
+        dispatchToast(resApi.err?.reason ?? "Unknown error", "error");
+      }
+      return resApi;
     };
+    return res;
+  }
+
+  if (submitType === "change-password") {
+    const res = async (formData: Record<string, string>) => {
+      const resApi = await handleUpdatePassword({
+        oldPassword: formData.oldPassword,
+        newPassword: formData.newPassword,
+      });
+
+      if (resApi.ok) {
+        dispatchToast("Your password has been changed successfully.");
+      } else {
+        dispatchToast(
+          "Your password could not be changed. API: " + resApi.err?.reason,
+          "error",
+        );
+      }
+
+      return resApi;
+    };
+
+    return res;
   }
 
   return async () => {
@@ -54,7 +80,7 @@ export const onBadForm = (submitType: SettingsType): (() => void) => {
   if (submitType === "change-info") {
     return () => {
       globalBus.emit("show-toast", {
-        message: "Please fill all the fields.",
+        message: "The field seems incorrect.",
         type: "error",
       });
     };

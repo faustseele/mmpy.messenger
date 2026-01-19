@@ -21,6 +21,7 @@ export const initApp = async () => {
   if (!root || !toast.runtime?.instance.element)
     throw new Error("root element not found");
 
+  /* prepending global toast */
   root.prepend(toast.runtime.instance.element);
 };
 

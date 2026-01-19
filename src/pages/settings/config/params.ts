@@ -15,7 +15,7 @@ import { SettingsProps } from "../model/types.ts";
 import css from "../ui/settings.module.css";
 import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
-const inputsEditors_profile = [
+const inputsEditors_info = [
   "inputEditor-email",
   "inputEditor-name",
   "inputEditor-surname",
@@ -23,7 +23,7 @@ const inputsEditors_profile = [
   "inputEditor-display_name",
   "inputEditor-phone",
 ];
-const iptProf = inputsEditors_profile;
+const iptProf = inputsEditors_info;
 
 const inputsEditors_password = [
   "inputEditor-oldPassword",
@@ -131,7 +131,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       heading_backToChats: "heading_backToChats",
       heading_profile: "heading_profile",
       subheading_form: "subheading_form",
-      inputsEditors_profile,
+      inputsEditors_info,
       inputsEditors_password,
       buttonEditInfo: "buttonEditInfo",
       buttonEditPassword: "buttonEditPassword",

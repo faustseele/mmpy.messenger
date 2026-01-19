@@ -12,6 +12,7 @@ interface ToastConfigs extends BaseConfigs {
   rootTag: Extract<RootTag, "span">;
   type: ToastType;
   message: string;
+  show: boolean;
   /* in ms */
   duration?: number;
 }

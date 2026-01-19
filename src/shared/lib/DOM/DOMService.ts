@@ -35,18 +35,17 @@ export default class DOMService<P extends BaseProps> {
     this._element = element;
   }
 
-  public setRootTagCx(classNames: string): void {
+  public setRootTagCx(newCx: string): void {
     if (!this._element) {
       console.warn("Cannot update classNames: DOMService element is null.");
       return;
     }
 
-    const oldCx = this._element.className;
     /* skip if same */
-    if (oldCx === classNames) return;
+    if (this._element.className === newCx) return;
 
     this._element.className = "";
-    this._element.classList.add(...classNames.split(" "));
+    this._element.classList.add(...newCx.split(" "));
   }
 
   public insertFragmentIntoElement(fragment: DocumentFragment): void {
