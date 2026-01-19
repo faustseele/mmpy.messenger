@@ -9,7 +9,7 @@ export class Button extends Component<ButtonProps> {
     super(props);
   }
 
-  public updateRootTagCx(): string {
+  public getRootTagCx(): string {
     const { isSilent } = this.configs;
     return cx(css.button, isSilent && css.button_silent);
   }

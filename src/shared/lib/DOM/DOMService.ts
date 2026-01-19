@@ -70,11 +70,11 @@ export default class DOMService<P extends BaseProps> {
     });
   }
 
-  public removeListeners(patch?: P["on"]): void {
-    if (!this._element || !patch) return;
+  public removeListeners(on?: P["on"]): void {
+    if (!this._element || !on) return;
 
-    Object.keys(patch).forEach((event) => {
-      this._element!.removeEventListener(event, patch[event]);
+    Object.keys(on).forEach((event) => {
+      this._element!.removeEventListener(event, on[event]);
     });
   }
 }

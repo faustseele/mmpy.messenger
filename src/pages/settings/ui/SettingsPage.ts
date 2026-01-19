@@ -59,7 +59,7 @@ export class SettingsPage extends Page<SettingsProps> {
   }
 
   public componentDidRender(): void {
-    /* re-binding avatar change event */
+    /* re-binding avatar change e */
     this._wireAvatar();
     /* sets placeholders for inputs from user-res */
     this._hydrateInputPlaceholders();
@@ -116,71 +116,42 @@ export class SettingsPage extends Page<SettingsProps> {
   ) {
     editInfo.setProps({
       on: {
-        click: async (event: Event) => {
-          event.preventDefault();
+        click: async (e: Event) => {
+          e.preventDefault();
 
-          /* guard-clauses */
-          const notInfo = this.configs.type !== "change-info";
-          if (notInfo) {
-            this._switchType("change-info");
-            return;
+          if (this.configs.type === "change-info") {
+            this._validateAndSubmit("change-info", validator, editInfo);
+          } else {
+            this._switchType("change-info", editInfo, editPassword);
           }
-          const formValid = validator.onFormCheck("change-info", () =>
-            onBadForm("change-info"),
-          );
-          if (!formValid) return;
-
-          editInfo.setProps({
-            configs: {
-              showSpinner: true,
-            },
-          });
-
-          await validator.onFormSubmit(
-            "change-info",
-            onGoodForm("change-info"),
-          );
-
-          editInfo.setProps({
-            configs: {
-              showSpinner: false,
-            },
-          });
         },
       },
     });
     editPassword.setProps({
       on: {
-        click: (event: Event) => {
-          event.preventDefault();
+        click: async (e: Event) => {
+          e.preventDefault();
 
-          const notPsw = this.configs.type !== "change-password";
-          if (notPsw) {
-            this._switchType("change-password");
-            return;
+          if (this.configs.type === "change-password") {
+            this._validateAndSubmit("change-password", validator, editPassword);
+          } else {
+            this._switchType("change-password", editPassword, editInfo);
           }
-          const formValid = validator.onFormCheck(
-            "change-password",
-            onBadForm("change-password"),
-          );
-          if (!formValid) return;
-
-          validator.onFormSubmit(
-            "change-password",
-            onGoodForm("change-password"),
-          );
         },
       },
     });
     logoutBtn.setProps({
       on: {
-        click: async (event: Event) => {
-          event.preventDefault();
+        click: async (e: Event) => {
+          e.preventDefault();
 
           handleLogout();
         },
       },
     });
+
+    /* def type is 'edit-info'; switched in _switchType() */
+    this.setProps({ on: { submit: editInfo.on?.click } });
   }
 
   private _wireAvatar(): void {
@@ -206,40 +177,66 @@ export class SettingsPage extends Page<SettingsProps> {
     });
   }
 
-  private _switchType(type: SettingsType) {
+  private _switchType(newType: SettingsType, newBtn: Button, btn: Button) {
     if (!this.children) {
       console.error("SettingsPage: Children are not defined", this);
       return;
     }
 
-    this.configs.type = type;
+    this.configs.type = newType;
 
-    const { subheading_form, buttonEditInfo, buttonEditPassword } = this
-      .children.nodes as SettingsNodes;
+    const { subheading_form } = this.children.nodes as SettingsNodes;
 
     const subheading = subheading_form.runtime?.instance as Subheading;
-    const editInfo = buttonEditInfo.runtime?.instance as Button;
-    const editPassword = buttonEditPassword.runtime?.instance as Button;
 
-    const isInfo = type === "change-info";
+    const isInfo = newType === "change-info";
     subheading.setProps({
       configs: {
         text: isInfo ? "Ваши данные:" : "Ваш пароль:",
       },
     });
-    editInfo.setProps({
+    btn.setProps({
       configs: {
-        isSilent: !isInfo,
+        type: 'button',
+        isSilent: true,
         showSpinner: false,
       },
     });
-    editPassword.setProps({
+    newBtn.setProps({
       configs: {
-        isSilent: isInfo,
+        type: 'submit',
+        isSilent: false,
         showSpinner: false,
       },
+    });
+
+    this.setProps({
+      on: { submit: newBtn.on?.click },
     });
   }
+
+  private _validateAndSubmit = async (
+    type: SettingsType,
+    validator: FormValidator,
+    btn: Button,
+  ): Promise<void> => {
+    const formValid = validator.onFormCheck(type, onBadForm(type));
+    if (!formValid) return;
+
+    btn.setProps({
+      configs: {
+        showSpinner: true,
+      },
+    });
+
+    await validator.onFormSubmit(type, onGoodForm(type));
+
+    btn.setProps({
+      configs: {
+        showSpinner: false,
+      },
+    });
+  };
 
   public getInnerMarkup(): string {
     if (!this.children?.nodes)

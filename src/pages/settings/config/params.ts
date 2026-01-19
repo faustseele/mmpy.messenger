@@ -84,7 +84,7 @@ const inputsEditorsNodes_password = {
 export const settingsPageParams: ComponentParams<SettingsProps> = {
   configs: {
     id: PageId.Settings,
-    rootTag: "div",
+    rootTag: "form",
     classNames: cx(cssPage.moduleWindow, css.moduleWindow_profile),
     type: "change-info",
     profileName: "Loading..",

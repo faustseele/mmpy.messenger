@@ -9,7 +9,7 @@ export class MessageBubble extends Component<MessageProps> {
     super(props);
   }
 
-  public updateRootTagCx(): string {
+  public getRootTagCx(): string {
     const { type } = this.configs;
     const msg_modifier = (() => {
       switch (type) {

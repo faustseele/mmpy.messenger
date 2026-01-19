@@ -9,7 +9,7 @@ export class GoToChat extends Component<GoToChatProps> {
     super(props);
   }
 
-  public updateRootTagCx(configs: GoToChatConfigs): string {
+  public getRootTagCx(configs: GoToChatConfigs): string {
     const { isNotes } = configs;
     return cx(css.goToChat, isNotes && css.goToChat_note)
   }

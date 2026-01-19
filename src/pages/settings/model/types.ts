@@ -7,7 +7,7 @@ import { RootTag } from "@shared/lib/DOM/types.ts";
 export interface SettingsProps extends BaseProps {
   configs: {
     id: PageId.Settings;
-    rootTag: Extract<RootTag, "div">;
+    rootTag: Extract<RootTag, "form">;
     classNames: string;
     type: SettingsType;
     profileName: string;
@@ -16,6 +16,7 @@ export interface SettingsProps extends BaseProps {
   };
   on: {
     messengerClick: () => void;
+    submit: () => void;
   };
 }
 
