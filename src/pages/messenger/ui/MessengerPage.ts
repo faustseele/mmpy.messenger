@@ -4,7 +4,6 @@ import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { urlToFile } from "@shared/lib/helpers/file.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
-import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
@@ -21,14 +20,12 @@ export class MessengerPage extends Page<MessengerProps> {
 
     /* --- getting instances --- */
     const {
-      heading_goToSettings,
       addNotesButton,
       findUserChatButton,
       deleteChatButton,
       deleteNotesButton,
       closeChatButton,
     } = this.children.nodes as MessengerNodes;
-    const headingToSettings = heading_goToSettings.runtime?.instance as Heading;
     const addChat = addNotesButton.runtime?.instance as Button;
     const addUser = findUserChatButton.runtime?.instance as Button;
     const closeChat = closeChatButton.runtime?.instance as Button;
@@ -41,11 +38,6 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireDeleteChat(deleteChat);
     this._wireDeleteChat(deleteNotes);
     this._wireCloseChat(closeChat);
-    headingToSettings.setProps({
-      on: {
-        click: this.on?.goToSettings,
-      },
-    });
   }
 
   public componentDidRender(): void {

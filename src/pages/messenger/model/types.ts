@@ -29,7 +29,6 @@ export interface MessengerProps extends BaseProps {
     deleteChat: (chatId: ChatId) => Promise<void>;
     findUser: (login: string) => Promise<ApiResponse<UserResponse>>;
     updateChatAvatar: (chatId: ChatId, file: File) => Promise<void>;
-    goToSettings: () => void;
   };
 }
 

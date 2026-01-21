@@ -38,13 +38,15 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
         type: "catalogue-title",
         text: "Чаты 👥",
       }) as any,
-      heading_goToSettings: getHeadingNode({
-        id: "heading_goToSettings",
-        type: "catalogue-link",
-        text: "Профиль ➛",
-        isClickable: true,
-        link: RouteLink.Settings,
-      }) as any,
+      heading_goToSettings: getHeadingNode(
+        {
+          id: "heading_goToSettings",
+          type: "catalogue-link",
+          text: "Профиль ➛",
+          isClickable: true,
+        },
+        { click: handleGoToSettings },
+      ) as any,
       searchInput: getInputNode({
         id: "searchInput",
         fieldId: "search",
@@ -108,7 +110,6 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
     deleteChat: handleDeleteChat,
     findUser: handleFindUser,
     updateChatAvatar: handleUpdateChatAvatar,
-    goToSettings: handleGoToSettings,
   },
 };
 

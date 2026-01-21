@@ -140,6 +140,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
   },
   on: {
     messengerClick: handleMessengerClick,
+    submit: () => {},
   },
 };
 

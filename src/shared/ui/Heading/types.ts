@@ -18,5 +18,5 @@ export interface HeadingConfigs extends BaseConfigs {
 }
 
 export interface HeadingOn {
-  click?: () => void;
+  click?: () => unknown;
 }

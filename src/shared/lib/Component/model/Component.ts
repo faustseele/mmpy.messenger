@@ -158,8 +158,20 @@ export default abstract class Component<P extends BaseProps> {
     this.componentDidRender();
   }
 
-  /* informational; propagates to childrenFlat */
+  /* re-mounting logic; propagates to childrenFlat */
   private _componentDidMount(): void {
+    /* re-attaches listeners/class if changed */
+    if (!isEqual(this._on ?? {}, this._attachedListeners ?? {})) {
+      this.domService.removeListeners(this._attachedListeners);
+      this.domService.addListeners(this._on);
+      this._attachedListeners = { ...this._on };
+    }
+    const newCx = this.getRootTagCx(this._configs);
+    if (this._cx !== newCx) {
+      this._cx = newCx;
+      this.domService.setRootTagCx(newCx);
+    }
+
     if (!this.childrenFlat) return;
 
     /* recusively mounting children */
@@ -206,6 +218,9 @@ export default abstract class Component<P extends BaseProps> {
    */
   private _componentDidUnmount(): void {
     this.domService.removeListeners(this._attachedListeners);
+
+    /* resets tracking for re-mount re-attach */
+    this._attachedListeners = {};
 
     if (!this.childrenFlat) return;
 
