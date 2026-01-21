@@ -3,7 +3,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, 50%);
-  z-index: 3;
+  /* keeps toast un-clickable */
+  z-index: -1;
 
   padding: 8px 16px;
   
@@ -21,6 +22,9 @@
 }
 
 .toast_visible {
+  /* brings toast to front */
+  z-index: 3;
+  
   transform: translate(-50%, 100%) scale(1);
   opacity: 1;
 }
