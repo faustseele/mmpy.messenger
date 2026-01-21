@@ -1,3 +1,4 @@
+import UserAPI from "@/entities/user/api/UserAPI.ts";
 import {
   SignInRequest,
   SignUpRequest,
@@ -9,10 +10,29 @@ import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
 class AuthService {
+  /** ya-praktikum.tech API strips down surname to 1st char,
+   * updateProfile() & store correct one */
+  private _fixSecondNameOnSignUp(
+    user: UserResponse,
+    second_name: string,
+  ): UserResponse {
+    user = {
+      ...user,
+      second_name,
+    };
+
+    /* no-await; bc its's a hook */
+    UserAPI.updateProfile(user);
+    return user;
+  }
+
   public async signUp(data: SignUpRequest): Promise<ApiResponse<UserResponse>> {
     try {
       const res = await AuthAPI.signUp(data);
-      const user = await AuthAPI.requestUser();
+      let user = await AuthAPI.requestUser();
+
+      user = this._fixSecondNameOnSignUp(user, data.second_name);
+
       Store.set("api.auth.user", user);
       if (user) {
         Store.set("controllers.isLoggedIn", true);
