@@ -10,39 +10,45 @@ import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import AuthAPI from "../api/AuthAPI.ts";
 
 class AuthService {
-  /** ya-praktikum.tech API strips down surname to 1st char,
-   * updateProfile() & store correct one */
-  private _fixSecondNameOnSignUp(
-    user: UserResponse,
-    second_name: string,
-  ): UserResponse {
-    user = {
-      ...user,
-      second_name,
-    };
-
-    /* no-await; bc its's a hook */
-    UserAPI.updateProfile(user);
-    return user;
-  }
-
   public async signUp(data: SignUpRequest): Promise<ApiResponse<UserResponse>> {
     try {
       const res = await AuthAPI.signUp(data);
       let user = await AuthAPI.requestUser();
 
-      user = this._fixSecondNameOnSignUp(user, data.second_name);
-
-      Store.set("api.auth.user", user);
-      if (user) {
-        Store.set("controllers.isLoggedIn", true);
-      } else {
+      if (!user) {
         Store.set("controllers.isLoggedIn", false);
+        Store.set("api.auth.user", null);
+        return {
+          ok: false,
+          err: {
+            status: 400,
+            reason: "Bad request",
+            response: "Wasn't able to sign up. Please try again.",
+          },
+        };
       }
 
+
+      Store.set("controllers.isLoggedIn", true);
+
+      /* ya-praktikum.tech API strips down surname to 1st char ('Petrov' to 'P'),
+        -> updateProfile() & store correct one */
+      user = ((second_name) => {
+        user = {
+          ...user,
+          second_name,
+        };
+
+        /* no-await; bc its's a hook */
+        UserAPI.updateProfile(user);
+        return user;
+
+      })(data.second_name);
+
+      Store.set("api.auth.user", user);
       console.log("", res, user, Store.getState());
 
-      return { ok: !!user, data: user };
+      return { ok: true, data: user };
     } catch (e) {
       console.error("signUp failed", e);
       return { ok: false, err: e as ApiError };
