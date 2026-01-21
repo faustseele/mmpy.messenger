@@ -13,7 +13,7 @@ import {
 import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
-import { hhmmDate } from "@shared/lib/helpers/formatting/date.ts";
+import { tinyDate } from "@shared/lib/helpers/formatting/date.ts";
 import css from "../ui/messageBubble.module.css";
 import { MessageBubble } from "../ui/MessageBubble.ts";
 import { MessageConfigs, MessageProps } from "./types.ts";
@@ -36,7 +36,7 @@ export function getMessagesGraph(): ChildGraph {
   rawMessages.forEach((msg) => {
     const id = `message_${msg.id}`;
     const type = msg.user_id === myId ? "outgoing" : "incoming";
-    const date = hhmmDate(msg.time);
+    const date = tinyDate(msg.time);
 
     const messageNode = getMessageNode({
       id,
