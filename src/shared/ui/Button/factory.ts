@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BaseProps } from "@/shared/lib/Component/model/base.types.ts";
 import {
   ComponentDeps,
   ComponentId,
@@ -8,28 +9,27 @@ import {
 import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
-import { RouteLink } from "../../types/universal.ts";
 import { getSpinnerNode } from "../Spinner/factory.ts";
-import { Button } from "./Button.ts";
-import { ButtonProps } from "./types.ts";
 import css from "./button.module.css";
+import { Button } from "./Button.ts";
+import { ButtonProps, ButtonType } from "./types.ts";
 
-export const getButtonNode = ({
-  id,
-  label,
-  type,
-  link,
-  isSilent,
-  tooltip,
-}: {
-  id: ComponentId;
-  label: string;
-  type?: "button" | "submit";
-  link?: RouteLink;
-  isSilent?: boolean;
-  tooltip?: string;
-}): ComponentNode<ButtonProps> => {
-  const params = getButtonProps({ id, label, type, link, isSilent, tooltip });
+export const getButtonNode = (
+  id: ComponentId,
+  text: string,
+  {
+    type,
+    isSilent,
+    tooltip,
+    on,
+  }: {
+    type?: ButtonType;
+    isSilent?: boolean;
+    tooltip?: string;
+    on?: BaseProps["on"];
+  } = {},
+): ComponentNode<ButtonProps> => {
+  const params = getButtonProps(id, text, type, tooltip, isSilent, on);
   return {
     params,
     factory: buildButton,
@@ -39,32 +39,25 @@ export const getButtonNode = ({
   };
 };
 
-const getButtonProps = ({
-  id,
-  label,
-  type = "button",
-  link,
-  isSilent = false,
-  tooltip = "",
-}: {
-  id: ComponentId;
-  label: string;
-  type?: "button" | "submit";
-  link?: RouteLink;
-  isSilent?: boolean;
-  tooltip?: string;
-}): ComponentParams<ButtonProps> => {
+const getButtonProps = (
+  id: ComponentId,
+  text: string,
+  type: ButtonType = "button",
+  tooltip: string = "",
+  isSilent: boolean = false,
+  on: BaseProps["on"],
+): ComponentParams<ButtonProps> => {
   return {
     configs: {
       id,
       rootTag: "button",
-      label,
-      isSilent,
-      link,
-      type,
       classNames: css.button,
-      title: tooltip,
+      type,
+      text,
+      tooltip,
+      isSilent,
     },
+    on,
     children: {
       nodes: {
         spinner: getSpinnerNode() as any,

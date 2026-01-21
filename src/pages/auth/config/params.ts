@@ -95,20 +95,15 @@ const authPageParams_in: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...inputNodes_in,
-      heading: getHeadingNode({
-        id: "heading",
-        text: "Вход 🚪",
-      }) as any,
-      buttonFormSubmit: getButtonNode({
-        id: "buttonFormSubmit",
-        label: "Войти ✓",
+      heading: getHeadingNode("heading", "Вход 🚪") as any,
+      buttonFormSubmit: getButtonNode("buttonFormSubmit", "Войти ✓", {
         type: "submit",
       }) as any,
-      buttonReroute: getButtonNode({
-        id: "buttonReroute",
-        label: "Впервые?",
-        link: RouteLink.SignUp,
+      buttonReroute: getButtonNode("buttonReroute", "Впервые?", {
         isSilent: true,
+        on: {
+          click: () => handleReroute("sign-in")
+        },
       }) as any,
     },
     edges: {
@@ -117,9 +112,6 @@ const authPageParams_in: ComponentParams<AuthProps> = {
       buttonReroute: "buttonReroute",
       inputs: [iptIds[2], iptIds[4]],
     },
-  },
-  on: {
-    reroute: handleReroute,
   },
 };
 
@@ -133,20 +125,16 @@ const authPageParams_up: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...inputNodes_up,
-      heading: getHeadingNode({
-        id: "heading",
-        text: "Регистрация 🎀",
-      }) as any,
-      buttonFormSubmit: getButtonNode({
-        id: "buttonFormSubmit",
-        label: "Зарегистрироваться ✓",
-        type: "submit",
-      }) as any,
-      buttonReroute: getButtonNode({
-        id: "buttonReroute",
-        label: "Я свой!",
-        link: RouteLink.SignIn,
+      heading: getHeadingNode("heading", "Регистрация 🎀") as any,
+      buttonFormSubmit: getButtonNode(
+        "buttonFormSubmit",
+        "Зарегистрироваться ✓",
+      ) as any,
+      buttonReroute: getButtonNode("buttonReroute", "Я свой!", {
         isSilent: true,
+        on: {
+          click: () => handleReroute("sign-up")
+        }
       }) as any,
     },
     edges: {
@@ -155,9 +143,6 @@ const authPageParams_up: ComponentParams<AuthProps> = {
       buttonReroute: "buttonReroute",
       inputs: iptIds,
     },
-  },
-  on: {
-    reroute: handleReroute,
   },
 };
 

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 import { getButtonNode } from "@/shared/ui/Button/factory.ts";
 import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
 import { getSubheadingNode } from "@/shared/ui/Subheading/factory.ts";
@@ -13,7 +14,6 @@ import profileAvatar from "../../../../static/profile-avatar.png";
 import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
 import css from "../ui/settings.module.css";
-import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 const inputsEditors_info = [
   "inputEditor-email",
@@ -95,35 +95,23 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
     nodes: {
       ...inputsEditorsNodes_profile,
       ...inputsEditorsNodes_password,
-      heading_profile: getHeadingNode({
-        id: "heading_profile",
-        type: "profile-title",
-        text: "Профиль 👤",
-      }) as any,
-      heading_backToChats: getHeadingNode({
-        id: "heading_backToChats",
-        type: "profile-back",
-        text: "⮘ Назад",
+      heading_profile: getHeadingNode("heading_profile", "Профиль 👤") as any,
+      heading_backToChats: getHeadingNode("heading_backToChats", "⮘ Назад", {
         isClickable: true,
-        link: RouteLink.Messenger,
+        on: { click: handleMessengerClick },
       }) as any,
-      subheading_form: getSubheadingNode({
-        id: "subheading_form",
-        text: "Ваши данные:",
-      }) as any,
-      buttonEditInfo: getButtonNode({
-        id: "buttonEditInfo",
-        label: "Изменить данные",
+      subheading_form: getSubheadingNode("subheading_form", "Ваши данные:") as any,
+      buttonEditInfo: getButtonNode("buttonEditInfo", "Изменить данные", {
         type: "submit",
       }) as any,
-      buttonEditPassword: getButtonNode({
-        id: "buttonEditPassword",
-        label: "Изменить пароль",
-        isSilent: true,
-      }) as any,
-      buttonLogout: getButtonNode({
-        id: "buttonLogout",
-        label: "Выйти",
+      buttonEditPassword: getButtonNode(
+        "buttonEditPassword",
+        "Изменить пароль",
+        {
+          isSilent: true,
+        },
+      ) as any,
+      buttonLogout: getButtonNode("buttonLogout", "Выйти", {
         isSilent: true,
       }) as any,
     },

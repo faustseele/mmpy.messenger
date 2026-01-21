@@ -24,18 +24,27 @@ export const mapMessengerState = (
 
   /* loading if there's an active chat but no msgs loaded yet */
   const isLoadingMessages = activeId ? !messagesByChatId[activeId] : false;
-  const hasMessages = activeId ? (messagesByChatId[activeId]?.length ?? 0) > 0 : false;
+  const hasMessages = activeId
+    ? (messagesByChatId[activeId]?.length ?? 0) > 0
+    : false;
+  const type = (() => {
+    if (!activeId) return "stub";
+    if (messagesByChatId[activeId]?.length === 0) return "notes";
+    return "chat";
+  })();
 
   /* TODO: duplicates params, refactor */
   const configs: MessengerProps["configs"] = {
     id: PageId.Messenger,
     rootTag: "div",
     classNames: cx(cssPage.moduleWindow, css.moduleWindow_messenger),
-    isNotes: state.isNotes[currentChat?.id ?? 0],
-    chatId: currentChat?.id,
-    chatTitle: currentChat?.title,
-    participantName: currentChat?.title ?? "",
-    participantAvatar: avatar,
+    info: {
+      type,
+      chatId: currentChat?.id ?? 0,
+      chatTitle: currentChat?.title ?? "",
+      participantName: currentChat?.title ?? "",
+      participantAvatar: avatar,
+    },
     isLoadingMessages,
     hasMessages,
   };

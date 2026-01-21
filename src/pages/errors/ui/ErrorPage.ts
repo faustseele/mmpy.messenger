@@ -1,7 +1,6 @@
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
-import { Button } from "@shared/ui/Button/Button.ts";
-import { ErrorNodes, ErrorProps } from "../model/types.ts";
+import { ErrorProps } from "../model/types.ts";
 import css from "./errors.module.css";
 
 export class ErrorPage extends Page<ErrorProps> {
@@ -14,16 +13,6 @@ export class ErrorPage extends Page<ErrorProps> {
       throw new Error("children is not defined");
     }
 
-    /* --- getting instances --- */
-    const nodes = this.children.nodes as ErrorNodes;
-    const backBtn = nodes["button_back"].runtime?.instance as Button;
-
-    /* --- setting events --- */
-    backBtn.setProps({
-      on: {
-        click: this.on?.back,
-      },
-    });
   }
 
   public getInnerMarkup(): string {

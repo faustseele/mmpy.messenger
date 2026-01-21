@@ -22,21 +22,14 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode({
-        id: "heading",
-        type: "error/404",
-        text: "⛔ Ошибка 404",
+      heading: getHeadingNode("heading", "⛔ Ошибка 404", {
         isDrama: true,
       }) as any,
-      subheading: getSubheadingNode({
-        id: "subheading",
-        text: "🌑 Не туда попали",
+      subheading: getSubheadingNode("subheading", "🌑 Не туда попали", {
         isDrama: true,
       }) as any,
-      button_back: getButtonNode({
-        id: "button_back",
-        label: "Назад к чатам",
-        link: RouteLink.Messenger,
+      button_back: getButtonNode("button_back", "Назад к чатам", {
+        on: { click: handleBack },
       }) as any,
     },
     edges: {
@@ -44,9 +37,6 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
       subheading: "subheading",
       button_back: "button_back",
     },
-  },
-  on: {
-    back: handleBack,
   },
 };
 
@@ -59,21 +49,14 @@ export const errorPageParams_500: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode({
-        id: "heading",
-        type: "error/500",
-        text: "🪜 Ошибка 500",
+      heading: getHeadingNode("heading", "🪜 Ошибка 500", {
         isDrama: true,
       }) as any,
-      subheading: getSubheadingNode({
-        id: "subheading",
-        text: "🔧 Мы уже фиксим",
+      subheading: getSubheadingNode("subheading", "🔧 Мы уже фиксим", {
         isDrama: true,
       }) as any,
-      button_back: getButtonNode({
-        id: "button_back",
-        label: "Назад к чатам",
-        link: RouteLink.Messenger,
+      button_back: getButtonNode("button_back", "Назад к чатам", {
+        on: { click: handleBack },
       }) as any,
     },
     edges: {

@@ -2,7 +2,6 @@ import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
-import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
@@ -28,16 +27,14 @@ export class AuthPage extends Page<AuthProps> {
     }
 
     /* --- getting instances --- */
-    const { buttonReroute, buttonFormSubmit } = this.children
+    const {  buttonFormSubmit } = this.children
       .nodes as AuthNodes;
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
-    const reroute = buttonReroute.runtime?.instance as Button;
     this.submit = buttonFormSubmit.runtime?.instance as Button;
     this.validator = new FormValidator(inputs);
 
     /* --- setting events --- */
     this._wireSubmit(this.validator, this.submit);
-    this._wireReroute(reroute);
     this._vivifyInputs(inputs, this.validator);
   }
 
@@ -74,17 +71,6 @@ export class AuthPage extends Page<AuthProps> {
     });
 
     this.setProps({ on: { submit } });
-  }
-
-  /* event for the auth-reroute button */
-  private _wireReroute(buttonReroute: Button): void {
-    buttonReroute.setProps({
-      on: {
-        click: () => {
-          this.on?.reroute?.(buttonReroute.configs.link ?? RouteLink.NotFound);
-        },
-      },
-    });
   }
 
   /* blur-events for the input fields */

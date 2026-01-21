@@ -1,5 +1,6 @@
 import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
@@ -8,20 +9,18 @@ import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
 import css from "./heading.module.css";
 import { Heading } from "./Heading.ts";
-import { HeadingConfigs, HeadingOn, HeadingProps } from "./types.ts";
+import { HeadingOn, HeadingProps } from "./types.ts";
 
 export const getHeadingNode = (
-  configs: Omit<HeadingConfigs, "rootTag" | "classNames">,
-  on?: HeadingOn,
-): ComponentNode<HeadingProps, Heading> => {
-  const params = getHeadingProps(
-    {
-      rootTag: "h1",
-      classNames: css.heading,
-      ...configs,
-    },
+  id: string,
+  text: string,
+  {
+    isClickable,
+    isDrama,
     on,
-  );
+  }: { isClickable?: boolean; isDrama?: boolean; on?: HeadingOn } = {},
+): ComponentNode<HeadingProps, Heading> => {
+  const params = getHeadingProps(id, text, isClickable, isDrama, on);
 
   return {
     params,
@@ -33,14 +32,22 @@ export const getHeadingNode = (
 };
 
 const getHeadingProps = (
-  configs: HeadingConfigs,
-  on?: HeadingOn,
+  id: ComponentId,
+  text: string,
+  isClickable: boolean = false,
+  isDrama: boolean = false,
+  on: HeadingOn = {},
 ): ComponentParams<HeadingProps> => {
   return {
-    configs,
-    on: {
-      ...on,
+    configs: {
+      id,
+      rootTag: "h1",
+      classNames: css.heading,
+      text,
+      isClickable,
+      isDrama,
     },
+    on: { ...on },
   };
 };
 

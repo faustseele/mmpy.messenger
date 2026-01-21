@@ -30,7 +30,7 @@ export class Button extends Component<ButtonProps> {
     {{#if showSpinner}}
       {{{ ${nodes.spinner.params.configs.id} }}}
     {{else}}
-      {{ label }}
+      {{ text }}
     {{/if}}
     `;
   }

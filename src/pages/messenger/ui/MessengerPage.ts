@@ -1,11 +1,13 @@
 import { Spinner } from "@/shared/ui/Spinner/Spinner.ts";
 import { Page } from "@pages/page/ui/Page.ts";
-import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
-import { urlToFile } from "@shared/lib/helpers/file.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
+import {
+  handleAddChat,
+  handleAddNotes,
+  handleDeleteChat,
+} from "../model/actions.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
-import { randomNoteLabel } from "../model/utils.ts";
 import css from "./messenger.module.css";
 
 export class MessengerPage extends Page<MessengerProps> {
@@ -24,11 +26,9 @@ export class MessengerPage extends Page<MessengerProps> {
       findUserChatButton,
       deleteChatButton,
       deleteNotesButton,
-      closeChatButton,
     } = this.children.nodes as MessengerNodes;
     const addChat = addNotesButton.runtime?.instance as Button;
     const addUser = findUserChatButton.runtime?.instance as Button;
-    const closeChat = closeChatButton.runtime?.instance as Button;
     const deleteNotes = deleteNotesButton.runtime?.instance as Button;
     const deleteChat = deleteChatButton.runtime?.instance as Button;
 
@@ -37,7 +37,6 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireAddChat(addUser);
     this._wireDeleteChat(deleteChat);
     this._wireDeleteChat(deleteNotes);
-    this._wireCloseChat(closeChat);
   }
 
   public componentDidRender(): void {
@@ -59,93 +58,40 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   private _wireAddChat(addUser: Button) {
+    if (!this.on.findUser || !this.on.addChatWithUser) {
+      console.error("MessengerPage: params.on is bad", this.on);
+      return;
+    }
+
     addUser?.setProps({
       on: {
-        click: async () => {
-          if (!this.on.addUsers || !this.on.addChatWithUser) {
-            console.error("MessengerPage: params.on is bad", this.on);
-            return;
-          }
-
-          const explanation = `Логин пользователя:\n\n Доступные сейчас: \n• emil\n• LevTolstoy\n• yandex\n• LeUser\n• mishima\n• tolkien\n• baudrillard\n• foucault\n• shakespear`;
-
-          const input = window.prompt(explanation, "");
-          if (input === null) return;
-
-          const login = input.trim();
-          if (!login) return;
-
-          const resUser = await this.on.findUser(login);
-          if (!resUser.ok) return;
-          const user = resUser.data!;
-
-          const newChatRes = await this.on.addChatWithUser(
-            user.first_name,
-            user.second_name,
-          );
-          if (!newChatRes.ok) return;
-          const chatId = newChatRes.data!.id;
-
-          await this.on.addUsers(chatId, [user.id]);
-
-          if (user.avatar) {
-            const avatar = await urlToFile(
-              `${API_URL_RESOURCES}${user.avatar}`,
-            );
-            this.on.updateChatAvatar(chatId, avatar);
-          }
-
-          console.log(
-            `User ${user.login} (id=${user.id}) added to chat`,
-            chatId,
-          );
-        },
+        click: () => handleAddChat(this.on),
       },
     });
   }
 
-  private _wireAddNotes(addChat: Button) {
-    addChat?.setProps({
+  private _wireAddNotes(addNotes: Button) {
+    addNotes?.setProps({
       on: {
-        click: () => {
-          const chatName = randomNoteLabel();
-          const input = window.prompt("Как назовём заметки?", chatName);
-          if (input === null) return;
-
-          const title = input.trim();
-          if (!title) return;
-
-          this.on?.addNotes?.(title);
-        },
+        click: () => handleAddNotes(this.on),
       },
     });
   }
 
   private _wireDeleteChat(deleteChat: Button) {
+    if (this.configs.info.type === "stub") {
+      console.error("MessengerPage: info is stub");
+      return;
+    }
+
+    const info = this.configs.info;
+
+    const chatId = info.chatId;
+    const chatTitle = info.chatTitle;
+
     deleteChat.setProps({
       on: {
-        click: async (e: Event) => {
-          e.preventDefault();
-
-          const confirm = window.confirm(
-            `Вы уверены, что хотите удалить ${this.configs.chatTitle}?`,
-          );
-          if (!confirm) return;
-
-          const id = this.configs.chatId;
-
-          if (id) this.on?.deleteChat?.(id);
-        },
-      },
-    });
-  }
-
-  private _wireCloseChat(closeChat: Button) {
-    closeChat?.setProps({
-      on: {
-        click: () => {
-          this.on?.closeChat?.();
-        },
+        click: (e: Event) => handleDeleteChat(e, this.on, chatTitle, chatId),
       },
     });
   }
@@ -157,7 +103,12 @@ export class MessengerPage extends Page<MessengerProps> {
     if (!input || input.dataset.bound) return;
 
     input.addEventListener("change", async () => {
-      const id = this.configs.chatId;
+      if (this.configs.info.type === "stub") {
+        console.error("MessengerPage: info is stub");
+        return;
+      }
+
+      const id = this.configs.info.chatId;
       const file = input.files?.[0];
 
       if (!id || !file) {
@@ -173,7 +124,7 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   public getInnerMarkup(): string {
-    const isNotes = this.configs.isNotes;
+    const isNotes = this.configs.info.type === "notes";
 
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: MessengerPage: Children are not defined</span>`;

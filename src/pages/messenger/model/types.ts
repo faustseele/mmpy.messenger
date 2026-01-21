@@ -1,4 +1,8 @@
-import { ChatId, CreateChatResponse, UserResponse } from "@/shared/api/model/api.types";
+import {
+  ChatId,
+  CreateChatResponse,
+  UserResponse,
+} from "@/shared/api/model/api.types";
 import { ApiResponse } from "@/shared/api/model/types.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
@@ -6,31 +10,50 @@ import { ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
 import { RootTag } from "@shared/lib/DOM/types.ts";
 
 export interface MessengerProps extends BaseProps {
-  configs: {
-    id: PageId.Messenger;
-    rootTag: Extract<RootTag, "div">;
-    classNames: string;
-    isNotes?: boolean;
-    chatId?: ChatId;
-    chatTitle?: string;
-    participantName?: string;
-    participantAvatar?: string;
-    isLoadingMessages?: boolean;
-    hasMessages?: boolean;
-  };
-  on: {
-    addChatWithUser?: (
-      firstName: string,
-      secondName: string,
-    ) => Promise<ApiResponse<CreateChatResponse>>;
-    addNotes: (title: string) => void;
-    addUsers: (chatId: ChatId, users: number[]) => Promise<void>;
-    closeChat: () => void;
-    deleteChat: (chatId: ChatId) => Promise<void>;
-    findUser: (login: string) => Promise<ApiResponse<UserResponse>>;
-    updateChatAvatar: (chatId: ChatId, file: File) => Promise<void>;
-  };
+  configs: MessengerConfigs;
+  on: MessengerOn;
 }
+
+export type MessengerConfigs = {
+  id: PageId.Messenger;
+  rootTag: Extract<RootTag, "div">;
+  classNames: string;
+  info: TypeStub | TypeChat | TypeNote;
+  isLoadingMessages?: boolean;
+  hasMessages?: boolean;
+};
+
+type TypeStub = {
+  type: "stub";
+};
+
+type TypeChat = {
+  type: "chat";
+  chatId: ChatId;
+  chatTitle: string;
+  participantName: string;
+  participantAvatar?: string;
+};
+
+type TypeNote = {
+  type: "notes";
+  chatId: ChatId;
+  chatTitle: string;
+  participantName: string;
+  participantAvatar?: string;
+};
+
+export type MessengerOn = {
+  addChatWithUser: (
+    firstName: string,
+    secondName: string,
+  ) => Promise<ApiResponse<CreateChatResponse>>;
+  addNotes: (title: string) => void;
+  addUsers: (chatId: ChatId, users: number[]) => Promise<void>;
+  deleteChat: (chatId: ChatId) => Promise<void>;
+  findUser: (login: string) => Promise<ApiResponse<UserResponse>>;
+  updateChatAvatar: (chatId: ChatId, file: File) => Promise<void>;
+};
 
 export type MessengerMap =
   | "heading_chats"

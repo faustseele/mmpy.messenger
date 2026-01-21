@@ -4,7 +4,6 @@ import {
   BaseProps,
 } from "../../lib/Component/model/base.types.ts";
 import { RootTag } from "../../lib/DOM/types.ts";
-import { RouteLink } from "../../types/universal.ts";
 
 export interface ButtonProps extends BaseProps {
   configs: ButtonConfigs;
@@ -12,15 +11,14 @@ export interface ButtonProps extends BaseProps {
 
 export interface ButtonConfigs extends BaseConfigs {
   rootTag: Extract<RootTag, "button">;
-  type: ButtonType;
   classNames: string;
-  label: string;
-  title?: string;
+  type: ButtonType;
+  text: string;
+  tooltip: string;
   isSilent?: boolean;
-  link?: RouteLink;
   showSpinner?: boolean;
 }
 
-type ButtonType = "button" | "submit";
+export type ButtonType = "button" | "submit";
 
 export type ButtonNodes = ChildrenNodes<"spinner">;
