@@ -1,5 +1,5 @@
-import { ChatResponse } from "@/shared/api/model/api.types.ts";
-import Store from "@app/providers/store/model/Store.ts";
+import { ChatType } from "@/entities/chat/model/types.ts";
+import { ChatResponse, ISODateString } from "@/shared/api/model/api.types.ts";
 import { handleSelectChat } from "@entities/chat/model/actions.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import {
@@ -30,48 +30,65 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
   };
   const goToChatItems = goToChatEdge.goToChatItems as ComponentId[];
 
-  apiChats.forEach((apiChat) => {
-    const id = `goToChatItem_${apiChat.id}`;
-    const isNotes = Store.getState().isNotes[apiChat.id];
+  for (const chat of apiChats) {
+    const { id, type, title, avatar, last_message } = chat;
+    if (!type) {
+      console.error("goToChat: chat type is not defined", chat, chat.type);
+      continue;
+    }
 
-    const avatar = apiChat.avatar ?? "";
-    const lastMsg = apiChat.last_message;
-    const contentText = lastMsg?.content ?? "";
-    const date = lastMsg?.time ?? "";
-    const unreadCount = apiChat.unread_count;
+    const componentId = `goToChatItem_${id}`;
 
-    const goToChatNode = getGoToChatNode(
-      {
-        id,
-        avatar,
-        userName: apiChat.title,
-        contentText,
-        date,
-        unreadCount,
-        chatId: apiChat.id,
-        isNotes,
+    const goToChatNode = getGoToChatNode(componentId, type, id, title, {
+      avatar,
+      contentText: last_message?.content,
+      date: last_message?.time,
+      unreadCount: chat.unread_count,
+      on: {
+        click: () => handleSelectChat(id),
       },
-      {
-        click: () => {
-          handleSelectChat(apiChat.id);
-        },
-      },
-    );
+    });
 
     /* populating */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    goToChatNodes[id] = goToChatNode as any;
-    goToChatItems.push(id);
-  });
+    goToChatNodes[componentId] = goToChatNode as any;
+    goToChatItems.push(componentId);
+  }
 
   return { nodes: goToChatNodes, edges: goToChatEdge };
 }
 
 const getGoToChatNode = (
-  configs: Omit<GoToChatConfigs, "rootTag" | "classNames">,
-  on?: GoToChatProps["on"],
+  id: ComponentId,
+  type: ChatType,
+  chatId: number,
+  userName: string,
+  {
+    avatar,
+    contentText,
+    date,
+    unreadCount,
+    on,
+  }: {
+    avatar: string | null;
+    contentText?: string;
+    date?: ISODateString;
+    unreadCount?: number;
+    on?: GoToChatProps["on"];
+  },
 ): ComponentNode<GoToChatProps, GoToChat> => {
-  const params = getGoToChatParams(configs, on);
+  const params = getGoToChatParams(
+    id,
+    type,
+    chatId,
+    userName,
+    avatar,
+    contentText,
+    date,
+    unreadCount,
+    on,
+  );
+
   return {
     params,
     factory: buildGoToChat,
@@ -82,26 +99,32 @@ const getGoToChatNode = (
 };
 
 const getGoToChatParams = (
-  configs: Omit<GoToChatConfigs, "rootTag" | "classNames">,
+  id: ComponentId,
+  type: ChatType,
+  chatId: number,
+  userName: string,
+  avatar: string | null,
+  contentText: string = "",
+  date?: ISODateString,
+  unreadCount: number = 0,
   on?: GoToChatProps["on"],
 ): ComponentParams<GoToChatProps> => {
-  const avatar = configs.avatar
-    ? `${API_URL_RESOURCES}${configs.avatar}`
-    : defaultAvatar;
+  const configs: GoToChatConfigs = {
+    id,
+    rootTag: "li",
+    type,
+    classNames: css.goToChat,
+    chatId,
+    userName,
+    avatar: avatar ? `${API_URL_RESOURCES}${avatar}` : defaultAvatar,
+    contentText,
+    date: tinyDate(date ?? ""),
+    unreadCount,
+  };
 
   return {
-    configs: {
-      rootTag: "li",
-      /* TODO: make optional, def is "" */
-      classNames: css.goToChat,
-      tabIndex: "0",
-      ...configs,
-      avatar,
-      date: tinyDate(configs.date),
-    },
-    on: {
-      ...on,
-    },
+    configs,
+    on,
   };
 };
 

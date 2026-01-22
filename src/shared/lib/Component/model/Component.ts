@@ -1,7 +1,7 @@
-import { isEqual } from "@/app/providers/store/lib/utils.ts";
 import DOMService from "../../DOM/DOMService.ts";
 import EventBus from "../../EventBus/EventBus.ts";
 import FragmentService from "../../Fragment/FragmentService.ts";
+import { isEqual } from "../../helpers/object/utils.ts";
 import { proxifyParams } from "../../helpers/proxy/functions.ts";
 import { BaseProps } from "./base.types.ts";
 import { ChildGraph, ChildrenFlat } from "./children.types.ts";

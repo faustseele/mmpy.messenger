@@ -12,6 +12,7 @@ import Store from "@app/providers/store/model/Store.ts";
 import { ls_storeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
+import { isChatNotes } from "./utils.ts";
 
 class ChatService {
   private ws = new ChatWebsocket();
@@ -20,7 +21,23 @@ class ChatService {
     query?: GetChatsQuery,
   ): Promise<ApiResponse<ChatResponse[]>> {
     try {
-      const list = await ChatAPI.getChats(query);
+      const setChatsTypes = async (
+        chats: ChatResponse[],
+      ): Promise<ChatResponse[]> => {
+        return await Promise.all(
+          chats.map(async (chat) => {
+            const isNotes = await isChatNotes(chat.id);
+            chat.type = isNotes ? "notes" : "chat";
+            return chat;
+          }),
+        );
+      };
+
+      let list = await ChatAPI.getChats(query);
+      list = await setChatsTypes(list);
+
+      console.log("Fetched chats with types:", list);
+
       Store.set("api.chats.list", list);
       console.log("chats fetch success !:", list);
 
@@ -133,7 +150,10 @@ class ChatService {
     }
   }
 
-  public async addUsers(chatId: ChatId, users: number[]): Promise<ApiResponse<string>> {
+  public async addUsers(
+    chatId: ChatId,
+    users: number[],
+  ): Promise<ApiResponse<string>> {
     try {
       const res = await ChatAPI.addUsers({ chatId, users });
 
@@ -145,7 +165,10 @@ class ChatService {
     }
   }
 
-  public async removeUsers(chatId: ChatId, users: number[]): Promise<ApiResponse<string>> {
+  public async removeUsers(
+    chatId: ChatId,
+    users: number[],
+  ): Promise<ApiResponse<string>> {
     try {
       const res = await ChatAPI.removeUsers({ chatId, users });
 
@@ -157,7 +180,10 @@ class ChatService {
     }
   }
 
-  public async getUsers(chatId: ChatId, query?: ChatUsersQuery): Promise<ApiResponse<ChatUser[]>> {
+  public async getUsers(
+    chatId: ChatId,
+    query?: ChatUsersQuery,
+  ): Promise<ApiResponse<ChatUser[]>> {
     try {
       const res = await ChatAPI.getUsers(chatId, query);
 
@@ -170,7 +196,7 @@ class ChatService {
   }
 
   public isCurrentChatNotes(): boolean {
-    return Store.getState().isNotes[Store.getState().api.chats.activeId ?? 0];
+    return Store.getState().api.chats.currentChat?.type === "notes";
   }
 
   public sendMessage(content: string) {

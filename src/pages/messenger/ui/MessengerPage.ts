@@ -79,26 +79,16 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   private _wireDeleteChat(deleteChat: Button) {
-    if (this.configs.info.type === "stub") {
-      console.error("MessengerPage: info is stub");
-      return;
-    }
-
-    const info = this.configs.info;
-
-    const chatId = info.chatId;
-    const chatTitle = info.chatTitle;
-
     deleteChat.setProps({
       on: {
-        click: (e: Event) => handleDeleteChat(e, this.on, chatTitle, chatId),
+        click: (e: Event) => handleDeleteChat(e, this.configs.info, this.on),
       },
     });
   }
 
   private _wireAvatar(): void {
     const input =
-      this.element?.querySelector<HTMLInputElement>("#avatar-input-chat");
+      this.element?.querySelector<HTMLInputElement>("#avatar-input");
 
     if (!input || input.dataset.bound) return;
 
@@ -124,7 +114,10 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   public getInnerMarkup(): string {
-    const isNotes = this.configs.info.type === "notes";
+    const type = this.configs.info.type;
+    const isStub = type === "stub";
+    const isNotes = type === "notes";
+    const isChat = type === "chat";
 
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: MessengerPage: Children are not defined</span>`;
@@ -157,35 +150,42 @@ export class MessengerPage extends Page<MessengerProps> {
       </aside>
 
       <main class="${css.chat}">
-        <header class="${css.chat__header}">
-          <div class="${css.chatParticipant}">
+        <header class="${css.chatHeader}">
+          <div class="${css.chatHeader__face}">
 
-          {{#if participantName}}
-            <label for="avatar-input-chat" class="${css.avatarContainer}">
-              <img class="${css.avatar}" src="{{ participantAvatar }}" alt="Participant avatar"  />
+          {{#if ${isChat || isNotes}}}
+            <label for="avatar-input" class="${css.avatarContainer}">
+              <img class="${css.avatar}" src="{{ info.chatAvatar }}" alt="Participant's avatar" />
               <div class="${css.avatarOverlay}">
                 <span class="${css.overlayText}">🔄</span>
               </div>
             </label>
-            <input id="avatar-input-chat" type="file" name="avatar" class="${css.avatarFileInput}" />
+            <input id="avatar-input" type="file" name="avatar" class="${css.avatarFileInput}" />
+            <p class="${css.chatTitle}">{{ info.chatTitle }}</p>
           {{/if}}
 
-            <p class="${css.chatParticipant__name}">{{ participantName }}</p>
           </div>
 
-          <div class="${css.chatOptions}">
-            {{~#if participantName}}
-              {{{ ${isNotes ? deleteNotesButton.params.configs.id : deleteChatButton.params.configs.id}}}}
-              {{{ ${closeChatButton.params.configs.id} }}}
-            {{~else}}
+          <div class="${css.chatHeader__options}">
+            {{#if ${isStub}}}
               {{{ ${addNotesButton.params.configs.id} }}}
               {{{ ${findUserChatButton.params.configs.id} }}}
+            {{/if}}
+
+            {{#if ${isChat}}}
+              {{{ ${deleteChatButton.params.configs.id}}}}
+              {{{ ${closeChatButton.params.configs.id} }}}
+            {{/if}}
+
+            {{#if ${isNotes}}}
+              {{{ ${deleteNotesButton.params.configs.id}}}}
+              {{{ ${closeChatButton.params.configs.id} }}}
             {{/if}}
           </div>
         </header>
 
         <div class="${css.chat__feed}">
-          {{#if participantName}}
+          {{#if ${isChat || isNotes}}}
             {{{ ${spinner.params.configs.id} }}}
 
             {{#if hasMessages}}
@@ -200,7 +200,7 @@ export class MessengerPage extends Page<MessengerProps> {
           {{/if}}
         </div>
 
-        {{#if participantName}}
+        {{#if ${isChat || isNotes}}}
           {{{ ${messageField.params.configs.id} }}}
         {{/if}}
       </main>

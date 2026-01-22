@@ -3,6 +3,8 @@
  * Clean, reusable, and exported for use across features/entities.
  */
 
+import { ChatType } from "@/entities/chat/model/types.ts";
+
 // Common aliases
 export type UserId = number;
 export type ChatId = number;
@@ -137,6 +139,8 @@ export interface ChatLastMessageUser {
 /** A chat object from GET /chats list */
 export interface ChatResponse {
   id: ChatId;
+  /* non-API type for 2 types of chats: chat w/ person & personal notes */
+  type?: ChatType;
   title: string;
   avatar: string | null;
   unread_count: number;

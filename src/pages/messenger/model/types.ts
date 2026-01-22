@@ -1,3 +1,4 @@
+import { ChatType } from "@/entities/chat/model/types.ts";
 import {
   ChatId,
   CreateChatResponse,
@@ -23,24 +24,24 @@ export type MessengerConfigs = {
   hasMessages?: boolean;
 };
 
+export type MessengerType = "stub" | ChatType;
+
 type TypeStub = {
-  type: "stub";
+  type: Extract<MessengerType, "stub">;
 };
 
 type TypeChat = {
-  type: "chat";
+  type: Extract<MessengerType, "chat">;
   chatId: ChatId;
   chatTitle: string;
-  participantName: string;
-  participantAvatar?: string;
+  chatAvatar?: string;
 };
 
 type TypeNote = {
-  type: "notes";
+  type: Extract<MessengerType, "notes">;
   chatId: ChatId;
   chatTitle: string;
-  participantName: string;
-  participantAvatar?: string;
+  chatAvatar?: string;
 };
 
 export type MessengerOn = {

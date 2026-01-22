@@ -11,7 +11,7 @@ export const mapSettingsState = ({
 }: AppState): ComponentPatch<SettingsProps> => {
   return {
     configs: {
-      rootTag: "div",
+      rootTag: "form",
       profileName: user?.first_name ?? "",
       profileAvatar: user?.avatar
         ? `${API_URL_RESOURCES}${user.avatar}`

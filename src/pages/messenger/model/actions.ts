@@ -3,7 +3,7 @@ import { urlToFile } from "@/shared/lib/helpers/file.ts";
 import Router from "@app/providers/router/Router.ts";
 import UserService from "@entities/user/model/UserService.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { MessengerOn } from "./types.ts";
+import { MessengerConfigs, MessengerOn } from "./types.ts";
 import { randomNoteLabel } from "./utils.ts";
 
 export const handleFindUser = async (login: string) => {
@@ -57,16 +57,20 @@ export const handleAddNotes = async (on: MessengerOn) => {
 
 export const handleDeleteChat = async (
   e: Event,
+  info: MessengerConfigs["info"],
   on: MessengerOn,
-  title: string,
-  chatId: number,
 ) => {
   e.preventDefault();
 
-  const confirm = window.confirm(`Вы уверены, что хотите удалить ${title}?`);
+  if (info.type === "stub") {
+    console.error("MessengerPage: info is stub");
+    return;
+  }
+
+  const { chatId, chatTitle } = info;
+
+  const confirm = window.confirm(`Вы уверены, что хотите удалить ${chatTitle}?`);
   if (!confirm) return;
 
-  const id = chatId;
-
-  if (id) on?.deleteChat?.(id);
+  if (chatId) on?.deleteChat?.(chatId);
 };

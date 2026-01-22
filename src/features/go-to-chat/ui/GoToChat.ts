@@ -10,8 +10,8 @@ export class GoToChat extends Component<GoToChatProps> {
   }
 
   public getRootTagCx(configs: GoToChatConfigs): string {
-    const { isNotes } = configs;
-    return cx(css.goToChat, isNotes && css.goToChat_note)
+    const isNotes = configs.type === "notes";
+    return cx(css.goToChat, isNotes && css.goToChat_note);
   }
 
   public componentDidMount(): void {

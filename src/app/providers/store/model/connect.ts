@@ -3,9 +3,10 @@ import { Page } from "@pages/page/ui/Page.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
 import { getProjection } from "../lib/patch.ts";
-import { isEqual, merge } from "../lib/utils.ts";
+import { merge } from "../lib/utils.ts";
 import Store from "./Store.ts";
 import { MapStateToProps } from "./types.ts";
+import { isEqual } from "@/shared/lib/helpers/object/utils.ts";
 
 /* bridges Store <-> Page blueprint */
 export function connect<P extends BaseProps, C extends Page<P>>(

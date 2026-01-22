@@ -19,16 +19,24 @@ import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { handleFindUser, handleGoToSettings } from "../model/actions.ts";
-import { MessengerProps } from "../model/types.ts";
+import { MessengerConfigs, MessengerProps } from "../model/types.ts";
 import css from "../ui/messenger.module.css";
 
+export const getBaseMessengerConfigs = (
+  info: MessengerConfigs["info"],
+  isLoadingMessages = false,
+  hasMessages = false,
+): MessengerProps["configs"] => ({
+  id: PageId.Messenger,
+  rootTag: "div",
+  classNames: cx(cssPage.moduleWindow, css.moduleWindow_messenger),
+  info,
+  isLoadingMessages,
+  hasMessages,
+});
+
 export const messengerPageParams: ComponentParams<MessengerProps> = {
-  configs: {
-    id: PageId.Messenger,
-    rootTag: "div",
-    classNames: cx(cssPage.moduleWindow, css.moduleWindow_messenger),
-    info: { type: "stub" },
-  },
+  configs: getBaseMessengerConfigs({ type: "stub" } satisfies MessengerConfigs["info"]),
   children: {
     nodes: {
       heading_chats: getHeadingNode("heading_chats", "Чаты 👥") as any,

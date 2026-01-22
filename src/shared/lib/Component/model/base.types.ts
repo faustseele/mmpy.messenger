@@ -5,7 +5,11 @@ import { ComponentId } from "./types.ts";
  * public contract of fundamental Component props
  */
 export interface BaseProps {
-  /* basic Component configuration */
+  /** basic Component configuration
+   * rendered into markup via Handlebars {{config-expressions}} in getInnerMarkup()
+   * ex.1- configs: { name } -> <p> {{ name }} </p>
+   * ex.2- configs: { info: date  } -> <span> {{ info.date }} </span>
+   */
   configs: BaseConfigs;
   /* event handlers */
   on?: BaseOn;

@@ -5,10 +5,8 @@ import {
   GetChatsQuery,
 } from "@/shared/api/model/api.types.ts";
 import { ApiResponse } from "@/shared/api/model/types.ts";
-import Store from "@app/providers/store/model/Store.ts";
 import { ls_getLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatService from "./ChatService.ts";
-import { isChatNotes } from "./utils.ts";
 
 export const handleAddUsers = async (id: ChatId, users: number[]) => {
   await ChatService.addUsers(id, users);
@@ -24,10 +22,8 @@ export const handleCreateChat = async (
   const res = await ChatService.createChat(title);
 
   if (res.ok) {
-    const resChats = await ChatService.fetchChats();
+    await ChatService.fetchChats();
     await ChatService.selectChat(res.data!.id);
-
-    if (resChats.ok) setChatsList(resChats.data!);
   }
 
   return res;
@@ -37,9 +33,8 @@ export const handleDeleteChat = async (id: number) => {
   await ChatService.deleteChat(id);
   ChatService.deselectChat();
 
-  const resChats = await ChatService.fetchChats();
+  await ChatService.fetchChats();
   
-  if (resChats.ok) setChatsList(resChats.data!);
 };
 
 export const handleFetchChats = async (
@@ -56,8 +51,6 @@ export const handleFetchChats = async (
   if (last && list!.some((chat) => chat.id === last))
     ChatService.selectChat(last);
 
-  setChatsList(list!);
-
   return resList;
 };
 
@@ -73,20 +66,4 @@ export const handleSelectChat = async (id: number) => {
 export const handleUpdateChatAvatar = async (id: ChatId, avatar: File) => {
   await ChatService.updateChatAvatar(id, avatar);
   await ChatService.fetchChats();
-};
-
-export const setChatsList = async (
-  list: ChatResponse[],
-): Promise<ApiResponse<Record<number, boolean>>> => {
-  /* set isNotes for each chat */
-  const isNotesList: Record<ChatId, boolean> = {};
-  await Promise.all(
-    list?.map(async (chat) => {
-      const is = await isChatNotes(chat.id);
-      isNotesList[chat.id] = is;
-    }),
-  );
-  Store.set("isNotes", isNotesList);
-
-  return { ok: true, data: isNotesList };
 };

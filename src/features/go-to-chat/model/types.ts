@@ -1,3 +1,4 @@
+import { ChatType } from "@/entities/chat/model/types.ts";
 import { ChatId, ISODateString } from "@/shared/api/model/api.types";
 import {
   BaseConfigs,
@@ -7,17 +8,17 @@ import { RootTag } from "@shared/lib/DOM/types.ts";
 
 export interface GoToChatProps extends BaseProps {
   configs: GoToChatConfigs;
+  on: BaseProps["on"];
 }
 
 export interface GoToChatConfigs extends BaseConfigs {
   rootTag: Extract<RootTag, "li">;
-  classNames: string;
+  type: ChatType;
+  chatId: ChatId;
   avatar: string;
   userName: string;
   contentText: string;
   date: ISODateString;
-  chatId: ChatId;
-  isNotes?: boolean;
   unreadCount?: number;
   tabIndex?: string;
 }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { isEqual } from "@/shared/lib/helpers/object/utils.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import { ComponentId, ComponentNode } from "@shared/lib/Component/model/types.ts";
-import { isEqual } from "./utils.ts";
 
 export function ensureInstance<P extends BaseProps>(node: ComponentNode<P>) {
   if (!node.runtime?.instance) {
@@ -14,7 +14,7 @@ export function deepEqualExceptChildren(a: any, b: any): boolean {
   if (a === b) return true;
   const { children: _ac, ...aa } = a ?? {};
   const { children: _bc, ...bb } = b ?? {};
-  return isEqual(aa, bb); // your deep compare from the message
+  return isEqual(aa, bb);
 }
 
 export function edgesLenEqual(
@@ -44,17 +44,19 @@ export function reconcileChildrenByLength<P extends BaseProps>(
   prev: Record<string, ComponentId | ComponentId[]>,
   next: Record<string, ComponentId | ComponentId[]>
 ) {
-  const prevChildren = node.params.children;              // note: after apply, node.params === nextParams
+
+  /* NB: after apply, node.params === nextParams */
+  const prevChildren = node.params.children;              // 
   const nodes = prevChildren?.nodes ?? node.params.children?.nodes ?? {};
 
-  // slots removed → unmount everything in that slot
+  /* slots removed -> unmount everything in that slot */
   for (const slot in prev) {
     if (!(slot in next)) {
       for (const id of toIds(prev[slot]!)) unmount(nodes[id]);
     }
   }
 
-  // slots added or length changed → brute remount whole slot
+  /* slots added or length changed -> brute remount whole slot */
   for (const slot in next) {
     const sameLen = slot in prev && linkLen(prev[slot]) === linkLen(next[slot]);
     if (!sameLen) {
