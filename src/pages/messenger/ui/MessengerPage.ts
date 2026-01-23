@@ -1,3 +1,4 @@
+import { MessageField } from "@/features/send-message/ui/MessageField.ts";
 import { Spinner } from "@/shared/ui/Spinner/Spinner.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -47,12 +48,20 @@ export class MessengerPage extends Page<MessengerProps> {
   public componentDidUpdate(): void {
     const spinner = this.children?.nodes["spinner"].runtime
       ?.instance as Spinner;
+    const msgField = this.children?.nodes["messageField"].runtime
+      ?.instance as MessageField;
 
     const isLoadingMessages = this.configs.isLoadingMessages;
 
     spinner.setProps({
       configs: {
         isOn: isLoadingMessages,
+      },
+    });
+    msgField.setProps({
+      configs: {
+        placeholder:
+          this.configs.info.type === "notes" ? "Заметка:" : "Cообщение...",
       },
     });
   }
