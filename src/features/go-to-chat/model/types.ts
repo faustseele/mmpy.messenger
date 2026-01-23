@@ -19,6 +19,7 @@ export interface GoToChatConfigs extends BaseConfigs {
   userName: string;
   contentText: string;
   date: ISODateString;
+  selected?: boolean;
   unreadCount?: number;
   tabIndex?: string;
 }

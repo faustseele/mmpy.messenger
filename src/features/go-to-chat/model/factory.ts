@@ -1,3 +1,4 @@
+import Store from "@/app/providers/store/model/Store.ts";
 import { ChatType } from "@/entities/chat/model/types.ts";
 import { ChatResponse, ISODateString } from "@/shared/api/model/api.types.ts";
 import { handleSelectChat } from "@entities/chat/model/actions.ts";
@@ -21,6 +22,7 @@ import defaultAvatar from "../../../../static/avatar.png";
 import { GoToChat } from "../ui/GoToChat.ts";
 import css from "../ui/goToChat.module.css";
 import { GoToChatConfigs, GoToChatProps } from "./types.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
   const goToChatNodes: ChildrenNodes = {};
@@ -29,6 +31,7 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
     goToChatItems: [],
   };
   const goToChatItems = goToChatEdge.goToChatItems as ComponentId[];
+  const selectedChatId = Store.getState().api.chats.activeId;
 
   for (const chat of apiChats) {
     const { id, type, title, avatar, last_message } = chat;
@@ -37,6 +40,8 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
       continue;
     }
 
+    const selected = id === selectedChatId;
+
     const componentId = `goToChatItem_${id}`;
 
     const goToChatNode = getGoToChatNode(componentId, type, id, title, {
@@ -44,6 +49,7 @@ export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
       contentText: last_message?.content,
       date: last_message?.time,
       unreadCount: chat.unread_count,
+      selected,
       on: {
         click: () => handleSelectChat(id),
       },
@@ -68,12 +74,14 @@ const getGoToChatNode = (
     contentText,
     date,
     unreadCount,
+    selected,
     on,
   }: {
     avatar: string | null;
     contentText?: string;
     date?: ISODateString;
     unreadCount?: number;
+    selected?: boolean;
     on?: GoToChatProps["on"];
   },
 ): ComponentNode<GoToChatProps, GoToChat> => {
@@ -84,8 +92,9 @@ const getGoToChatNode = (
     userName,
     avatar,
     contentText,
-    date,
     unreadCount,
+    date,
+    selected,
     on,
   );
 
@@ -105,21 +114,23 @@ const getGoToChatParams = (
   userName: string,
   avatar: string | null,
   contentText: string = "",
-  date?: ISODateString,
   unreadCount: number = 0,
+  date?: ISODateString,
+  selected: boolean = false,
   on?: GoToChatProps["on"],
 ): ComponentParams<GoToChatProps> => {
   const configs: GoToChatConfigs = {
     id,
     rootTag: "li",
     type,
-    classNames: css.goToChat,
+    classNames: cx(css.goToChat, selected ? css.goToChat_selected : ""),
     chatId,
     userName,
     avatar: avatar ? `${API_URL_RESOURCES}${avatar}` : defaultAvatar,
     contentText,
-    date: tinyDate(date ?? ""),
     unreadCount,
+    date: tinyDate(date ?? ""),
+    selected
   };
 
   return {
