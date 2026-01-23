@@ -16,7 +16,7 @@
   --color-panel-lightest: #2f2d2d;
 
   --color-msg-in-bg: rgba(255, 255, 255, 0.06);
-  --color-msg-out-bg: rgba(255, 255, 255, 0.14);
+  --color-msg-out-bg: rgba(255, 255, 255, 0.09);
 
   --color-universal-br: var(--color-panel-lightest);
 
