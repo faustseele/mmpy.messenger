@@ -16,7 +16,7 @@ import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
 import { tinyDate } from "@shared/lib/helpers/formatting/date.ts";
 import css from "../ui/messageBubble.module.css";
 import { MessageBubble } from "../ui/MessageBubble.ts";
-import { MessageConfigs, MessageProps } from "./types.ts";
+import { MessageProps, MessageType } from "./types.ts";
 
 export function getMessagesGraph(): ChildGraph {
   const state = Store.getState();
@@ -36,13 +36,9 @@ export function getMessagesGraph(): ChildGraph {
   rawMessages.forEach((msg) => {
     const id = `message_${msg.id}`;
     const type = msg.user_id === myId ? "outgoing" : "incoming";
-    const date = tinyDate(msg.time);
 
-    const messageNode = getMessageNode({
-      id,
+    const messageNode = getMessageNode(id, type, tinyDate(msg.time), {
       text: msg.content,
-      type,
-      date,
     });
 
     /* populating */
@@ -55,9 +51,18 @@ export function getMessagesGraph(): ChildGraph {
 }
 
 export const getMessageNode = (
-  configs: Omit<MessageConfigs, "rootTag" | "classNames">,
+  id: ComponentId,
+  type: MessageType,
+  date: string,
+  {
+    text,
+    image,
+  }: {
+    text?: string;
+    image?: string;
+  },
 ): ComponentNode<MessageProps, MessageBubble> => {
-  const params = getMessageParams(configs);
+  const params = getMessageParams(id, type, date, text, image);
   return {
     params,
     factory: buildMessage,
@@ -68,13 +73,21 @@ export const getMessageNode = (
 };
 
 const getMessageParams = (
-  configs: Omit<MessageConfigs, "rootTag" | "classNames">,
+  id: ComponentId,
+  type: MessageType,
+  date: string,
+  text: string = "",
+  image?: string,
 ): ComponentParams<MessageProps> => {
   return {
     configs: {
+      id,
       rootTag: "article",
       classNames: css.message,
-      ...configs,
+      type,
+      date,
+      text,
+      image,
     },
   };
 };
