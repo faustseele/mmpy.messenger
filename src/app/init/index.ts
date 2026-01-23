@@ -14,9 +14,7 @@ export const initApp = async () => {
 
   const root = document.getElementsByTagName("body")[0];
 
-  const toast = getToastNode({
-    message: "Hello World!",
-  });
+  const toast = getToastNode('Waiting for the bus..');
 
   if (!root || !toast.runtime?.instance.element)
     throw new Error("root element not found");
