@@ -21,10 +21,7 @@
 }
 
 .goToChat:hover {
-  border-color: var(--color-universal-br-active);
-}
-
-.goToChat:focus {
+  border-style: solid;
   border-color: var(--color-universal-br-active);
 }
 
