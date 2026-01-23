@@ -15,69 +15,31 @@ import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
 import css from "../ui/settings.module.css";
 
-const inputsEditors_info = [
-  "inputEditor-email",
-  "inputEditor-name",
-  "inputEditor-surname",
-  "inputEditor-login",
-  "inputEditor-display_name",
-  "inputEditor-phone",
-];
-const iptProf = inputsEditors_info;
-
-const inputsEditors_password = [
-  "inputEditor-oldPassword",
-  "inputEditor-newPassword",
-];
-const iptPsw = inputsEditors_password;
-
-const inputsEditorsNodes_profile = {
-  [iptProf[0]]: getEditorNode(
-    iptProf[0],
-    "email",
-    "Эл. почта",
-    "pochta@yandex.ru",
-    "email",
-  ),
-  [iptProf[1]]: getEditorNode(iptProf[1], "name", "Имя", "Иван", "text"),
-  [iptProf[2]]: getEditorNode(
-    iptProf[2],
-    "surname",
-    "Фамилия",
-    "Иванов",
-    "text",
-  ),
-  [iptProf[3]]: getEditorNode(iptProf[3], "login", "Логин", "ivanov", "text"),
-  [iptProf[4]]: getEditorNode(
-    iptProf[4],
+const editorNodes_info = {
+  "editor-email": getEditorNode("editor-email", "email", "Эл. почта"),
+  "editor-name": getEditorNode("editor-name", "name", "Имя"),
+  "editor-surname": getEditorNode("editor-surname", "surname", "Фамилия"),
+  "editor-login": getEditorNode("editor-login", "login", "Логин"),
+  "editor-display_name": getEditorNode(
+    "editor-display_name",
     "display_name",
     "Имя в чате",
-    "Vanya",
-    "text",
   ),
-  [iptProf[5]]: getEditorNode(
-    iptProf[5],
-    "phone",
-    "Номер телефона",
-    "+7 905 551-23-45",
-    "tel",
-  ),
+  "editor-phone": getEditorNode("editor-phone", "phone", "Номер телефона"),
 };
 
-const inputsEditorsNodes_password = {
-  [iptPsw[0]]: getEditorNode(
-    iptPsw[0],
+const editorNodes_psw = {
+  "editor-oldPassword": getEditorNode(
+    "editor-oldPassword",
     "oldPassword",
     "Старый пароль",
-    "***",
-    "password",
+    { placeholder: "* * * * *" },
   ),
-  [iptPsw[1]]: getEditorNode(
-    iptPsw[1],
+  "editor-newPassword": getEditorNode(
+    "editor-newPassword",
     "newPassword",
     "Новый пароль",
-    "***",
-    "password",
+    { placeholder: "* * * * *" },
   ),
 };
 
@@ -93,14 +55,17 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
   },
   children: {
     nodes: {
-      ...inputsEditorsNodes_profile,
-      ...inputsEditorsNodes_password,
+      ...(editorNodes_info as any),
+      ...(editorNodes_psw as any),
       heading_profile: getHeadingNode("heading_profile", "Профиль 👤") as any,
       heading_backToChats: getHeadingNode("heading_backToChats", "⮘ Назад", {
         isClickable: true,
         on: { click: handleMessengerClick },
       }) as any,
-      subheading_form: getSubheadingNode("subheading_form", "Ваши данные:") as any,
+      subheading_form: getSubheadingNode(
+        "subheading_form",
+        "Ваши данные:",
+      ) as any,
       buttonEditInfo: getButtonNode("buttonEditInfo", "Изменить данные", {
         type: "submit",
       }) as any,
@@ -119,8 +84,15 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       heading_backToChats: "heading_backToChats",
       heading_profile: "heading_profile",
       subheading_form: "subheading_form",
-      inputsEditors_info,
-      inputsEditors_password,
+      inputsEditors_info: [
+        "editor-email",
+        "editor-name",
+        "editor-surname",
+        "editor-login",
+        "editor-display_name",
+        "editor-phone",
+      ],
+      inputsEditors_password: ["editor-oldPassword", "editor-newPassword"],
       buttonEditInfo: "buttonEditInfo",
       buttonEditPassword: "buttonEditPassword",
       buttonLogout: "buttonLogout",

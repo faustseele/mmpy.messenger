@@ -23,69 +23,21 @@ const iptIds = [
   "input-phone",
 ];
 
-const inputNodes_up = {
-  [iptIds[0]]: getInputNode({
-    id: iptIds[0],
-    fieldId: "name",
-    label: "Имя",
-    type: "text",
-    placeholder: "Имя",
-  }),
-  [iptIds[1]]: getInputNode({
-    id: iptIds[1],
-    fieldId: "surname",
-    label: "Фамилия",
-    type: "text",
-    placeholder: "Фамилия",
-  }),
-  [iptIds[2]]: getInputNode({
-    id: iptIds[2],
-    fieldId: "login",
-    label: "Логин",
-    type: "text",
-    placeholder: "Логин",
-  }),
-  [iptIds[3]]: getInputNode({
-    id: iptIds[3],
-    fieldId: "email",
-    label: "Эл. почта",
-    type: "email",
-    placeholder: "Эл. почта",
-  }),
-  [iptIds[4]]: getInputNode({
-    id: iptIds[4],
-    fieldId: "password",
-    label: "Пароль",
-    type: "password",
-    placeholder: "Пароль",
-  }),
-  [iptIds[5]]: getInputNode({
-    id: iptIds[5],
-    fieldId: "phone",
-    label: "Телефон",
-    type: "tel",
-    placeholder: "Телефон",
-  }),
+const inputs_signUp = {
+  "input-name": getInputNode(iptIds[0], "name", "Имя"),
+  "input-surname": getInputNode(iptIds[1], "surname", "Фамилия"),
+  "input-login": getInputNode(iptIds[2], "login", "Логин"),
+  "input-email": getInputNode(iptIds[3], "email", "Эл. почта"),
+  "input-password": getInputNode(iptIds[4], "password", "Пароль"),
+  "input-phone": getInputNode(iptIds[5], "phone", "Телефон"),
 };
 
-const inputNodes_in = {
-  [iptIds[2]]: getInputNode({
-    id: iptIds[2],
-    fieldId: "login",
-    label: "Логин",
-    type: "text",
-    placeholder: "Логин",
-  }),
-  [iptIds[4]]: getInputNode({
-    id: iptIds[4],
-    fieldId: "password",
-    label: "Пароль",
-    type: "password",
-    placeholder: "Пароль",
-  }),
+const inputs_signIn = {
+  "input-login": getInputNode(iptIds[2], "login", "Логин"),
+  "input-password": getInputNode(iptIds[4], "password", "Пароль"),
 };
 
-const authPageParams_in: ComponentParams<AuthProps> = {
+const authPageParams_signIn: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignIn,
     rootTag: "form",
@@ -94,7 +46,7 @@ const authPageParams_in: ComponentParams<AuthProps> = {
   },
   children: {
     nodes: {
-      ...inputNodes_in,
+      ...(inputs_signIn as any),
       heading: getHeadingNode("heading", "Вход 🚪") as any,
       buttonFormSubmit: getButtonNode("buttonFormSubmit", "Войти ✓", {
         type: "submit",
@@ -102,7 +54,7 @@ const authPageParams_in: ComponentParams<AuthProps> = {
       buttonReroute: getButtonNode("buttonReroute", "Впервые?", {
         isSilent: true,
         on: {
-          click: () => handleReroute("sign-in")
+          click: () => handleReroute("sign-in"),
         },
       }) as any,
     },
@@ -110,12 +62,12 @@ const authPageParams_in: ComponentParams<AuthProps> = {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
       buttonReroute: "buttonReroute",
-      inputs: [iptIds[2], iptIds[4]],
+      inputs: ["input-login", "input-password"],
     },
   },
 };
 
-const authPageParams_up: ComponentParams<AuthProps> = {
+const authPageParams_signUp: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignUp,
     rootTag: "form",
@@ -124,7 +76,7 @@ const authPageParams_up: ComponentParams<AuthProps> = {
   },
   children: {
     nodes: {
-      ...inputNodes_up,
+      ...(inputs_signUp as any),
       heading: getHeadingNode("heading", "Регистрация 🎀") as any,
       buttonFormSubmit: getButtonNode(
         "buttonFormSubmit",
@@ -133,26 +85,33 @@ const authPageParams_up: ComponentParams<AuthProps> = {
       buttonReroute: getButtonNode("buttonReroute", "Я свой!", {
         isSilent: true,
         on: {
-          click: () => handleReroute("sign-up")
-        }
+          click: () => handleReroute("sign-up"),
+        },
       }) as any,
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
       buttonReroute: "buttonReroute",
-      inputs: iptIds,
+      inputs: [
+        "input-name",
+        "input-surname",
+        "input-login",
+        "input-email",
+        "input-password",
+        "input-phone",
+      ],
     },
   },
 };
 
 export const authPageNode_in: PageNode<AuthProps, AuthPage> = {
-  params: authPageParams_in,
+  params: authPageParams_signIn,
   factory: buildAuthPage as any,
 };
 
 export const authPageNode_up: PageNode<AuthProps, AuthPage> = {
-  params: authPageParams_up,
+  params: authPageParams_signUp,
   factory: buildAuthPage as any,
 };
 

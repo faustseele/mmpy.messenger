@@ -1,19 +1,47 @@
+import { BaseProps } from "../../lib/Component/model/base.types.ts";
 import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
 import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
-import cssInput from "./input.module.css";
+import css from "./input.module.css";
 import { Input } from "./Input.ts";
-import { InputConfigs, InputProps } from "./types.ts";
+import { FieldType, InputProps } from "./types.ts";
+import { getInputTypeByFieldId } from "./utils.ts";
 
 export const getInputNode = (
-  configs: Omit<InputConfigs, "rootTag" | "classNames" | "for">,
+  id: ComponentId,
+  fieldId: FieldType,
+  label: string,
+  {
+    placeholder,
+    isError,
+    errorMessage,
+    autocomplete,
+    on,
+  }: {
+    placeholder?: string;
+    isError?: boolean;
+    isSearch?: boolean;
+    errorMessage?: string;
+    autocomplete?: "on" | "off";
+    on?: BaseProps["on"];
+  } = {},
 ): ComponentNode<InputProps, Input> => {
-  const params = getInputProps(configs);
+  const params = getInputProps(
+    id,
+    fieldId,
+    label,
+    placeholder,
+    isError,
+    errorMessage,
+    autocomplete,
+    on,
+  );
 
   return {
     params,
@@ -25,15 +53,30 @@ export const getInputNode = (
 };
 
 const getInputProps = (
-  configs: Omit<InputConfigs, "rootTag" | "classNames" | "for">,
+  id: ComponentId,
+  fieldId: FieldType,
+  label: string,
+  placeholder: string = label,
+  isError: boolean = false,
+  errorMessage: string = "",
+  autocomplete: "on" | "off" = "on",
+  on: BaseProps["on"] = {},
 ): ComponentParams<InputProps> => {
   return {
     configs: {
+      id,
       rootTag: "label",
-      classNames: cssInput.inputLabelWrap,
-      for: configs.fieldId,
-      ...configs,
+      classNames: css.inputLabelWrap,
+      fieldId,
+      label,
+      type: getInputTypeByFieldId(fieldId),
+      placeholder,
+      for: fieldId,
+      isError,
+      errorMessage,
+      autocomplete,
     },
+    on,
   };
 };
 
@@ -46,7 +89,6 @@ const buildInput: ComponentFactory<InputProps, Input> = (
     domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
-
   const node = {
     params,
     factory: buildInput,

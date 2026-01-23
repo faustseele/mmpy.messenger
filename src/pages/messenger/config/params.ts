@@ -48,14 +48,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
           on: { click: handleGoToSettings },
         },
       ) as any,
-      searchInput: getInputNode({
-        id: "searchInput",
-        fieldId: "search",
-        label: "Поиск",
-        type: "text",
-        placeholder: "Поиск",
-        isSearch: true,
-      }) as any,
+      searchInput: getInputNode("searchInput", "search", "Поиск") as any,
       addNotesButton: getButtonNode("addNotesButton", "Заметкa ✏️", {
         tooltip: "Добавить новые заметки",
       }) as any,

@@ -18,7 +18,6 @@ export interface InputConfigs extends BaseConfigs {
   placeholder: string;
   for: FieldType;
   isError?: boolean;
-  isSearch?: boolean;
   errorMessage?: string;
   autocomplete?: "on" | "off";
 }
