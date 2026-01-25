@@ -1,7 +1,7 @@
 import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
-import { GoToChatConfigs, GoToChatProps } from "../model/types.ts";
+import { GoToChatConfigs, GoToChatNodes, GoToChatProps } from "../model/types.ts";
 import css from "./goToChat.module.css";
 
 export class GoToChat extends Component<GoToChatProps> {
@@ -25,16 +25,13 @@ export class GoToChat extends Component<GoToChatProps> {
   }
 
   public getInnerMarkup(): string {
-    const noAvatar = this.configs.avatar === "/static/avatar.png";
-    const letter = this.configs.userName.charAt(0);
+    if (!this.children?.nodes) return `<span>ERROR: GoToChat: Children are not defined</span>`;
+    const { chatAvatar } = this.children.nodes as GoToChatNodes;
+
+    console.log("chatAvatar", chatAvatar);
 
     return /*html*/ `
-      <div class="${css.avatarWrap}">
-        <img class="${css.avatarWrap_img}" alt="User's avatar from catalogue" src="{{ avatar }}">
-        {{#if ${noAvatar} }}
-          <span class="${css.avatarWrap_letter}"> ${letter} </span>
-        {{/if}}
-      </div>
+      {{{ ${chatAvatar.params.configs.id} }}}
 
       <div class="${css.goToChat__content}">
         <p class="${css.userName}">{{ userName }}</p>

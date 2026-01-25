@@ -1,8 +1,9 @@
 import Store from "@/app/providers/store/model/Store.ts";
 import { ChatType } from "@/entities/chat/model/types.ts";
 import { ChatResponse, ISODateString } from "@/shared/api/model/api.types.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 import { handleSelectChat } from "@entities/chat/model/actions.ts";
-import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import {
   ChildGraph,
   ChildrenEdges,
@@ -18,11 +19,9 @@ import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
 import { tinyDate } from "@shared/lib/helpers/formatting/date.ts";
-import defaultAvatar from "../../../../static/avatar.png";
 import { GoToChat } from "../ui/GoToChat.ts";
 import css from "../ui/goToChat.module.css";
 import { GoToChatConfigs, GoToChatProps } from "./types.ts";
-import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 export function getGoToChatGraph(apiChats: ChatResponse[]): ChildGraph {
   const goToChatNodes: ChildrenNodes = {};
@@ -126,16 +125,25 @@ const getGoToChatParams = (
     classNames: cx(css.goToChat, selected ? css.goToChat_selected : ""),
     chatId,
     userName,
-    avatar: avatar ? `${API_URL_RESOURCES}${avatar}` : defaultAvatar,
+    avatar,
     contentText,
     unreadCount,
     date: tinyDate(date ?? ""),
-    selected
+    selected,
   };
 
   return {
     configs,
     on,
+    children: {
+      nodes: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        chatAvatar: getAvatarNode(`chatAvatar`, userName, avatar) as any,
+      },
+      edges: {
+        chatAvatar: "chatAvatar",
+      },
+    },
   };
 };
 

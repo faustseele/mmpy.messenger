@@ -36,8 +36,6 @@ class ChatService {
       let list = await ChatAPI.getChats(query);
       list = await setChatsTypes(list);
 
-      console.log("Fetched chats with types:", list);
-
       Store.set("api.chats.list", list);
       console.log("chats fetch success !:", list);
 

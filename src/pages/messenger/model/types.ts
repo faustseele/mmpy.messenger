@@ -34,14 +34,12 @@ type TypeChat = {
   type: Extract<MessengerType, "chat">;
   chatId: ChatId;
   chatTitle: string;
-  chatAvatar?: string;
 };
 
 type TypeNote = {
   type: Extract<MessengerType, "notes">;
   chatId: ChatId;
   chatTitle: string;
-  chatAvatar?: string;
 };
 
 export type MessengerOn = {
@@ -66,6 +64,7 @@ export type MessengerMap =
   | "deleteChatButton"
   | "deleteNotesButton"
   | "goToChatItems"
+  | "chatAvatar"
   | "messages"
   | "isLoadingMessages"
   | "hasMessages"

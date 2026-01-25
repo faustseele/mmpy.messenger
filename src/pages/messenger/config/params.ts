@@ -21,6 +21,7 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { handleFindUser, handleGoToSettings } from "../model/actions.ts";
 import { MessengerConfigs, MessengerProps } from "../model/types.ts";
 import css from "../ui/messenger.module.css";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 
 export const getBaseMessengerConfigs = (
   info: MessengerConfigs["info"],
@@ -49,6 +50,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
         },
       ) as any,
       searchInput: getInputNode("searchInput", "search", "Поиск") as any,
+      chatAvatar: getAvatarNode("chatAvatar", "chatAvatar") as any,
       addNotesButton: getButtonNode("addNotesButton", "Заметкa ✏️", {
         tooltip: "Добавить новые заметки",
       }) as any,
@@ -71,13 +73,14 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
         tooltip: "Удалить чат с пользователем",
         isSilent: true,
       }) as any,
-      messageField: getMessageFieldNode("messageField") as any,
       spinner: getSpinnerNode(true) as any,
+      messageField: getMessageFieldNode("messageField") as any,
     },
     edges: {
       heading_chats: "heading_chats",
       heading_goToSettings: "heading_goToSettings",
       searchInput: "searchInput",
+      chatAvatar: "chatAvatar",
       addNotesButton: "addNotesButton",
       findUserChatButton: "findUserChatButton",
       closeChatButton: "closeChatButton",

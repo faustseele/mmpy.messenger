@@ -1,9 +1,8 @@
-import { API_URL_RESOURCES } from "@/shared/config/urls.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 import { AppState } from "@app/providers/store/model/Store.ts";
 import { getMessagesGraph } from "@entities/message-bubble/model/factory.ts";
 import { getGoToChatGraph } from "@features/go-to-chat/model/factory.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
-import defaultAvatar from "../../../../static/avatar.png";
 import { getBaseMessengerConfigs } from "../config/params.ts";
 import { MessengerProps, MessengerType } from "./types.ts";
 
@@ -22,7 +21,6 @@ export const mapMessengerState = (
     if (!activeId) return "stub";
 
     if (!currentChat?.type) {
-      console.error("currentChat.type is not defined", currentChat);
       return "stub";
     }
 
@@ -33,10 +31,16 @@ export const mapMessengerState = (
     type,
     chatId: currentChat?.id ?? 0,
     chatTitle: currentChat?.title ?? "",
-    chatAvatar: currentChat?.avatar
-      ? `${API_URL_RESOURCES}${currentChat.avatar}`
-      : defaultAvatar,
   };
+
+  const chatAvatar = getAvatarNode(
+    "chatAvatar",
+    currentChat?.title,
+    currentChat?.avatar,
+    {
+      hasInput: type === "notes",
+    },
+  );
 
   const updatedConfigs = getBaseMessengerConfigs(
     info,
@@ -58,10 +62,12 @@ export const mapMessengerState = (
       nodes: {
         ...goToChatPatch.nodes,
         ...messagesPatch.nodes,
+        chatAvatar,
       },
       edges: {
         ...goToChatPatch.edges,
         ...messagesPatch.edges,
+        chatAvatar: "chatAvatar",
       },
     },
   };

@@ -135,6 +135,7 @@ export class MessengerPage extends Page<MessengerProps> {
       heading_chats,
       heading_goToSettings,
       addNotesButton,
+      chatAvatar,
       findUserChatButton,
       closeChatButton,
       deleteNotesButton,
@@ -162,16 +163,11 @@ export class MessengerPage extends Page<MessengerProps> {
         <header class="${css.chatHeader}">
           <div class="${css.chatHeader__face}">
 
-          {{#if ${isChat || isNotes}}}
-            <label for="avatar-input" class="${css.avatarContainer}">
-              <img class="${css.avatar}" src="{{ info.chatAvatar }}" alt="Participant's avatar" />
-              <div class="${css.avatarOverlay}">
-                <span class="${css.overlayText}">🔄</span>
-              </div>
-            </label>
-            <input id="avatar-input" type="file" name="avatar" class="${css.avatarFileInput}" />
+            {{#if ${isChat || isNotes}}}
+              {{{ ${chatAvatar.params.configs.id} }}}
+            {{/if}}
+
             <p class="${css.chatTitle}">{{ info.chatTitle }}</p>
-          {{/if}}
 
           </div>
 
