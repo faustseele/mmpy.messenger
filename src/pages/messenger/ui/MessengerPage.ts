@@ -40,11 +40,6 @@ export class MessengerPage extends Page<MessengerProps> {
     this._wireDeleteChat(deleteNotes);
   }
 
-  public componentDidRender(): void {
-    /* re-binding avatar change event */
-    this._wireAvatar();
-  }
-
   public componentDidUpdate(): void {
     const spinner = this.children?.nodes["spinner"].runtime
       ?.instance as Spinner;
@@ -95,32 +90,6 @@ export class MessengerPage extends Page<MessengerProps> {
     });
   }
 
-  private _wireAvatar(): void {
-    const input =
-      this.element?.querySelector<HTMLInputElement>("#avatar-input");
-
-    if (!input || input.dataset.bound) return;
-
-    input.addEventListener("change", async () => {
-      if (this.configs.info.type === "stub") {
-        console.error("MessengerPage: info is stub");
-        return;
-      }
-
-      const id = this.configs.info.chatId;
-      const file = input.files?.[0];
-
-      if (!id || !file) {
-        console.error("No active chat to update avatar or bad file");
-        return;
-      }
-
-      await this.on?.updateChatAvatar?.(id, file);
-
-      input.value = "";
-    });
-    input.dataset.bound = "true";
-  }
 
   public getInnerMarkup(): string {
     const type = this.configs.info.type;
@@ -165,9 +134,8 @@ export class MessengerPage extends Page<MessengerProps> {
 
             {{#if ${isChat || isNotes}}}
               {{{ ${chatAvatar.params.configs.id} }}}
+              <p class="${css.chatTitle}">{{ info.chatTitle }}</p>
             {{/if}}
-
-            <p class="${css.chatTitle}">{{ info.chatTitle }}</p>
 
           </div>
 

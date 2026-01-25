@@ -50,7 +50,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
         },
       ) as any,
       searchInput: getInputNode("searchInput", "search", "Поиск") as any,
-      chatAvatar: getAvatarNode("chatAvatar", "chatAvatar") as any,
+      chatAvatar: getAvatarNode("chatAvatar") as any,
       addNotesButton: getButtonNode("addNotesButton", "Заметкa ✏️", {
         tooltip: "Добавить новые заметки",
       }) as any,

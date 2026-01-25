@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { handleUpdateAvatar } from "@/entities/user/model/actions.ts";
 import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 import { getButtonNode } from "@/shared/ui/Button/factory.ts";
 import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
 import { getSubheadingNode } from "@/shared/ui/Subheading/factory.ts";
@@ -10,7 +12,6 @@ import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import profileAvatar from "../../../../static/profile-avatar.png";
 import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
 import css from "../ui/settings.module.css";
@@ -50,7 +51,6 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
     classNames: cx(cssPage.moduleWindow, css.moduleWindow_profile),
     type: "change-info",
     profileName: "Loading..",
-    profileAvatar,
     user: null,
   },
   children: {
@@ -61,6 +61,11 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       heading_backToChats: getHeadingNode("heading_backToChats", "⮘ Назад", {
         isClickable: true,
         on: { click: handleMessengerClick },
+      }) as any,
+      user_avatar: getAvatarNode("user_avatar", -1, "user_avatar", "", {
+        hasInput: true,
+        size: "xl",
+        updateAvatar: (file) => handleUpdateAvatar(file),
       }) as any,
       subheading_form: getSubheadingNode(
         "subheading_form",

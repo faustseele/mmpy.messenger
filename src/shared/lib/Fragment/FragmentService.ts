@@ -121,16 +121,14 @@ export default class FragmentService<C extends BaseConfigs> {
       if (placeholder && childElement) {
         placeholder.replaceWith(childElement);
       } else {
-        if (node.params.configs.id === "chatAvatar") {
-          console.error(
+        /* console.error(
             `FragmentService Error: Could not replace child placeholder.
           Child ID: ${node.params.configs.id}.
           Placeholder found: ${!!placeholder}.
           Child element obtained: ${!!childElement}.
           DocumentFragment content:`,
             JSON.stringify(fragment),
-          );
-        }
+          ); */
       }
     }
 

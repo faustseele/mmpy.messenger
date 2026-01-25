@@ -11,7 +11,6 @@ export interface SettingsProps extends BaseProps {
     classNames: string;
     type: SettingsType;
     profileName: string;
-    profileAvatar: string;
     user: UserResponse | null;
   };
   on: {
@@ -25,6 +24,7 @@ export type SettingsType = "change-password" | "change-info";
 type SettingsMap =
   | "heading_backToChats"
   | "heading_profile"
+  | "user_avatar"
   | "subheading_form"
   | "buttonEditInfo"
   | "buttonEditPassword"

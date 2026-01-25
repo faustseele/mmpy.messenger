@@ -1,3 +1,4 @@
+import { handleUpdateChatAvatar } from "@/entities/chat/model/actions.ts";
 import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 import { AppState } from "@app/providers/store/model/Store.ts";
 import { getMessagesGraph } from "@entities/message-bubble/model/factory.ts";
@@ -9,7 +10,8 @@ import { MessengerProps, MessengerType } from "./types.ts";
 export const mapMessengerState = (
   state: AppState,
 ): ComponentPatch<MessengerProps> => {
-  const { currentChat, list, activeId, messagesByChatId } = state.api.chats;
+  const { list, activeId, messagesByChatId } = state.api.chats;
+  const currentChat = activeId ? list?.find(chat => chat.id === activeId) ?? null : null;
 
   /* loading if there's an active chat but no msgs loaded yet */
   const isLoadingMessages = activeId ? !messagesByChatId[activeId] : false;
@@ -35,10 +37,14 @@ export const mapMessengerState = (
 
   const chatAvatar = getAvatarNode(
     "chatAvatar",
+    currentChat?.id ?? 0,
     currentChat?.title,
     currentChat?.avatar,
     {
+      updateAvatar: (file) =>
+        handleUpdateChatAvatar(currentChat?.id ?? 0, file),
       hasInput: type === "notes",
+      size: "l",
     },
   );
 

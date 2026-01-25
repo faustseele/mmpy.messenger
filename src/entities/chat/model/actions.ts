@@ -63,7 +63,7 @@ export const handleSelectChat = async (id: number) => {
   await ChatService.selectChat(id);
 };
 
-export const handleUpdateChatAvatar = async (id: ChatId, avatar: File) => {
-  await ChatService.updateChatAvatar(id, avatar);
+export const handleUpdateChatAvatar = async (id: ChatId, file: File): Promise<void> => {
+  await ChatService.updateChatAvatar(id, file);
   await ChatService.fetchChats();
 };

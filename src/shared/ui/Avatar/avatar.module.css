@@ -11,6 +11,16 @@
   overflow: hidden;  
 }
 
+.avatarWrap_l {
+  width: 47px;
+  height: 47px;
+}
+
+.avatarWrap_xl {
+  width: 95px;
+  height: 95px;
+}
+
 .avatarWrap__img {
   display: block;
 

@@ -1,4 +1,3 @@
-import { Subheading } from "@/shared/ui/Subheading/Subheading.ts";
 import { handleUpdateAvatar } from "@entities/user/model/actions.ts";
 import { handleLogout } from "@features/authenticate/model/actions.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
@@ -9,8 +8,8 @@ import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
-import { SettingsNodes, SettingsProps, SettingsType } from "../model/types.ts";
-import { onBadForm, onGoodForm } from "../model/utils.ts";
+import { handleSwitchType, handleValidateAndSubmit } from "../model/actions.ts";
+import { SettingsNodes, SettingsProps } from "../model/types.ts";
 import css from "./settings.module.css";
 
 export class SettingsPage extends Page<SettingsProps> {
@@ -133,9 +132,9 @@ export class SettingsPage extends Page<SettingsProps> {
           e.preventDefault();
 
           if (this.configs.type === "change-info") {
-            this._validateAndSubmit("change-info", validator_info, editInfo);
+            handleValidateAndSubmit("change-info", validator_info, editInfo);
           } else {
-            this._switchType("change-info", editInfo, editPassword);
+            handleSwitchType("change-info", editInfo, editPassword, this);
           }
         },
       },
@@ -146,13 +145,13 @@ export class SettingsPage extends Page<SettingsProps> {
           e.preventDefault();
 
           if (this.configs.type === "change-password") {
-            this._validateAndSubmit(
+            handleValidateAndSubmit(
               "change-password",
               validator_psw,
               editPassword,
             );
           } else {
-            this._switchType("change-password", editPassword, editInfo);
+            handleSwitchType("change-password", editPassword, editInfo, this);
           }
         },
       },
@@ -161,7 +160,6 @@ export class SettingsPage extends Page<SettingsProps> {
       on: {
         click: async (e: Event) => {
           e.preventDefault();
-
           handleLogout();
         },
       },
@@ -194,93 +192,37 @@ export class SettingsPage extends Page<SettingsProps> {
     });
   }
 
-  private _switchType(newType: SettingsType, newBtn: Button, btn: Button) {
-    if (!this.children) {
-      console.error("SettingsPage: Children are not defined", this);
-      return;
-    }
-
-    this.configs.type = newType;
-
-    const { subheading_form } = this.children.nodes as SettingsNodes;
-
-    const subheading = subheading_form.runtime?.instance as Subheading;
-
-    const isInfo = newType === "change-info";
-    subheading.setProps({
-      configs: {
-        text: isInfo ? "Ваши данные:" : "Ваш пароль:",
-      },
-    });
-    btn.setProps({
-      configs: {
-        type: "button",
-        isSilent: true,
-        showSpinner: false,
-      },
-    });
-    newBtn.setProps({
-      configs: {
-        type: "submit",
-        isSilent: false,
-        showSpinner: false,
-      },
-    });
-
-    this.setProps({
-      on: { submit: newBtn.on?.click },
-    });
-  }
-
-  private _validateAndSubmit = async (
-    type: SettingsType,
-    validator: FormValidator,
-    btn: Button,
-  ): Promise<void> => {
-    const formValid = validator.onFormCheck(type, onBadForm(type));
-    if (!formValid) return;
-
-    btn.setProps({
-      configs: {
-        showSpinner: true,
-      },
-    });
-
-    await validator.onFormSubmit(type, onGoodForm(type));
-
-    btn.setProps({
-      configs: {
-        showSpinner: false,
-      },
-    });
-  };
-
   public getInnerMarkup(): string {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: SettingsPage: Children are not defined</span>`;
 
     const nodes = this.children.nodes as SettingsNodes;
 
+    const {
+      heading_profile,
+      heading_backToChats,
+      user_avatar,
+      subheading_form,
+      buttonEditInfo,
+      buttonEditPassword,
+    } = nodes;
+
     return /*html*/ `
       <header class="${css.profileHeadings}">
-        {{{ ${nodes["heading_profile"].params.configs.id} }}}
-        {{{ ${nodes["heading_backToChats"].params.configs.id} }}}
+        {{{ ${heading_profile.params.configs.id} }}}
+        {{{ ${heading_backToChats.params.configs.id} }}}
       </header>
       
       <main class="${css.settingsContent}">
         <div class="${css.settingsFace}">
-          <label for="avatar-input" class="${css.avatarContainer}">
-            <img alt="User's avatar" src="{{ profileAvatar }}" class="${css.avatarImage}" />
-            <div class="${css.avatarOverlay}">
-              <span class="${css.overlayText}">change avatar</span>
-            </div>
-          </label>
-          <input id="avatar-input" type="file" name="avatar" class="${css.avatarFileInput}" />
+
+          {{{${user_avatar.params.configs.id} }}}
+
           <h2 class="${css.settingsFace__name}">{{ profileName }}</h2>
         </div>
 
         <div class="${css.settingsInputs}">
-          {{{ ${nodes["subheading_form"].params.configs.id} }}}
+          {{{ ${subheading_form.params.configs.id} }}}
 
           <div class="${css.settingsInputs__list}">
             {{#if ${this.isInfo}}}
@@ -294,8 +236,8 @@ export class SettingsPage extends Page<SettingsProps> {
 
       <footer class="${css.footer}">
         <div class="${css.footer__horBtns}">
-          {{{ ${nodes["buttonEditInfo"].params.configs.id} }}}
-          {{{ ${nodes["buttonEditPassword"].params.configs.id} }}}
+          {{{ ${buttonEditInfo.params.configs.id} }}}
+          {{{ ${buttonEditPassword.params.configs.id} }}}
         </div>
         {{{ ${nodes["buttonLogout"].params.configs.id} }}}
       </footer>

@@ -3,7 +3,9 @@ import { ChatType } from "@/entities/chat/model/types.ts";
 import { ChatResponse, ISODateString } from "@/shared/api/model/api.types.ts";
 import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
-import { handleSelectChat } from "@entities/chat/model/actions.ts";
+import {
+  handleSelectChat
+} from "@entities/chat/model/actions.ts";
 import {
   ChildGraph,
   ChildrenEdges,
@@ -137,8 +139,13 @@ const getGoToChatParams = (
     on,
     children: {
       nodes: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        chatAvatar: getAvatarNode(`chatAvatar`, userName, avatar) as any,
+        chatAvatar: getAvatarNode(
+          `chatAvatar`,
+          chatId,
+          userName,
+          avatar,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ) as any,
       },
       edges: {
         chatAvatar: "chatAvatar",

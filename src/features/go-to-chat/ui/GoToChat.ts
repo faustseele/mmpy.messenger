@@ -19,16 +19,9 @@ export class GoToChat extends Component<GoToChatProps> {
     );
   }
 
-  public componentDidMount(): void {
-    this.element?.setAttribute("tabindex", "0");
-    this.element?.focus();
-  }
-
   public getInnerMarkup(): string {
     if (!this.children?.nodes) return `<span>ERROR: GoToChat: Children are not defined</span>`;
     const { chatAvatar } = this.children.nodes as GoToChatNodes;
-
-    console.log("chatAvatar", chatAvatar);
 
     return /*html*/ `
       {{{ ${chatAvatar.params.configs.id} }}}
