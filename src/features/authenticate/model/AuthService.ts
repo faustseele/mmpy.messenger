@@ -8,6 +8,7 @@ import { ApiError, ApiResponse } from "@/shared/api/model/types.ts";
 import Store from "@app/providers/store/model/Store.ts";
 import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import AuthAPI from "../api/AuthAPI.ts";
+import { GUEST_CREDS } from "../config/guest.ts";
 
 class AuthService {
   public async signUp(data: SignUpRequest): Promise<ApiResponse<UserResponse>> {
@@ -28,7 +29,6 @@ class AuthService {
         };
       }
 
-
       Store.set("controllers.isLoggedIn", true);
 
       /* ya-praktikum.tech API strips down surname to 1st char ('Petrov' to 'P'),
@@ -42,7 +42,6 @@ class AuthService {
         /* no-await; bc its's a hook */
         UserAPI.updateProfile(user);
         return user;
-
       })(data.second_name);
 
       Store.set("api.auth.user", user);

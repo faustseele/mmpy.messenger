@@ -6,6 +6,8 @@ import css from "./toast.module.css";
 import { ToastPayload, ToastProps } from "./types.ts";
 
 export class Toast extends Component<ToastProps> {
+  private timerId: ReturnType<typeof setTimeout> | undefined;
+
   constructor(props: ComponentProps<ToastProps, Toast>) {
     super(props);
   }
@@ -15,6 +17,7 @@ export class Toast extends Component<ToastProps> {
     return cx(
       css.toast,
       type === "error" && css.toast_error,
+      type === "success" && css.toast_success,
       show && css.toast_visible,
     );
   }
@@ -37,19 +40,39 @@ export class Toast extends Component<ToastProps> {
   public showToast({ message, type = "info" }: ToastPayload): void {
     if (!this.element) return;
 
-    this.setProps({
-      configs: {
-        message,
-        type,
-        show: true,
-      },
-    });
+    /* clear timer if toast active */
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = undefined;
 
+      this.setProps({
+        configs: {
+          show: false,
+        },
+      });
+    }
+
+    /* timeout needed to allow hide-anim on clearTimeout() to complete */
     setTimeout(() => {
-      this.setProps({ configs: { show: false } });
-    }, 2000);
-  }
+      this.setProps({
+        configs: {
+          message,
+          type,
+          show: true,
+        },
+      });
 
+      /* auto-hide after 2s */
+      this.timerId = setTimeout(() => {
+        this.timerId = undefined;
+        this.setProps({
+          configs: {
+            show: false,
+          },
+        });
+      }, 2000);
+    }, 200);
+  }
   public getInnerMarkup(): string {
     return /*html*/ ``;
   }

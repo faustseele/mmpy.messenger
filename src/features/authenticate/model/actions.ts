@@ -9,6 +9,8 @@ import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
+import { GUEST_CREDS } from "../config/guest.ts";
+import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
 
 export const handleFetchUser = async (): Promise<ApiResponse<UserResponse>> => {
   const res = await AuthService.fetchUser();
@@ -41,6 +43,24 @@ export const handleSignIn = async (
     /* fetch chats on successful login */
     handleFetchChats();
     Router.go(RouteLink.Messenger);
+  }
+  return res;
+};
+
+export const handleGuestMode = async (): Promise<ApiResponse<UserResponse>> => {
+  globalBus.emit("show-toast", {
+    message: "Launching Guest Mode...",
+  });
+  const res = await AuthService.signIn(GUEST_CREDS);
+
+  if (res.ok) {
+    /* fetch chats on successful login */
+    handleFetchChats();
+    Router.go(RouteLink.Messenger);
+    globalBus.emit("show-toast", {
+      message: "👻 Guest Login Success!",
+      type: "success",
+    });
   }
   return res;
 };

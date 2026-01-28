@@ -13,6 +13,7 @@ import { handleReroute } from "../model/actions.ts";
 import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
 import type { AuthPage } from "../ui/AuthPage.ts";
+import { handleGuestMode } from "@/features/authenticate/model/actions.ts";
 
 const iptIds = [
   "input-name",
@@ -47,20 +48,26 @@ const authPageParams_signIn: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...(inputs_signIn as any),
-      heading: getHeadingNode("heading", "Вход 🚪") as any,
+      heading: getHeadingNode("heading", "Вход 🚪"),
       buttonFormSubmit: getButtonNode("buttonFormSubmit", "Войти ✓", {
         type: "submit",
-      }) as any,
+      }),
+      buttonGuest: getButtonNode("buttonGuest", "👻 Guest", {
+        on: {
+          click: () => handleGuestMode(),
+        },
+      }),
       buttonReroute: getButtonNode("buttonReroute", "Впервые?", {
         isSilent: true,
         on: {
           click: () => handleReroute("sign-in"),
         },
-      }) as any,
+      }),
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
+      buttonGuest: "buttonGuest",
       buttonReroute: "buttonReroute",
       inputs: ["input-login", "input-password"],
     },
@@ -77,21 +84,27 @@ const authPageParams_signUp: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...(inputs_signUp as any),
-      heading: getHeadingNode("heading", "Регистрация 🎀") as any,
+      heading: getHeadingNode("heading", "Регистрация 🎀"),
       buttonFormSubmit: getButtonNode(
         "buttonFormSubmit",
         "Зарегистрироваться ✓",
-      ) as any,
+      ),
+      buttonGuest: getButtonNode("buttonGuest", "👻 Guest", {
+        on: {
+          click: () => handleGuestMode(),
+        },
+      }),
       buttonReroute: getButtonNode("buttonReroute", "Я свой!", {
         isSilent: true,
         on: {
           click: () => handleReroute("sign-up"),
         },
-      }) as any,
+      }),
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
+      buttonGuest: "buttonGuest",
       buttonReroute: "buttonReroute",
       inputs: [
         "input-name",

@@ -93,7 +93,7 @@ export class AuthPage extends Page<AuthProps> {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonReroute } = this.children
+    const { heading, buttonFormSubmit, buttonGuest, buttonReroute, } = this.children
       .nodes as AuthNodes;
 
     return /*html*/ `
@@ -109,7 +109,10 @@ export class AuthPage extends Page<AuthProps> {
 
       <footer class="${css.authFooter} ${this.footerModifier}">
         {{{ ${buttonReroute.params.configs.id} }}}
-        {{{ ${buttonFormSubmit.params.configs.id} }}}
+        <div class="${css.authFooter__submits}">
+          {{{ ${buttonGuest.params.configs.id} }}}
+          {{{ ${buttonFormSubmit.params.configs.id} }}}
+        </div>
       </footer> 
       `;
   }
