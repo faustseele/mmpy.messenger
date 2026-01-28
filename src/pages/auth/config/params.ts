@@ -54,7 +54,7 @@ const authPageParams_signIn: ComponentParams<AuthProps> = {
       }),
       buttonGuest: getButtonNode("buttonGuest", "👻 Guest", {
         on: {
-          click: () => handleGuestMode(),
+          click: handleGuestMode,
         },
       }),
       buttonReroute: getButtonNode("buttonReroute", "Впервые?", {
@@ -87,11 +87,13 @@ const authPageParams_signUp: ComponentParams<AuthProps> = {
       heading: getHeadingNode("heading", "Регистрация 🎀"),
       buttonFormSubmit: getButtonNode(
         "buttonFormSubmit",
-        "Зарегистрироваться ✓",
+        "Зарегистрироваться ✓", {
+          type: "submit",
+        }
       ),
       buttonGuest: getButtonNode("buttonGuest", "👻 Guest", {
         on: {
-          click: () => handleGuestMode(),
+          click: handleGuestMode,
         },
       }),
       buttonReroute: getButtonNode("buttonReroute", "Я свой!", {
