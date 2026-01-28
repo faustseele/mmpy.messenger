@@ -10,6 +10,7 @@ import {
 } from "../model/actions.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import css from "./messenger.module.css";
+import Store from "@/app/providers/store/model/Store.ts";
 
 export class MessengerPage extends Page<MessengerProps> {
   constructor(props: ComponentProps<MessengerProps, MessengerPage>) {
@@ -20,6 +21,8 @@ export class MessengerPage extends Page<MessengerProps> {
     if (!this.children?.nodes) {
       throw new Error("MessengerPage: Children are not defined");
     }
+
+    console.log(Store.getState())
 
     /* --- getting instances --- */
     const {

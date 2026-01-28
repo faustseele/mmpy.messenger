@@ -50,7 +50,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
         },
       ) as any,
       searchInput: getInputNode("searchInput", "search", "Поиск") as any,
-      chatAvatar: getAvatarNode("chatAvatar") as any,
+      chatAvatar: getAvatarNode("chatAvatar", 0) as any,
       addNotesButton: getButtonNode("addNotesButton", "Заметкa ✏️", {
         tooltip: "Добавить новые заметки",
       }) as any,
@@ -94,7 +94,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
   },
   on: {
     addChatWithUser: (firstName: string, secondName: string) =>
-      handleCreateChat(`{${firstName} ${secondName}}`),
+      handleCreateChat(`${firstName} ${secondName}`),
     addNotes: handleCreateChat,
     addUsers: handleAddUsers,
     deleteChat: handleDeleteChat,
