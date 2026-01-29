@@ -19,7 +19,7 @@ export class MessageField extends Component<MessageFieldProps> {
           const text = (input as HTMLInputElement)?.value?.trim();
 
           if (text) {
-            this.on?.sendMessage?.(text);
+            this.on.sendMessage?.(text);
             (input as HTMLInputElement).value = "";
           }
         },

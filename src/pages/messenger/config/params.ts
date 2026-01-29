@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 import { getButtonNode } from "@/shared/ui/Button/factory.ts";
 import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
 import { getInputNode } from "@/shared/ui/Input/factory.ts";
@@ -21,7 +22,6 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { handleFindUser, handleGoToSettings } from "../model/actions.ts";
 import { MessengerConfigs, MessengerProps } from "../model/types.ts";
 import css from "../ui/messenger.module.css";
-import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 
 export const getBaseMessengerConfigs = (
   info: MessengerConfigs["info"],
@@ -37,7 +37,9 @@ export const getBaseMessengerConfigs = (
 });
 
 export const messengerPageParams: ComponentParams<MessengerProps> = {
-  configs: getBaseMessengerConfigs({ type: "stub" } satisfies MessengerConfigs["info"]),
+  configs: getBaseMessengerConfigs({
+    type: "stub",
+  } satisfies MessengerConfigs["info"]),
   children: {
     nodes: {
       heading_chats: getHeadingNode("heading_chats", "Чаты 👥") as any,

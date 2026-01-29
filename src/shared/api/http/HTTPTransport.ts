@@ -103,13 +103,27 @@ export default class HTTPTransport {
 
       try {
         if (method === HttpMethod.GET || !data) {
-          xhr.send();
+          try {
+            xhr.send();
+          } catch (e) {
+            globalBus.emit("show-toast", {
+              message: "HTTPTransport: xhr.send failed",
+              type: "error",
+            });
+            throw new Error(
+              "HTTPTransport: xhr.send failed",
+              e as ErrorOptions,
+            );
+          }
         } else {
           const body = data instanceof FormData ? data : JSON.stringify(data);
           xhr.send(body);
         }
       } catch (e) {
-        globalBus.emit("show-toast", { message: "HTTPTransport: xhr.send failed", type: "error" });
+        globalBus.emit("show-toast", {
+          message: "HTTPTransport: xhr.send failed",
+          type: "error",
+        });
         throw new Error("HTTPTransport: xhr.send failed", e as ErrorOptions);
       }
     });

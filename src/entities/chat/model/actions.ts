@@ -5,6 +5,7 @@ import {
   GetChatsQuery,
 } from "@/shared/api/model/api.types.ts";
 import { ApiResponse } from "@/shared/api/model/types.ts";
+import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
 import { ls_getLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatService from "./ChatService.ts";
 
@@ -42,7 +43,14 @@ export const handleFetchChats = async (
 ): Promise<ApiResponse<ChatResponse[]>> => {
   const resList = await ChatService.fetchChats(query);
 
-  if (!resList.ok) return resList;
+  if (!resList.ok) {
+    console.error("fetchChats failed:", resList.err);
+    globalBus.emit("show-toast", {
+      message: resList.err?.reason,
+      type: "error",
+    });
+    return resList;
+  }
 
   const list = resList.data;
 

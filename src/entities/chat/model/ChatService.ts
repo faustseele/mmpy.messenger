@@ -197,7 +197,7 @@ class ChatService {
     return Store.getState().api.chats.currentChat?.type === "notes";
   }
 
-  public sendMessage(content: string) {
+  public sendMessage (content: string) {
     this.ws.sendMessage(content);
   }
 
