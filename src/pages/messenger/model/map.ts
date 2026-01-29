@@ -10,8 +10,10 @@ import { MessengerProps, MessengerType } from "./types.ts";
 export const mapMessengerState = (
   state: AppState,
 ): ComponentPatch<MessengerProps> => {
-  const { list, activeId, messagesByChatId } = state.api.chats;
-  const currentChat = activeId ? list?.find(chat => chat.id === activeId) ?? null : null;
+  const { list: chats, activeId, messagesByChatId } = state.api.chats;
+  const currentChat = activeId
+    ? (chats?.find((chat) => chat.id === activeId) ?? null)
+    : null;
 
   /* loading if there's an active chat but no msgs loaded yet */
   const isLoadingMessages = activeId ? !messagesByChatId[activeId] : false;
@@ -54,7 +56,13 @@ export const mapMessengerState = (
     hasMessages,
   );
 
-  const goToChatPatch = getGoToChatGraph(list ?? []);
+  const sortedChats = [...(chats ?? [])].sort((a, b) => {
+    const timeA = a.last_message?.time ?? "";
+    const timeB = b.last_message?.time ?? "";
+    return timeB.localeCompare(timeA);
+  });
+
+  const goToChatPatch = getGoToChatGraph(sortedChats ?? []);
 
   const messagesPatch = getMessagesGraph();
 

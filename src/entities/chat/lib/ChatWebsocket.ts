@@ -1,6 +1,7 @@
-import Store from "@app/providers/store/model/Store.ts";
 import { ChatId, ChatMessage } from "@/shared/api/model/api.types";
+import Store from "@app/providers/store/model/Store.ts";
 import { WSS_CHATS } from "@shared/config/urls.ts";
+import { handleFetchChats } from "../model/actions.ts";
 
 export class ChatWebsocket {
   private sockets = new Map<ChatId, WebSocket>();
@@ -97,6 +98,9 @@ export class ChatWebsocket {
     }
 
     ws.send(JSON.stringify({ type: "message", content }));
+
+    /* update the chats list */
+    handleFetchChats()
   }
 
   private setMessages(chatId: ChatId, messages: ChatMessage[]) {
