@@ -1,3 +1,5 @@
+import { getInputTypeByFieldId } from "@/shared/ui/Input/utils.ts";
+import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import {
   ComponentDeps,
   ComponentId,
@@ -8,30 +10,36 @@ import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
 import css from "@shared/ui/Input/input.module.css";
-import { FieldType, InputConfigs, InputProps } from "@shared/ui/Input/types.ts";
+import { FieldType, InputProps } from "@shared/ui/Input/types.ts";
 import { InputEditor } from "../ui/InputEditor.ts";
 
 export const getEditorNode = (
   id: ComponentId,
   fieldId: FieldType,
   label: string,
-  placeholder: string,
-  type: InputProps["configs"]["type"],
-  isError?: boolean,
-  isSearch?: boolean,
-  autocomplete?: InputConfigs["autocomplete"],
-  errorMessage?: string,
+  {
+    placeholder,
+    isError,
+    errorMessage,
+    autocomplete,
+    on,
+  }: {
+    placeholder?: string;
+    isError?: boolean;
+    errorMessage?: string;
+    autocomplete?: "on" | "off";
+    on?: BaseProps["on"];
+  } = {},
 ): ComponentNode<InputProps, InputEditor> => {
   const params = getEditorProps(
     id,
     fieldId,
     label,
     placeholder,
-    type,
     isError,
-    isSearch,
-    autocomplete,
     errorMessage,
+    autocomplete,
+    on,
   );
   return {
     params,
@@ -46,36 +54,37 @@ const getEditorProps = (
   id: ComponentId,
   fieldId: FieldType,
   label: string,
-  placeholder: string,
-  type: InputProps["configs"]["type"],
-  isError?: boolean,
-  isSearch?: boolean,
-  autocomplete?: InputConfigs["autocomplete"],
-  errorMessage?: string,
-): ComponentParams<InputProps> => ({
-  configs: {
-    id,
-    tagName: "label",
-    classNames: css.inputLabelWrap,
-    for: fieldId,
-    fieldId,
-    label,
-    type,
-    placeholder,
-    isError: isError ?? false,
-    isSearch: isSearch ?? false,
-    autocomplete: autocomplete ?? "off",
-    errorMessage: errorMessage ?? "",
-  },
-});
+  placeholder: string = label,
+  isError: boolean = false,
+  errorMessage: string = "",
+  autocomplete: "on" | "off" = "off",
+  on: BaseProps["on"] = {},
+): ComponentParams<InputProps> => {
+  return {
+    configs: {
+      id,
+      rootTag: "label",
+      classNames: css.inputLabelWrap,
+      for: fieldId,
+      fieldId,
+      label,
+      type: getInputTypeByFieldId(fieldId),
+      placeholder,
+      isError,
+      errorMessage,
+      autocomplete,
+    },
+    on,
+  };
+};
 
 const buildInputEditor: ComponentFactory<InputProps, InputEditor> = (
   params: ComponentParams<InputProps>,
 ): InputEditor => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<InputProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

@@ -1,35 +1,59 @@
-import Store from "@app/providers/store/model/Store.ts";
 import {
   ChatId,
   ChatResponse,
+  ChatUser,
   ChatUsersQuery,
   CreateChatResponse,
   GetChatsQuery,
   UpdateChatAvatarResponse,
-} from "@shared/api/model/types.ts";
+} from "@/shared/api/model/api.types.ts";
+import { ApiError, ApiResponse } from "@/shared/api/model/types.ts";
+import Store from "@app/providers/store/model/Store.ts";
 import { ls_storeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
+import { isChatNotes } from "./utils.ts";
 
 class ChatService {
   private ws = new ChatWebsocket();
 
   public async fetchChats(
     query?: GetChatsQuery,
-  ): Promise<ChatResponse[] | undefined> {
+  ): Promise<ApiResponse<ChatResponse[]>> {
     try {
-      const list = await ChatAPI.getChats(query);
+      const setChatsTypes = async (
+        chats: ChatResponse[],
+      ): Promise<ChatResponse[]> => {
+        return await Promise.all(
+          chats.map(async (chat) => {
+            const isNotes = await isChatNotes(chat.id);
+            chat.type = isNotes ? "notes" : "chat";
+            return chat;
+          }),
+        );
+      };
+
+      let list = await ChatAPI.getChats(query);
+      list = await setChatsTypes(list);
+
       Store.set("api.chats.list", list);
       console.log("chats fetch success !:", list);
 
-      return list;
+      return { ok: true, data: list };
     } catch (e) {
-      console.error("chats fetch fail:", e);
-      return;
+      const badCookie = (e as ApiError).status === 401;
+
+      if (badCookie) {
+        console.info("chats fetch fail, probably not logged in", e);
+      } else {
+        console.error("chats fetch fail", e);
+      }
+
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public async selectChat(chatId: number) {
+  public async selectChat(chatId: number): Promise<ApiResponse<unknown>> {
     try {
       Store.set("api.chats.activeId", chatId);
       ls_storeLastChatId(chatId);
@@ -43,12 +67,29 @@ class ChatService {
       Store.set("api.chats.currentChat", current);
 
       if (!current) {
-        console.error("Current chat not found");
-        return;
+        console.error("Current chat not found", chatId);
+        return {
+          ok: false,
+          err: {
+            status: 404,
+            reason: "Not found",
+            response: `Non-API: Chat ${chatId} not found`,
+          },
+        };
       }
 
       const user = Store.getState().api.auth.user;
-      if (!user) return;
+      if (!user) {
+        console.error("Bad user selection", Store.getState().api);
+        return {
+          ok: false,
+          err: {
+            status: 401,
+            reason: "Unauthorized",
+            response: "Non-API resp: Bad user selection",
+          },
+        };
+      }
 
       /* closing prev socket */
       const prevId = Store.getState().api.chats.activeId;
@@ -58,88 +99,105 @@ class ChatService {
       this.ws.openWS(user.id, chatId, token);
 
       console.log("chat select success !, token:", token);
+      return { ok: true };
     } catch (e) {
       console.error("chat select failed:", e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
   public async createChat(
     title: string,
-  ): Promise<CreateChatResponse | undefined> {
+  ): Promise<ApiResponse<CreateChatResponse>> {
     try {
       const chat = await ChatAPI.createChat({ title });
       console.log(`chat ${title} create success !:`, chat);
 
-      return chat;
+      return { ok: true, data: chat };
     } catch (e) {
       console.error("chat create failed:", e);
-      return;
+      return { ok: false, err: e as ApiError };
     }
   }
 
   public async updateChatAvatar(
     chatId: ChatId,
     avatar: File,
-  ): Promise<UpdateChatAvatarResponse | undefined> {
+  ): Promise<ApiResponse<UpdateChatAvatarResponse>> {
     try {
       const updatedChat = await ChatAPI.updateChatAvatar(chatId, avatar);
       console.log("chat avatar update success:", updatedChat);
 
-      return updatedChat;
+      return { ok: true, data: updatedChat };
     } catch (e) {
       console.error("chat avatar update fail:", e);
-      return;
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public async deleteChat(chatId: ChatId) {
+  public async deleteChat(chatId: ChatId): Promise<ApiResponse<string>> {
     try {
-      const delRes = await ChatAPI.deleteChat({ chatId });
+      const res = await ChatAPI.deleteChat({ chatId });
       this.ws.closeWS(chatId);
 
-      console.log("chat delete success !:", delRes);
+      console.log("chat delete success !:", res);
+      return { ok: true, data: res };
     } catch (e) {
       console.error("chat delete failed:", e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public async addUsers(chatId: ChatId, users: number[]) {
+  public async addUsers(
+    chatId: ChatId,
+    users: number[],
+  ): Promise<ApiResponse<string>> {
     try {
       const res = await ChatAPI.addUsers({ chatId, users });
 
       console.log("users-add success:", res);
+      return { ok: true, data: res };
     } catch (e) {
       console.error("users-add failed:", e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public async removeUsers(chatId: ChatId, users: number[]) {
+  public async removeUsers(
+    chatId: ChatId,
+    users: number[],
+  ): Promise<ApiResponse<string>> {
     try {
       const res = await ChatAPI.removeUsers({ chatId, users });
 
       console.log("users-remove success:", res, chatId);
+      return { ok: true, data: res };
     } catch (e) {
       console.error("users-remove failed:", e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public async getUsers(chatId: ChatId, query?: ChatUsersQuery) {
+  public async getUsers(
+    chatId: ChatId,
+    query?: ChatUsersQuery,
+  ): Promise<ApiResponse<ChatUser[]>> {
     try {
       const res = await ChatAPI.getUsers(chatId, query);
 
       console.log("users-get success:", res);
-      return res;
+      return { ok: true, data: res };
     } catch (e) {
-      console.error("users-get failed:", e);
-      return [];
+      console.error(`users-get failed, chatId=${chatId}, query=${query}`, e);
+      return { ok: false, err: e as ApiError };
     }
   }
 
-  public isCurrentChatNotes() {
-    return Store.getState().isNotes[Store.getState().api.chats.activeId ?? 0];
+  public isCurrentChatNotes(): boolean {
+    return Store.getState().api.chats.currentChat?.type === "notes";
   }
 
-  public sendMessage(content: string) {
+  public sendMessage (content: string) {
     this.ws.sendMessage(content);
   }
 

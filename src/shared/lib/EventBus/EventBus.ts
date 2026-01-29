@@ -33,10 +33,9 @@ export default class EventBus<TEvents extends string> {
     this.listeners[event]?.forEach((listener) => listener(...args));
   }
 
-  private _throwNotFoundError(
-    event: TEvents,
-    action: "off" | "emit",
-  ): Error {
+  private _throwNotFoundError(event: TEvents, action: "off" | "emit"): Error {
     return new Error(`Not found event called '${event}' in '${action}' action`);
   }
 }
+
+export const globalBus = new EventBus();

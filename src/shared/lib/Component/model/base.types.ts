@@ -1,11 +1,15 @@
-import { TagNameType } from "../../DOM/types.ts";
+import { RootTag } from "../../DOM/types.ts";
 import { ComponentId } from "./types.ts";
 
 /**
  * public contract of fundamental Component props
  */
 export interface BaseProps {
-  /* basic Component configuration */
+  /** basic Component configuration
+   * rendered into markup via Handlebars {{config-expressions}} in getInnerMarkup()
+   * ex.1- configs: { name } -> <p> {{ name }} </p>
+   * ex.2- configs: { info: date  } -> <span> {{ info.date }} </span>
+   */
   configs: BaseConfigs;
   /* event handlers */
   on?: BaseOn;
@@ -14,7 +18,7 @@ export interface BaseProps {
 export type BaseConfigs = {
   readonly id: ComponentId;
   /* Component's root tag */
-  readonly tagName: TagNameType;
+  readonly rootTag: RootTag;
   /* classes separated by space */
   classNames: string;
   type?: string;

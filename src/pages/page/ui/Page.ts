@@ -15,7 +15,7 @@ export abstract class Page<Props extends BaseProps> extends Component<Props> {
     this.pageParams = params;
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     /* reassigned in concrete Page */
     return /*html*/ ``;
   }

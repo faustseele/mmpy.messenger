@@ -13,20 +13,20 @@
   --color-panel-dark: #050a02;
   --color-panel: #101607;
   --color-panel-light: #181c12;
-  --color-panel-lightest: #2f2d2d;
+  --color-panel-lightest: rgba(47, 45, 45, 0.7);
 
   --color-msg-in-bg: rgba(255, 255, 255, 0.06);
-  --color-msg-out-bg: rgba(255, 255, 255, 0.14);
+  --color-msg-out-bg: rgba(255, 255, 255, 0.09);
 
   --color-universal-br: var(--color-panel-lightest);
 
-  --color-item-bg: rgba(255, 255, 255, 0.06);
+  --color-item-bg: rgba(255, 255, 255, 0.04);
 
   --avatar-select-bg: rgba(0, 0, 0, 0.25);
 
-  --color-btn-bg: rgba(127, 237, 69, 0.05);
+  --color-btn-bg: rgba(145, 175, 128, 0.05);
   --color-btn-br: rgba(255, 255, 255, 0.3);
-  --color-universal-br-active: rgba(255, 255, 255, 0.4);
+  --color-universal-br-active: rgba(255, 255, 255, 0.6);
 
   --transition: 0.2s ease-in-out;
 
@@ -37,10 +37,13 @@
   background color of the page */
 body {
   margin: 0;
+  position: relative;
   background-color: var(--color-panel-dark);
+  
   display: flex;
   justify-content: center;
   align-items: center;
+
   min-height: 100vh;
   font-family: var(--font-family);
 }

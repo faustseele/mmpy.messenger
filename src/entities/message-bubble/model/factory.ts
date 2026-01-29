@@ -1,5 +1,9 @@
 import Store from "@app/providers/store/model/Store.ts";
-import { ChildGraph, ChildrenEdges, ChildrenNodes } from "@shared/lib/Component/model/children.types.ts";
+import {
+  ChildGraph,
+  ChildrenEdges,
+  ChildrenNodes,
+} from "@shared/lib/Component/model/children.types.ts";
 import {
   ComponentDeps,
   ComponentId,
@@ -9,10 +13,10 @@ import {
 import DOMService from "@shared/lib/DOM/DOMService.ts";
 import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
-import { hhmmDate } from "@shared/lib/helpers/formatting/date.ts";
+import { tinyDate } from "@shared/lib/helpers/formatting/date.ts";
 import css from "../ui/messageBubble.module.css";
 import { MessageBubble } from "../ui/MessageBubble.ts";
-import { MessageConfigs, MessageProps } from "./types.ts";
+import { MessageProps, MessageType } from "./types.ts";
 
 export function getMessagesGraph(): ChildGraph {
   const state = Store.getState();
@@ -32,13 +36,9 @@ export function getMessagesGraph(): ChildGraph {
   rawMessages.forEach((msg) => {
     const id = `message_${msg.id}`;
     const type = msg.user_id === myId ? "outgoing" : "incoming";
-    const date = hhmmDate(msg.time);
 
-    const messageNode = getMessageNode({
-      id,
+    const messageNode = getMessageNode(id, type, tinyDate(msg.time), {
       text: msg.content,
-      type,
-      date,
     });
 
     /* populating */
@@ -51,9 +51,18 @@ export function getMessagesGraph(): ChildGraph {
 }
 
 export const getMessageNode = (
-  configs: Omit<MessageConfigs, "tagName" | "classNames">,
+  id: ComponentId,
+  type: MessageType,
+  date: string,
+  {
+    text,
+    image,
+  }: {
+    text?: string;
+    image?: string;
+  },
 ): ComponentNode<MessageProps, MessageBubble> => {
-  const params = getMessageParams(configs);
+  const params = getMessageParams(id, type, date, text, image);
   return {
     params,
     factory: buildMessage,
@@ -64,13 +73,21 @@ export const getMessageNode = (
 };
 
 const getMessageParams = (
-  configs: Omit<MessageConfigs, "tagName" | "classNames">,
+  id: ComponentId,
+  type: MessageType,
+  date: string,
+  text: string = "",
+  image?: string,
 ): ComponentParams<MessageProps> => {
   return {
     configs: {
-      tagName: "article",
+      id,
+      rootTag: "article",
       classNames: css.message,
-      ...configs,
+      type,
+      date,
+      text,
+      image,
     },
   };
 };
@@ -78,22 +95,9 @@ const getMessageParams = (
 const buildMessage: ComponentFactory<MessageProps, MessageBubble> = (
   params: ComponentParams<MessageProps>,
 ): MessageBubble => {
-  const messageClasses = [
-    params.configs.classNames || '',
-    params.configs.type === "outgoing" ? css.message_outgoing : "",
-    params.configs.type === "incoming" ? css.message_incoming : "",
-    params.configs.type === "date" ? css.message_dateBubble : "",
-  ]
-    /* cleans up the array of falsy elements */
-    .filter(Boolean)
-    .join(" ");
-
+  const { id, rootTag } = params.configs;
   const deps: ComponentDeps<MessageProps> = {
-    domService: new DOMService(
-      params.configs.id,
-      params.configs.tagName,
-      messageClasses,
-    ),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

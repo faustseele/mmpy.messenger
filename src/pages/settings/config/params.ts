@@ -1,147 +1,112 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  RouteConfigs,
-} from "@app/providers/router/types.ts";
-import {
-  getEditorNode
-} from "@features/edit-profile/model/factory.ts";
+import { handleUpdateAvatar } from "@/entities/user/model/actions.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
+import { getButtonNode } from "@/shared/ui/Button/factory.ts";
+import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
+import { getSubheadingNode } from "@/shared/ui/Subheading/factory.ts";
+import { RouteConfigs } from "@app/providers/router/types.ts";
+import { getEditorNode } from "@features/edit-profile/model/factory.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import {
-  getButtonNode
-} from "@/shared/ui/Button/factory.ts";
-import {
-  getHeadingNode
-} from "@/shared/ui/Heading/factory.ts";
-import profileAvatar from "../../../../static/profile-avatar.png";
 import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
-import cssSettings from "../ui/settings.module.css";
+import css from "../ui/settings.module.css";
 
-const iptIds = [
-  "inputEditor-email",
-  "inputEditor-name",
-  "inputEditor-surname",
-  "inputEditor-login",
-  "inputEditor-display_name",
-  "inputEditor-phone",
-  "inputEditor-oldPassword",
-  "inputEditor-newPassword",
-];
-
-const inputEditorsNodes = {
-  [iptIds[0]]: getEditorNode(
-    iptIds[0],
-    "email",
-    "Эл. почта",
-    "pochta@yandex.ru",
-    "email",
-  ),
-  [iptIds[1]]: getEditorNode(
-    iptIds[1],
-    "name",
-    "Имя",
-    "Иван",
-    "text",
-  ),
-  [iptIds[2]]: getEditorNode(
-    iptIds[2],
-    "surname",
-    "Фамилия",
-    "Иванов",
-    "text",
-  ),
-  [iptIds[3]]: getEditorNode(
-    iptIds[3],
-    "login",
-    "Логин",
-    "ivanov",
-    "text",
-  ),
-  [iptIds[4]]: getEditorNode(
-    iptIds[4],
+const editorNodes_info = {
+  "editor-email": getEditorNode("editor-email", "email", "Эл. почта"),
+  "editor-name": getEditorNode("editor-name", "name", "Имя"),
+  "editor-surname": getEditorNode("editor-surname", "surname", "Фамилия"),
+  "editor-login": getEditorNode("editor-login", "login", "Логин"),
+  "editor-display_name": getEditorNode(
+    "editor-display_name",
     "display_name",
     "Имя в чате",
-    "Vanya",
-    "text",
   ),
-  [iptIds[5]]: getEditorNode(
-    iptIds[5],
-    "phone",
-    "Номер телефона",
-    "+7 905 551-23-45",
-    "tel",
-  ),
-  [iptIds[6]]: getEditorNode(
-    iptIds[6],
+  "editor-phone": getEditorNode("editor-phone", "phone", "Номер телефона"),
+};
+
+const editorNodes_psw = {
+  "editor-oldPassword": getEditorNode(
+    "editor-oldPassword",
     "oldPassword",
     "Старый пароль",
-    "***",
-    "password",
+    { placeholder: "* * * * *" },
   ),
-  [iptIds[7]]: getEditorNode(
-    iptIds[7],
+  "editor-newPassword": getEditorNode(
+    "editor-newPassword",
     "newPassword",
     "Новый пароль",
-    "***",
-    "password",
+    { placeholder: "* * * * *" },
   ),
 };
 
 export const settingsPageParams: ComponentParams<SettingsProps> = {
   configs: {
     id: PageId.Settings,
-    tagName: "div",
-    classNames: `${cssPage.moduleWindow} ${cssSettings.moduleWindow_profile}`,
+    rootTag: "form",
+    classNames: cx(cssPage.moduleWindow, css.moduleWindow_profile),
+    type: "change-info",
     profileName: "Loading..",
-    profileAvatar,
     user: null,
   },
   children: {
     nodes: {
-      ...inputEditorsNodes,
-      heading_profile: getHeadingNode({
-        id: "heading_profile",
-        type: "profile-title",
-        text: "Профиль 👤",
-      }) as any,
-      heading_backToChats: getHeadingNode({
-        id: "heading_backToChats",
-        type: "profile-back",
-        text: "⮘ Назад",
+      ...(editorNodes_info as any),
+      ...(editorNodes_psw as any),
+      heading_profile: getHeadingNode("heading_profile", "Профиль 👤") as any,
+      heading_backToChats: getHeadingNode("heading_backToChats", "⮘ Назад", {
         isClickable: true,
-        link: RouteLink.Messenger,
+        on: { click: handleMessengerClick },
       }) as any,
-      buttonEditInfo: getButtonNode({
-        id: "buttonEditInfo",
-        label: "Изменить данные",
+      user_avatar: getAvatarNode("user_avatar", -1, "user_avatar", "", {
+        hasInput: true,
+        size: "xl",
+        updateAvatar: (file) => handleUpdateAvatar(file),
+      }) as any,
+      subheading_form: getSubheadingNode(
+        "subheading_form",
+        "Ваши данные:",
+      ) as any,
+      buttonEditInfo: getButtonNode("buttonEditInfo", "Изменить данные", {
         type: "submit",
       }) as any,
-      buttonEditPassword: getButtonNode({
-        id: "buttonEditPassword",
-        label: "Изменить пароль",
-      }) as any,
-      buttonLogout: getButtonNode({
-        id: "buttonLogout",
-        label: "Выйти",
+      buttonEditPassword: getButtonNode(
+        "buttonEditPassword",
+        "Изменить пароль",
+        {
+          isSilent: true,
+        },
+      ) as any,
+      buttonLogout: getButtonNode("buttonLogout", "Выйти", {
         isSilent: true,
       }) as any,
     },
     edges: {
       heading_backToChats: "heading_backToChats",
       heading_profile: "heading_profile",
+      subheading_form: "subheading_form",
+      inputsEditors_info: [
+        "editor-email",
+        "editor-name",
+        "editor-surname",
+        "editor-login",
+        "editor-display_name",
+        "editor-phone",
+      ],
+      inputsEditors_password: ["editor-oldPassword", "editor-newPassword"],
       buttonEditInfo: "buttonEditInfo",
       buttonEditPassword: "buttonEditPassword",
       buttonLogout: "buttonLogout",
-      inputsEditors: iptIds,
     },
   },
   on: {
-    messengerClick: handleMessengerClick
-  }
+    messengerClick: handleMessengerClick,
+    submit: () => {},
+  },
 };
 
 export const settingsPageRouteConfig: RouteConfigs = {

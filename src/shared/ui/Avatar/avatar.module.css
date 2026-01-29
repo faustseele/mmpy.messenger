@@ -1,0 +1,79 @@
+
+.avatarWrap {
+  display: block;    
+  position: relative;
+
+  width: 38px;  
+  height: 38px;     
+
+  border-radius: 50%;
+
+  overflow: hidden;  
+}
+
+.avatarWrap_l {
+  width: 47px;
+  height: 47px;
+}
+
+.avatarWrap_xl {
+  width: 105px;
+  height: 105px;
+}
+
+.avatarWrap__img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* The overlay that appears on top of le image */
+.avatarWrap__inputOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  
+  background-color: var(--avatar-select-bg);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  opacity: 0;
+  
+  transition: opacity 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+/* Shows overlay on le hover */
+.avatarWrap:hover .avatarWrap__inputOverlay {
+  opacity: 1;
+}
+
+/* The text inside the overlay */
+.avatarWrap__inputOverlay > span {
+  font-size: 15px;
+}
+
+/* hidin the default file input completely */
+.avatarFileInput {
+  display: none;
+}
+
+.avatarWrap__letter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--color-acc-light);
+}

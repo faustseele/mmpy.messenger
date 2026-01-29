@@ -1,6 +1,7 @@
 import DOMService from "../../DOM/DOMService.ts";
 import EventBus from "../../EventBus/EventBus.ts";
 import FragmentService from "../../Fragment/FragmentService.ts";
+import { isEqual } from "../../helpers/object/utils.ts";
 import { proxifyParams } from "../../helpers/proxy/functions.ts";
 import { BaseProps } from "./base.types.ts";
 import { ChildGraph, ChildrenFlat } from "./children.types.ts";
@@ -28,7 +29,9 @@ export default abstract class Component<P extends BaseProps> {
   /* --- Node --- */
   public readonly id: ComponentId;
   private _configs: P["configs"];
+  private _cx: string = "";
   private _on?: P["on"];
+  private _attachedListeners: P["on"] = {};
   private _children?: ChildGraph;
 
   /* --- Helpers --- */
@@ -56,13 +59,24 @@ export default abstract class Component<P extends BaseProps> {
       : undefined;
   }
 
-  /* get overridden */
+  /* --- Concrete Methods --- */
   public componentDidRender(): void {}
   public componentDidMount(): void {}
   public componentDidUpdate(): void {}
   public componentDidUnmount(): void {}
-  public getSourceMarkup(): string {
-    /* spits html-structure as a string */
+
+  /**
+   * @param configs to conditionally format classNames
+   * @returns classNames string
+   */
+  public getRootTagCx(configs?: P["configs"]): string {
+    return configs?.classNames ?? this._configs.classNames;
+  }
+
+  /**
+   * @returns inner-html from inside the root tag (excludes Component's root-tag)
+   */
+  public getInnerMarkup(): string {
     return ``;
   }
 
@@ -74,7 +88,7 @@ export default abstract class Component<P extends BaseProps> {
     const { configs, on, children } = proxifyParams(params, this._bus);
     this.id = configs.id;
     this._configs = configs;
-    this._on = (on as P["on"]) ?? {};
+    this._on = on ?? {};
     this._children = children ?? {
       edges: {},
       nodes: {},
@@ -115,41 +129,49 @@ export default abstract class Component<P extends BaseProps> {
     this._bus.emit("flow:component-did-mount");
   }
 
-  /* on _initComponent & CDM; On CDU */
+  /* on _initComponent; On CDU */
   private _componentDidRender(): void {
-    /* creates the Element */
-    this.domService.createElement();
+    if (!this.domService.element) this._createElement();
 
-    /* checks if Element alive */
-    if (!this.domService.element) return;
+    /* (re-)drawing logic of the element */
+    const innerFragment = (() => {
+      const markup = this.getInnerMarkup();
+      const deproxifiedConfigs = { ...this._configs };
+      const hasChildren = this.children?.nodes;
 
-    const markup = this.getSourceMarkup();
-    const deproxifiedConfigs = { ...this._configs };
-
-    /* get a compiled (innerHTML) DocumentFragment from FragmentService */
-    const innerFragment = this.children?.nodes
-      ? this.fragmentService.compileWithChildren(
+      /* get a compiled (innerHTML) DocumentFragment from FragmentService */
+      if (hasChildren) {
+        return this.fragmentService.compileWithChildren(
           markup,
           deproxifiedConfigs,
           this.children,
-        )
-      : this.fragmentService.compile(markup, deproxifiedConfigs);
-
-    this.domService.removeListeners(this._on);
+        );
+      } else {
+        return this.fragmentService.compile(markup, deproxifiedConfigs);
+      }
+    })();
 
     /* DOMService renders: handles innerHTML and appendChild */
     this.domService.insertFragmentIntoElement(innerFragment);
-
-    this.domService.addListeners(this._on);
-
-    this.domService.updateClassNames(this.configs.classNames ?? '')
 
     /* allows components to run post-render logic */
     this.componentDidRender();
   }
 
-  /* informational; propagates to childrenFlat */
+  /* re-mounting logic; propagates to childrenFlat */
   private _componentDidMount(): void {
+    /* re-attaches listeners/class if changed */
+    if (!isEqual(this._on ?? {}, this._attachedListeners ?? {})) {
+      this.domService.removeListeners(this._attachedListeners);
+      this.domService.addListeners(this._on);
+      this._attachedListeners = { ...this._on };
+    }
+    const newCx = this.getRootTagCx(this._configs);
+    if (this._cx !== newCx) {
+      this._cx = newCx;
+      this.domService.setRootTagCx(newCx);
+    }
+
     if (!this.childrenFlat) return;
 
     /* recusively mounting children */
@@ -167,10 +189,25 @@ export default abstract class Component<P extends BaseProps> {
 
   /* emits -> CDR */
   private _componentDidUpdate(): void {
-    this._bus.emit("flow:render");
+    /* updates listners if !eq */
+    if (!isEqual(this._on ?? {}, this._attachedListeners ?? {})) {
+      this.domService.removeListeners(this._attachedListeners);
+      this.domService.addListeners(this._on);
+      this._attachedListeners = { ...this._on };
+    }
 
-    /* allows components to run post-update logic */
+    /* updates classNames if !eq */
+    const newCx = this.getRootTagCx(this._configs);
+    if (this._cx !== newCx) {
+      this._cx = newCx;
+      this.domService.setRootTagCx(newCx);
+    }
+
+    /* concrete component logic */
     this.componentDidUpdate();
+
+    /* CDR emits after listeners & classNames updated */
+    this._bus.emit("flow:render");
   }
 
   /**
@@ -180,7 +217,10 @@ export default abstract class Component<P extends BaseProps> {
    * removes listeners
    */
   private _componentDidUnmount(): void {
-    this.domService.removeListeners(this._on);
+    this.domService.removeListeners(this._attachedListeners);
+
+    /* resets tracking for re-mount re-attach */
+    this._attachedListeners = {};
 
     if (!this.childrenFlat) return;
 
@@ -196,10 +236,23 @@ export default abstract class Component<P extends BaseProps> {
     this.componentDidUnmount();
   }
 
+  private _createElement(): void {
+    /* creates the Element */
+    this.domService.createElement();
+
+    /* sets classNames */
+    this._cx = this.getRootTagCx(this._configs);
+    this.domService.setRootTagCx(this._cx);
+
+    /* sets initial listeners */
+    this.domService.addListeners(this._on);
+    this._attachedListeners = { ...this._on };
+  }
+
   /* invokes Proxy-setters */
   public setProps(patch: ComponentPatch<P>): void {
     if (!patch) return;
-    
+
     Object.assign(this._configs, patch.configs);
 
     const { configs, on, children } = patch;

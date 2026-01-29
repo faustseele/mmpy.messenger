@@ -1,5 +1,5 @@
 import { BaseConfigs, BaseProps } from "@shared/lib/Component/model/base.types.ts";
-import { TagNameType } from "@shared/lib/DOM/types.ts";
+import { RootTag } from "@shared/lib/DOM/types.ts";
 
 export type MessageType = "incoming" | "outgoing" | "date";
 
@@ -8,7 +8,7 @@ export interface MessageProps extends BaseProps {
 }
 
 export interface MessageConfigs extends BaseConfigs {
-  tagName: Extract<TagNameType, "article">;
+  rootTag: Extract<RootTag, "article">;
   type: MessageType;
   date: string;
   text?: string;

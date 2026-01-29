@@ -1,7 +1,8 @@
+import { ApiResponse } from "@/shared/api/model/types.ts";
 import { InputEditor } from "@features/edit-profile/ui/InputEditor.ts";
-import { AuthType } from "@pages/auth/model/types.ts";
 import { Input } from "../../ui/Input/Input.ts";
 import { FieldType } from "../../ui/Input/types.ts";
+import { SubmitTypes } from "./types.ts";
 import { validateInputField } from "./utils.ts";
 
 const logMessages = {
@@ -11,22 +12,9 @@ const logMessages = {
 
 export default class FormValidator {
   private inputs: Input[] | InputEditor[];
-  private onSubmitSuccess?: (
-    formData: Record<string, string>,
-    submitType: string,
-  ) => Promise<{ok: boolean}>;
 
-  constructor(
-    inputs: Input[] | InputEditor[],
-    options: {
-      onSubmitSuccess?: (
-        formData: Record<string, string>,
-        submitType: string,
-      ) => Promise<{ok: boolean}>;
-    },
-  ) {
+  constructor(inputs: Input[] | InputEditor[]) {
     this.inputs = inputs;
-    this.onSubmitSuccess = options.onSubmitSuccess;
   }
 
   public onInputBlur = (input: Input): void => {
@@ -34,35 +22,39 @@ export default class FormValidator {
   };
 
   public onFormCheck = (
-    submitType: AuthType | "change-info" | "change-password",
+    submitType: SubmitTypes,
+    badFormCb?: () => void,
   ): boolean => {
     const targetInputs = this._filterInputsBySubmitType(
       submitType,
       this.inputs,
     );
-    return this._handleFormValidation(targetInputs);
+    const formValid = this._handleFormValidation(targetInputs);
+
+    if (!formValid) badFormCb?.();
+
+    return formValid;
   };
 
   public onFormSubmit = async (
-    event: Event,
-    submitType: AuthType | "change-info" | "change-password",
-  ): Promise<{ok: boolean}> => {
-    event.preventDefault();
-
+    submitType: SubmitTypes,
+    onGoodForm: (
+      formData: Record<string, string>,
+    ) => Promise<ApiResponse<unknown>>,
+  ): Promise<ApiResponse<unknown>> => {
     const targetInputs = this._filterInputsBySubmitType(
       submitType,
       this.inputs,
     );
     const isFormValid = this._handleFormValidation(targetInputs);
 
-    if (isFormValid && this.onSubmitSuccess) {
+    if (isFormValid) {
       const formData = this._getFormData(targetInputs);
       console.log(logMessages.formIsValid, formData);
 
-      return await this.onSubmitSuccess?.(formData, submitType);
+      return await onGoodForm(formData);
     } else {
       console.log(logMessages.formHasErrors);
-      event.stopPropagation();
 
       return { ok: false };
     }
@@ -100,10 +92,29 @@ export default class FormValidator {
     const inputIsValid = !errorMessage;
     input.showError(errorMessage);
 
-    /* Logging current invalid input fields */
-    if (!inputIsValid) console.log(errorMessage);
-
     return inputIsValid;
+  }
+
+  /* narrows inputs for validation/submission based on submitType */
+  private _filterInputsBySubmitType(
+    submitType: SubmitTypes,
+    inputs: Array<Input | InputEditor>,
+  ): Array<Input | InputEditor> {
+    const getMeta = (inp: Input | InputEditor) => {
+      const { name, value } = inp.getNameAndValue();
+      return { name: String(name || ""), value: (value ?? "").trim() };
+    };
+
+    if (submitType === "change-info") {
+      return inputs.filter((input) => {
+        const { name, value } = getMeta(input);
+        if (!name) return false;
+        return value.length > 0;
+      });
+    }
+
+    /* default (sign-in/sign-up/edit-info): validate everything */
+    return inputs;
   }
 
   /* collects data from all inputs into a single object */
@@ -118,38 +129,5 @@ export default class FormValidator {
     });
 
     return formData;
-  }
-
-  /* narrows inputs for validation/submission based on submitType */
-  private _filterInputsBySubmitType(
-    submitType: AuthType | "change-info" | "change-password",
-    inputs: Array<Input | InputEditor>,
-  ): Array<Input | InputEditor> {
-    const PASSWORD_ONLY = new Set(["oldPassword", "newPassword"]);
-    const EXCLUDE_FOR_INFO = new Set([
-      "password",
-      "oldPassword",
-      "newPassword",
-    ]);
-
-    const getMeta = (inp: Input | InputEditor) => {
-      const { name, value } = inp.getNameAndValue();
-      return { name: String(name || ""), value: (value ?? "").trim() };
-    };
-
-    if (submitType === "change-password") {
-      return inputs.filter((inp) => PASSWORD_ONLY.has(getMeta(inp).name));
-    }
-
-    if (submitType === "change-info") {
-      return inputs.filter((inp) => {
-        const { name, value } = getMeta(inp);
-        if (!name || EXCLUDE_FOR_INFO.has(name)) return false;
-        return value.length > 0;
-      });
-    }
-
-    /* default (sign-in/sign-up): validate everything */
-    return inputs;
   }
 }

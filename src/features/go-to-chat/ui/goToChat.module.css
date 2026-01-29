@@ -21,20 +21,41 @@
 }
 
 .goToChat:hover {
+  border-style: solid;
   border-color: var(--color-universal-br-active);
 }
 
-.goToChat:focus {
+.goToChat_selected {
+  border-style: solid;
   border-color: var(--color-universal-br-active);
 }
 
-.avatar {
+.avatarWrap {
+  position: relative;
+
   width: 34px;
   height: 34px;
   flex: 0 0 auto;
+}
+
+.avatarWrap_img {
+  width: 34px;
+  height: 34px;
 
   border-radius: 50%;
   background-color: var(--color-item-bg);
+}
+
+.avatarWrap_letter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--color-acc-light);
 }
 
 .goToChat__content {

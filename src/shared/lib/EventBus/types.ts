@@ -1,1 +1,2 @@
-export type EventCallback = (...args: unknown[]) => void;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type EventCallback = (...args: any[]) => void;

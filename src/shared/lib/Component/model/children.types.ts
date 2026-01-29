@@ -3,7 +3,7 @@ import { ComponentId, ComponentNode } from "./types.ts";
 
 /**
  * normalized state of Component nodes (children)
- * * use type-assertion to access children instances
+ * use type-assertion to access children instances
  */
 export interface ChildGraph {
   nodes: ChildrenNodes;

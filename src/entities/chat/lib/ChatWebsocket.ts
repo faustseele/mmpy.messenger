@@ -1,6 +1,8 @@
+import { ChatId, ChatMessage } from "@/shared/api/model/api.types";
+import { ApiResponse } from "@/shared/api/model/types.ts";
 import Store from "@app/providers/store/model/Store.ts";
-import { ChatId, ChatMessage } from "@shared/api/model/types.ts";
 import { WSS_CHATS } from "@shared/config/urls.ts";
+import { handleFetchChats } from "../model/actions.ts";
 
 export class ChatWebsocket {
   private sockets = new Map<ChatId, WebSocket>();
@@ -16,44 +18,59 @@ export class ChatWebsocket {
     ws.addEventListener("open", () => {
       /* get history */
       ws.send(JSON.stringify({ type: "get old", content: "0" }));
-      /* heartbeat everuy 30 secs */
-      const t = window.setInterval(() => {
+
+      /* heartbeat every 30 secs */
+      const timer = window.setInterval(() => {
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify({ type: "ping" }));
         }
       }, 30000);
-      this.heartbeats.set(chatId, t);
+
+      this.heartbeats.set(chatId, timer);
     });
 
-    ws.addEventListener("message", (event) => {
-      try {
-        const data = JSON.parse(event.data);
+    ws.addEventListener(
+      "message",
+      (event): void | ApiResponse<string | ChatMessage | ChatMessage[]> => {
+        try {
+          const data = JSON.parse(event.data);
 
-        if (Array.isArray(data)) {
-          const history = (data as ChatMessage[]).sort(
-            (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
-          );
-          this.setMessages(chatId, history);
-          return;
+          if (Array.isArray(data)) {
+            const history = (data as ChatMessage[]).sort(
+              (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
+            );
+            this.setMessages(chatId, history);
+            return { ok: true, data: history };
+          }
+
+          if (data?.type === "message") {
+            const msg = data as ChatMessage;
+            this.appendMessage(chatId, msg);
+            return { ok: true, data: msg };
+          }
+
+          if (data?.type === "pong") return;
+
+          if (data?.type === "error") {
+            console.error("WS error:", data);
+            return {
+              ok: false,
+              err: { status: 0, reason: "Network error", response: data },
+            };
+          }
+        } catch (err) {
+          console.error("WS parse error:", err);
+          return {
+            ok: false,
+            err: {
+              status: 0,
+              reason: "Network error",
+              response: typeof err === "string" ? err : "",
+            },
+          };
         }
-
-        if (data?.type === "message") {
-          const msg = data as ChatMessage;
-          this.appendMessage(chatId, msg);
-          return;
-        }
-
-        if (data?.type === "pong") return;
-
-        if (data?.type === "error") {
-          console.error("WS error:", data);
-          return;
-        }
-
-      } catch (err) {
-        console.error("WS parse error:", err);
-      }
-    });
+      },
+    );
 
     ws.addEventListener("close", () => {
       this.stopHeartbeat(chatId);
@@ -97,6 +114,9 @@ export class ChatWebsocket {
     }
 
     ws.send(JSON.stringify({ type: "message", content }));
+
+    /* update the chats list */
+    setTimeout(() => handleFetchChats(), 100);
   }
 
   private setMessages(chatId: ChatId, messages: ChatMessage[]) {
@@ -108,7 +128,7 @@ export class ChatWebsocket {
   private appendMessage(chatId: ChatId, message: ChatMessage) {
     const byChat = Store.getState().api.chats.messagesByChatId || {};
     const list = byChat[chatId] || [];
-    
+
     this.setMessages(chatId, [...list, message]);
   }
 }

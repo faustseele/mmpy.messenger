@@ -1,7 +1,7 @@
+import { handleUpdateAvatar } from "@/entities/user/model/actions.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 import { AppState } from "@app/providers/store/model/Store.ts";
-import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
-import profileAvatar from "../../../../static/profile-avatar.png";
 import { SettingsProps } from "./types.ts";
 
 export const mapSettingsState = ({
@@ -9,14 +9,31 @@ export const mapSettingsState = ({
     auth: { user },
   },
 }: AppState): ComponentPatch<SettingsProps> => {
+  const user_avatar = getAvatarNode(
+    "user_avatar",
+    -1,
+    "user_avatar",
+    user?.avatar,
+    {
+      hasInput: true,
+      size: "xl",
+      updateAvatar: (file) => handleUpdateAvatar(file),
+    },
+  );
+
   return {
     configs: {
-      tagName: "div",
+      rootTag: "form",
       profileName: user?.first_name ?? "",
-      profileAvatar: user?.avatar
-        ? `${API_URL_RESOURCES}${user.avatar}`
-        : profileAvatar,
       user,
+    },
+    children: {
+      nodes: {
+        user_avatar,
+      },
+      edges: {
+        user_avatar: "user_avatar",
+      },
     },
   };
 };

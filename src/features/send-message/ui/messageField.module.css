@@ -51,14 +51,20 @@
 
   padding: 11px 13px;
 
-  border: none;
-  border-radius: 4px;
+  border: 1px solid transparent;
+  border-radius: 12px;
   outline: none;
-  background-color: var(--color-btn-bg);
+  background-color: var(--color-item-bg);
 
   font-size: 14px;
   line-height: 15px;
   letter-spacing: 0.02em;
   font-family: inherit;
   color: var(--color-content);
+
+  transition: var(--transition);
+}
+
+.input:hover {
+  border-color: var(--color-btn-br);
 }

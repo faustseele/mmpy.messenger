@@ -1,65 +1,77 @@
+import { UserResponse } from "@/shared/api/model/api.types.ts";
+import { ApiResponse } from "@/shared/api/model/types.ts";
 import Router from "@app/providers/router/Router.ts";
 import {
   handleCreateChat,
   handleFetchChats,
 } from "@entities/chat/model/actions.ts";
-import { UserResponse } from "@shared/api/model/types.ts";
 import { ls_removeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
 import { SignInData, SignUpData } from "./types.ts";
+import { GUEST_CREDS } from "../config/guest.ts";
+import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
 
-export const handleFetchUser = async (): Promise<UserResponse | undefined> => {
+export const handleFetchUser = async (): Promise<ApiResponse<UserResponse>> => {
   const res = await AuthService.fetchUser();
-  if (!res) ls_removeLastChatId();
+  if (!res.ok) ls_removeLastChatId();
   return res;
 };
 
 export const handleSignUp = async (
   data: SignUpData,
-): Promise<{ ok: boolean }> => {
+): Promise<ApiResponse<UserResponse>> => {
   const res = await AuthService.signUp(data);
+
   if (res.ok) {
     /* fetch chats on successful signup */
     Router.go(RouteLink.Messenger);
 
     /* generating one notes-chat */
     handleCreateChat("Заметки 📃");
-
-    return { ok: true };
-  } else {
-    console.error("SignUp failed");
-
-    return { ok: false };
   }
+
+  return res;
 };
 
 export const handleSignIn = async (
   data: SignInData,
-): Promise<{ ok: boolean }> => {
+): Promise<ApiResponse<UserResponse>> => {
   const res = await AuthService.signIn(data);
 
   if (res.ok) {
     /* fetch chats on successful login */
     handleFetchChats();
     Router.go(RouteLink.Messenger);
-
-    return { ok: true };
-  } else {
-    console.error("SignIn failed");
-
-    return { ok: false };
   }
+  return res;
 };
 
-export const handleLogout = async (): Promise<{ ok: boolean }> => {
+export const handleGuestMode = async (): Promise<ApiResponse<UserResponse>> => {
+  globalBus.emit("show-toast", {
+    message: "Launching Guest Mode...",
+  });
+  const res = await AuthService.signIn(GUEST_CREDS);
+
+  if (res.ok) {
+    /* fetch chats on successful login */
+    handleFetchChats();
+    Router.go(RouteLink.Messenger);
+    globalBus.emit("show-toast", {
+      message: "👻 Guest Login Success!",
+      type: "success",
+    });
+  }
+  return res;
+};
+
+export const handleLogout = async (): Promise<ApiResponse<boolean>> => {
   const res = await AuthService.logout();
   if (res.ok) {
     Router.go(RouteLink.SignIn);
-    return { ok: true };
   } else {
     Router.go(RouteLink.Error);
     console.error("Logout failed");
-    return { ok: false };
   }
+  return res;
 };

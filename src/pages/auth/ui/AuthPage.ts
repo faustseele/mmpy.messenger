@@ -2,12 +2,11 @@ import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
-import { RouteLink } from "@shared/types/universal.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
 import { AuthNodes, AuthProps } from "../model/types.ts";
-import { onSubmitSuccess } from "../model/utils.ts";
+import { onBadForm, onGoodForm } from "../model/utils.ts";
 import css from "./auth.module.css";
 
 export class AuthPage extends Page<AuthProps> {
@@ -28,38 +27,41 @@ export class AuthPage extends Page<AuthProps> {
     }
 
     /* --- getting instances --- */
-    const { buttonReroute, buttonFormSubmit } = this.children
+    const {  buttonFormSubmit } = this.children
       .nodes as AuthNodes;
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
-    const reroute = buttonReroute.runtime?.instance as Button;
     this.submit = buttonFormSubmit.runtime?.instance as Button;
-    this.validator = new FormValidator(inputs, { onSubmitSuccess });
+    this.validator = new FormValidator(inputs);
 
     /* --- setting events --- */
     this._wireSubmit(this.validator, this.submit);
-    this._wireReroute(reroute);
     this._vivifyInputs(inputs, this.validator);
   }
 
   private _wireSubmit(validator: FormValidator, submit: Button): void {
-    this.setProps({
+    submit.setProps({
       on: {
-        submit: (e: Event) => validator?.onFormSubmit(e, this.configs.type),
-      },
-    });
-    submit?.setProps({
-      on: {
-        click: async (e: Event) => {
-          const isFormValid = validator?.onFormCheck(this.configs.type);
-          submit?.setProps({
+        click: async (event: Event) => {
+          event.preventDefault();
+          const type = this.configs.type;
+
+          /* guard clause */
+          if (!validator) {
+            console.error("AuthPage: Validator is not defined");
+            return;
+          }
+          const formValid = validator.onFormCheck(type, onBadForm);
+          if (!formValid) return;
+
+          submit.setProps({
             configs: {
-              showSpinner: isFormValid,
+              showSpinner: true,
             },
           });
 
-          await validator?.onFormSubmit(e, this.configs.type);
+          await validator.onFormSubmit(type, onGoodForm(type));
 
-          submit?.setProps({
+          submit.setProps({
             configs: {
               showSpinner: false,
             },
@@ -67,41 +69,34 @@ export class AuthPage extends Page<AuthProps> {
         },
       },
     });
-  }
 
-  /* event for the auth-reroute button */
-  private _wireReroute(buttonReroute: Button): void {
-    buttonReroute.setProps({
-      on: {
-        click: () => {
-          this.on?.reroute?.(buttonReroute.configs.link ?? RouteLink.NotFound);
-          // this.children?.nodes?.toast?.runtime?.instance.showToast("Вы вошли успешно!!!!", "error");
-        },
-      },
-    });
+    this.setProps({ on: { submit } });
   }
 
   /* blur-events for the input fields */
   private _vivifyInputs(inputs: Input[], validator: FormValidator): void {
+    if (!validator) {
+      console.error("AuthPage: Validator is not defined");
+      return;
+    }
+
     inputs.forEach((input) => {
       input.setProps({
         on: {
-          focusout: () => validator?.onInputBlur(input),
+          focusout: () => validator.onInputBlur(input),
         },
       });
     });
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonReroute, toast } = this.children
+    const { heading, buttonFormSubmit, buttonGuest, buttonReroute, } = this.children
       .nodes as AuthNodes;
 
     return /*html*/ `
-      {{{ ${toast.params.configs.id} }}}
-      
       <header class="${css.authHeading}">
         {{{ ${heading.params.configs.id} }}}
       </header>
@@ -114,7 +109,10 @@ export class AuthPage extends Page<AuthProps> {
 
       <footer class="${css.authFooter} ${this.footerModifier}">
         {{{ ${buttonReroute.params.configs.id} }}}
-        {{{ ${buttonFormSubmit.params.configs.id} }}}
+        <div class="${css.authFooter__submits}">
+          {{{ ${buttonGuest.params.configs.id} }}}
+          {{{ ${buttonFormSubmit.params.configs.id} }}}
+        </div>
       </footer> 
       `;
   }

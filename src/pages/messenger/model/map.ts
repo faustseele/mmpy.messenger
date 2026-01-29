@@ -1,63 +1,87 @@
-import { PageId } from "@pages/page/config/const.ts";
+import { handleUpdateChatAvatar } from "@/entities/chat/model/actions.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
 import { AppState } from "@app/providers/store/model/Store.ts";
 import { getMessagesGraph } from "@entities/message-bubble/model/factory.ts";
 import { getGoToChatGraph } from "@features/go-to-chat/model/factory.ts";
-import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
-import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
-import defaultAvatar from "../../../../static/avatar.png";
-import { MessengerProps } from "./types.ts";
-import cssMessenger from "../ui/messenger.module.css";
-import cssPage from "@pages/page/ui/page.module.css";
+import { getBaseMessengerConfigs } from "../config/params.ts";
+import { MessengerProps, MessengerType } from "./types.ts";
 
 export const mapMessengerState = (
   state: AppState,
 ): ComponentPatch<MessengerProps> => {
-  const { currentChat, list, activeId, messagesByChatId } = state.api.chats;
-
-  const avatar = currentChat
-    ? currentChat.avatar
-      ? `${API_URL_RESOURCES}${currentChat.avatar}`
-      : defaultAvatar
-    : "";
+  const { list: chats, activeId, messagesByChatId } = state.api.chats;
+  const currentChat = activeId
+    ? (chats?.find((chat) => chat.id === activeId) ?? null)
+    : null;
 
   /* loading if there's an active chat but no msgs loaded yet */
   const isLoadingMessages = activeId ? !messagesByChatId[activeId] : false;
+  const hasMessages = activeId
+    ? (messagesByChatId[activeId]?.length ?? 0) > 0
+    : false;
 
-  const configs: MessengerProps["configs"] = {
-    id: PageId.Messenger,
-    tagName: "div",
-    classNames: `${cssPage.moduleWindow} ${cssMessenger.moduleWindow_messenger}`,
-    isNotes: state.isNotes[currentChat?.id ?? 0],
-    chatId: currentChat?.id,
-    chatTitle: currentChat?.title,
-    participantName: currentChat?.title ?? "",
-    participantAvatar: avatar,
-    isLoadingMessages,
+  const type = ((): MessengerType => {
+    if (!activeId) return "stub";
+
+    if (!currentChat?.type) {
+      return "stub";
+    }
+
+    return currentChat.type;
+  })();
+
+  const info = {
+    type,
+    chatId: currentChat?.id ?? 0,
+    chatTitle: currentChat?.title ?? "",
   };
 
-  const goToChatNodesPatch = getGoToChatGraph(list ?? []);
+  const chatAvatar = getAvatarNode(
+    "chatAvatar",
+    currentChat?.id ?? 0,
+    currentChat?.title,
+    currentChat?.avatar,
+    {
+      updateAvatar: (file) =>
+        handleUpdateChatAvatar(currentChat?.id ?? 0, file),
+      hasInput: type === "notes",
+      size: "l",
+    },
+  );
 
-  const messageNodesPatch = getMessagesGraph();
+  const updatedConfigs = getBaseMessengerConfigs(
+    info,
+    isLoadingMessages,
+    hasMessages,
+  );
 
-  if (!goToChatNodesPatch.nodes) {
+  const sortedChats = [...(chats ?? [])].sort((a, b) => {
+    const timeA = a.last_message?.time ?? "";
+    const timeB = b.last_message?.time ?? "";
+    return timeB.localeCompare(timeA);
+  });
+
+  const goToChatPatch = getGoToChatGraph(sortedChats ?? []);
+
+  const messagesPatch = getMessagesGraph();
+
+  if (!goToChatPatch.nodes) {
     console.error("goToChatNodesPatch is not defined");
   }
 
-  const { nodes: goToChatNodes, edges: goToChatEdge } = goToChatNodesPatch;
-  const { nodes: messageNodes, edges: messageEdge } = messageNodesPatch;
-
   return {
-    configs,
+    configs: updatedConfigs,
     children: {
       nodes: {
-        ...goToChatNodes,
-        ...messageNodes,
-        messageField: getMessageFieldNode("messageField"),
+        ...goToChatPatch.nodes,
+        ...messagesPatch.nodes,
+        chatAvatar,
       },
       edges: {
-        ...goToChatEdge,
-        ...messageEdge,
+        ...goToChatPatch.edges,
+        ...messagesPatch.edges,
+        chatAvatar: "chatAvatar",
       },
     },
   };

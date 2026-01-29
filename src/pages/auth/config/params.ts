@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getButtonNode } from "@/shared/ui/Button/factory.ts";
+import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
+import { getInputNode } from "@/shared/ui/Input/factory.ts";
 import { RouteConfigs } from "@app/providers/router/types.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import { PageNode } from "@pages/page/model/types.ts";
@@ -7,13 +9,11 @@ import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
-import { getInputNode } from "@/shared/ui/Input/factory.ts";
 import { handleReroute } from "../model/actions.ts";
 import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
 import type { AuthPage } from "../ui/AuthPage.ts";
-import { getToastNode } from "@/shared/ui/Toast/factory.ts";
+import { handleGuestMode } from "@/features/authenticate/model/actions.ts";
 
 const iptIds = [
   "input-name",
@@ -24,163 +24,109 @@ const iptIds = [
   "input-phone",
 ];
 
-const inputNodes_up = {
-  [iptIds[0]]: getInputNode({
-    id: iptIds[0],
-    fieldId: "name",
-    label: "Имя",
-    type: "text",
-    placeholder: "Имя",
-  }),
-  [iptIds[1]]: getInputNode({
-    id: iptIds[1],
-    fieldId: "surname",
-    label: "Фамилия",
-    type: "text",
-    placeholder: "Фамилия",
-  }),
-  [iptIds[2]]: getInputNode({
-    id: iptIds[2],
-    fieldId: "login",
-    label: "Логин",
-    type: "text",
-    placeholder: "Логин",
-  }),
-  [iptIds[3]]: getInputNode({
-    id: iptIds[3],
-    fieldId: "email",
-    label: "Эл. почта",
-    type: "email",
-    placeholder: "Эл. почта",
-  }),
-  [iptIds[4]]: getInputNode({
-    id: iptIds[4],
-    fieldId: "password",
-    label: "Пароль",
-    type: "password",
-    placeholder: "Пароль",
-  }),
-  [iptIds[5]]: getInputNode({
-    id: iptIds[5],
-    fieldId: "phone",
-    label: "Телефон",
-    type: "tel",
-    placeholder: "Телефон",
-  }),
+const inputs_signUp = {
+  "input-name": getInputNode(iptIds[0], "name", "Имя"),
+  "input-surname": getInputNode(iptIds[1], "surname", "Фамилия"),
+  "input-login": getInputNode(iptIds[2], "login", "Логин"),
+  "input-email": getInputNode(iptIds[3], "email", "Эл. почта"),
+  "input-password": getInputNode(iptIds[4], "password", "Пароль"),
+  "input-phone": getInputNode(iptIds[5], "phone", "Телефон"),
 };
 
-const inputNodes_in = {
-  [iptIds[2]]: getInputNode({
-    id: iptIds[2],
-    fieldId: "login",
-    label: "Логин",
-    type: "text",
-    placeholder: "Логин",
-  }),
-  [iptIds[4]]: getInputNode({
-    id: iptIds[4],
-    fieldId: "password",
-    label: "Пароль",
-    type: "password",
-    placeholder: "Пароль",
-  }),
+const inputs_signIn = {
+  "input-login": getInputNode(iptIds[2], "login", "Логин"),
+  "input-password": getInputNode(iptIds[4], "password", "Пароль"),
 };
 
-const authPageParams_in: ComponentParams<AuthProps> = {
+const authPageParams_signIn: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignIn,
-    tagName: "form",
+    rootTag: "form",
     classNames: cssPage.moduleWindow,
     type: "sign-in",
   },
   children: {
     nodes: {
-      ...inputNodes_in,
-      heading: getHeadingNode({
-        id: "heading",
-        text: "Вход 🚪",
-      }) as any,
-      buttonFormSubmit: getButtonNode({
-        id: "buttonFormSubmit",
-        label: "Войти ✓",
+      ...(inputs_signIn as any),
+      heading: getHeadingNode("heading", "Вход 🚪"),
+      buttonFormSubmit: getButtonNode("buttonFormSubmit", "Войти ✓", {
         type: "submit",
-      }) as any,
-      buttonReroute: getButtonNode({
-        id: "buttonReroute",
-        label: "Впервые?",
-        link: RouteLink.SignUp,
+      }),
+      buttonGuest: getButtonNode("buttonGuest", "👻 Guest", {
+        on: {
+          click: handleGuestMode,
+        },
+      }),
+      buttonReroute: getButtonNode("buttonReroute", "Впервые?", {
         isSilent: true,
-      }) as any,
-      toast: getToastNode({
-        message: "Вход успешно",
-        type: "info",
-        duration: 4000,
-      }) as any,
+        on: {
+          click: () => handleReroute("sign-in"),
+        },
+      }),
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
+      buttonGuest: "buttonGuest",
       buttonReroute: "buttonReroute",
-      inputs: [iptIds[2], iptIds[4]],
-      toast: "toast",
+      inputs: ["input-login", "input-password"],
     },
-  },
-  on: {
-    reroute: handleReroute,
   },
 };
 
-const authPageParams_up: ComponentParams<AuthProps> = {
+const authPageParams_signUp: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignUp,
-    tagName: "form",
+    rootTag: "form",
     classNames: cssPage.moduleWindow,
     type: "sign-up",
   },
   children: {
     nodes: {
-      ...inputNodes_up,
-      heading: getHeadingNode({
-        id: "heading",
-        text: "Регистрация 🎀",
-      }) as any,
-      buttonFormSubmit: getButtonNode({
-        id: "buttonFormSubmit",
-        label: "Зарегистрироваться ✓",
-        type: "submit",
-      }) as any,
-      buttonReroute: getButtonNode({
-        id: "buttonReroute",
-        label: "Я свой!",
-        link: RouteLink.SignIn,
+      ...(inputs_signUp as any),
+      heading: getHeadingNode("heading", "Регистрация 🎀"),
+      buttonFormSubmit: getButtonNode(
+        "buttonFormSubmit",
+        "Зарегистрироваться ✓", {
+          type: "submit",
+        }
+      ),
+      buttonGuest: getButtonNode("buttonGuest", "👻 Guest", {
+        on: {
+          click: handleGuestMode,
+        },
+      }),
+      buttonReroute: getButtonNode("buttonReroute", "Я свой!", {
         isSilent: true,
-      }) as any,
-      toast: getToastNode({
-        message: "Вход успешно",
-        type: "info",
-        duration: 4000,
-      }) as any,
+        on: {
+          click: () => handleReroute("sign-up"),
+        },
+      }),
     },
     edges: {
       heading: "heading",
       buttonFormSubmit: "buttonFormSubmit",
+      buttonGuest: "buttonGuest",
       buttonReroute: "buttonReroute",
-      inputs: iptIds,
-      toast: "toast",
+      inputs: [
+        "input-name",
+        "input-surname",
+        "input-login",
+        "input-email",
+        "input-password",
+        "input-phone",
+      ],
     },
-  },
-  on: {
-    reroute: handleReroute,
   },
 };
 
 export const authPageNode_in: PageNode<AuthProps, AuthPage> = {
-  params: authPageParams_in,
+  params: authPageParams_signIn,
   factory: buildAuthPage as any,
 };
 
 export const authPageNode_up: PageNode<AuthProps, AuthPage> = {
-  params: authPageParams_up,
+  params: authPageParams_signUp,
   factory: buildAuthPage as any,
 };
 

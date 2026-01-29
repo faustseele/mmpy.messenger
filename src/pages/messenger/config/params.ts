@@ -1,4 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
+import { getAvatarNode } from "@/shared/ui/Avatar/factory.ts";
+import { getButtonNode } from "@/shared/ui/Button/factory.ts";
+import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
+import { getInputNode } from "@/shared/ui/Input/factory.ts";
+import { getSpinnerNode } from "@/shared/ui/Spinner/factory.ts";
+import { RouteConfigs } from "@app/providers/router/types.ts";
 import {
   handleAddUsers,
   handleCloseChat,
@@ -6,87 +13,76 @@ import {
   handleDeleteChat,
   handleUpdateChatAvatar,
 } from "@entities/chat/model/actions.ts";
-import { RouteConfigs } from "@app/providers/router/types.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { getButtonNode } from "@/shared/ui/Button/factory.ts";
-import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
-import { getInputNode } from "@/shared/ui/Input/factory.ts";
-import participantAvatar from "../../../../static/avatar.png";
 import { handleFindUser, handleGoToSettings } from "../model/actions.ts";
-import { MessengerProps } from "../model/types.ts";
-import cssMessenger from "../ui/messenger.module.css";
-import { getSpinnerNode } from "@/shared/ui/Spinner/factory.ts";
+import { MessengerConfigs, MessengerProps } from "../model/types.ts";
+import css from "../ui/messenger.module.css";
+
+export const getBaseMessengerConfigs = (
+  info: MessengerConfigs["info"],
+  isLoadingMessages = false,
+  hasMessages = false,
+): MessengerProps["configs"] => ({
+  id: PageId.Messenger,
+  rootTag: "div",
+  classNames: cx(cssPage.moduleWindow, css.moduleWindow_messenger),
+  info,
+  isLoadingMessages,
+  hasMessages,
+});
 
 export const messengerPageParams: ComponentParams<MessengerProps> = {
-  configs: {
-    id: PageId.Messenger,
-    tagName: "div",
-    classNames: `${cssPage.moduleWindow} ${cssMessenger.moduleWindow_messenger}`,
-    participantAvatar,
-    participantName: "",
-  },
+  configs: getBaseMessengerConfigs({
+    type: "stub",
+  } satisfies MessengerConfigs["info"]),
   children: {
     nodes: {
-      heading_chats: getHeadingNode({
-        id: "heading_chats",
-        type: "catalogue-title",
-        text: "Чаты 👥",
-      }) as any,
-      heading_goToSettings: getHeadingNode({
-        id: "heading_goToSettings",
-        type: "catalogue-link",
-        text: "Профиль ➛",
-        isClickable: true,
-        link: RouteLink.Settings,
-      }) as any,
-      searchInput: getInputNode({
-        id: "searchInput",
-        fieldId: "search",
-        label: "Поиск",
-        type: "text",
-        placeholder: "Поиск",
-        isSearch: true,
-      }) as any,
-      addNotesButton: getButtonNode({
-        id: "addNotesButton",
-        label: "Заметкa ✏️",
+      heading_chats: getHeadingNode("heading_chats", "Чаты 👥") as any,
+      heading_goToSettings: getHeadingNode(
+        "heading_goToSettings",
+        "Профиль ➛",
+        {
+          isClickable: true,
+          on: { click: handleGoToSettings },
+        },
+      ) as any,
+      searchInput: getInputNode("searchInput", "search", "Поиск") as any,
+      chatAvatar: getAvatarNode("chatAvatar", 0) as any,
+      addNotesButton: getButtonNode("addNotesButton", "Заметкa ✏️", {
         tooltip: "Добавить новые заметки",
       }) as any,
-      findUserChatButton: getButtonNode({
-        id: "findUserChatButton",
-        label: "Найти пользователя 👤",
-        tooltip: "Найти пользователя по логину",
-      }) as any,
-      closeChatButton: getButtonNode({
-        id: "closeChatButton",
-        label: "❌",
-        isSilent: true,
+      findUserChatButton: getButtonNode(
+        "findUserChatButton",
+        "Найти пользователя 👤",
+        { tooltip: "Найти пользователя по логину" },
+      ) as any,
+      closeChatButton: getButtonNode("closeChatButton", "❌", {
         tooltip: "Закрыть чат",
-      }) as any,
-      deleteNotesButton: getButtonNode({
-        id: "deleteNotesButton",
-        label: "Сжечь заметки 🔥",
         isSilent: true,
-        tooltip: "Стереть заметки",
+        on: { click: handleCloseChat },
       }) as any,
-      deleteChatButton: getButtonNode({
-        id: "deleteChatButton",
-        label: "Удалить чат 👤",
-        isSilent: true,
+      deleteNotesButton: getButtonNode(
+        "deleteNotesButton",
+        "Сжечь заметки 🔥",
+        { tooltip: "Стереть заметки", isSilent: true },
+      ) as any,
+      deleteChatButton: getButtonNode("deleteChatButton", "Удалить чат 👤", {
         tooltip: "Удалить чат с пользователем",
+        isSilent: true,
       }) as any,
-      messageField: getMessageFieldNode("messageField") as any,
       spinner: getSpinnerNode(true) as any,
+      messageField: getMessageFieldNode("messageField") as any,
     },
     edges: {
       heading_chats: "heading_chats",
       heading_goToSettings: "heading_goToSettings",
       searchInput: "searchInput",
+      chatAvatar: "chatAvatar",
       addNotesButton: "addNotesButton",
       findUserChatButton: "findUserChatButton",
       closeChatButton: "closeChatButton",
@@ -100,14 +96,12 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
   },
   on: {
     addChatWithUser: (firstName: string, secondName: string) =>
-      handleCreateChat(`{${firstName} ${secondName}}`),
+      handleCreateChat(`${firstName} ${secondName}`),
     addNotes: handleCreateChat,
     addUsers: handleAddUsers,
-    closeChat: handleCloseChat,
     deleteChat: handleDeleteChat,
     findUser: handleFindUser,
     updateChatAvatar: handleUpdateChatAvatar,
-    goToSettings: handleGoToSettings,
   },
 };
 

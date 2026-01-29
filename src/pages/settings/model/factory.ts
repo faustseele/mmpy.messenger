@@ -26,10 +26,10 @@ const getSettingsPageNode = (): PageNode<SettingsProps, SettingsPage> => {
 const buildSettingsPage: PageFactory<SettingsProps, SettingsPage> = (
   params: ComponentParams<SettingsProps>,
 ): SettingsPage => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<SettingsProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

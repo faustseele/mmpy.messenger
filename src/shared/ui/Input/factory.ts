@@ -1,20 +1,47 @@
+import { BaseProps } from "../../lib/Component/model/base.types.ts";
 import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
 import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
-import { cx } from "../../lib/helpers/formatting/classnames.ts";
-import cssInput from "./input.module.css";
+import css from "./input.module.css";
 import { Input } from "./Input.ts";
-import { InputConfigs, InputProps } from "./types.ts";
+import { FieldType, InputProps } from "./types.ts";
+import { getInputTypeByFieldId } from "./utils.ts";
 
 export const getInputNode = (
-  configs: Omit<InputConfigs, "tagName" | "classNames" | "for">,
+  id: ComponentId,
+  fieldId: FieldType,
+  label: string,
+  {
+    placeholder,
+    isError,
+    errorMessage,
+    autocomplete,
+    on,
+  }: {
+    placeholder?: string;
+    isError?: boolean;
+    isSearch?: boolean;
+    errorMessage?: string;
+    autocomplete?: "on" | "off";
+    on?: BaseProps["on"];
+  } = {},
 ): ComponentNode<InputProps, Input> => {
-  const params = getInputProps(configs);
+  const params = getInputProps(
+    id,
+    fieldId,
+    label,
+    placeholder,
+    isError,
+    errorMessage,
+    autocomplete,
+    on,
+  );
 
   return {
     params,
@@ -26,28 +53,42 @@ export const getInputNode = (
 };
 
 const getInputProps = (
-  configs: Omit<InputConfigs, "tagName" | "classNames" | "for">,
+  id: ComponentId,
+  fieldId: FieldType,
+  label: string,
+  placeholder: string = label,
+  isError: boolean = false,
+  errorMessage: string = "",
+  autocomplete: "on" | "off" = "on",
+  on: BaseProps["on"] = {},
 ): ComponentParams<InputProps> => {
   return {
     configs: {
-      tagName: "label",
-      classNames: cx(`${cssInput.inputLabelWrap}`),
-      for: configs.fieldId,
-      ...configs,
+      id,
+      rootTag: "label",
+      classNames: css.inputLabelWrap,
+      fieldId,
+      label,
+      type: getInputTypeByFieldId(fieldId),
+      placeholder,
+      for: fieldId,
+      isError,
+      errorMessage,
+      autocomplete,
     },
+    on,
   };
 };
 
 const buildInput: ComponentFactory<InputProps, Input> = (
   params: ComponentParams<InputProps>,
 ): Input => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<InputProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
-
   const node = {
     params,
     factory: buildInput,

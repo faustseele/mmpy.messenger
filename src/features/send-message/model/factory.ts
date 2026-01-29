@@ -1,4 +1,3 @@
-import ChatService from "@entities/chat/model/ChatService.ts";
 import {
   ComponentDeps,
   ComponentId,
@@ -10,8 +9,8 @@ import FragmentService from "@shared/lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "@shared/lib/helpers/factory/types.ts";
 import css from "../ui/messageField.module.css";
 import { MessageField } from "../ui/MessageField.ts";
-import { MessageFieldProps } from "./types.ts";
 import { handleSendMessage } from "./actions.ts";
+import { MessageFieldProps } from "./types.ts";
 
 export const getMessageFieldNode = (
   id: ComponentId,
@@ -32,13 +31,10 @@ const getMessageFieldParams = (
   return {
     configs: {
       id,
-      tagName: "form",
+      rootTag: "form",
       classNames: css.messageField,
       type: "text",
       label: "Message Input",
-      placeholder: ChatService.isCurrentChatNotes()
-        ? "Заметка:"
-        : "Cообщение...",
     },
     on: {
       sendMessage: handleSendMessage,
@@ -49,10 +45,10 @@ const getMessageFieldParams = (
 const buildMessageField: ComponentFactory<MessageFieldProps, MessageField> = (
   params: ComponentParams<MessageFieldProps>,
 ): MessageField => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<MessageFieldProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

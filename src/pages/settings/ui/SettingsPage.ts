@@ -8,11 +8,15 @@ import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
+import { handleSwitchType, handleValidateAndSubmit } from "../model/actions.ts";
 import { SettingsNodes, SettingsProps } from "../model/types.ts";
-import { onSubmitSuccess } from "../model/utils.ts";
 import css from "./settings.module.css";
 
 export class SettingsPage extends Page<SettingsProps> {
+  protected get isInfo(): boolean {
+    return this.configs.type === "change-info";
+  }
+
   constructor(props: ComponentProps<SettingsProps, SettingsPage>) {
     super(props);
   }
@@ -34,14 +38,20 @@ export class SettingsPage extends Page<SettingsProps> {
     const editInfo = buttonEditInfo.runtime?.instance as Button;
     const editPassword = buttonEditPassword.runtime?.instance as Button;
     const logoutBtn = buttonLogout.runtime?.instance as Button;
-    const inputs = getInstances<InputProps, InputEditor>(
+    const inputs_info = getInstances<InputProps, InputEditor>(
       this.children!,
-      "inputsEditors",
+      "inputsEditors_info",
+    );
+    const inputs_psw = getInstances<InputProps, InputEditor>(
+      this.children!,
+      "inputsEditors_password",
     );
 
     /* --- vivifying inputs --- */
-    const validator = new FormValidator(inputs, { onSubmitSuccess });
-    this._vivifyInputs(inputs, validator);
+    const validator_info = new FormValidator(inputs_info);
+    this._vivifyInputs(inputs_info, validator_info);
+    const validator_psw = new FormValidator(inputs_psw);
+    this._vivifyInputs(inputs_psw, validator_psw);
 
     /* sets placeholders for inputs from user-res */
     this._hydrateInputPlaceholders();
@@ -50,11 +60,17 @@ export class SettingsPage extends Page<SettingsProps> {
     heading.setProps({
       on: { click: this.on?.messengerClick },
     });
-    this._wireButtonEvents(editInfo, editPassword, logoutBtn, validator);
+    this._wireButtonEvents(
+      editInfo,
+      editPassword,
+      logoutBtn,
+      validator_info,
+      validator_psw,
+    );
   }
 
   public componentDidRender(): void {
-    /* re-binding avatar change event */
+    /* re-binding avatar change e */
     this._wireAvatar();
     /* sets placeholders for inputs from user-res */
     this._hydrateInputPlaceholders();
@@ -67,7 +83,7 @@ export class SettingsPage extends Page<SettingsProps> {
 
     const inputs = getInstances<InputProps, InputEditor>(
       this.children,
-      "inputsEditors",
+      "inputsEditors_info",
     );
 
     inputs.forEach((input) => {
@@ -107,40 +123,50 @@ export class SettingsPage extends Page<SettingsProps> {
     editInfo: Button,
     editPassword: Button,
     logoutBtn: Button,
-    validator: FormValidator,
+    validator_info: FormValidator,
+    validator_psw: FormValidator,
   ) {
     editInfo.setProps({
       on: {
         click: async (e: Event) => {
-          const isFormValid = validator.onFormCheck("change-info");
-          editInfo.setProps({
-            configs: {
-              showSpinner: isFormValid,
-            },
-          });
-          await validator.onFormSubmit(e, "change-info");
-          editInfo.setProps({
-            configs: {
-              showSpinner: false,
-            },
-          });
+          e.preventDefault();
+
+          if (this.configs.type === "change-info") {
+            handleValidateAndSubmit("change-info", validator_info, editInfo);
+          } else {
+            handleSwitchType("change-info", editInfo, editPassword, this);
+          }
         },
       },
     });
     editPassword.setProps({
       on: {
-        click: (e: Event) => validator.onFormSubmit(e, "change-password"),
+        click: async (e: Event) => {
+          e.preventDefault();
+
+          if (this.configs.type === "change-password") {
+            handleValidateAndSubmit(
+              "change-password",
+              validator_psw,
+              editPassword,
+            );
+          } else {
+            handleSwitchType("change-password", editPassword, editInfo, this);
+          }
+        },
       },
     });
     logoutBtn.setProps({
       on: {
-        click: async (event: Event) => {
-          event.preventDefault();
-
+        click: async (e: Event) => {
+          e.preventDefault();
           handleLogout();
         },
       },
     });
+
+    /* def type is 'edit-info'; switched in _switchType() */
+    this.setProps({ on: { submit: editInfo.on?.click } });
   }
 
   private _wireAvatar(): void {
@@ -166,40 +192,53 @@ export class SettingsPage extends Page<SettingsProps> {
     });
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: SettingsPage: Children are not defined</span>`;
 
     const nodes = this.children.nodes as SettingsNodes;
 
+    const {
+      heading_profile,
+      heading_backToChats,
+      user_avatar,
+      subheading_form,
+      buttonEditInfo,
+      buttonEditPassword,
+    } = nodes;
+
     return /*html*/ `
       <header class="${css.profileHeadings}">
-        {{{ ${nodes["heading_profile"].params.configs.id} }}}
-        {{{ ${nodes["heading_backToChats"].params.configs.id} }}}
+        {{{ ${heading_profile.params.configs.id} }}}
+        {{{ ${heading_backToChats.params.configs.id} }}}
       </header>
       
       <main class="${css.settingsContent}">
         <div class="${css.settingsFace}">
-          <label for="avatar-input" class="${css.avatarContainer}">
-            <img alt="User's avatar" src="{{ profileAvatar }}" class="${css.avatarImage}" />
-            <div class="${css.avatarOverlay}">
-              <span class="${css.overlayText}">change avatar</span>
-            </div>
-          </label>
-          <input id="avatar-input" type="file" name="avatar" class="${css.avatarFileInput}" />
+
+          {{{${user_avatar.params.configs.id} }}}
+
           <h2 class="${css.settingsFace__name}">{{ profileName }}</h2>
         </div>
 
         <div class="${css.settingsInputs}">
+          {{{ ${subheading_form.params.configs.id} }}}
+
           <div class="${css.settingsInputs__list}">
-            {{{ inputsEditors }}}
+            {{#if ${this.isInfo}}}
+              {{{ inputsEditors_info }}}
+            {{else}}
+              {{{ inputsEditors_password }}}  
+            {{/if}}
           </div>
         </div>
       </main>
 
-      <footer class="${css.settingsFooter}">
-        {{{ ${nodes["buttonEditInfo"].params.configs.id} }}}
-        {{{ ${nodes["buttonEditPassword"].params.configs.id} }}}
+      <footer class="${css.footer}">
+        <div class="${css.footer__horBtns}">
+          {{{ ${buttonEditInfo.params.configs.id} }}}
+          {{{ ${buttonEditPassword.params.configs.id} }}}
+        </div>
         {{{ ${nodes["buttonLogout"].params.configs.id} }}}
       </footer>
     `;

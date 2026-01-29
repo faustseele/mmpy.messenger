@@ -1,19 +1,14 @@
-import Store from "@app/providers/store/model/Store.ts";
-import { ChatId } from "@shared/api/model/types.ts";
+import { ChatId } from "@/shared/api/model/api.types.ts";
 import ChatService from "./ChatService.ts";
 
-export const isChatNotes = async (id: ChatId | null): Promise<boolean> => {
-  const userId = Store.getState().api.auth.user?.id;
-  if (!userId || !id) {
-    console.error("No user found");
-    return false;
-  }
+export const isChatNotes = async (id: ChatId): Promise<boolean> => {
+  const resChatParticipants = await ChatService.getUsers(id);
 
-  const usersInChat = (await ChatService.getUsers(id)).filter(
-    (user) => user.id !== userId,
-  );
+  if (!resChatParticipants.ok) return false;
 
-  if (!usersInChat.length) {
+  const userOnly = resChatParticipants.data!.length < 2;
+
+  if (userOnly) {
     return true;
   } else {
     return false;

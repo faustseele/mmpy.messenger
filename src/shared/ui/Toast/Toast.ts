@@ -1,14 +1,33 @@
+import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import css from "./toast.module.css";
-import { ToastProps, ToastType } from "./types.ts";
+import { ToastPayload, ToastProps } from "./types.ts";
 
 export class Toast extends Component<ToastProps> {
+  private timerId: ReturnType<typeof setTimeout> | undefined;
+
   constructor(props: ComponentProps<ToastProps, Toast>) {
     super(props);
   }
 
-  public componentDidMount(): void {}
+  public getRootTagCx(configs?: ToastProps["configs"]): string {
+    const { type, show } = configs ?? this.configs;
+    return cx(
+      css.toast,
+      type === "error" && css.toast_error,
+      type === "success" && css.toast_success,
+      show && css.toast_visible,
+    );
+  }
+
+  public componentDidMount(): void {
+    /* mounting Toast to globalBus */
+    globalBus.on("show-toast", (payload: ToastPayload) =>
+      this.showToast(payload),
+    );
+  }
 
   public componentDidRender(): void {
     if (!this.element) {
@@ -18,41 +37,43 @@ export class Toast extends Component<ToastProps> {
     this.element.textContent = this.configs.message;
   }
 
-  public showToast(message: string, type: ToastType = "info"): void {
+  public showToast({ message, type = "info" }: ToastPayload): void {
     if (!this.element) return;
-    console.log(
-      `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
-    );
 
-    this.setProps({
-      configs: {
-        ...this.configs,
-        message,
-        type,
-        classNames:
-          `${css.toast} ${type === "error" ? css.toast_error : ""}`.trim(),
-      },
-    });
+    /* clear timer if toast active */
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = undefined;
 
-    this.element.classList.add(css.toast_visible);
-    // setTimeout(() => {
-    //   this.element?.classList.remove(css.toast_visible);
-    // }, 2000); /* match CSS transition duration */
-  }
-
-  /*   private getToastTypeClass(type: ToastType): string {
-    switch (type) {
-      case "success":
-        return css.toast_success;
-      case "error":
-        return css.toast_error;
-      case "info":
-      default:
-        return css.toast_info;
+      this.setProps({
+        configs: {
+          show: false,
+        },
+      });
     }
+
+    /* timeout needed to allow hide-anim on clearTimeout() to complete */
+    setTimeout(() => {
+      this.setProps({
+        configs: {
+          message,
+          type,
+          show: true,
+        },
+      });
+
+      /* auto-hide after 2s */
+      this.timerId = setTimeout(() => {
+        this.timerId = undefined;
+        this.setProps({
+          configs: {
+            show: false,
+          },
+        });
+      }, 2000);
+    }, 200);
   }
- */
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return /*html*/ ``;
   }
 }

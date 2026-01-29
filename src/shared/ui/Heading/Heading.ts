@@ -8,7 +8,7 @@ export class Heading extends Component<HeadingProps> {
     super(props);
   }
 
-  public getSourceMarkup(): string {
+  public getInnerMarkup(): string {
     return /*html*/ `
         {{#if isClickable}}
           <a class="${css.heading__text}

@@ -9,6 +9,7 @@ import { ComponentFactory } from "@/shared/lib/helpers/factory/types.ts";
 import css from "./spinner.module.css";
 import { Spinner } from "./Spinner.ts";
 import { SpinnerProps } from "./types.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 
 export const getSpinnerNode = (
   isBig: boolean = false,
@@ -16,11 +17,13 @@ export const getSpinnerNode = (
   const params: ComponentParams<SpinnerProps> = {
     configs: {
       id: "spinner",
-      tagName: "span",
-      classNames: `${css.spinner} ${isBig ? css.spinner_big : ""}`.trim(),
+      rootTag: "span",
       isBig,
+      isOn: true,
+      classNames: cx(css.spinner, css.spinner_on),
     },
   };
+
   return {
     params,
     factory: buildSpinner,
@@ -33,10 +36,10 @@ export const getSpinnerNode = (
 const buildSpinner: ComponentFactory<SpinnerProps, Spinner> = (
   params: ComponentParams<SpinnerProps>,
 ): Spinner => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<SpinnerProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

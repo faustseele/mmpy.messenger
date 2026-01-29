@@ -1,5 +1,7 @@
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
@@ -10,16 +12,14 @@ import cssSubheading from "./subheading.module.css";
 import { Subheading } from "./Subheading.ts";
 import { SubheadingProps } from "./types.ts";
 
-export const getSubheadingNode = ({
-  id,
-  text,
-  isDrama = false,
-}: {
-  id: string;
-  text: string;
-  isDrama?: boolean;
-}): ComponentNode<SubheadingProps> => {
-  const params = getSubheadingProps({ id, text, isDrama });
+export const getSubheadingNode = (
+  id: ComponentId,
+  text: string,
+  {
+    isDrama,
+  }: { isDrama?: boolean } = {},
+): ComponentNode<SubheadingProps> => {
+  const params = getSubheadingProps( id, text, isDrama );
   return {
     params,
     factory: buildSubheading,
@@ -29,21 +29,16 @@ export const getSubheadingNode = ({
   };
 };
 
-const getSubheadingProps = ({
-  id,
-  text,
-  isDrama = false,
-}: {
-  id: string;
-  text: string;
-  isDrama?: boolean;
-}): ComponentParams<SubheadingProps> => {
+const getSubheadingProps = (
+  id: string,
+  text: string,
+  isDrama: boolean = false,
+): ComponentParams<SubheadingProps> => {
   return {
     configs: {
       id,
-      tagName: "h2",
-      classNames:
-        `${cssSubheading.subheading} ${isDrama ? cssSubheading.subheading_drama : ""}`.trim(),
+      rootTag: "h2",
+      classNames: cx(cssSubheading.subheading, isDrama ? cssSubheading.subheading_drama : ""),
       text,
     },
   };
@@ -52,10 +47,10 @@ const getSubheadingProps = ({
 const buildSubheading: ComponentFactory<SubheadingProps, Subheading> = (
   params: ComponentParams<SubheadingProps>,
 ): Subheading => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<SubheadingProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
 

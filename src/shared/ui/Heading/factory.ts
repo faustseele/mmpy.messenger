@@ -1,28 +1,26 @@
 import {
   ComponentDeps,
+  ComponentId,
   ComponentNode,
   ComponentParams,
 } from "../../lib/Component/model/types.ts";
 import DOMService from "../../lib/DOM/DOMService.ts";
 import FragmentService from "../../lib/Fragment/FragmentService.ts";
 import { ComponentFactory } from "../../lib/helpers/factory/types.ts";
-import { cx } from "../../lib/helpers/formatting/classnames.ts";
 import css from "./heading.module.css";
 import { Heading } from "./Heading.ts";
-import { HeadingConfigs, HeadingOn, HeadingProps } from "./types.ts";
+import { HeadingOn, HeadingProps } from "./types.ts";
 
 export const getHeadingNode = (
-  configs: Omit<HeadingConfigs, "tagName" | "classNames">,
-  on?: HeadingOn,
-): ComponentNode<HeadingProps, Heading> => {
-  const params = getHeadingProps(
-    {
-      tagName: "h1",
-      classNames: cx(`${css.heading}`),
-      ...configs,
-    },
+  id: string,
+  text: string,
+  {
+    isClickable,
+    isDrama,
     on,
-  );
+  }: { isClickable?: boolean; isDrama?: boolean; on?: HeadingOn } = {},
+): ComponentNode<HeadingProps, Heading> => {
+  const params = getHeadingProps(id, text, isClickable, isDrama, on);
 
   return {
     params,
@@ -34,24 +32,32 @@ export const getHeadingNode = (
 };
 
 const getHeadingProps = (
-  configs: HeadingConfigs,
-  on?: HeadingOn,
+  id: ComponentId,
+  text: string,
+  isClickable: boolean = false,
+  isDrama: boolean = false,
+  on: HeadingOn = {},
 ): ComponentParams<HeadingProps> => {
   return {
-    configs,
-    on: {
-      ...on,
+    configs: {
+      id,
+      rootTag: "h1",
+      classNames: css.heading,
+      text,
+      isClickable,
+      isDrama,
     },
+    on: { ...on },
   };
 };
 
 const buildHeading: ComponentFactory<HeadingProps, Heading> = (
   params: ComponentParams<HeadingProps>,
 ): Heading => {
-  const { id, tagName, classNames } = params.configs;
+  const { id, rootTag } = params.configs;
 
   const deps: ComponentDeps<HeadingProps> = {
-    domService: new DOMService(id, tagName, classNames),
+    domService: new DOMService(id, rootTag),
     fragmentService: new FragmentService(),
   };
   const node = {
