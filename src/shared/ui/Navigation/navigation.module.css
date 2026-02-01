@@ -1,0 +1,15 @@
+.nav {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+nav > a {
+ font-family: inherit;
+ font-size: 14px;
+ color: var(--color-content-darkest);
+}

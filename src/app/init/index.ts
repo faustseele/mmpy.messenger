@@ -1,13 +1,9 @@
-import { handleFetchChats } from "@entities/chat/model/actions.ts";
-import {
-  handleFetchUser,
-  handleLogout,
-} from "@features/authenticate/model/actions.ts";
-import { RouteLink } from "@shared/types/universal.ts";
-import Router from "../providers/router/Router.ts";
-import Store from "../providers/store/model/Store.ts";
-import { getToastNode } from "@/shared/ui/Toast/factory.ts";
 import { isMobile } from "@/shared/lib/browser/isMobile.ts";
+import { getNavigationNode } from "@/shared/ui/Navigation/factory.ts";
+import { getToastNode } from "@/shared/ui/Toast/factory.ts";
+import { handleFetchChats } from "@entities/chat/model/actions.ts";
+import { handleFetchUser } from "@features/authenticate/model/actions.ts";
+import Store from "../providers/store/model/Store.ts";
 
 /* initilizes application; keeps Router separate */
 export const initApp = async () => {
@@ -16,7 +12,7 @@ export const initApp = async () => {
   const root = document.getElementsByTagName("body")[0];
 
   handleUA(root);
-  initGlobalToast(root);
+  prependGlobalToast(root);
 };
 
 const bootstrapAuth = async () => {
@@ -35,10 +31,14 @@ const handleUA = (root: HTMLBodyElement) => {
   const ua = navigator.userAgent;
   console.log("handleUA: ua", ua);
 
-  if (isMobile()) root.classList.add("mobile");
+  if (isMobile()) {
+    root.classList.add("mobile");
+  } else {
+    prependNavigation(root);
+  }
 };
 
-const initGlobalToast = (root: HTMLBodyElement) => {
+const prependGlobalToast = (root: HTMLBodyElement) => {
   const toast = getToastNode("Waiting for the bus..");
 
   if (!root || !toast.runtime?.instance.element)
@@ -49,21 +49,13 @@ const initGlobalToast = (root: HTMLBodyElement) => {
 };
 
 /** for the nav-<a> links */
-export const bootstrapNavLinks = () => {
-  const navs = document.getElementsByClassName(
-    "navButton",
-  ) as HTMLCollectionOf<HTMLAnchorElement>;
+const prependNavigation = (root: HTMLBodyElement) => {
+  const nav = getNavigationNode("navigation");
 
-  for (const a of Array.from(navs)) {
-    a.addEventListener("click", async (e: MouseEvent) => {
-      e.preventDefault();
-
-      const path = a.getAttribute("href");
-      if (path === "/logout") {
-        handleLogout();
-      } else {
-        Router.go(path as RouteLink);
-      }
-    });
+  if (!nav.runtime?.instance.element) {
+    console.error("bootstrapNavigation: nav not found");
+    return;
   }
+
+  root.prepend(nav.runtime.instance.element);
 };

@@ -1,4 +1,4 @@
-import { bootstrapNavLinks, initApp } from "@app/init/index.ts";
+import { initApp } from "@app/init/index.ts";
 import Router from "@app/providers/router/Router.ts";
 import "@app/styles/index.css";
 import {
@@ -41,7 +41,4 @@ try {
     /* Error route */
     .use(errorRouteConfig_500, createErrorPage_500);
   Router.start();
-
-  /* for the nav-<a> links */
-  bootstrapNavLinks();
 }
