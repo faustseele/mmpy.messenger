@@ -7,6 +7,7 @@ import { RouteLink } from "@shared/types/universal.ts";
 import Router from "../providers/router/Router.ts";
 import Store from "../providers/store/model/Store.ts";
 import { getToastNode } from "@/shared/ui/Toast/factory.ts";
+import { isMobile } from "@/shared/lib/browser/isMobile.ts";
 
 /* initilizes application; keeps Router separate */
 export const initApp = async () => {
@@ -14,13 +15,8 @@ export const initApp = async () => {
 
   const root = document.getElementsByTagName("body")[0];
 
-  const toast = getToastNode('Waiting for the bus..');
-
-  if (!root || !toast.runtime?.instance.element)
-    throw new Error("root element not found");
-
-  /* prepending global toast */
-  root.prepend(toast.runtime.instance.element);
+  handleUA(root);
+  initGlobalToast(root);
 };
 
 const bootstrapAuth = async () => {
@@ -33,6 +29,23 @@ const bootstrapAuth = async () => {
   } catch (error) {
     throw new Error("bootstrapAuth failed", { cause: error });
   }
+};
+
+const handleUA = (root: HTMLBodyElement) => {
+  const ua = navigator.userAgent;
+  console.log("handleUA: ua", ua);
+
+  if (isMobile()) root.classList.add("mobile");
+};
+
+const initGlobalToast = (root: HTMLBodyElement) => {
+  const toast = getToastNode("Waiting for the bus..");
+
+  if (!root || !toast.runtime?.instance.element)
+    throw new Error("root element not found");
+
+  /* prepending global toast */
+  root.prepend(toast.runtime.instance.element);
 };
 
 /** for the nav-<a> links */

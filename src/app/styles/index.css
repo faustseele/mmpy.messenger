@@ -48,6 +48,10 @@ body {
   font-family: var(--font-family);
 }
 
+.mobile {
+  background-color: var(--color-acc);
+}
+
 
 /* Navigation bar on the left for
   quick page-switching */
