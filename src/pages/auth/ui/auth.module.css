@@ -1,10 +1,10 @@
+.moduleWindow_auth {
+  justify-content: space-between;
+}
+
 .authHeading {
   padding: 0 8px;
   height: auto;
-}
-
-.authContent {
-  padding-top: 215px;
 }
 
 .inputsWrapper {
@@ -15,7 +15,7 @@
 
 .authFooter {
   width: 100%;
-  padding: 215px 8px 8px 8px;
+  padding: 8px 8px 8px 8px;
   box-sizing: border-box;
 
   display: flex;

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { handleGuestMode } from "@/features/authenticate/model/actions.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
 import { getButtonNode } from "@/shared/ui/Button/factory.ts";
 import { getHeadingNode } from "@/shared/ui/Heading/factory.ts";
 import { getInputNode } from "@/shared/ui/Input/factory.ts";
@@ -13,7 +15,7 @@ import { handleReroute } from "../model/actions.ts";
 import { buildAuthPage } from "../model/factory.ts";
 import { AuthProps } from "../model/types.ts";
 import type { AuthPage } from "../ui/AuthPage.ts";
-import { handleGuestMode } from "@/features/authenticate/model/actions.ts";
+import css from "../ui/auth.module.css"
 
 const iptIds = [
   "input-name",
@@ -42,7 +44,7 @@ const authPageParams_signIn: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignIn,
     rootTag: "form",
-    classNames: cssPage.moduleWindow,
+    classNames: cx(cssPage.moduleWindow, css.moduleWindow_auth),
     type: "sign-in",
   },
   children: {
@@ -78,7 +80,7 @@ const authPageParams_signUp: ComponentParams<AuthProps> = {
   configs: {
     id: PageId.SignUp,
     rootTag: "form",
-    classNames: cssPage.moduleWindow,
+    classNames: cx(cssPage.moduleWindow, css.moduleWindow_auth),
     type: "sign-up",
   },
   children: {

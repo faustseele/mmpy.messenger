@@ -32,7 +32,8 @@ const handleUA = (root: HTMLBodyElement) => {
   console.log("handleUA: ua", ua);
 
   if (isMobile()) {
-    root.classList.add("mobile");
+    const app = document.getElementById("app");
+    if (app) app.classList.add("app_mobile");
   } else {
     prependNavigation(root);
   }

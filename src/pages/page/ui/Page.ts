@@ -7,7 +7,7 @@ export abstract class Page<Props extends BaseProps> extends Component<Props> {
 
   constructor(props: ComponentProps<Props, Page<Props>>) {
     super(props);
-    
+
     this.pageParams = {};
   }
 

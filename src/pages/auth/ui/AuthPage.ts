@@ -1,3 +1,6 @@
+import { isMobile } from "@/shared/lib/browser/isMobile.ts";
+import { cx } from "@/shared/lib/helpers/formatting/classnames.ts";
+import cssPage from "@pages/page/ui/page.module.css";
 import { Page } from "@pages/page/ui/Page.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
@@ -21,14 +24,23 @@ export class AuthPage extends Page<AuthProps> {
       props.node.params.configs.type === "sign-up" ? css.authFooter_signUp : "";
   }
 
+  public getRootTagCx(): string {
+    const mobile = isMobile();
+
+    return cx(
+      cssPage.moduleWindow,
+      mobile && cssPage.moduleWindow_mobile,
+      css.moduleWindow_auth,
+    );
+  }
+
   public componentDidMount(): void {
     if (!this.children?.edges) {
       throw new Error("children is not defined");
     }
 
     /* --- getting instances --- */
-    const {  buttonFormSubmit } = this.children
-      .nodes as AuthNodes;
+    const { buttonFormSubmit } = this.children.nodes as AuthNodes;
     const inputs = getInstances<InputProps, Input>(this.children, "inputs");
     this.submit = buttonFormSubmit.runtime?.instance as Button;
     this.validator = new FormValidator(inputs);
@@ -93,18 +105,16 @@ export class AuthPage extends Page<AuthProps> {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonGuest, buttonReroute, } = this.children
-      .nodes as AuthNodes;
+    const { heading, buttonFormSubmit, buttonGuest, buttonReroute } = this
+      .children.nodes as AuthNodes;
 
     return /*html*/ `
       <header class="${css.authHeading}">
         {{{ ${heading.params.configs.id} }}}
       </header>
 
-      <main class="${css.authContent}">
-        <div class="${css.inputsWrapper}">
-          {{{ inputs }}}
-        </div>
+      <main class="${css.inputsWrapper}">
+        {{{ inputs }}}
       </main>
 
       <footer class="${css.authFooter} ${this.footerModifier}">

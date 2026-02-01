@@ -48,26 +48,11 @@ body {
   font-family: var(--font-family);
 }
 
-.mobile {
-  background-color: var(--color-acc);
-}
+.app_mobile {
+  width: 100vw;
+  height: 100vh;
 
-
-/* Navigation bar on the left for
-  quick page-switching */
-nav {
-  position: absolute;
-  left: 16px;
-  top: 16px;
-  
   display: flex;
-  flex-direction: column;
-  row-gap: 8px;
+  justify-content: center;
+  align-items: center;
 }
-
-nav > a {
- font-family: inherit;
- font-size: 14px;
- color: var(--color-content-darkest);
-}
-
