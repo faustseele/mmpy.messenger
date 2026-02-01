@@ -1,7 +1,7 @@
 .moduleWindow {
   width: 400px;
   max-width: 400px;
-  height: 100vh;
+  height: auto;
   max-height: 90vh;
   padding: 0;
 
@@ -14,8 +14,7 @@
 }
 
 .moduleWindow_mobile {
-  width: 100%;
+  width: calc(100% - 16px);
   max-width: calc(100% - 16px);
   height: 90vh;
-  max-height: 90vh;
 }

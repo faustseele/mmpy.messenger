@@ -1,4 +1,6 @@
 .moduleWindow_errors {
+  max-height: 150px;
+  
   padding: 72px 0 62px 0;
   
   display: flex;

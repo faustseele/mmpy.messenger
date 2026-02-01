@@ -1,5 +1,7 @@
 .moduleWindow_auth {
   justify-content: space-between;
+  
+  min-height: 80vh;
 }
 
 .authHeading {
