@@ -1,9 +1,15 @@
 .moduleWindow_messenger {
   width: auto;
   max-width: 1100px;
-  height: calc(100vh - 100px);
+  height: 90vh;
+  min-height: 90vh;
 
   flex-direction: row;
+}
+
+.moduleWindow_messengerMobile {
+  min-width: calc(100% - 16px);
+  max-width: calc(100% - 16px);
 }
 
 .catalogue {
@@ -20,6 +26,11 @@
 
 .catalogue::-webkit-scrollbar {
   width: 0;
+}
+
+.catalogue_mobile {
+  width: 100%;
+  border: none;
 }
 
 .catalogue__head {
@@ -89,6 +100,11 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+.chat_mobile {
+  min-width: 100%;
+  width: 100%;
 }
 
 .chatHeader {
