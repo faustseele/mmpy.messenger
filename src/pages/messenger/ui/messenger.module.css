@@ -34,22 +34,25 @@
 }
 
 .catalogue__head {
-  padding: 0 8px 8px 8px;
+  padding: 0 6px 6px 6px;
   box-sizing: border-box;
 
   display: flex;
-  flex-direction: column;
-  row-gap: 8px;
+  flex-direction: row;
+  justify-content: space-between;
 
   border-bottom: var(--color-universal-br) 1px solid;
 }
 
-.catalogue__headings {
+.catalogue__headingsMobile {
   width: 100%;
+  padding: 6px 6px 0 6px;
   box-sizing: border-box;
 
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  column-gap: 6px;
+  justify-content: end;
 }
 
 .searchInput {

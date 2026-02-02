@@ -134,6 +134,7 @@ export class MessengerPage extends Page<MessengerProps> {
 
     const shouldShowAside = () => {
       if (!mobile) return true;
+
       /* mobile-view conditions */
       if (isStub) return true;
 
@@ -149,6 +150,7 @@ export class MessengerPage extends Page<MessengerProps> {
 
     const shouldShowMain = () => {
       if (!mobile) return true;
+
       /* mobile-view conditions */
       if (isStub) return false;
 
@@ -167,14 +169,19 @@ export class MessengerPage extends Page<MessengerProps> {
 
     return /*html*/ `
       {{#if ${showAside}}}
-        <aside class="${css.catalogue} ${mobile ? css.catalogue_mobile : ''}">
+        <aside class="${css.catalogue} ${mobile ? css.catalogue_mobile : ""}">
         
           <header class="${css.catalogue__head}">
-            <div class="${css.catalogue__headings}">
               {{{ ${heading_chats.params.configs.id} }}}
               {{{ ${heading_goToSettings.params.configs.id} }}}
-            </div>
           </header>
+
+          {{#if ${mobile}}}
+            <div class="${css.catalogue__headingsMobile}">
+            {{{ ${addNotesButton.params.configs.id} }}}
+            {{{ ${findUserChatButton.params.configs.id} }}}
+            </div>
+          {{/if}}
 
           <ul class="${css.catalogue__items}">
             {{{ goToChatItems }}}
@@ -183,7 +190,7 @@ export class MessengerPage extends Page<MessengerProps> {
       {{/if}}
 
       {{#if ${showMain}}}
-        <main class="${css.chat} ${mobile ? css.chat_mobile : ''}">
+        <main class="${css.chat} ${mobile ? css.chat_mobile : ""}">
           <header class="${css.chatHeader}">
             <div class="${css.chatHeader__face}">
 
