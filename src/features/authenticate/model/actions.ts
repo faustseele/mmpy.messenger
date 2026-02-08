@@ -49,7 +49,7 @@ export const handleSignIn = async (
   return res;
 };
 
-export const handleGuestMode = async (): Promise<ApiResponse<UserResponse>> => {
+export const handleGuestSignIn = async (): Promise<ApiResponse<UserResponse>> => {
   globalBus.emit("toast", { msg: "Launching Guest Mode..." });
   const res = await AuthService.signIn(GUEST_CREDS);
 

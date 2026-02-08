@@ -42,10 +42,10 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
   } satisfies MessengerConfigs["info"]),
   children: {
     nodes: {
-      heading_chats: getHeadingNode("heading_chats", "Чаты 👥") as any,
+      heading_chats: getHeadingNode("heading_chats", "чаты 👥") as any,
       heading_goToSettings: getHeadingNode(
         "heading_goToSettings",
-        "Профиль ➛",
+        "️⚙️ юзер",
         {
           isClickable: true,
           on: { click: handleGoToSettings },

@@ -57,8 +57,8 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
     nodes: {
       ...(editorNodes_info as any),
       ...(editorNodes_psw as any),
-      heading_profile: getHeadingNode("heading_profile", "Профиль 👤") as any,
-      heading_backToChats: getHeadingNode("heading_backToChats", "⮘ Назад", {
+      heading_profile: getHeadingNode("heading_profile", "профиль 👤") as any,
+      heading_backToChats: getHeadingNode("heading_backToChats", "🗨️ к чатам", {
         isClickable: true,
         on: { click: handleMessengerClick },
       }) as any,
