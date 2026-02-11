@@ -77,10 +77,12 @@ class AuthService {
 
       return { ok: !!user, data: user };
     } catch (e: unknown) {
+      const err = e as ApiError;
+
       ls_setLoggedIn(false);
 
-      console.error("signIn failed", e);
-      return { ok: false, err: e as ApiError };
+      console.error("signIn failed", err);
+      return { ok: false, err };
     }
   }
 
