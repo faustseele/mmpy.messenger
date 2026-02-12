@@ -11,16 +11,24 @@ import { ComponentNode } from "../Component/model/types.ts";
  * @sourceMarkup – raw HTML-string
  * e.g., sourceMarkup provided by Component
  * @compiledSourceMarkup – Handlebars-compiled HTML-string with placeholders
+ * @returns DocumentFragment
+ * DocumentFragment is an off-DOM lightweight container.
+ * when appended to a DOM Element, its child nodes-
+ * are moved out of the DocumentFragment into the target Element.
  */
 export default class FragmentService<C extends BaseConfigs> {
-  /**
-   * @returns DocumentFragment
-   * DocumentFragment is an off-DOM lightweight container.
-   * when appended to a DOM Element, its child nodes-
-   * are moved out of the DocumentFragment into the target Element.
-   */
+  private templateCache = new Map<string, HandlebarsTemplateDelegate>();
+
   public compile(sourceMarkup: string, configs: C): DocumentFragment {
-    const compiledSourceMarkup = Handlebars.compile(sourceMarkup)(configs);
+    let template = this.templateCache.get(sourceMarkup);
+
+    /* compile if not cached */
+    if (!template) {
+      template = Handlebars.compile(sourceMarkup);
+      this.templateCache.set(sourceMarkup, template);
+    }
+
+    const compiledSourceMarkup = template(configs);
     return this._createFragmentFromString(compiledSourceMarkup);
   }
 
@@ -29,16 +37,22 @@ export default class FragmentService<C extends BaseConfigs> {
     configs: C,
     children: ChildGraph,
   ): DocumentFragment {
+    let template = this.templateCache.get(sourceMarkup);
+
     /* creates <li id="random UUID"></li>.. placeholders for children */
     const divPlaceholders = this._createDivPlaceholders(children);
 
+    /* compile if not cached */
+    if (!template) {
+      template = Handlebars.compile(sourceMarkup);
+      this.templateCache.set(sourceMarkup, template);
+    }
+
     /**
      * handles {{expressions-configs}} & {{{children-html expressions}}}
-     * inserts placeholders into the sourceMarkup
+     * inserts placeholders into the (cached) template
      */
-    const compiledSourceMarkupWithPlaceholders = Handlebars.compile(
-      sourceMarkup,
-    )({
+    const compiledSourceMarkupWithPlaceholders = template({
       /* {{{children-html expressions}}} */
       ...divPlaceholders,
       /* {{config-expressions}} of a parent */
