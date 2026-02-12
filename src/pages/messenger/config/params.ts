@@ -45,7 +45,7 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
       heading_chats: getHeadingNode("heading_chats", "чаты 👥") as any,
       heading_goToSettings: getHeadingNode(
         "heading_goToSettings",
-        "️⚙️ юзер",
+        "️⚙️ профиль",
         {
           isClickable: true,
           on: { click: handleGoToSettings },

@@ -35,7 +35,7 @@ export const handleCreateChat = async (
       globalBus.emit("toast", { msg: `'${title}' created!` }, "success");
   } else {
     console.error("ChatService: createChat failed:", res);
-    globalBus.emit("toast", { msg: `Dev error: ${res.err?.reason}` }, "error");
+    globalBus.emit("toast", { msg: `Dev-Error: ${res.err?.reason}` }, "error");
   }
 
   return res;
@@ -56,7 +56,7 @@ export const handleDeleteChat = async (id: number, chatTitle: string) => {
   } else {
     console.error("ChatService: deleteChat failed:", res);
     globalBus.emit("toast", {
-      msg: "Dev error: " + res.err?.reason,
+      msg: "Dev-Error: " + res.err?.reason,
       type: "error",
     });
   }
