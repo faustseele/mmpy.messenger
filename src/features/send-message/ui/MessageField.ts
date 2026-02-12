@@ -10,7 +10,6 @@ export class MessageField extends Component<MessageFieldProps> {
   }
 
   public componentDidRender(): void {
-    console.log("MessageField");
     this._wireAttach();
   }
 

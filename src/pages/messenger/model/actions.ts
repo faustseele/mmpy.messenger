@@ -1,11 +1,12 @@
+import { ZERO_WIDTH_SPACE } from "@/shared/config/const.ts";
 import { API_URL_RESOURCES } from "@/shared/config/urls.ts";
+import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
 import { urlToFile } from "@/shared/lib/helpers/file.ts";
 import Router from "@app/providers/router/Router.ts";
 import UserService from "@entities/user/model/UserService.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { MessengerConfigs, MessengerOn } from "./types.ts";
 import { randomNoteLabel } from "./utils.ts";
-import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
 
 export const handleFindUser = async (login: string) => {
   return await UserService.findByLogin(login);
@@ -80,7 +81,7 @@ export const handleAddNotes = async (on: MessengerOn) => {
   const input = window.prompt("Как назовём заметки?", chatName);
   if (input === null) return;
 
-  const title = input.trim();
+  const title = input.trim() + ZERO_WIDTH_SPACE;
   if (!title) return;
 
   on?.addNotes?.(title);

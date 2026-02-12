@@ -12,7 +12,7 @@ import Store from "@app/providers/store/model/Store.ts";
 import { ls_storeLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatAPI from "../api/ChatAPI.ts";
 import { ChatWebsocket } from "../lib/ChatWebsocket.ts";
-import { isChatNotes } from "./utils.ts";
+import { getChatType } from "./utils.ts";
 
 class ChatService {
   private ws = new ChatWebsocket();
@@ -21,20 +21,8 @@ class ChatService {
     query?: GetChatsQuery,
   ): Promise<ApiResponse<ChatResponse[]>> {
     try {
-      const setChatsTypes = async (
-        chats: ChatResponse[],
-      ): Promise<ChatResponse[]> => {
-        return await Promise.all(
-          chats.map(async (chat) => {
-            const isNotes = await isChatNotes(chat.id);
-            chat.type = isNotes ? "notes" : "chat";
-            return chat;
-          }),
-        );
-      };
-
-      let list = await ChatAPI.getChats(query);
-      list = await setChatsTypes(list);
+      const list = await ChatAPI.getChats(query);
+      list.map((chat) => (chat.type = getChatType(chat.title)));
 
       Store.set("api.chats.list", list);
       console.log("chats fetch success !:", list);
@@ -197,7 +185,7 @@ class ChatService {
     return Store.getState().api.chats.currentChat?.type === "notes";
   }
 
-  public sendMessage (content: string) {
+  public sendMessage(content: string) {
     this.ws.sendMessage(content);
   }
 
