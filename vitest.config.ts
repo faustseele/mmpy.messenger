@@ -1,5 +1,7 @@
 import path from 'path';
-import { defineConfig } from 'vitest/config.ts'
+/* TODO: fix this */
+// eslint-disable-next-line import/extensions
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
@@ -13,6 +15,7 @@ export default defineConfig({
   resolve: {
     alias: {
       /* syncs w/ tsconfig.json so vitest can find our files thru aliases */
+      '@': path.resolve(__dirname, './src'),
       '@app': path.resolve(__dirname, './src/app'),
       '@pages': path.resolve(__dirname, './src/pages'),
       '@features': path.resolve(__dirname, './src/features'),
