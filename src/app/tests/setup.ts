@@ -1,17 +1,20 @@
 import { vi } from "vitest";
 
 const localStorageMock = (function () {
-  let store: Record<string, string> = {};
+  let ls: Record<string, string> = {};
   return {
-    getItem: vi.fn((key: string) => store[key] || null),
+    /* wrapping in vi.fn(), so we can verify the behavior 
+      of the functions (getItem(), setItem(), etc.) */
+    /* e.g: expect(localStorage.setItem).toHaveBeenCalledWith('isLoggedIn', 'true') */
+    getItem: vi.fn((key: string) => ls[key] || null),
     setItem: vi.fn((key: string, value: string) => {
-      store[key] = value.toString();
+      ls[key] = value.toString();
     }),
     clear: vi.fn(() => {
-      store = {};
+      ls = {};
     }),
     removeItem: vi.fn((key: string) => {
-      delete store[key];
+      delete ls[key];
     }),
   };
 })();
