@@ -21,3 +21,12 @@ export function ls_getLastChatId(): ChatId | null {
 export function ls_removeLastChatId(): void {
   localStorage.removeItem("lastActiveChatId");
 }
+
+/* --- Locale --- */
+export function ls_setLocale(locale: string): void {
+  localStorage.setItem("locale", locale);
+}
+
+export function ls_getLocale(): string {
+  return localStorage.getItem("locale") || "en";
+}
