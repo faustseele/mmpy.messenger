@@ -1,0 +1,163 @@
+{
+  "pages": {
+    "auth": {
+      "signin": {
+        "heading": "Вход 🚪",
+        "submit": "Войти 🔑",
+        "guest": "Гость 👻",
+        "newHere": "Впервые?"
+      },
+      "signup": {
+        "heading": "Регистрация 🎀",
+        "submit": "Зарегистрироваться ✒️",
+        "guest": "Гость 👻",
+        "haveAccount": "Я свой!"
+      },
+      "inputs": {
+        "name": {
+          "placeholder": "Имя"
+        },
+        "surname": {
+          "placeholder": "Фамилия"
+        },
+        "login": {
+          "placeholder": "Логин"
+        },
+        "email": {
+          "placeholder": "Эл. почта"
+        },
+        "password": {
+          "placeholder": "Пароль"
+        },
+        "phone": {
+          "placeholder": "Телефон"
+        }
+      }
+    },
+    "errors": {
+      "404": {
+        "heading": "⛔ Ошибка 404",
+        "subheading": " не туда попали",
+        "back": "Назад к чатам 🗨️"
+      },
+      "500": {
+        "heading": "🪜 Ошибка 500",
+        "subheading": "мы уже фиксим..",
+        "back": "Назад к чатам 🗨️"
+      }
+    },
+    "messenger": {
+      "header": {
+        "chats": "чаты 👥",
+        "profile": "️⚙️ профиль"
+      },
+      "search": {
+        "placeholder": "Поиск"
+      },
+      "buttons": {
+        "addNote": "Заметкa ✏️",
+        "addNoteTooltip": "Добавить новые заметки",
+        "findUser": "Найти юзера 👤",
+        "findUserTooltip": "Найти пользователя по логину",
+        "closeChat": "❌",
+        "closeChatTooltip": "Закрыть чат",
+        "deleteNotes": "Сжечь заметки 🔥",
+        "deleteNotesTooltip": "Стереть заметки",
+        "deleteChat": "Удалить чат 👤",
+        "deleteChatTooltip": "Удалить чат с пользователем"
+      },
+      "message": {
+        "notePlaceholder": "Заметка:",
+        "chatPlaceholder": "Cообщение...",
+        "noNotes": "Нет заметок",
+        "noMessages": "Нет сообщений"
+      },
+      "notes": {
+        "personal": "Личное 👤",
+        "finance": "Финансы 💰",
+        "ideas": "Идеи 💡",
+        "projects": "Проекты 🧩",
+        "work": "Работа 💼",
+        "study": "Учёба 🎓",
+        "health": "Здоровье 🩺",
+        "family": "Семья 👨‍👩‍👧‍👦",
+        "shopping": "Покупки 🛍️",
+        "travel": "Путешествия ✈️",
+        "reading": "Чтение 📚",
+        "recipes": "Рецепты 🍳",
+        "dailyPlan": "План на день 🗓️",
+        "journal": "Дневник 📓",
+        "archive": "Архив 🗃️"
+      }
+    },
+    "settings": {
+      "header": {
+        "profile": "профиль 👤",
+        "backToChats": "🗨️ к чатам"
+      },
+      "form": {
+        "subheading": "Ваши данные:",
+        "editInfo": "Изменить данные 📝",
+        "changePassword": "Изменить пароль 🔑",
+        "logout": "Выйти 🕳️"
+      },
+      "inputs": {
+        "email": {
+          "placeholder": "Эл. почта"
+        },
+        "name": {
+          "placeholder": "Имя"
+        },
+        "surname": {
+          "placeholder": "Фамилия"
+        },
+        "login": {
+          "placeholder": "Логин"
+        },
+        "displayName": {
+          "placeholder": "Имя в чате"
+        },
+        "phone": {
+          "placeholder": "Номер телефона"
+        },
+        "oldPassword": {
+          "placeholder": "Старый пароль"
+        },
+        "newPassword": {
+          "placeholder": "Новый пароль"
+        }
+      }
+    }
+  },
+  "toasts": {
+    "auth": {
+      "timeout": "Таймаут запроса. Попробуйте снова.",
+      "alreadyLogged": "Вы уже авторизованы. Используйте страницу профиля для выхода.",
+      "invalidSession": "Сессия недействительна, выходим. Попробуйте снова.",
+      "loggingOut": "Выходим...",
+      "logoutSuccess": "Увидимся! 👋",
+      "signupSuccess": "Аккаунт успешно создан.",
+      "signinSuccess": "И снова здравствуйте!",
+      "guestLoading": "Загружаем Гость-Мод...",
+      "guestSuccess": "Вы вошли как Гость! 👻"
+    },
+    "chats": {
+      "createLoading": "Создаём чат...",
+      "createSuccess": "Чат создан!",
+      "deleteLoading": "Удаляем чат...",
+      "deleteSuccess": "Чат успешно удалён.",
+      "devError": "Ошибка разработки: {reason}",
+      "fetchError": "{reason}",
+      "addUserLoading": "Добавляем пользователя...",
+      "addUserNotFound": "Пользователь с логином '{login}' не найден",
+      "addUserError": "Не удалось добавить пользователя, {reason}",
+      "addUserSuccess": "Пользователь успешно добавлен."
+    },
+    "validation": {
+      "badForm": "Пожалуйста, заполните все поля корректно."
+    },
+    "dev": {
+      "unhandled": "Ошибка разработчика: необработанное состояние."
+    }
+  }
+}

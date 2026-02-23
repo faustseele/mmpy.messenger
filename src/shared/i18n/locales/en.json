@@ -1,0 +1,163 @@
+{
+  "pages": {
+    "auth": {
+      "signin": {
+        "heading": "Sign In 🚪",
+        "submit": "Sign In 🔑",
+        "guest": "Guest 👻",
+        "newHere": "New here?"
+      },
+      "signup": {
+        "heading": "Sign Up 🎀",
+        "submit": "Sign Up ✒️",
+        "guest": "Guest 👻",
+        "haveAccount": "I have an account!"
+      },
+      "inputs": {
+        "name": {
+          "placeholder": "Name"
+        },
+        "surname": {
+          "placeholder": "Surname"
+        },
+        "login": {
+          "placeholder": "Username"
+        },
+        "email": {
+          "placeholder": "Email"
+        },
+        "password": {
+          "placeholder": "Password"
+        },
+        "phone": {
+          "placeholder": "Phone"
+        }
+      }
+    },
+    "errors": {
+      "404": {
+        "heading": "⛔ 404 Error",
+        "subheading": "You've gone astray",
+        "back": "Back to Chats 🗨️"
+      },
+      "500": {
+        "heading": "🪜 500 Error",
+        "subheading": "We're fixing it..",
+        "back": "Back to Chats 🗨️"
+      }
+    },
+    "messenger": {
+      "header": {
+        "chats": "Chats 👥",
+        "profile": "⚙️ Profile"
+      },
+      "search": {
+        "placeholder": "Search"
+      },
+      "buttons": {
+        "addNote": "Note ✏️",
+        "addNoteTooltip": "Add new notes",
+        "findUser": "Find User 👤",
+        "findUserTooltip": "Find user by login",
+        "closeChat": "❌",
+        "closeChatTooltip": "Close chat",
+        "deleteNotes": "Delete Notes 🔥",
+        "deleteNotesTooltip": "Erase notes",
+        "deleteChat": "Delete Chat 👤",
+        "deleteChatTooltip": "Delete chat with user"
+      },
+      "message": {
+        "notePlaceholder": "Note:",
+        "chatPlaceholder": "Message...",
+        "noNotes": "No notes",
+        "noMessages": "No messages"
+      },
+      "notes": {
+        "personal": "Personal 👤",
+        "finance": "Finance 💰",
+        "ideas": "Ideas 💡",
+        "projects": "Projects 🧩",
+        "work": "Work 💼",
+        "study": "Study 🎓",
+        "health": "Health 🩺",
+        "family": "Family 👨‍👩‍👧‍👦",
+        "shopping": "Shopping 🛍️",
+        "travel": "Travel ✈️",
+        "reading": "Reading 📚",
+        "recipes": "Recipes 🍳",
+        "dailyPlan": "Daily Plan 🗓️",
+        "journal": "Journal 📓",
+        "archive": "Archive 🗃️"
+      }
+    },
+    "settings": {
+      "header": {
+        "profile": "Profile 👤",
+        "backToChats": "🗨️ to Chats"
+      },
+      "form": {
+        "subheading": "Your Data:",
+        "editInfo": "Edit Data 📝",
+        "changePassword": "Change Password 🔑",
+        "logout": "Logout 🕳️"
+      },
+      "inputs": {
+        "email": {
+          "placeholder": "Email"
+        },
+        "name": {
+          "placeholder": "Name"
+        },
+        "surname": {
+          "placeholder": "Surname"
+        },
+        "login": {
+          "placeholder": "Login"
+        },
+        "displayName": {
+          "placeholder": "Chat Name"
+        },
+        "phone": {
+          "placeholder": "Phone Number"
+        },
+        "oldPassword": {
+          "placeholder": "Old Password"
+        },
+        "newPassword": {
+          "placeholder": "New Password"
+        }
+      }
+    }
+  },
+  "toasts": {
+    "auth": {
+      "timeout": "Request Timeout. Try Again.",
+      "alreadyLogged": "You are already logged in. Use Profile page to log out.",
+      "invalidSession": "This session is invalid, logging out. Try again.",
+      "loggingOut": "Logging out...",
+      "logoutSuccess": "See you! 👋",
+      "signupSuccess": "Account created successfully.",
+      "signinSuccess": "Welcome back!",
+      "guestLoading": "Launching Guest Mode...",
+      "guestSuccess": "Guest Login Success! 👻"
+    },
+    "chats": {
+      "createLoading": "Creating chat..",
+      "createSuccess": "Chat created!",
+      "deleteLoading": "Deleting chat...",
+      "deleteSuccess": "Chat deleted successfully.",
+      "devError": "Dev-Error: {reason}",
+      "fetchError": "{reason}",
+      "addUserLoading": "Adding user...",
+      "addUserNotFound": "User with '{login}' login is not found",
+      "addUserError": "Cannot add the user, {reason}",
+      "addUserSuccess": "User added successfully."
+    },
+    "validation": {
+      "badForm": "Please fill all the fields correctly."
+    },
+    "dev": {
+      "unhandled": "Developer error: unhandled condition."
+    }
+  }
+}
