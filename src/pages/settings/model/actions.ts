@@ -6,6 +6,7 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { SettingsPage } from "../ui/SettingsPage.ts";
 import { SettingsNodes, SettingsType } from "./types.ts";
 import { onBadForm, onGoodForm } from "./utils.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
 
 export const handleMessengerClick = () => {
   Router.go(RouteLink.Messenger);
@@ -54,7 +55,7 @@ export const handleSwitchType = (
   const isInfo = newType === "change-info";
   subheading.setProps({
     configs: {
-      text: isInfo ? "Ваши данные:" : "Ваш пароль:",
+      text: isInfo ? i18n.t("settings.form.subheadingInfo") : i18n.t("settings.form.subheadingPsw"),
     },
   });
   btn.setProps({

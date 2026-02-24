@@ -108,7 +108,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       ),
       subheading_form: getSubheadingNode(
         "subheading_form",
-        i18n.t("settings.form.subheading"),
+        i18n.t("settings.form.subheadingInfo"),
       ) as any,
       buttonEditInfo: getButtonNode(
         "buttonEditInfo",

@@ -46,13 +46,17 @@
     }
   },
   "messenger": {
+    "actions": {
+      "findUserPrompt": "Логин пользователя (например):",
+      "newNotesPrompt": "Как назовём заметки?",
+      "deletionEnsuring": "Вы уверены, что хотите удалить"
+    },
     "header": {
       "chats": "чаты 👥",
       "profile": "️⚙️ профиль"
     },
     "search": {
-      "placeholder": "Поиск",
-      "findUserPrompt": "Логин пользователя (например):"
+      "placeholder": "Поиск"
     },
     "buttons": {
       "addNote": "Заметкa ✏️",
@@ -96,7 +100,8 @@
       "backToChats": "🗨️ к чатам"
     },
     "form": {
-      "subheading": "Ваши данные:",
+      "subheadingInfo": "Ваши данные:",
+      "subheadingPsw": "Ваш пароль:",
       "editInfo": "Изменить данные 📝",
       "changePassword": "Изменить пароль 🔑",
       "logout": "Выйти 🕳️"

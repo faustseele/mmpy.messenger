@@ -46,13 +46,17 @@
     }
   },
   "messenger": {
+    "actions": {
+      "findUserPrompt": "User's login (or pick one of these):",
+      "newNotesPrompt": "Note's title:",
+      "deletionEnsuring": "Are you sure you want to delete"
+    },
     "header": {
       "chats": "Chats 👥",
       "profile": "⚙️ Profile"
     },
     "search": {
-      "placeholder": "Search",
-      "findUserPrompt": "User's login (or pick one of these):"
+      "placeholder": "Search"
     },
     "buttons": {
       "addNote": "Note ✏️",
@@ -96,7 +100,8 @@
       "backToChats": "🗨️ to Chats"
     },
     "form": {
-      "subheading": "Your Data:",
+      "subheadingInfo": "Your Data:",
+      "subheadingPsw": "Your Password:",
       "editInfo": "Edit Data 📝",
       "changePassword": "Change Password 🔑",
       "logout": "Logout 🕳️"
