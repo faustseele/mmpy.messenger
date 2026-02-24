@@ -2,6 +2,7 @@ import Store from "@app/providers/store/model/Store.ts";
 import { ls_getLocale, ls_setLocale } from "../lib/LocalStorage/actions.ts";
 import { resolveKey } from "./dictionary.ts";
 import { Locale, Dictionary } from "./types.ts";
+import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
 
 /**
  * this service manages application localization,
@@ -43,18 +44,11 @@ class I18nService {
     return this._lang;
   }
 
-  public cycleLanguages(): void {
-    const langs = ["en", "de", "ru", "jp", "th"] as Locale[];
-    const index = langs.indexOf(this._lang);
-    const nextIndex = (index + 1) % langs.length;
-    this.setLanguage(langs[nextIndex]);
-  }
-
   /**
    * updates apps lang, syncs storage, and triggers store reactivity
    * @param {Locale} lang - lang to switch to
    */
-  public async setLanguage(lang: Locale): Promise<void> {
+  private async _setLanguage(lang: Locale): Promise<void> {
     if (this._lang === lang) return;
 
     ls_setLocale(lang);
@@ -65,6 +59,16 @@ class I18nService {
 
     /* only after set store state */
     Store.set("controllers.language", lang);
+
+    globalBus.emit("global-rerender");
+  }
+
+  public cycleLanguages(): void {
+    const langs = ["en", "de", "ru", "jp", "th"] as Locale[];
+    const index = langs.indexOf(this._lang);
+    const nextIx = (index + 1) % langs.length;
+
+    this._setLanguage(langs[nextIx]);
   }
 }
 
