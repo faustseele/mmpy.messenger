@@ -1,131 +1,130 @@
 {
-  "pages": {
-    "auth": {
-      "signin": {
-        "heading": "Вход 🚪",
-        "submit": "Войти 🔑",
-        "guest": "Гость 👻",
-        "newHere": "Впервые?"
-      },
-      "signup": {
-        "heading": "Регистрация 🎀",
-        "submit": "Зарегистрироваться ✒️",
-        "guest": "Гость 👻",
-        "haveAccount": "Я свой!"
-      },
-      "inputs": {
-        "name": {
-          "placeholder": "Имя"
-        },
-        "surname": {
-          "placeholder": "Фамилия"
-        },
-        "login": {
-          "placeholder": "Логин"
-        },
-        "email": {
-          "placeholder": "Эл. почта"
-        },
-        "password": {
-          "placeholder": "Пароль"
-        },
-        "phone": {
-          "placeholder": "Телефон"
-        }
-      }
+  "auth": {
+    "signin": {
+      "heading": "Вход 🚪",
+      "submit": "Войти 🔑",
+      "guest": "Гость 👻",
+      "newHere": "Впервые?"
     },
-    "errors": {
-      "404": {
-        "heading": "⛔ Ошибка 404",
-        "subheading": " не туда попали",
-        "back": "Назад к чатам 🗨️"
-      },
-      "500": {
-        "heading": "🪜 Ошибка 500",
-        "subheading": "мы уже фиксим..",
-        "back": "Назад к чатам 🗨️"
-      }
+    "signup": {
+      "heading": "Регистрация 🎀",
+      "submit": "Зарегистрироваться ✒️",
+      "guest": "Гость 👻",
+      "haveAccount": "Я свой!"
     },
-    "messenger": {
-      "header": {
-        "chats": "чаты 👥",
-        "profile": "️⚙️ профиль"
+    "inputs": {
+      "name": {
+        "label": "Имя"
       },
-      "search": {
-        "placeholder": "Поиск"
+      "surname": {
+        "label": "Фамилия"
       },
-      "buttons": {
-        "addNote": "Заметкa ✏️",
-        "addNoteTooltip": "Добавить новые заметки",
-        "findUser": "Найти юзера 👤",
-        "findUserTooltip": "Найти пользователя по логину",
-        "closeChat": "❌",
-        "closeChatTooltip": "Закрыть чат",
-        "deleteNotes": "Сжечь заметки 🔥",
-        "deleteNotesTooltip": "Стереть заметки",
-        "deleteChat": "Удалить чат 👤",
-        "deleteChatTooltip": "Удалить чат с пользователем"
+      "login": {
+        "label": "Логин"
       },
-      "message": {
-        "notePlaceholder": "Заметка:",
-        "chatPlaceholder": "Cообщение...",
-        "noNotes": "Нет заметок",
-        "noMessages": "Нет сообщений"
+      "email": {
+        "label": "Эл. почта"
       },
-      "notes": {
-        "personal": "Личное 👤",
-        "finance": "Финансы 💰",
-        "ideas": "Идеи 💡",
-        "projects": "Проекты 🧩",
-        "work": "Работа 💼",
-        "study": "Учёба 🎓",
-        "health": "Здоровье 🩺",
-        "family": "Семья 👨‍👩‍👧‍👦",
-        "shopping": "Покупки 🛍️",
-        "travel": "Путешествия ✈️",
-        "reading": "Чтение 📚",
-        "recipes": "Рецепты 🍳",
-        "dailyPlan": "План на день 🗓️",
-        "journal": "Дневник 📓",
-        "archive": "Архив 🗃️"
+      "password": {
+        "label": "Пароль"
+      },
+      "phone": {
+        "label": "Телефон"
       }
+    }
+  },
+  "errors": {
+    "404": {
+      "heading": "⛔ Ошибка 404",
+      "subheading": " не туда попали",
+      "back": "Назад к чатам 🗨️"
     },
-    "settings": {
-      "header": {
-        "profile": "профиль 👤",
-        "backToChats": "🗨️ к чатам"
+    "500": {
+      "heading": "🪜 Ошибка 500",
+      "subheading": "мы уже фиксим..",
+      "back": "Назад к чатам 🗨️"
+    }
+  },
+  "messenger": {
+    "header": {
+      "chats": "чаты 👥",
+      "profile": "️⚙️ профиль"
+    },
+    "search": {
+      "placeholder": "Поиск",
+      "findUserPrompt": "Логин пользователя (например):"
+    },
+    "buttons": {
+      "addNote": "Заметкa ✏️",
+      "addNoteTooltip": "Добавить новые заметки",
+      "findUser": "Найти юзера 👤",
+      "findUserTooltip": "Найти пользователя по логину",
+      "closeChat": "❌",
+      "closeChatTooltip": "Закрыть чат",
+      "deleteNotes": "Сжечь заметки 🔥",
+      "deleteNotesTooltip": "Стереть заметки",
+      "deleteChat": "Удалить чат 👤",
+      "deleteChatTooltip": "Удалить чат с пользователем"
+    },
+    "message": {
+      "notePlaceholder": "Заметка:",
+      "chatPlaceholder": "Cообщение...",
+      "noNotes": "Нет заметок",
+      "noMessages": "Нет сообщений"
+    },
+    "notes": {
+      "personal": "Личное 👤",
+      "finance": "Финансы 💰",
+      "ideas": "Идеи 💡",
+      "projects": "Проекты 🧩",
+      "work": "Работа 💼",
+      "study": "Учёба 🎓",
+      "health": "Здоровье 🩺",
+      "family": "Семья 👨‍👩‍👧‍👦",
+      "shopping": "Покупки 🛍️",
+      "travel": "Путешествия ✈️",
+      "reading": "Чтение 📚",
+      "recipes": "Рецепты 🍳",
+      "dailyPlan": "План на день 🗓️",
+      "journal": "Дневник 📓",
+      "archive": "Архив 🗃️"
+    }
+  },
+  "settings": {
+    "header": {
+      "profile": "профиль 👤",
+      "backToChats": "🗨️ к чатам"
+    },
+    "form": {
+      "subheading": "Ваши данные:",
+      "editInfo": "Изменить данные 📝",
+      "changePassword": "Изменить пароль 🔑",
+      "logout": "Выйти 🕳️"
+    },
+    "inputs": {
+      "email": {
+        "label": "Эл. почта"
       },
-      "form": {
-        "subheading": "Ваши данные:",
-        "editInfo": "Изменить данные 📝",
-        "changePassword": "Изменить пароль 🔑",
-        "logout": "Выйти 🕳️"
+      "name": {
+        "label": "Имя"
       },
-      "inputs": {
-        "email": {
-          "placeholder": "Эл. почта"
-        },
-        "name": {
-          "placeholder": "Имя"
-        },
-        "surname": {
-          "placeholder": "Фамилия"
-        },
-        "login": {
-          "placeholder": "Логин"
-        },
-        "displayName": {
-          "placeholder": "Имя в чате"
-        },
-        "phone": {
-          "placeholder": "Номер телефона"
-        },
-        "oldPassword": {
-          "placeholder": "Старый пароль"
-        },
-        "newPassword": {
-          "placeholder": "Новый пароль"
-        }
+      "surname": {
+        "label": "Фамилия"
+      },
+      "login": {
+        "label": "Логин"
+      },
+      "displayName": {
+        "label": "Имя в чате"
+      },
+      "phone": {
+        "label": "Номер телефона"
+      },
+      "oldPassword": {
+        "label": "Старый пароль"
+      },
+      "newPassword": {
+        "label": "Новый пароль"
       }
     }
   },
@@ -159,5 +158,8 @@
     "dev": {
       "unhandled": "Ошибка разработчика: необработанное состояние."
     }
+  },
+  "validation": {
+    "noValue": "Заполните поле."
   }
 }

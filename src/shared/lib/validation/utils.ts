@@ -1,3 +1,4 @@
+import { i18n } from "@shared/i18n/I18nService.ts";
 import { FieldType } from "../../ui/Input/types.ts";
 import {
   DISPLAY_NAME_ERROR,
@@ -44,10 +45,10 @@ const getRegex: Record<FieldType, (value: string) => string> = {
     return DISPLAY_NAME_REGEX.test(value) ? "" : DISPLAY_NAME_ERROR;
   },
   message: (value: string): string => {
-    return value.length > 0 ? "" : "Напишите что-нибудь.";
+    return value.length > 0 ? "" : i18n.t("validation.noValue");
   },
   search: (value: string): string => {
-    return value.length > 0 ? "" : "Напишите что-нибудь.";
+    return value.length > 0 ? "" : i18n.t("validation.noValue");
   },
   oldPassword: (value: string): string => {
     return PASSWORD_REGEX.test(value) ? "" : PASSWORD_ERROR;
@@ -68,6 +69,6 @@ export function validateInputField(
   value?: string,
 ): string {
   if (!fieldName) return "";
-  if (!value) return "Заполните поле.";
+  if (!value) return i18n.t("validation.noValue");
   return getRegex[fieldName](value);
 }

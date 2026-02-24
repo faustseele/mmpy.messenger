@@ -1,131 +1,130 @@
 {
-  "pages": {
-    "auth": {
-      "signin": {
-        "heading": "Sign In 🚪",
-        "submit": "Sign In 🔑",
-        "guest": "Guest 👻",
-        "newHere": "New here?"
-      },
-      "signup": {
-        "heading": "Sign Up 🎀",
-        "submit": "Sign Up ✒️",
-        "guest": "Guest 👻",
-        "haveAccount": "I have an account!"
-      },
-      "inputs": {
-        "name": {
-          "placeholder": "Name"
-        },
-        "surname": {
-          "placeholder": "Surname"
-        },
-        "login": {
-          "placeholder": "Username"
-        },
-        "email": {
-          "placeholder": "Email"
-        },
-        "password": {
-          "placeholder": "Password"
-        },
-        "phone": {
-          "placeholder": "Phone"
-        }
-      }
+  "auth": {
+    "signin": {
+      "heading": "Sign In 🚪",
+      "submit": "Sign In 🔑",
+      "guest": "Guest 👻",
+      "newHere": "New here?"
     },
-    "errors": {
-      "404": {
-        "heading": "⛔ 404 Error",
-        "subheading": "You've gone astray",
-        "back": "Back to Chats 🗨️"
-      },
-      "500": {
-        "heading": "🪜 500 Error",
-        "subheading": "We're fixing it..",
-        "back": "Back to Chats 🗨️"
-      }
+    "signup": {
+      "heading": "Sign Up 🎀",
+      "submit": "Sign Up ✒️",
+      "guest": "Guest 👻",
+      "haveAccount": "I have an account!"
     },
-    "messenger": {
-      "header": {
-        "chats": "Chats 👥",
-        "profile": "⚙️ Profile"
+    "inputs": {
+      "name": {
+        "label": "Name"
       },
-      "search": {
-        "placeholder": "Search"
+      "surname": {
+        "label": "Surname"
       },
-      "buttons": {
-        "addNote": "Note ✏️",
-        "addNoteTooltip": "Add new notes",
-        "findUser": "Find User 👤",
-        "findUserTooltip": "Find user by login",
-        "closeChat": "❌",
-        "closeChatTooltip": "Close chat",
-        "deleteNotes": "Delete Notes 🔥",
-        "deleteNotesTooltip": "Erase notes",
-        "deleteChat": "Delete Chat 👤",
-        "deleteChatTooltip": "Delete chat with user"
+      "login": {
+        "label": "Username"
       },
-      "message": {
-        "notePlaceholder": "Note:",
-        "chatPlaceholder": "Message...",
-        "noNotes": "No notes",
-        "noMessages": "No messages"
+      "email": {
+        "label": "Email"
       },
-      "notes": {
-        "personal": "Personal 👤",
-        "finance": "Finance 💰",
-        "ideas": "Ideas 💡",
-        "projects": "Projects 🧩",
-        "work": "Work 💼",
-        "study": "Study 🎓",
-        "health": "Health 🩺",
-        "family": "Family 👨‍👩‍👧‍👦",
-        "shopping": "Shopping 🛍️",
-        "travel": "Travel ✈️",
-        "reading": "Reading 📚",
-        "recipes": "Recipes 🍳",
-        "dailyPlan": "Daily Plan 🗓️",
-        "journal": "Journal 📓",
-        "archive": "Archive 🗃️"
+      "password": {
+        "label": "Password"
+      },
+      "phone": {
+        "label": "Phone"
       }
+    }
+  },
+  "errors": {
+    "404": {
+      "heading": "⛔ 404 Error",
+      "subheading": "You've gone astray",
+      "back": "Back to Chats 🗨️"
     },
-    "settings": {
-      "header": {
-        "profile": "Profile 👤",
-        "backToChats": "🗨️ to Chats"
+    "500": {
+      "heading": "🪜 500 Error",
+      "subheading": "We're fixing it..",
+      "back": "Back to Chats 🗨️"
+    }
+  },
+  "messenger": {
+    "header": {
+      "chats": "Chats 👥",
+      "profile": "⚙️ Profile"
+    },
+    "search": {
+      "placeholder": "Search",
+      "findUserPrompt": "User's login (or pick one of these):"
+    },
+    "buttons": {
+      "addNote": "Note ✏️",
+      "addNoteTooltip": "Add new notes",
+      "findUser": "Find User 👤",
+      "findUserTooltip": "Find user by login",
+      "closeChat": "❌",
+      "closeChatTooltip": "Close chat",
+      "deleteNotes": "Delete Notes 🔥",
+      "deleteNotesTooltip": "Erase notes",
+      "deleteChat": "Delete Chat 👤",
+      "deleteChatTooltip": "Delete chat with user"
+    },
+    "message": {
+      "notePlaceholder": "Note:",
+      "chatPlaceholder": "Message...",
+      "noNotes": "No notes",
+      "noMessages": "No messages"
+    },
+    "notes": {
+      "personal": "Personal 👤",
+      "finance": "Finance 💰",
+      "ideas": "Ideas 💡",
+      "projects": "Projects 🧩",
+      "work": "Work 💼",
+      "study": "Study 🎓",
+      "health": "Health 🩺",
+      "family": "Family 👨‍👩‍👧‍👦",
+      "shopping": "Shopping 🛍️",
+      "travel": "Travel ✈️",
+      "reading": "Reading 📚",
+      "recipes": "Recipes 🍳",
+      "dailyPlan": "Daily Plan 🗓️",
+      "journal": "Journal 📓",
+      "archive": "Archive 🗃️"
+    }
+  },
+  "settings": {
+    "header": {
+      "profile": "Profile 👤",
+      "backToChats": "🗨️ to Chats"
+    },
+    "form": {
+      "subheading": "Your Data:",
+      "editInfo": "Edit Data 📝",
+      "changePassword": "Change Password 🔑",
+      "logout": "Logout 🕳️"
+    },
+    "inputs": {
+      "email": {
+        "label": "Email"
       },
-      "form": {
-        "subheading": "Your Data:",
-        "editInfo": "Edit Data 📝",
-        "changePassword": "Change Password 🔑",
-        "logout": "Logout 🕳️"
+      "name": {
+        "label": "Name"
       },
-      "inputs": {
-        "email": {
-          "placeholder": "Email"
-        },
-        "name": {
-          "placeholder": "Name"
-        },
-        "surname": {
-          "placeholder": "Surname"
-        },
-        "login": {
-          "placeholder": "Login"
-        },
-        "displayName": {
-          "placeholder": "Chat Name"
-        },
-        "phone": {
-          "placeholder": "Phone Number"
-        },
-        "oldPassword": {
-          "placeholder": "Old Password"
-        },
-        "newPassword": {
-          "placeholder": "New Password"
-        }
+      "surname": {
+        "label": "Surname"
+      },
+      "login": {
+        "label": "Login"
+      },
+      "displayName": {
+        "label": "Chat Name"
+      },
+      "phone": {
+        "label": "Phone Number"
+      },
+      "oldPassword": {
+        "label": "Old Password"
+      },
+      "newPassword": {
+        "label": "New Password"
       }
     }
   },
@@ -159,5 +158,8 @@
     "dev": {
       "unhandled": "Developer error: unhandled condition."
     }
+  },
+  "validation": {
+    "noValue": "Please fill in the field."
   }
 }

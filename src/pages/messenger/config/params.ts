@@ -22,6 +22,7 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { handleFindUser, handleGoToSettings } from "../model/actions.ts";
 import { MessengerConfigs, MessengerProps } from "../model/types.ts";
 import css from "../ui/messenger.module.css";
+import { i18n } from "@shared/i18n/I18nService.ts";
 
 export const getBaseMessengerConfigs = (
   info: MessengerConfigs["info"],
@@ -42,37 +43,37 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
   } satisfies MessengerConfigs["info"]),
   children: {
     nodes: {
-      heading_chats: getHeadingNode("heading_chats", "чаты 👥") as any,
+      heading_chats: getHeadingNode("heading_chats", i18n.t("messenger.header.chats")) as any,
       heading_goToSettings: getHeadingNode(
         "heading_goToSettings",
-        "️⚙️ профиль",
+        i18n.t("messenger.header.profile"),
         {
           isClickable: true,
           on: { click: handleGoToSettings },
         },
       ) as any,
-      searchInput: getInputNode("searchInput", "search", "Поиск") as any,
+      searchInput: getInputNode("searchInput", "search", i18n.t("messenger.search.placeholder")) as any,
       chatAvatar: getAvatarNode("chatAvatar", 0) as any,
-      addNotesButton: getButtonNode("addNotesButton", "Заметкa ✏️", {
-        tooltip: "Добавить новые заметки",
+      addNotesButton: getButtonNode("addNotesButton", i18n.t("messenger.buttons.addNote"), {
+        tooltip: i18n.t("messenger.buttons.addNoteTooltip"),
       }) as any,
       findUserChatButton: getButtonNode(
         "findUserChatButton",
-        "Найти юзера 👤",
-        { tooltip: "Найти пользователя по логину" },
+        i18n.t("messenger.buttons.findUser"),
+        { tooltip: i18n.t("messenger.buttons.findUserTooltip") },
       ) as any,
-      closeChatButton: getButtonNode("closeChatButton", "❌", {
-        tooltip: "Закрыть чат",
+      closeChatButton: getButtonNode("closeChatButton", i18n.t("messenger.buttons.closeChat"), {
+        tooltip: i18n.t("messenger.buttons.closeChatTooltip"),
         isSilent: true,
         on: { click: handleCloseChat },
       }) as any,
       deleteNotesButton: getButtonNode(
         "deleteNotesButton",
-        "Сжечь заметки 🔥",
-        { tooltip: "Стереть заметки", isSilent: true },
+        i18n.t("messenger.buttons.deleteNotes"),
+        { tooltip: i18n.t("messenger.buttons.deleteNotesTooltip"), isSilent: true },
       ) as any,
-      deleteChatButton: getButtonNode("deleteChatButton", "Удалить чат 👤", {
-        tooltip: "Удалить чат с пользователем",
+      deleteChatButton: getButtonNode("deleteChatButton", i18n.t("messenger.buttons.deleteChat"), {
+        tooltip: i18n.t("messenger.buttons.deleteChatTooltip"),
         isSilent: true,
       }) as any,
       spinner: getSpinnerNode(true) as any,

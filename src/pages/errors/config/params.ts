@@ -12,6 +12,7 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { handleBack } from "../model/actions.ts";
 import { ErrorProps } from "../model/types.ts";
 import css from "../ui/errors.module.css";
+import { i18n } from "@shared/i18n/I18nService.ts";
 
 export const errorPageParams_404: ComponentParams<ErrorProps> = {
   configs: {
@@ -22,13 +23,17 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode("heading", "⛔ Ошибка 404", {
+      heading: getHeadingNode("heading", i18n.t("errors.404.heading"), {
         isDrama: true,
       }) as any,
-      subheading: getSubheadingNode("subheading", " не туда попали", {
-        isDrama: true,
-      }) as any,
-      button_back: getButtonNode("button_back", "Назад к чатам 🗨️", {
+      subheading: getSubheadingNode(
+        "subheading",
+        i18n.t("errors.404.subheading"),
+        {
+          isDrama: true,
+        },
+      ) as any,
+      button_back: getButtonNode("button_back", i18n.t("errors.404.back"), {
         on: { click: handleBack },
       }) as any,
     },
@@ -49,13 +54,17 @@ export const errorPageParams_500: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode("heading", "🪜 Ошибка 500", {
+      heading: getHeadingNode("heading", i18n.t("errors.500.heading"), {
         isDrama: true,
       }) as any,
-      subheading: getSubheadingNode("subheading", "мы уже фиксим..", {
-        isDrama: true,
-      }) as any,
-      button_back: getButtonNode("button_back", "Назад к чатам 🗨️", {
+      subheading: getSubheadingNode(
+        "subheading",
+        i18n.t("errors.500.subheading"),
+        {
+          isDrama: true,
+        },
+      ) as any,
+      button_back: getButtonNode("button_back", i18n.t("errors.500.back"), {
         on: { click: handleBack },
       }) as any,
     },

@@ -15,31 +15,52 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
 import css from "../ui/settings.module.css";
+import { i18n } from "@shared/i18n/I18nService.ts";
 
 const editorNodes_info = {
-  "editor-email": getEditorNode("editor-email", "email", "Эл. почта"),
-  "editor-name": getEditorNode("editor-name", "name", "Имя"),
-  "editor-surname": getEditorNode("editor-surname", "surname", "Фамилия"),
-  "editor-login": getEditorNode("editor-login", "login", "Логин"),
+  "editor-email": getEditorNode(
+    "editor-email",
+    "email",
+    i18n.t("settings.inputs.email.label"),
+  ),
+  "editor-name": getEditorNode(
+    "editor-name",
+    "name",
+    i18n.t("settings.inputs.name.label"),
+  ),
+  "editor-surname": getEditorNode(
+    "editor-surname",
+    "surname",
+    i18n.t("settings.inputs.surname.label"),
+  ),
+  "editor-login": getEditorNode(
+    "editor-login",
+    "login",
+    i18n.t("settings.inputs.login.label"),
+  ),
   "editor-display_name": getEditorNode(
     "editor-display_name",
     "display_name",
-    "Имя в чате",
+    i18n.t("settings.inputs.displayName.label"),
   ),
-  "editor-phone": getEditorNode("editor-phone", "phone", "Номер телефона"),
+  "editor-phone": getEditorNode(
+    "editor-phone",
+    "phone",
+    i18n.t("settings.inputs.phone.label"),
+  ),
 };
 
 const editorNodes_psw = {
   "editor-oldPassword": getEditorNode(
     "editor-oldPassword",
     "oldPassword",
-    "Старый пароль",
+    i18n.t("settings.inputs.oldPassword.label"),
     { placeholder: "* * * * *" },
   ),
   "editor-newPassword": getEditorNode(
     "editor-newPassword",
     "newPassword",
-    "Новый пароль",
+    i18n.t("settings.inputs.newPassword.label"),
     { placeholder: "* * * * *" },
   ),
 };
@@ -57,11 +78,18 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
     nodes: {
       ...(editorNodes_info as any),
       ...(editorNodes_psw as any),
-      heading_profile: getHeadingNode("heading_profile", "профиль 👤") as any,
-      heading_backToChats: getHeadingNode("heading_backToChats", "🗨️ к чатам", {
-        isClickable: true,
-        on: { click: handleMessengerClick },
-      }) as any,
+      heading_profile: getHeadingNode(
+        "heading_profile",
+        i18n.t("settings.header.profile"),
+      ) as any,
+      heading_backToChats: getHeadingNode(
+        "heading_backToChats",
+        i18n.t("settings.header.backToChats"),
+        {
+          isClickable: true,
+          on: { click: handleMessengerClick },
+        },
+      ) as any,
       user_avatar: getAvatarNode("user_avatar", -1, "user_avatar", "", {
         hasInput: true,
         size: "xl",
@@ -80,21 +108,29 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       ),
       subheading_form: getSubheadingNode(
         "subheading_form",
-        "Ваши данные:",
+        i18n.t("settings.form.subheading"),
       ) as any,
-      buttonEditInfo: getButtonNode("buttonEditInfo", "Изменить данные 📝", {
-        type: "submit",
-      }) as any,
+      buttonEditInfo: getButtonNode(
+        "buttonEditInfo",
+        i18n.t("settings.form.editInfo"),
+        {
+          type: "submit",
+        },
+      ) as any,
       buttonEditPassword: getButtonNode(
         "buttonEditPassword",
-        "Изменить пароль 🔑",
+        i18n.t("settings.form.changePassword"),
         {
           isSilent: true,
         },
       ) as any,
-      buttonLogout: getButtonNode("buttonLogout", "Выйти 🕳️", {
-        isSilent: true,
-      }) as any,
+      buttonLogout: getButtonNode(
+        "buttonLogout",
+        i18n.t("settings.form.logout"),
+        {
+          isSilent: true,
+        },
+      ) as any,
     },
     edges: {
       heading_backToChats: "heading_backToChats",

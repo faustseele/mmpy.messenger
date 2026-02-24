@@ -7,6 +7,7 @@ import UserService from "@entities/user/model/UserService.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { MessengerConfigs, MessengerOn } from "./types.ts";
 import { randomNoteLabel } from "./utils.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
 
 export const handleFindUser = async (login: string) => {
   return await UserService.findByLogin(login);
@@ -17,7 +18,7 @@ export const handleGoToSettings = () => {
 };
 
 export const handleAddChat = async (on: MessengerOn) => {
-  const explanation = `Логин пользователя (например):
+  const explanation = `${i18n.t("messenger.search.findUserPrompt")}
   \n• miathompson \n• lucasbrown \n• noahrodriguez \n• emmawilson \n• liamgarcia \n• oliviamartinez \n• sophialee \n• masonkim \n• isabellapatel \n• ethanwong \n• emil \n• LevTolstoy \n• yandex \n• LeUser \n• mishima \n• tolkien \n• baudrillard \n• foucault \n• shakespear`;
 
   const input = window.prompt(explanation, "");

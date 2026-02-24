@@ -77,15 +77,15 @@ export class Input extends Component<InputProps> {
 
   public getInnerMarkup(): string {
     return /*html*/ `
-        <input
-          class="${css.input} {{#if isSearch}}${css.input_search} {{/if}}"
-          name="{{fieldId}}"
-          type="{{type}}"
-          id="{{fieldId}}"
-          placeholder="{{placeholder}}"
-          autocomplete="on"
-        />
-        <span class="${css.errorLabel}"></span>
-      `;
+      <input
+        class="${css.input} {{#if isSearch}}${css.input_search} {{/if}}"
+        name="{{fieldId}}"
+        type="{{type}}"
+        id="{{fieldId}}"
+        placeholder="{{placeholder}}"
+        autocomplete="on"
+      />
+      <span class="${css.errorLabel}"></span>
+    `;
   }
 }
