@@ -31,7 +31,7 @@ class I18nService {
     if (!Object.keys(this._dict).length) {
       console.error("i18n.t: dictionary not loaded");
       return path;
-    };
+    }
     return resolveKey(this._dict, path);
   }
 
@@ -41,6 +41,13 @@ class I18nService {
    */
   public getLanguage(): Locale {
     return this._lang;
+  }
+
+  public cycleLanguages(): void {
+    const langs = ["en", "de", "ru", "jp", "th"] as Locale[];
+    const index = langs.indexOf(this._lang);
+    const nextIndex = (index + 1) % langs.length;
+    this.setLanguage(langs[nextIndex]);
   }
 
   /**

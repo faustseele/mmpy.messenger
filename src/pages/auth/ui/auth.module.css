@@ -5,8 +5,15 @@
 }
 
 .authHeading {
-  padding: 0 6px;
+  width: 100%;
   height: auto;
+
+  padding: 0 6px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .inputsWrapper {

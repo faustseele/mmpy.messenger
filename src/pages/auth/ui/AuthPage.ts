@@ -116,12 +116,18 @@ export class AuthPage extends Page<AuthProps> {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonGuest, buttonReroute } = this
-      .children.nodes as AuthNodes;
+    const {
+      heading,
+      buttonLanguage,
+      buttonFormSubmit,
+      buttonGuest,
+      buttonReroute,
+    } = this.children.nodes as AuthNodes;
 
     return /*html*/ `
       <header class="${css.authHeading}">
         {{{ ${heading.params.configs.id} }}}
+        {{{ ${buttonLanguage.params.configs.id} }}}
       </header>
 
       <main class="${css.inputsWrapper}">

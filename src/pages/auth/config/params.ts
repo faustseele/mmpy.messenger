@@ -27,17 +27,49 @@ const iptIds = [
 ];
 
 const inputs_signUp = {
-  "input-name": getInputNode(iptIds[0], "name", i18n.t("auth.inputs.name.label")),
-  "input-surname": getInputNode(iptIds[1], "surname", i18n.t("auth.inputs.surname.label")),
-  "input-login": getInputNode(iptIds[2], "login", i18n.t("auth.inputs.login.label")),
-  "input-email": getInputNode(iptIds[3], "email", i18n.t("auth.inputs.email.label")),
-  "input-password": getInputNode(iptIds[4], "password", i18n.t("auth.inputs.password.label")),
-  "input-phone": getInputNode(iptIds[5], "phone", i18n.t("auth.inputs.phone.label")),
+  "input-name": getInputNode(
+    iptIds[0],
+    "name",
+    i18n.t("auth.inputs.name.label"),
+  ),
+  "input-surname": getInputNode(
+    iptIds[1],
+    "surname",
+    i18n.t("auth.inputs.surname.label"),
+  ),
+  "input-login": getInputNode(
+    iptIds[2],
+    "login",
+    i18n.t("auth.inputs.login.label"),
+  ),
+  "input-email": getInputNode(
+    iptIds[3],
+    "email",
+    i18n.t("auth.inputs.email.label"),
+  ),
+  "input-password": getInputNode(
+    iptIds[4],
+    "password",
+    i18n.t("auth.inputs.password.label"),
+  ),
+  "input-phone": getInputNode(
+    iptIds[5],
+    "phone",
+    i18n.t("auth.inputs.phone.label"),
+  ),
 };
 
 const inputs_signIn = {
-  "input-login": getInputNode(iptIds[2], "login", i18n.t("auth.inputs.login.label")),
-  "input-password": getInputNode(iptIds[4], "password", i18n.t("auth.inputs.password.label")),
+  "input-login": getInputNode(
+    iptIds[2],
+    "login",
+    i18n.t("auth.inputs.login.label"),
+  ),
+  "input-password": getInputNode(
+    iptIds[4],
+    "password",
+    i18n.t("auth.inputs.password.label"),
+  ),
 };
 
 const authPageParams_signIn: ComponentParams<AuthProps> = {
@@ -51,19 +83,34 @@ const authPageParams_signIn: ComponentParams<AuthProps> = {
     nodes: {
       ...(inputs_signIn as any),
       heading: getHeadingNode("heading", i18n.t("auth.signin.heading")),
-      buttonFormSubmit: getButtonNode("buttonFormSubmit", i18n.t("auth.signin.submit"), {
-        type: "submit",
-      }),
-      buttonGuest: getButtonNode("buttonGuest", i18n.t("auth.signin.guest")),
-      buttonReroute: getButtonNode("buttonReroute", i18n.t("auth.signin.newHere"), {
-        isSilent: true,
+      buttonLanguage: getButtonNode("buttonLanguage", "🇬🇧", {
+        type: "button",
         on: {
-          click: () => handleReroute("sign-in"),
+          click: () => i18n.cycleLanguages(),
         },
       }),
+      buttonFormSubmit: getButtonNode(
+        "buttonFormSubmit",
+        i18n.t("auth.signin.submit"),
+        {
+          type: "submit",
+        },
+      ),
+      buttonGuest: getButtonNode("buttonGuest", i18n.t("auth.signin.guest")),
+      buttonReroute: getButtonNode(
+        "buttonReroute",
+        i18n.t("auth.signin.newHere"),
+        {
+          isSilent: true,
+          on: {
+            click: () => handleReroute("sign-in"),
+          },
+        },
+      ),
     },
     edges: {
       heading: "heading",
+      buttonLanguage: "buttonLanguage",
       buttonFormSubmit: "buttonFormSubmit",
       buttonGuest: "buttonGuest",
       buttonReroute: "buttonReroute",
@@ -91,12 +138,16 @@ const authPageParams_signUp: ComponentParams<AuthProps> = {
         },
       ),
       buttonGuest: getButtonNode("buttonGuest", i18n.t("auth.signup.guest")),
-      buttonReroute: getButtonNode("buttonReroute", i18n.t("auth.signup.haveAccount"), {
-        isSilent: true,
-        on: {
-          click: () => handleReroute("sign-up"),
+      buttonReroute: getButtonNode(
+        "buttonReroute",
+        i18n.t("auth.signup.haveAccount"),
+        {
+          isSilent: true,
+          on: {
+            click: () => handleReroute("sign-up"),
+          },
         },
-      }),
+      ),
     },
     edges: {
       heading: "heading",
