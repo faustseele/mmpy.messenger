@@ -23,7 +23,7 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode("heading", i18n.t("errors.404.heading"), {
+      heading: getHeadingNode("heading", "errors.404.heading", {
         isDrama: true,
       }) as any,
       subheading: getSubheadingNode(
@@ -54,7 +54,7 @@ export const errorPageParams_500: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode("heading", i18n.t("errors.500.heading"), {
+      heading: getHeadingNode("heading", "errors.500.heading", {
         isDrama: true,
       }) as any,
       subheading: getSubheadingNode(

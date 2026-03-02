@@ -43,10 +43,10 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
   } satisfies MessengerConfigs["info"]),
   children: {
     nodes: {
-      heading_chats: getHeadingNode("heading_chats", i18n.t("messenger.header.chats")) as any,
+      heading_chats: getHeadingNode("heading_chats", "messenger.header.chats") as any,
       heading_goToSettings: getHeadingNode(
         "heading_goToSettings",
-        i18n.t("messenger.header.profile"),
+        "messenger.header.profile",
         {
           isClickable: true,
           on: { click: handleGoToSettings },

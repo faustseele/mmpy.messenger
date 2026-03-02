@@ -80,11 +80,11 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       ...(editorNodes_psw as any),
       heading_profile: getHeadingNode(
         "heading_profile",
-        i18n.t("settings.header.profile"),
+        "settings.header.profile",
       ) as any,
       heading_backToChats: getHeadingNode(
         "heading_backToChats",
-        i18n.t("settings.header.backToChats"),
+        "settings.header.backToChats",
         {
           isClickable: true,
           on: { click: handleMessengerClick },
