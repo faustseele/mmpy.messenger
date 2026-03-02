@@ -1,3 +1,5 @@
+import { i18n } from "@shared/i18n/I18nService.ts";
+import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import Component from "../../lib/Component/model/Component.ts";
 import { ComponentProps } from "../../lib/Component/model/types.ts";
 import css from "./heading.module.css";
@@ -8,24 +10,18 @@ export class Heading extends Component<HeadingProps> {
     super(props);
   }
 
+  public getRootTagCx(): string {
+    const { isClickable, isDrama } = this.configs;
+    return cx(
+      css.heading,
+      isClickable && css.heading_clickable,
+      isDrama && css.heading_drama,
+    );
+  }
+
   public getInnerMarkup(): string {
     return /*html*/ `
-        {{#if isClickable}}
-          <a class="${css.heading__text}
-            ${css.heading__text_clickable}"">
-            {{ text }}
-          </a>
-
-        {{else}}
-        
-          <p class="${css.heading__text}
-            {{#if isDrama}}
-              ${css.heading__text_drama}
-            {{/if}}">
-            
-            {{text}}
-          </p>
-        {{/if}}
-      `;
+      ${i18n.t(this.configs.i18nKey)} 
+    `;
   }
 }

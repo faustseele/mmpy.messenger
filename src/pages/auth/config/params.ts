@@ -82,7 +82,7 @@ const authPageParams_signIn: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...(inputs_signIn as any),
-      heading: getHeadingNode("heading", i18n.t("auth.signin.heading")),
+      heading: getHeadingNode("heading", "auth.signin.heading"),
       buttonLanguage: getButtonNode("buttonLanguage", "🇬🇧", {
         type: "button",
         on: {
@@ -129,7 +129,7 @@ const authPageParams_signUp: ComponentParams<AuthProps> = {
   children: {
     nodes: {
       ...(inputs_signUp as any),
-      heading: getHeadingNode("heading", i18n.t("auth.signup.heading")),
+      heading: getHeadingNode("heading", "auth.signup.heading"),
       buttonLanguage: getButtonNode("buttonLanguage", "🇬🇧", {
         type: "button",
         on: {
