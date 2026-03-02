@@ -59,10 +59,10 @@ export default abstract class Component<P extends BaseProps> {
       : undefined;
   }
 
-  /* --- Concrete Methods --- */
+  /* --- Concrete Component Methods --- */
   public componentDidRender(): void {}
   public componentDidMount(): void {}
-  public componentDidUpdate(): void {}
+  public componentDidUpdate(): void {} // for local-component use
   public componentDidUnmount(): void {}
 
   /**
@@ -188,7 +188,7 @@ export default abstract class Component<P extends BaseProps> {
   }
 
   /* emits -> CDR */
-  private _componentDidUpdate(): void {
+  public _componentDidUpdate(): void {
     /* updates listners if !eq */
     if (!isEqual(this._on ?? {}, this._attachedListeners ?? {})) {
       this.domService.removeListeners(this._attachedListeners);
@@ -201,6 +201,16 @@ export default abstract class Component<P extends BaseProps> {
     if (this._cx !== newCx) {
       this._cx = newCx;
       this.domService.setRootTagCx(newCx);
+    }
+
+    /* using bus to fully unmount children */
+    if (this.childrenFlat) {
+      Object.values(this.childrenFlat).forEach((value) => {
+        if (!value.runtime?.instance) {
+          console.error("Child has no instance", value, this);
+        }
+        value.runtime?.instance._componentDidUpdate();
+      });
     }
 
     /* concrete component logic */
@@ -229,7 +239,7 @@ export default abstract class Component<P extends BaseProps> {
       if (!value.runtime?.instance) {
         console.error("Child has no instance", value, this);
       }
-      value.runtime?.instance._bus.emit("flow:component-did-unmount");
+      value.runtime?.instance._componentDidUnmount();
     });
 
     /* allows components to run post-unmount logic */
@@ -261,6 +271,8 @@ export default abstract class Component<P extends BaseProps> {
     if (children) Object.assign(this._children as object, children);
   }
 
+  /* --- Helper Methods --- */
+
   /* DOMService -> makes visible */
   public show(): void {
     const element = this.domService.element;
@@ -275,5 +287,9 @@ export default abstract class Component<P extends BaseProps> {
     if (!element) return;
 
     element!.style.display = "none";
+  }
+
+  public rerender(): void {
+    this.bus.emit("flow:component-did-update");
   }
 }

@@ -51,6 +51,9 @@ export class AuthPage extends Page<AuthProps> {
     this._wireSubmit(this.validator, this.submit);
     this._vivifyInputs(inputs, this.validator);
     this._wireGuestClick(guest);
+
+    /* keeping the call chain to Page */
+    super.componentDidMount();
   }
 
   private _wireGuestClick(guest: Button): void {

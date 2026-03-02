@@ -130,6 +130,12 @@ const authPageParams_signUp: ComponentParams<AuthProps> = {
     nodes: {
       ...(inputs_signUp as any),
       heading: getHeadingNode("heading", i18n.t("auth.signup.heading")),
+      buttonLanguage: getButtonNode("buttonLanguage", "🇬🇧", {
+        type: "button",
+        on: {
+          click: () => i18n.cycleLanguages(),
+        },
+      }),
       buttonFormSubmit: getButtonNode(
         "buttonFormSubmit",
         i18n.t("auth.signup.submit"),
@@ -151,6 +157,7 @@ const authPageParams_signUp: ComponentParams<AuthProps> = {
     },
     edges: {
       heading: "heading",
+      buttonLanguage: "buttonLanguage",
       buttonFormSubmit: "buttonFormSubmit",
       buttonGuest: "buttonGuest",
       buttonReroute: "buttonReroute",
