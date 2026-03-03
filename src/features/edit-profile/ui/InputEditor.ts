@@ -1,3 +1,4 @@
+import { i18n } from "@shared/i18n/I18nService.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
 import css from "@shared/ui/Input/input.module.css";
@@ -11,7 +12,7 @@ export class InputEditor extends Input {
   public getInnerMarkup(): string {
     return /*html*/ `
     <span class="${css.labelSpan}">
-      {{ label }}
+      ${i18n.t(this.configs.i18nLabelKey)}
     </span>
       <input
         class="${css.input} ${css.input_editor}"

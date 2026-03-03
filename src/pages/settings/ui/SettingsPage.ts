@@ -179,7 +179,7 @@ export class SettingsPage extends Page<SettingsProps> {
               showSpinner: true,
             },
           });
-          
+
           await handleLogout();
 
           logoutBtn.setProps({
@@ -276,6 +276,7 @@ export class SettingsPage extends Page<SettingsProps> {
         <div class="${css.footer__horBtns}">
           {{{ ${buttonEditInfo.params.configs.id} }}}
           {{{ ${buttonEditPassword.params.configs.id} }}}
+          {{{ ${nodes["buttonLanguage"].params.configs.id} }}}
         </div>
         {{{ ${nodes["buttonLogout"].params.configs.id} }}}
       </footer>

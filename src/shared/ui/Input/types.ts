@@ -15,7 +15,7 @@ export interface InputConfigs extends BaseConfigs {
   fieldId: FieldType;
   i18nLabelKey: string;
   type: InputType;
-  i18nPlaceholderKey: string;
+  placeholder: string;
   for: FieldType;
   isError?: boolean;
   errorMessage?: string;

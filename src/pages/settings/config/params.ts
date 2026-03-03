@@ -16,37 +16,36 @@ import { handleMessengerClick } from "../model/actions.ts";
 import { SettingsProps } from "../model/types.ts";
 import css from "../ui/settings.module.css";
 import { i18n } from "@shared/i18n/I18nService.ts";
-
 const editorNodes_info = {
   "editor-email": getEditorNode(
     "editor-email",
     "email",
-    i18n.t("settings.inputs.email.label"),
+    "settings.inputs.email.label",
   ),
   "editor-name": getEditorNode(
     "editor-name",
     "name",
-    i18n.t("settings.inputs.name.label"),
+    "settings.inputs.name.label",
   ),
   "editor-surname": getEditorNode(
     "editor-surname",
     "surname",
-    i18n.t("settings.inputs.surname.label"),
+    "settings.inputs.surname.label",
   ),
   "editor-login": getEditorNode(
     "editor-login",
     "login",
-    i18n.t("settings.inputs.login.label"),
+    "settings.inputs.login.label",
   ),
   "editor-display_name": getEditorNode(
     "editor-display_name",
     "display_name",
-    i18n.t("settings.inputs.displayName.label"),
+    "settings.inputs.displayName.label",
   ),
   "editor-phone": getEditorNode(
     "editor-phone",
     "phone",
-    i18n.t("settings.inputs.phone.label"),
+    "settings.inputs.phone.label",
   ),
 };
 
@@ -54,13 +53,13 @@ const editorNodes_psw = {
   "editor-oldPassword": getEditorNode(
     "editor-oldPassword",
     "oldPassword",
-    i18n.t("settings.inputs.oldPassword.label"),
+    "settings.inputs.oldPassword.label",
     { placeholder: "* * * * *" },
   ),
   "editor-newPassword": getEditorNode(
     "editor-newPassword",
     "newPassword",
-    i18n.t("settings.inputs.newPassword.label"),
+    "settings.inputs.newPassword.label",
     { placeholder: "* * * * *" },
   ),
 };
@@ -124,13 +123,15 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
           isSilent: true,
         },
       ) as any,
-      buttonLogout: getButtonNode(
-        "buttonLogout",
-        "settings.form.logout",
-        {
-          isSilent: true,
+      buttonLanguage: getButtonNode("buttonLanguage", "languageEmoji", {
+        type: "button",
+        on: {
+          click: () => i18n.cycleLanguages(),
         },
-      ) as any,
+      }),
+      buttonLogout: getButtonNode("buttonLogout", "settings.form.logout", {
+        isSilent: true,
+      }) as any,
     },
     edges: {
       heading_backToChats: "heading_backToChats",
@@ -149,6 +150,7 @@ export const settingsPageParams: ComponentParams<SettingsProps> = {
       inputsEditors_password: ["editor-oldPassword", "editor-newPassword"],
       buttonEditInfo: "buttonEditInfo",
       buttonEditPassword: "buttonEditPassword",
+      buttonLanguage: "buttonLanguage",
       buttonLogout: "buttonLogout",
     },
   },

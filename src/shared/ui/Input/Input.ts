@@ -83,7 +83,7 @@ export class Input extends Component<InputProps> {
         name="{{fieldId}}"
         type="{{type}}"
         id="{{fieldId}}"
-        placeholder="${i18n.t(this.configs.i18nPlaceholderKey)}"
+        placeholder="${i18n.t(this.configs.placeholder)}"
         autocomplete="on"
       />
       <span class="${css.errorLabel}"></span>

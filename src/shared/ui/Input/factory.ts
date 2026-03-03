@@ -18,13 +18,13 @@ export const getInputNode = (
   fieldId: FieldType,
   i18nLabelKey: string,
   {
-    i18nPlaceholderKey,
+    placeholder,
     isError,
     errorMessage,
     autocomplete,
     on,
   }: {
-    i18nPlaceholderKey?: string;
+    placeholder?: string;
     isError?: boolean;
     isSearch?: boolean;
     errorMessage?: string;
@@ -36,7 +36,7 @@ export const getInputNode = (
     id,
     fieldId,
     i18nLabelKey,
-    i18nPlaceholderKey,
+    placeholder,
     isError,
     errorMessage,
     autocomplete,
@@ -56,7 +56,7 @@ const getInputProps = (
   id: ComponentId,
   fieldId: FieldType,
   i18nLabelKey: string,
-  i18nPlaceholderKey: string = i18nLabelKey,
+  placeholder: string = i18nLabelKey,
   isError: boolean = false,
   errorMessage: string = "",
   autocomplete: "on" | "off" = "on",
@@ -70,7 +70,7 @@ const getInputProps = (
       fieldId,
       i18nLabelKey,
       type: getInputTypeByFieldId(fieldId),
-      i18nPlaceholderKey,
+      placeholder,
       for: fieldId,
       isError,
       errorMessage,

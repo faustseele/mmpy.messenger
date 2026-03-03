@@ -22,15 +22,16 @@ export interface SettingsProps extends BaseProps {
 export type SettingsType = "change-password" | "change-info";
 
 type SettingsMap =
-  | "heading_backToChats"
   | "heading_profile"
+  | "heading_backToChats"
   | "user_avatar"
   | "user_avatar_mobile"
   | "subheading_form"
   | "buttonEditInfo"
   | "buttonEditPassword"
-  | "buttonLogout"
   | "inputsEditors_info"
-  | "inputsEditors_password";
+  | "inputsEditors_password"
+  | "buttonLanguage"
+  | "buttonLogout";
 
 export type SettingsNodes = ChildrenNodes<SettingsMap>;
