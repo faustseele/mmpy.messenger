@@ -64,7 +64,7 @@ class I18nService {
   }
 
   public cycleLanguages(): void {
-    const langs = ["en", "de", "ru", "jp", "th"] as Locale[];
+    const langs = ["en", "de", "ru", "jp", "th", "es", "fr"] as Locale[];
     const index = langs.indexOf(this._lang);
     const nextIx = (index + 1) % langs.length;
 
