@@ -1,3 +1,5 @@
+import { i18n } from "@shared/i18n/I18nService.ts";
+
 export function tinyDate(
   input: string | Date,
   opts?: { locale?: string; timeZone?: string },
@@ -7,7 +9,9 @@ export function tinyDate(
 
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
-  const locale = opts?.locale ?? undefined;
+
+  /* using i18n service for locale */
+  const locale = opts?.locale ?? i18n.getLanguage();
   const tz = opts?.timeZone;
 
   const formatAbsolute = (targetDate: Date): string => {
@@ -32,7 +36,7 @@ export function tinyDate(
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
 
   if (diffSeconds < 60) {
-    return "now";
+    return rtf.format(0, "second");
   }
 
   let value: number;
