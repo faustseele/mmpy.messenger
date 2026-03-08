@@ -260,7 +260,10 @@ export class SettingsPage extends Page<SettingsProps> {
         {{/unless}}
 
         <div class="${css.settingsInputs}">
-          {{{ ${subheading_form.params.configs.id} }}}
+          <div class="${css.settingsInputs__subheading}">
+            {{{ ${subheading_form.params.configs.id} }}}
+            {{{ ${nodes["buttonLanguage"].params.configs.id} }}}
+          </div>
 
           <div class="${css.settingsInputs__list}">
             {{#if ${this.isInfo}}}
@@ -276,7 +279,6 @@ export class SettingsPage extends Page<SettingsProps> {
         <div class="${css.footer__horBtns}">
           {{{ ${buttonEditInfo.params.configs.id} }}}
           {{{ ${buttonEditPassword.params.configs.id} }}}
-          {{{ ${nodes["buttonLanguage"].params.configs.id} }}}
         </div>
         {{{ ${nodes["buttonLogout"].params.configs.id} }}}
       </footer>
