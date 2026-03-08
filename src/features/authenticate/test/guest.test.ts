@@ -1,6 +1,7 @@
 import Router from "@app/providers/router/Router.ts";
 import { handleFetchChats } from "@entities/chat/model/actions.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { handleGuestSignIn } from "../model/actions-guest.ts";
@@ -79,7 +80,7 @@ describe("@Features/Auth: Guest", () => {
     /* checking if Toast has been fired
     toHaveBeenCalledWith instead of toHaveBeenCalledExactlyOnceWith
     bc we call 2 toasts in Guest-Flow */
-    expect(spiedToast).toHaveBeenCalledWith("toast", {
+    expect(spiedToast).toHaveBeenCalledWith(GlobalEvent.Toast, {
       msg: i18n.t("toasts.auth.guestSuccess"),
       type: "success",
     });
@@ -100,7 +101,7 @@ describe("@Features/Auth: Guest", () => {
     expect(handleFetchChats).not.toHaveBeenCalled();
 
     /* checking for the last-fired Toast */
-    expect(spiedToast).toHaveBeenLastCalledWith("toast", {
+    expect(spiedToast).toHaveBeenLastCalledWith(GlobalEvent.Toast, {
       msg: i18n.t("toasts.dev.devErrorStub").replace('${}', badGuest.err?.reason || ''),
       type: "error",
     });

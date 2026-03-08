@@ -7,6 +7,7 @@ import {
 import { ApiResponse } from "@shared/api/model/types.ts";
 import { i18n } from "@shared/i18n/I18nService.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { ls_getLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatService from "./ChatService.ts";
 
@@ -26,7 +27,7 @@ export const handleCreateChat = async (
   noToast = false,
 ): Promise<ApiResponse<CreateChatResponse>> => {
   if (!noToast)
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.chats.creatingStub").replace('${}', title),
     });
 
@@ -36,13 +37,13 @@ export const handleCreateChat = async (
     await ChatService.fetchChats();
     await ChatService.selectChat(res.data!.id);
     if (!noToast)
-      globalBus.emit("toast", {
+      globalBus.emit(GlobalEvent.Toast, {
         msg: i18n.t("toasts.chats.createSuccessStub").replace('${}', title),
       });
   } else {
     console.error("ChatService: createChat failed:", res);
     globalBus.emit(
-      "toast",
+      GlobalEvent.Toast,
       {
         msg: i18n.t("toasts.dev.devErrorStub").replace('${}', res.err?.reason || ''),
       },
@@ -54,20 +55,20 @@ export const handleCreateChat = async (
 };
 
 export const handleDeleteChat = async (id: number, chatTitle: string) => {
-  globalBus.emit("toast", { msg: i18n.t("toasts.chats.deleteLoading") });
+  globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.chats.deleteLoading") });
   const res = await ChatService.deleteChat(id);
 
   if (res.ok) {
     await ChatService.fetchChats();
 
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.chats.deleteSuccessStub").replace('${}', chatTitle),
       type: "success",
     });
     ChatService.deselectChat();
   } else {
     console.error("ChatService: deleteChat failed:", res);
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.dev.devErrorStub").replace('${}', res.err?.reason || ''),
       type: "error",
     });
@@ -81,7 +82,7 @@ export const handleFetchChats = async (
 
   if (!resList.ok) {
     console.error("fetchChats failed:", resList.err?.response);
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.chats.fetchErrorStub").replace('${}', resList.err?.reason || ''),
       type: "error",
     });

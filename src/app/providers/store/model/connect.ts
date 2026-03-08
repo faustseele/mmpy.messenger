@@ -1,11 +1,12 @@
 import { PageNode } from "@pages/page/model/types.ts";
 import { Page } from "@pages/page/ui/Page.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
+import { ComponentEvent } from "@shared/lib/Component/model/event.types.ts";
 import { ComponentPatch } from "@shared/lib/Component/model/types.ts";
 import { getProjection } from "../lib/patch.ts";
 import { merge } from "../lib/utils.ts";
 import Store from "./Store.ts";
-import { MapStateToProps } from "./types.ts";
+import { MapStateToProps, StoreEvent } from "./types.ts";
 import { isEqual } from "@shared/lib/helpers/object/utils.ts";
 
 /* bridges Store <-> Page blueprint */
@@ -86,11 +87,11 @@ export function connect<P extends BaseProps, C extends Page<P>>(
   const onStoreUpdated = () => {
     handlePatch();
   };
-  Store.on("updated", onStoreUpdated);
+  Store.on(StoreEvent.Updated, onStoreUpdated);
 
-  connectedNode.runtime?.instance.bus.on("flow:component-did-unmount", () => {
+  connectedNode.runtime?.instance.bus.on(ComponentEvent.DidUnmount, () => {
     /* cleans up subscription on page unmount */
-    Store.off("updated", onStoreUpdated);
+    Store.off(StoreEvent.Updated, onStoreUpdated);
 
     /* marks __disposed so next connect() recreates instance lazily */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Store from "../model/Store.ts";
+import { StoreEvent } from "../model/types.ts";
 
 describe("App/Providers: Store", () => {
   beforeEach(() => {
@@ -22,7 +23,7 @@ describe("App/Providers: Store", () => {
   it('should EMIT an \'updated\' event when state changes', () => {
     const mockHandler = vi.fn();
     
-    Store.on("updated", mockHandler);
+    Store.on(StoreEvent.Updated, mockHandler);
 
     Store.set("some.key", true);
     expect(mockHandler).toHaveBeenCalled();

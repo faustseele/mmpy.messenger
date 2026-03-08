@@ -1,4 +1,5 @@
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
@@ -24,7 +25,7 @@ export class Toast extends Component<ToastProps> {
 
   public componentDidMount(): void {
     /* mounting Toast to globalBus */
-    globalBus.on("toast", (payload: ToastPayload) =>
+    globalBus.on(GlobalEvent.Toast, (payload: ToastPayload) =>
       this.showToast(payload),
     );
   }

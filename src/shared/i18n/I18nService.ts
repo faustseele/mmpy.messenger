@@ -3,6 +3,7 @@ import { ls_getLocale, ls_setLocale } from "../lib/LocalStorage/actions.ts";
 import { resolveKey } from "./dictionary.ts";
 import { Locale, Dictionary } from "./types.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 
 /**
  * this service manages application localization,
@@ -60,11 +61,11 @@ class I18nService {
     /* only after set store state */
     Store.set("controllers.language", lang);
 
-    globalBus.emit("global-rerender");
+    globalBus.emit(GlobalEvent.GlobalRerender);
   }
 
   public cycleLanguages(): void {
-    const langs = ["en", "de", "ru", "jp", "th", "es", "fr"] as Locale[];
+    const langs = ["en", "ru", "de", "fr", "es", "jp", "th"] as Locale[];
     const index = langs.indexOf(this._lang);
     const nextIx = (index + 1) % langs.length;
 

@@ -1,4 +1,4 @@
-export type Locale = "en" | "de" | "ru" | "jp" | "th" | "es" | "fr";
+export type Locale = "en" | "ru" | "de" | "fr" | "es" | "jp" | "th";
 
 /**
  * recursive type representing a nested translation dictionary

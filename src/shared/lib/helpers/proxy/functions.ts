@@ -1,4 +1,5 @@
 import { BaseConfigs, BaseProps } from "../../Component/model/base.types.ts";
+import { ComponentEvent } from "../../Component/model/event.types.ts";
 import { ComponentParams } from "../../Component/model/types.ts";
 import EventBus from "../../EventBus/EventBus.ts";
 
@@ -28,14 +29,14 @@ export function proxifyParams<P extends BaseProps>(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (target as any)[prop] = value;
 
-      bus.emit("flow:component-did-update");
+      bus.emit(ComponentEvent.DidUpdate);
       return true;
     },
     deleteProperty: (target: typeof configs, prop: keyof BaseConfigs) => {
       if (typeof prop === "string" && prop.startsWith("_")) return false;
 
       delete (target as Record<PropertyKey, unknown>)[prop];
-      bus.emit("flow:component-did-update");
+      bus.emit(ComponentEvent.DidUpdate);
 
       return true;
     },
@@ -52,14 +53,14 @@ export function proxifyParams<P extends BaseProps>(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (target as any)[prop] = value;
 
-      bus.emit("flow:component-did-update");
+      bus.emit(ComponentEvent.DidUpdate);
       return true;
     },
     deleteProperty: (target: typeof on, prop: keyof BaseProps) => {
       if (typeof prop === "string" && prop.startsWith("_")) return false;
 
       delete (target as Record<PropertyKey, unknown>)[prop];
-      bus.emit("flow:component-did-update");
+      bus.emit(ComponentEvent.DidUpdate);
 
       return true;
     },
@@ -76,7 +77,7 @@ export function proxifyParams<P extends BaseProps>(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (target as any)[prop] = value;
 
-      bus.emit("flow:component-did-update");
+      bus.emit(ComponentEvent.DidUpdate);
       return true;
     },
     deleteProperty: (target: typeof children, prop: keyof BaseProps) => {
@@ -84,7 +85,7 @@ export function proxifyParams<P extends BaseProps>(
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (target as any)[prop];
-      bus.emit("flow:component-did-update");
+      bus.emit(ComponentEvent.DidUpdate);
 
       return true;
     },

@@ -1,6 +1,7 @@
 import { UserResponse } from "@shared/api/model/api.types.ts";
 import { ApiResponse } from "@shared/api/model/types.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { SubmitTypes } from "@shared/lib/validation/types.ts";
 import {
   handleSignIn,
@@ -13,12 +14,12 @@ const emitToast = (res: ApiResponse<UserResponse>, type: SubmitTypes) => {
   if (!res.ok) {
     const err = res.err;
     const msg = `${err?.reason}`;
-    globalBus.emit("toast", { msg: i18n.t("toasts.dev.devErrorStub").replace('${}', msg), type: "error" });
+    globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.dev.devErrorStub").replace('${}', msg), type: "error" });
     return;
   }
 
   if (type === "sign-up") {
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.auth.signupSuccess"),
       type: "success",
     });
@@ -26,14 +27,14 @@ const emitToast = (res: ApiResponse<UserResponse>, type: SubmitTypes) => {
   }
 
   if (type === "sign-in") {
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.auth.signinSuccess"),
       type: "success",
     });
     return;
   }
 
-  globalBus.emit("toast", {
+  globalBus.emit(GlobalEvent.Toast, {
     msg: i18n.t("toasts.dev.unhandled"),
     type: "error",
   });
@@ -41,7 +42,7 @@ const emitToast = (res: ApiResponse<UserResponse>, type: SubmitTypes) => {
 };
 
 export const onBadForm = (msg?: string) => {
-  globalBus.emit("toast", {
+  globalBus.emit(GlobalEvent.Toast, {
     msg: i18n.t("toasts.validation.badForm") + msg,
     type: "error",
   });

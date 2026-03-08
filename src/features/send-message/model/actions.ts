@@ -2,6 +2,7 @@ import ChatService from "@entities/chat/model/ChatService.ts";
 import ResourcesAPI from "@shared/api/ResourcesAPI.ts";
 import css from "../ui/messageField.module.css";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { i18n } from "@shared/i18n/I18nService.ts";
 
 export const handleSendMessage = (e: Event) => {
@@ -23,7 +24,7 @@ export const handleAttachImage = async (e: Event) => {
 
   if (file) {
     try {
-      globalBus.emit("toast", { msg: i18n.t("toasts.message.uploadImageLoading") });
+      globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.message.uploadImageLoading") });
       const resource = await ResourcesAPI.upload(file);
       ChatService.sendFile(resource.id);
     } catch (err) {

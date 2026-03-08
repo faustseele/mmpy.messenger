@@ -1,6 +1,7 @@
 import { UserResponse } from "@shared/api/model/api.types.ts";
 import { ApiResponse } from "@shared/api/model/types.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { ToastType } from "@shared/ui/Toast/types.ts";
 import {
   handleUpdatePassword,
@@ -15,7 +16,7 @@ export const onGoodForm = (
   formData: Record<string, string>,
 ) => Promise<ApiResponse<Partial<UserResponse> | string>>) => {
   function dispatchToast(msg: string, type: ToastType = "info") {
-    globalBus.emit("toast", { msg, type });
+    globalBus.emit(GlobalEvent.Toast, { msg, type });
   }
 
   if (submitType === "change-info") {
@@ -77,14 +78,14 @@ export const onGoodForm = (
 export const onBadForm = (submitType: SettingsType): (() => void) => {
   if (submitType === "change-info") {
     return () => {
-      globalBus.emit("toast", {
+      globalBus.emit(GlobalEvent.Toast, {
         msg: i18n.t("toasts.validation.fieldError"),
         type: "error",
       });
     };
   } else {
     return () => {
-      globalBus.emit("toast", {
+      globalBus.emit(GlobalEvent.Toast, {
         msg: i18n.t("toasts.validation.passwordError"),
         type: "error",
       });

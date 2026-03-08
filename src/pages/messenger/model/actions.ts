@@ -4,6 +4,7 @@ import { ZERO_WIDTH_SPACE } from "@shared/config/const.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { i18n } from "@shared/i18n/I18nService.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { urlToFile } from "@shared/lib/helpers/file.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { MessengerConfigs, MessengerOn } from "./types.ts";
@@ -24,7 +25,7 @@ export const handleAddChat = async (on: MessengerOn) => {
   const input = window.prompt(explanation, "");
   if (input === null) return;
 
-  globalBus.emit("toast", { msg: i18n.t("toasts.chats.addUserLoading") });
+  globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.chats.addUserLoading") });
 
   const login = input.trim();
   if (!login) return;
@@ -32,7 +33,7 @@ export const handleAddChat = async (on: MessengerOn) => {
   const resUser = await on.findUser(login);
   if (!resUser.ok || !resUser.data) {
     console.error("ChatService: addUser failed:", resUser);
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.chats.addUserNotFoundStub").replace('${}', login),
       type: "error",
     });
@@ -47,7 +48,7 @@ export const handleAddChat = async (on: MessengerOn) => {
   );
   if (!newChatRes.ok) {
     console.error("ChatService: addUser failed:", newChatRes);
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.chats.addUserErrorStub").replace('${}', user.login),
       type: "error",
     });
@@ -59,12 +60,12 @@ export const handleAddChat = async (on: MessengerOn) => {
   const resAddUser = await on.addUser(chatId, user.id);
 
   if (resAddUser.ok) {
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.chats.addUserSuccessStub").replace('${}', user.login),
     });
   } else {
     console.error("ChatService: addUser failed:", resAddUser);
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.chats.addUserErrorStub").replace('${}', user.login),
       type: "error",
     });

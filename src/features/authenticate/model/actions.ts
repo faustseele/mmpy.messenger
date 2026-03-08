@@ -1,6 +1,7 @@
 import { UserResponse } from "@shared/api/model/api.types.ts"
 import { ApiResponse } from "@shared/api/model/types.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import Router from "@app/providers/router/Router.ts";
 import {
   handleCreateChat,
@@ -18,7 +19,7 @@ export const handleFetchUser = async (): Promise<ApiResponse<UserResponse>> => {
     const status = res.err?.status;
 
     if (status === 408) {
-      globalBus.emit("toast", {
+      globalBus.emit(GlobalEvent.Toast, {
         msg: i18n.t("toasts.auth.timeout"),
         type: "error",
       });
@@ -75,7 +76,7 @@ export const handlePresentSession = async (res: ApiResponse<UserResponse>) => {
   const reason = res.err?.reason;
 
   if (reason === "User already in system") {
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.auth.alreadyLogged"),
       type: "info",
     });
@@ -88,7 +89,7 @@ export const handlePresentSession = async (res: ApiResponse<UserResponse>) => {
     /* straight logout & cookie removal; bypassing full handleLogout() */
     await AuthService.logout();
 
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.auth.invalidSession"),
       type: "error",
     });
@@ -101,19 +102,19 @@ export const handlePresentSession = async (res: ApiResponse<UserResponse>) => {
 };
 
 export const handleLogout = async (): Promise<ApiResponse<boolean>> => {
-  globalBus.emit("toast", { msg: i18n.t("toasts.auth.loggingOut") });
+  globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.auth.loggingOut") });
 
   const res = await AuthService.logout();
   if (res.ok) {
     Router.go(RouteLink.SignIn);
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.auth.logoutSuccess"),
       type: "success",
     });
   } else {
     Router.go(RouteLink.Error);
     console.error("Logout Failed", res);
-    globalBus.emit("toast", {
+    globalBus.emit(GlobalEvent.Toast, {
       msg: i18n.t("toasts.dev.devErrorStub").replace('${}', res.err?.reason || ''),
       type: "error",
     });

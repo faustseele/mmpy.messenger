@@ -1,8 +1,9 @@
+import { GlobalEvent } from "./events.ts";
 import { EventCallback } from "./types.ts";
 
 /**
  * <TEvents extends string> is used to make the Events generics
- * E.g. ComponentEvents for Component, StoreEvents for Store
+ * E.g. ComponentEvent for Component, StoreEvent for Store
  */
 export default class EventBus<TEvents extends string> {
   // eslint-disable-next-line no-unused-vars
@@ -38,4 +39,4 @@ export default class EventBus<TEvents extends string> {
   }
 }
 
-export const globalBus = new EventBus();
+export const globalBus = new EventBus<GlobalEvent>();
