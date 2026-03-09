@@ -187,7 +187,7 @@
     "noValue": "Please fill in the field.",
     "name": "Invalid name.",
     "surname": "Invalid surname.",
-    "login": "3-20 characters.",
+    "login": "3-20 letras.",
     "email": "Invalid email.",
     "password": "8-40 chars, 1 digit and uppercase.",
     "phone": "Invalid phone number.",
