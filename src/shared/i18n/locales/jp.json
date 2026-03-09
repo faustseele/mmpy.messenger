@@ -106,7 +106,8 @@
       "subheadingPsw": "あなたのパスワード：",
       "editInfo": "データを編集 📝",
       "changePassword": "パスワードを変更 🔑",
-      "logout": "ログアウト 🕳️"
+      "logout": "ログアウト 🕳️",
+      "guestModeStub": "ゲストモード。登録して編集。"
     },
     "inputs": {
       "email": {
@@ -145,7 +146,8 @@
       "signupSuccess": "アカウントが正常に作成されました。",
       "signinSuccess": "おかえりなさい！",
       "guestLoading": "ゲストモードを起動中...",
-      "guestSuccess": "ゲストログイン成功！ 👻"
+      "guestSuccess": "ゲストログイン成功！ 👻",
+      "guestResetting": "ゲストデータをリセット中..."
     },
     "chats": {
       "creatingStub": "${}を作成中...",
@@ -182,7 +184,14 @@
     }
   },
   "validation": {
-    "noValue": "フィールドを入力してください。"
+    "noValue": "フィールドを入力してください。",
+    "name": "無効な名前。",
+    "surname": "無効な姓。",
+    "login": "3〜20文字。",
+    "email": "無効なメール。",
+    "password": "8〜40文字、数字と大文字各1つ。",
+    "phone": "無効な電話番号。",
+    "displayName": "無効な表示名。"
   },
   "avatar": {
     "alt": "参加者のアバター"

@@ -106,7 +106,8 @@
       "subheadingPsw": "Your Password:",
       "editInfo": "Edit Data 📝",
       "changePassword": "Change Password 🔑",
-      "logout": "Logout 🕳️"
+      "logout": "Logout 🕳️",
+      "guestModeStub": "Guest mode. Sign up to edit."
     },
     "inputs": {
       "email": {
@@ -145,7 +146,8 @@
       "signupSuccess": "Account created successfully.",
       "signinSuccess": "Welcome back!",
       "guestLoading": "Launching Guest Mode...",
-      "guestSuccess": "Guest Login Success! 👻"
+      "guestSuccess": "Guest Login Success! 👻",
+      "guestResetting": "Resetting guest data..."
     },
     "chats": {
       "creatingStub": "Creating ${}...",
@@ -182,7 +184,14 @@
     }
   },
   "validation": {
-    "noValue": "Please fill in the field."
+    "noValue": "Please fill in the field.",
+    "name": "Invalid name.",
+    "surname": "Invalid surname.",
+    "login": "3-20 characters.",
+    "email": "Invalid email.",
+    "password": "8-40 chars, 1 digit and uppercase.",
+    "phone": "Invalid phone number.",
+    "displayName": "Invalid display name."
   },
   "avatar": {
     "alt": "Participant's avatar"

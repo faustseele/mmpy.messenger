@@ -1,13 +1,19 @@
 import Router from "@app/providers/router/Router.ts";
+import {
+  handleAddUser,
+  handleCreateChat,
+  handleDeleteChat,
+  handleUpdateChatAvatar,
+} from "@entities/chat/model/actions.ts";
 import UserService from "@entities/user/model/UserService.ts";
 import { ZERO_WIDTH_SPACE } from "@shared/config/const.ts";
 import { API_URL_RESOURCES } from "@shared/config/urls.ts";
 import { i18n } from "@shared/i18n/I18nService.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
 import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
-import { urlToFile } from "@shared/lib/helpers/file.ts";
+import { downloadFile } from "@shared/lib/helpers/file.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { MessengerConfigs, MessengerOn } from "./types.ts";
+import { MessengerConfigs } from "./types.ts";
 import { randomNoteLabel } from "./utils.ts";
 
 export const handleFindUser = async (login: string) => {
@@ -18,23 +24,25 @@ export const handleGoToSettings = () => {
   Router.go(RouteLink.Settings);
 };
 
-export const handleAddChat = async (on: MessengerOn) => {
+export const handleAddChatPrompt = async () => {
   const explanation = `${i18n.t("messenger.actions.findUserPrompt")}
   \n• miathompson \n• lucasbrown \n• noahrodriguez \n• emmawilson \n• liamgarcia \n• oliviamartinez \n• sophialee \n• masonkim \n• isabellapatel \n• ethanwong \n• emil \n• LevTolstoy \n• yandex \n• LeUser \n• mishima \n• tolkien \n• baudrillard \n• foucault \n• shakespear`;
 
   const input = window.prompt(explanation, "");
   if (input === null) return;
 
-  globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.chats.addUserLoading") });
+  globalBus.emit(GlobalEvent.Toast, {
+    msg: i18n.t("toasts.chats.addUserLoading"),
+  });
 
   const login = input.trim();
   if (!login) return;
 
-  const resUser = await on.findUser(login);
+  const resUser = await handleFindUser(login);
   if (!resUser.ok || !resUser.data) {
     console.error("ChatService: addUser failed:", resUser);
     globalBus.emit(GlobalEvent.Toast, {
-      msg: i18n.t("toasts.chats.addUserNotFoundStub").replace('${}', login),
+      msg: i18n.t("toasts.chats.addUserNotFoundStub").replace("${}", login),
       type: "error",
     });
     return;
@@ -42,14 +50,15 @@ export const handleAddChat = async (on: MessengerOn) => {
 
   const user = resUser.data!;
 
-  const newChatRes = await on.addChatWithUser(
-    user.first_name,
-    user.second_name,
+  const newChatRes = await handleCreateChat(
+    `${user.first_name} ${user.second_name}`,
+    true,
   );
+
   if (!newChatRes.ok) {
     console.error("ChatService: addUser failed:", newChatRes);
     globalBus.emit(GlobalEvent.Toast, {
-      msg: i18n.t("toasts.chats.addUserErrorStub").replace('${}', user.login),
+      msg: i18n.t("toasts.chats.addUserErrorStub").replace("${}", user.login),
       type: "error",
     });
     return;
@@ -57,30 +66,31 @@ export const handleAddChat = async (on: MessengerOn) => {
 
   const chatId = newChatRes.data!.id;
 
-  const resAddUser = await on.addUser(chatId, user.id);
+  const resAddUser = await handleAddUser(chatId, user.id);
 
   if (resAddUser.ok) {
     globalBus.emit(GlobalEvent.Toast, {
-      msg: i18n.t("toasts.chats.addUserSuccessStub").replace('${}', user.login),
+      msg: i18n.t("toasts.chats.addUserSuccessStub").replace("${}", user.login),
     });
+
+    const avatarUrl = user.avatar;
+    if (avatarUrl) {
+      const avatar = await downloadFile(`${API_URL_RESOURCES}${avatarUrl}`);
+      handleUpdateChatAvatar(chatId, avatar);
+    }
   } else {
     console.error("ChatService: addUser failed:", resAddUser);
     globalBus.emit(GlobalEvent.Toast, {
-      msg: i18n.t("toasts.chats.addUserErrorStub").replace('${}', user.login),
+      msg: i18n.t("toasts.chats.addUserErrorStub").replace("${}", user.login),
       type: "error",
     });
     return;
   }
 
-  if (user.avatar) {
-    const avatar = await urlToFile(`${API_URL_RESOURCES}${user.avatar}`);
-    on.updateChatAvatar(chatId, avatar);
-  }
-
   console.log(`User ${user.login} (id=${user.id}) added to chat`, chatId);
 };
 
-export const handleAddNotes = async (on: MessengerOn) => {
+export const handleAddNotesPrompt = async () => {
   const chatName = randomNoteLabel();
   const input = window.prompt(
     i18n.t("messenger.actions.newNotesPrompt"),
@@ -91,13 +101,12 @@ export const handleAddNotes = async (on: MessengerOn) => {
   const title = input.trim() + ZERO_WIDTH_SPACE;
   if (!title) return;
 
-  on?.addNotes?.(title);
+  handleCreateChat(title);
 };
 
-export const handleDeleteChat = async (
+export const handleDeleteChatPrompt = async (
   e: Event,
   info: MessengerConfigs["info"],
-  on: MessengerOn,
 ) => {
   e.preventDefault();
 
@@ -113,5 +122,5 @@ export const handleDeleteChat = async (
   );
   if (!confirm) return;
 
-  if (chatId) on?.deleteChat?.(chatId, chatTitle);
+  if (chatId) handleDeleteChat(chatId, chatTitle);
 };

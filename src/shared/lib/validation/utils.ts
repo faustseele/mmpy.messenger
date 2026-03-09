@@ -1,19 +1,19 @@
 import { i18n } from "@shared/i18n/I18nService.ts";
 import { FieldType } from "../../ui/Input/types.ts";
 import {
-  DISPLAY_NAME_ERROR,
+  DISPLAY_NAME_ERROR_KEY,
   DISPLAY_NAME_REGEX,
-  EMAIL_ERROR,
+  EMAIL_ERROR_KEY,
   EMAIL_REGEX,
-  LOGIN_ERROR,
+  LOGIN_ERROR_KEY,
   LOGIN_REGEX,
-  NAME_ERROR,
+  NAME_ERROR_KEY,
   NAME_REGEX,
-  PASSWORD_ERROR,
+  PASSWORD_ERROR_KEY,
   PASSWORD_REGEX,
-  PHONE_ERROR,
+  PHONE_ERROR_KEY,
   PHONE_REGEX,
-  SURNAME_ERROR,
+  SURNAME_ERROR_KEY,
   SURNAME_REGEX,
 } from "./consts.ts";
 
@@ -24,25 +24,25 @@ import {
 // eslint-disable-next-line no-unused-vars
 const getRegex: Record<FieldType, (value: string) => string> = {
   name: (value: string): string => {
-    return NAME_REGEX.test(value) ? "" : NAME_ERROR;
+    return NAME_REGEX.test(value) ? "" : i18n.t(NAME_ERROR_KEY);
   },
   surname: (value: string): string => {
-    return SURNAME_REGEX.test(value) ? "" : SURNAME_ERROR;
+    return SURNAME_REGEX.test(value) ? "" : i18n.t(SURNAME_ERROR_KEY);
   },
   login: (value: string): string => {
-    return LOGIN_REGEX.test(value) ? "" : LOGIN_ERROR;
+    return LOGIN_REGEX.test(value) ? "" : i18n.t(LOGIN_ERROR_KEY);
   },
   email: (value: string): string => {
-    return EMAIL_REGEX.test(value) ? "" : EMAIL_ERROR;
+    return EMAIL_REGEX.test(value) ? "" : i18n.t(EMAIL_ERROR_KEY);
   },
   password: (value: string): string => {
-    return PASSWORD_REGEX.test(value) ? "" : PASSWORD_ERROR;
+    return PASSWORD_REGEX.test(value) ? "" : i18n.t(PASSWORD_ERROR_KEY);
   },
   phone: (value: string): string => {
-    return PHONE_REGEX.test(value) ? "" : PHONE_ERROR;
+    return PHONE_REGEX.test(value) ? "" : i18n.t(PHONE_ERROR_KEY);
   },
   display_name: (value: string): string => {
-    return DISPLAY_NAME_REGEX.test(value) ? "" : DISPLAY_NAME_ERROR;
+    return DISPLAY_NAME_REGEX.test(value) ? "" : i18n.t(DISPLAY_NAME_ERROR_KEY);
   },
   message: (value: string): string => {
     return value.length > 0 ? "" : i18n.t("validation.noValue");
@@ -51,10 +51,10 @@ const getRegex: Record<FieldType, (value: string) => string> = {
     return value.length > 0 ? "" : i18n.t("validation.noValue");
   },
   oldPassword: (value: string): string => {
-    return PASSWORD_REGEX.test(value) ? "" : PASSWORD_ERROR;
+    return PASSWORD_REGEX.test(value) ? "" : i18n.t(PASSWORD_ERROR_KEY);
   },
   newPassword: (value: string): string => {
-    return PASSWORD_REGEX.test(value) ? "" : PASSWORD_ERROR;
+    return PASSWORD_REGEX.test(value) ? "" : i18n.t(PASSWORD_ERROR_KEY);
   },
 };
 

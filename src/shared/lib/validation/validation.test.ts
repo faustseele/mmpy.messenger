@@ -1,8 +1,14 @@
+import { i18n } from "@shared/i18n/I18nService.ts";
 import { describe, expect, it } from "vitest";
-import { EMAIL_ERROR, LOGIN_ERROR, PASSWORD_ERROR } from "./consts.ts";
+import { EMAIL_ERROR_KEY, LOGIN_ERROR_KEY, PASSWORD_ERROR_KEY } from "./consts.ts";
 import { validateInputField } from "./utils.ts";
 
 describe("Shared/Lib: Validation", () => {
+  /* resolved at test-time so locale is applied */
+  const emailErr = () => i18n.t(EMAIL_ERROR_KEY);
+  const passwordErr = () => i18n.t(PASSWORD_ERROR_KEY);
+  const loginErr = () => i18n.t(LOGIN_ERROR_KEY);
+
   /* email validation */
   describe("Field: Email", () => {
     it.each([
@@ -11,11 +17,12 @@ describe("Shared/Lib: Validation", () => {
       ["user.name@domain.co.uk", ""],
       ["user-name@domain.com", ""],
       /* invalid */
-      ["plainaddress", EMAIL_ERROR],
-      ["@missinguser.com", EMAIL_ERROR],
-      ["username@.com", EMAIL_ERROR],
-      ["user@domain", EMAIL_ERROR], // missing Top-Level-Domain
-    ])("should validate %s as %s", (email, expectedErr) => {
+      ["plainaddress"],
+      ["@missinguser.com"],
+      ["username@.com"],
+      ["user@domain"],
+    ])("should validate %s", (email, expected?: string) => {
+      const expectedErr = expected ?? emailErr();
       expect(validateInputField("email", email)).toBe(expectedErr);
     });
   });
@@ -27,11 +34,12 @@ describe("Shared/Lib: Validation", () => {
       ["Password123", ""],
       ["HardP@ssw0rd", ""],
       /* invalid */
-      ["password123", PASSWORD_ERROR], // no uppercase
-      ["Password", PASSWORD_ERROR], // no digit
-      ["12345678", PASSWORD_ERROR], // no letters
-      ["Pass1", PASSWORD_ERROR], // too short (<8)
-    ])("should validate password rules for '%s'", (password, expectedErr) => {
+      ["password123"],
+      ["Password"],
+      ["12345678"],
+      ["Pass1"],
+    ])("should validate password rules for '%s'", (password, expected?: string) => {
+      const expectedErr = expected ?? passwordErr();
       expect(validateInputField("password", password)).toBe(expectedErr);
     });
   });
@@ -41,14 +49,15 @@ describe("Shared/Lib: Validation", () => {
     it.each([
       /* valid */
       ["Ivan", ""],
-      ["Иван", ""], // cyrillic check
+      ["Иван", ""],
       ["Anna-Maria", ""],
       /* invalid */
-      ["ivan", LOGIN_ERROR], // lowercase start
-      ["иван", LOGIN_ERROR], // lowercase cyrillic start
-      ["Ivan123", LOGIN_ERROR], // digits
-      ["Ivan The Great", LOGIN_ERROR], // spaces
-    ])("should validate login rules for '%s'", (login, expectedErr) => {
+      ["ivan0"],
+      ["иван0"],
+      ["Ivan123"],
+      ["Ivan The Great"],
+    ])("should validate login rules for '%s'", (login, expected?: string) => {
+      const expectedErr = expected ?? loginErr();
       expect(validateInputField("login", login)).toBe(expectedErr);
     });
   });

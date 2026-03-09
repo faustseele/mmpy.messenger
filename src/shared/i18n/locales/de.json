@@ -106,7 +106,8 @@
       "subheadingPsw": "Dein Passwort:",
       "editInfo": "Daten bearbeiten 📝",
       "changePassword": "Passwort ändern 🔑",
-      "logout": "Abmelden 🕳️"
+      "logout": "Abmelden 🕳️",
+      "guestModeStub": "Gastmodus. Registriere dich zum Bearbeiten."
     },
     "inputs": {
       "email": {
@@ -145,7 +146,8 @@
       "signupSuccess": "Konto erfolgreich erstellt.",
       "signinSuccess": "Willkommen zurück!",
       "guestLoading": "Gastmodus starten...",
-      "guestSuccess": "Gast-Anmeldung erfolgreich! 👻"
+      "guestSuccess": "Gast-Anmeldung erfolgreich! 👻",
+      "guestResetting": "Gastdaten werden zurückgesetzt..."
     },
     "chats": {
       "creatingStub": "Erstelle ${}...",
@@ -182,7 +184,14 @@
     }
   },
   "validation": {
-    "noValue": "Bitte fülle das Feld aus."
+    "noValue": "Bitte fülle das Feld aus.",
+    "name": "Ungültiger Name.",
+    "surname": "Ungültiger Nachname.",
+    "login": "3-20 Zeichen.",
+    "email": "Ungültige E-Mail.",
+    "password": "8-40 Zeichen, 1 Ziffer und Großbuchstabe.",
+    "phone": "Ungültige Telefonnummer.",
+    "displayName": "Ungültiger Anzeigename."
   },
   "avatar": {
     "alt": "Avatar des Teilnehmers"

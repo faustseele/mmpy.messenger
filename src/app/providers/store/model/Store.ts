@@ -13,6 +13,7 @@ export interface AppState {
   controllers: {
     language: Locale;
     isLoggedIn: boolean;
+    isGuestMode: boolean;
   };
   pageNodes: Record<ComponentId, PageNode<BaseProps, Page<BaseProps>>>;
 }

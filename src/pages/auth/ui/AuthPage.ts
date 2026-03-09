@@ -72,6 +72,7 @@ export class AuthPage extends Page<AuthProps> {
             console.error("AuthPage: Validator is not defined");
             return;
           }
+
           const formValid = validator.onFormCheck(type, onBadForm);
           if (!formValid) return;
 

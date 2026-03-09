@@ -1,3 +1,4 @@
+import Store from "@app/providers/store/model/Store.ts";
 import { isMobile } from "@shared/lib/browser/isMobile.ts";
 import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import { handleUpdateAvatar } from "@entities/user/model/actions.ts";
@@ -11,6 +12,7 @@ import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Heading } from "@shared/ui/Heading/Heading.ts";
 import { InputProps } from "@shared/ui/Input/types.ts";
+import { Subheading } from "@shared/ui/Subheading/Subheading.ts";
 import { handleSwitchType, handleValidateAndSubmit } from "../model/actions.ts";
 import { SettingsNodes, SettingsProps } from "../model/types.ts";
 import css from "./settings.module.css";
@@ -81,6 +83,9 @@ export class SettingsPage extends Page<SettingsProps> {
       validator_info,
       validator_psw,
     );
+
+    /* lock inputs & buttons in guest mode */
+    this._applyGuestLock(editInfo, editPassword);
   }
 
   public componentDidRender(): void {
@@ -88,6 +93,40 @@ export class SettingsPage extends Page<SettingsProps> {
     this._wireAvatar();
     /* sets placeholders for inputs from user-res */
     this._hydrateInputPlaceholders();
+    /* re-apply guest lock after re-render */
+    this._applyGuestLockDOM();
+  }
+
+  private _applyGuestLock(editInfo: Button, editPassword: Button): void {
+    const isGuest = Store.getState().controllers.isGuestMode;
+    if (!isGuest) return;
+
+    /* swap subheading to guest warning */
+    const { subheading_form } = this.children!.nodes as SettingsNodes;
+    const subheading = subheading_form.runtime?.instance as Subheading;
+    subheading.setProps({
+      configs: { i18nKey: "settings.form.guestModeStub", isDrama: true },
+    });
+
+    /* disable edit buttons */
+    [editInfo, editPassword].forEach((btn) => {
+      const el = btn.element;
+      if (el) {
+        el.setAttribute("disabled", "true");
+        el.classList.add(css.footer__btn_disabled);
+      }
+    });
+
+    /* disable all inputs */
+    this._applyGuestLockDOM();
+  }
+
+  private _applyGuestLockDOM(): void {
+    const isGuest = Store.getState().controllers.isGuestMode;
+    if (!isGuest) return;
+
+    const inputs = this.element?.querySelectorAll("input");
+    inputs?.forEach((input) => input.setAttribute("disabled", "true"));
   }
 
   private _hydrateInputPlaceholders(): void {

@@ -20,6 +20,7 @@ export const initialState: AppState = {
   controllers: {
     language: ls_getLocale(),
     isLoggedIn: ls_getLoggedIn(),
+    isGuestMode: false,
   },
   pageNodes: {},
 };

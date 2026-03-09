@@ -3,9 +3,11 @@ import { ApiResponse } from "@shared/api/model/types.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
 import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import Router from "@app/providers/router/Router.ts";
+import Store from "@app/providers/store/model/Store.ts";
 import {
   handleCreateChat,
   handleFetchChats,
+  hardResetMessenger,
 } from "@entities/chat/model/actions.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
@@ -103,6 +105,13 @@ export const handlePresentSession = async (res: ApiResponse<UserResponse>) => {
 
 export const handleLogout = async (): Promise<ApiResponse<boolean>> => {
   globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.auth.loggingOut") });
+
+  /* andcleanup on guest mode */
+  const isGuest = Store.getState().controllers.isGuestMode;
+  if (isGuest) {
+    await hardResetMessenger();
+    Store.set("controllers.isGuestMode", false);
+  }
 
   const res = await AuthService.logout();
   if (res.ok) {

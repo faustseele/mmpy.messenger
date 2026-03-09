@@ -49,10 +49,37 @@ vi.mock("../../../app/providers/router/Router.ts", () => {
   };
 });
 
-/* mock handleFetchChats */
+/* mock chat actions */
 vi.mock("../../../entities/chat/model/actions.ts", () => {
   return {
     handleFetchChats: vi.fn(),
+    handleCreateChat: vi.fn().mockResolvedValue({ ok: true, data: { id: 1 } }),
+    handleAddUser: vi.fn().mockResolvedValue({ ok: true }),
+    hardResetMessenger: vi.fn().mockResolvedValue(undefined),
+  };
+});
+
+/* mock Store for isGuestMode flag */
+vi.mock("../../../app/providers/store/model/Store.ts", () => {
+  return {
+    default: {
+      getState: vi.fn().mockReturnValue({
+        controllers: { isGuestMode: false },
+      }),
+      set: vi.fn(),
+    },
+  };
+});
+
+/* mock UserService for bootstrapGuestStarter */
+vi.mock("../../../entities/user/model/UserService.ts", () => {
+  return {
+    default: {
+      findByLogin: vi.fn().mockResolvedValue({
+        ok: true,
+        data: { id: 2, first_name: "Test", second_name: "User", login: "testuser" },
+      }),
+    },
   };
 });
 

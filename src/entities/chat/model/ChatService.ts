@@ -114,6 +114,7 @@ class ChatService {
   ): Promise<ApiResponse<UpdateChatAvatarResponse>> {
     try {
       const updatedChat = await ChatAPI.updateChatAvatar(chatId, avatar);
+
       console.log("chat avatar update success:", updatedChat);
 
       return { ok: true, data: updatedChat };

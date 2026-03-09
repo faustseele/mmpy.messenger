@@ -1,25 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
-import { getAvatarNode } from "@shared/ui/Avatar/factory.ts";
-import { getButtonNode } from "@shared/ui/Button/factory.ts";
-import { getHeadingNode } from "@shared/ui/Heading/factory.ts";
-import { getInputNode } from "@shared/ui/Input/factory.ts";
-import { getSpinnerNode } from "@shared/ui/Spinner/factory.ts";
 import { RouteConfigs } from "@app/providers/router/types.ts";
 import {
-  handleAddUser,
-  handleCloseChat,
-  handleCreateChat,
-  handleDeleteChat,
-  handleUpdateChatAvatar,
+  handleCloseChat
 } from "@entities/chat/model/actions.ts";
 import { getMessageFieldNode } from "@features/send-message/model/factory.ts";
 import { PageId } from "@pages/page/config/const.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { ComponentParams } from "@shared/lib/Component/model/types.ts";
+import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import { RouteLink } from "@shared/types/universal.ts";
-import { handleFindUser, handleGoToSettings } from "../model/actions.ts";
+import { getAvatarNode } from "@shared/ui/Avatar/factory.ts";
+import { getButtonNode } from "@shared/ui/Button/factory.ts";
+import { getHeadingNode } from "@shared/ui/Heading/factory.ts";
+import { getInputNode } from "@shared/ui/Input/factory.ts";
+import { getSpinnerNode } from "@shared/ui/Spinner/factory.ts";
+import { handleGoToSettings } from "../model/actions.ts";
 import { MessengerConfigs, MessengerProps } from "../model/types.ts";
 import css from "../ui/messenger.module.css";
 export const getBaseMessengerConfigs = (
@@ -92,15 +88,6 @@ export const messengerPageParams: ComponentParams<MessengerProps> = {
       messages: [],
       spinner: "spinner",
     },
-  },
-  on: {
-    addChatWithUser: (firstName: string, secondName: string) =>
-      handleCreateChat(`${firstName} ${secondName}`, true),
-    addNotes: handleCreateChat,
-    addUser: handleAddUser,
-    deleteChat: handleDeleteChat,
-    findUser: handleFindUser,
-    updateChatAvatar: handleUpdateChatAvatar,
   },
 };
 

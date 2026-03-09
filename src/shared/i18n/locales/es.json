@@ -106,7 +106,8 @@
       "subheadingPsw": "Tu contraseña:",
       "editInfo": "Editar datos 📝",
       "changePassword": "Cambiar contraseña 🔑",
-      "logout": "Cerrar sesión 🕳️"
+      "logout": "Cerrar sesión 🕳️",
+      "guestModeStub": "Modo invitado. Regístrate para editar."
     },
     "inputs": {
       "email": {
@@ -145,7 +146,8 @@
       "signupSuccess": "Cuenta creada con éxito.",
       "signinSuccess": "¡Bienvenido de nuevo!",
       "guestLoading": "Iniciando modo invitado...",
-      "guestSuccess": "¡Inicio de sesión de invitado exitoso! 👻"
+      "guestSuccess": "¡Inicio de sesión de invitado exitoso! 👻",
+      "guestResetting": "Restableciendo datos de invitado..."
     },
     "chats": {
       "creatingStub": "Creando ${}...",
@@ -182,7 +184,14 @@
     }
   },
   "validation": {
-    "noValue": "Por favor rellena el campo."
+    "noValue": "Por favor rellena el campo.",
+    "name": "Nombre inválido.",
+    "surname": "Apellido inválido.",
+    "login": "3-20 caracteres.",
+    "email": "Correo inválido.",
+    "password": "8-40 caracteres, 1 dígito y mayúscula.",
+    "phone": "Número de teléfono inválido.",
+    "displayName": "Nombre de chat inválido."
   },
   "avatar": {
     "alt": "Avatar del participante"

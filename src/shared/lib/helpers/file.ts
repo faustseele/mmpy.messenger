@@ -1,4 +1,4 @@
-export async function urlToFile(
+export async function downloadFile(
   url: string,
   filename?: string
 ): Promise<File> {
