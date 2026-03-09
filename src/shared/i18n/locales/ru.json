@@ -1,0 +1,199 @@
+{
+  "langSwitch": "Язык: 🇷🇺",
+  "auth": {
+    "signin": {
+      "heading": "Вход 🚪",
+      "submit": "Войти 🔑",
+      "guest": "Гость 👻",
+      "newHere": "Впервые?"
+    },
+    "signup": {
+      "heading": "Регистрация 🎀",
+      "submit": "Зарегистрироваться ✒️",
+      "guest": "Гость 👻",
+      "haveAccount": "Я свой!"
+    },
+    "inputs": {
+      "name": {
+        "label": "Имя"
+      },
+      "surname": {
+        "label": "Фамилия"
+      },
+      "login": {
+        "label": "Логин"
+      },
+      "email": {
+        "label": "Эл. почта"
+      },
+      "password": {
+        "label": "Пароль"
+      },
+      "phone": {
+        "label": "Телефон"
+      }
+    }
+  },
+  "errors": {
+    "404": {
+      "heading": "⛔ Ошибка 404",
+      "subheading": " не туда попали",
+      "back": "Назад к чатам 🗨️"
+    },
+    "500": {
+      "heading": "🪜 Ошибка 500",
+      "subheading": "мы уже фиксим..",
+      "back": "Назад к чатам 🗨️"
+    }
+  },
+  "messenger": {
+    "actions": {
+      "findUserPrompt": "Логин пользователя (например):",
+      "newNotesPrompt": "Как назовём заметки?",
+      "deletionEnsuring": "Вы уверены, что хотите удалить"
+    },
+    "header": {
+      "chats": "чаты 👥",
+      "profile": "️⚙️ профиль"
+    },
+    "search": {
+      "placeholder": "Поиск"
+    },
+    "buttons": {
+      "addNote": "Заметкa ✏️",
+      "addNoteTooltip": "Добавить новые заметки",
+      "findUser": "Найти юзера 👤",
+      "findUserTooltip": "Найти пользователя по логину",
+      "closeChat": "❌",
+      "closeChatTooltip": "Закрыть чат",
+      "deleteNotes": "Сжечь заметки 🔥",
+      "deleteNotesTooltip": "Стереть заметки",
+      "deleteChat": "Удалить чат 👤",
+      "deleteChatTooltip": "Удалить чат с пользователем"
+    },
+    "message": {
+      "notePlaceholder": "Заметка:",
+      "chatPlaceholder": "Cообщение...",
+      "noNotes": "Нет заметок",
+      "noMessages": "Нет сообщений",
+      "stub": "⬅️ Выберите чат."
+    },
+    "notes": {
+      "personal": "Личное 👤",
+      "finance": "Финансы 💰",
+      "ideas": "Идеи 💡",
+      "projects": "Проекты 🧩",
+      "work": "Работа 💼",
+      "study": "Учёба 🎓",
+      "health": "Здоровье 🩺",
+      "family": "Семья 👨‍👩‍👧‍👦",
+      "shopping": "Покупки 🛍️",
+      "travel": "Путешествия ✈️",
+      "reading": "Чтение 📚",
+      "recipes": "Рецепты 🍳",
+      "dailyPlan": "План на день 🗓️",
+      "journal": "Дневник 📓",
+      "archive": "Архив 🗃️"
+    }
+  },
+  "settings": {
+    "header": {
+      "profile": "профиль 👤",
+      "backToChats": "🗨️ к чатам"
+    },
+    "form": {
+      "subheadingInfo": "Ваши данные:",
+      "subheadingPsw": "Ваш пароль:",
+      "editInfo": "Изменить данные 📝",
+      "changePassword": "Изменить пароль 🔑",
+      "logout": "Выйти 🕳️",
+      "guestModeStub": "Гостевой режим. Создайте аккаунт."
+    },
+    "inputs": {
+      "email": {
+        "label": "Эл. почта"
+      },
+      "name": {
+        "label": "Имя"
+      },
+      "surname": {
+        "label": "Фамилия"
+      },
+      "login": {
+        "label": "Логин"
+      },
+      "displayName": {
+        "label": "Имя в чате"
+      },
+      "phone": {
+        "label": "Номер телефона"
+      },
+      "oldPassword": {
+        "label": "Старый пароль"
+      },
+      "newPassword": {
+        "label": "Новый пароль"
+      }
+    }
+  },
+  "toasts": {
+    "auth": {
+      "timeout": "Таймаут запроса. Попробуйте снова.",
+      "alreadyLogged": "Вы уже авторизованы. Используйте страницу профиля для выхода.",
+      "invalidSession": "Сессия недействительна, выходим. Попробуйте снова.",
+      "loggingOut": "Выходим...",
+      "logoutSuccess": "Увидимся! 👋",
+      "signupSuccess": "Аккаунт успешно создан.",
+      "signinSuccess": "И снова здравствуйте!",
+      "guestLoading": "Загружаем Гость-Мод...",
+      "guestSuccess": "Вы вошли как Гость! 👻",
+      "guestResetting": "Сбрасываем гостевые данные..."
+    },
+    "chats": {
+      "creatingStub": "Создаём ${}...",
+      "createSuccessStub": "${} создана!",
+      "deleteSuccessStub": "${} успешно удалён.",
+      "createLoading": "Создаём чат...",
+      "createSuccess": "Чат создан!",
+      "deleteLoading": "Удаляем чат...",
+      "deleteSuccess": "Чат успешно удалён.",
+      "devErrorStub": "Ошибка разработки: ${}",
+      "fetchErrorStub": "Ошибка получения данных: ${}",
+      "addUserLoading": "Добавляем пользователя...",
+      "addUserNotFoundStub": "Пользователь '${}' не найден.",
+      "addUserErrorStub": "Пользователь '${}' не может быть добавлен.",
+      "addUserSuccessStub": "Пользователь '${}' успешно добавлен."
+    },
+    "settings": {
+      "changeSuccess": "Ваш профиль успешно изменён.",
+      "changePswSuccess": "Ваш пароль успешно изменён.",
+      "changePswErrorStub": "Ваш пароль не может быть изменён. API: ${}"
+    },
+    "dev": {
+      "unhandled": "Ошибка разработчика: необработанное состояние."
+    },
+    "api": {
+      "httpSendFailed": "HTTPTransport: ошибка xhr.send"
+    },
+    "message": {
+      "uploadImageLoading": "Загрузка изображения..."
+    },
+    "validation": {
+      "passwordError": "Либо старый пароль неверный, либо новый пароль невалиден.",
+      "badForm": "Пожалуйста, заполните все поля корректно. "
+    }
+  },
+  "validation": {
+    "noValue": "Заполните поле.",
+    "name": "Странное имя.",
+    "surname": "Странная фамилия.",
+    "login": "Латинские буквы, длина – 3-20.",
+    "email": "Невалидная почта.",
+    "password": "8-40 символов, 1 цифра и заглавная.",
+    "phone": "Неправильный номер.",
+    "displayName": "Странный ник."
+  },
+  "avatar": {
+    "alt": "Аватар участника"
+  }
+}

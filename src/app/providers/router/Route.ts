@@ -1,6 +1,7 @@
 import { Page } from "@pages/page/ui/Page.ts";
 import { ROOT_QUERY } from "@shared/config/dom.ts";
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
+import { ComponentEvent } from "@shared/lib/Component/model/event.types.ts";
 import { AuthStateType, RouteConfigs, RouteContract } from "./types.ts";
 import { matchPath } from "./utils.ts";
 
@@ -53,7 +54,7 @@ export default class Route<
     if (this._pageInstance) {
 
       /* using bus to fully unmount the page */
-      this._pageInstance.bus.emit("flow:component-did-unmount");
+      this._pageInstance.bus.emit(ComponentEvent.DidUnmount);
       this._pageInstance.element?.remove();
       /* Nullifing the instance to ensure it's recreated on next visit */
       this._pageInstance = null;

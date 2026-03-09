@@ -1,6 +1,8 @@
 import { BaseProps } from "@shared/lib/Component/model/base.types.ts";
 import Component from "@shared/lib/Component/model/Component.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 
 export abstract class Page<Props extends BaseProps> extends Component<Props> {
   public pageParams: Record<string, string>;
@@ -13,6 +15,19 @@ export abstract class Page<Props extends BaseProps> extends Component<Props> {
 
   public setPageParams(params: Record<string, string>): void {
     this.pageParams = params;
+  }
+
+  public componentDidMount(): void {
+    globalBus.on(GlobalEvent.GlobalRerender, this._handleForcedUpdate.bind(this));
+  }
+
+  public componentDidUnmount(): void {
+    globalBus.off(GlobalEvent.GlobalRerender, this._handleForcedUpdate.bind(this));
+  }
+
+  /** is used on language-switch */
+  private _handleForcedUpdate(): void {
+    this.rerender();
   }
 
   public getInnerMarkup(): string {

@@ -1,9 +1,9 @@
-import { isMobile } from "@shared/lib/browser/isMobile.ts";
-import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { Page } from "@pages/page/ui/Page.ts";
+import { isMobile } from "@shared/lib/browser/isMobile.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
 import { getInstances } from "@shared/lib/helpers/factory/functions.ts";
+import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import FormValidator from "@shared/lib/validation/FormValidator.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
 import { Input } from "@shared/ui/Input/Input.ts";
@@ -14,15 +14,11 @@ import { onBadForm, onGoodForm } from "../model/utils.ts";
 import css from "./auth.module.css";
 
 export class AuthPage extends Page<AuthProps> {
-  private footerModifier: string = "";
   private validator: FormValidator | null = null;
   private submit: Button | null = null;
 
   constructor(props: ComponentProps<AuthProps, AuthPage>) {
     super(props);
-
-    this.footerModifier =
-      props.node.params.configs.type === "sign-up" ? css.authFooter_signUp : "";
   }
 
   public getRootTagCx(): string {
@@ -51,6 +47,9 @@ export class AuthPage extends Page<AuthProps> {
     this._wireSubmit(this.validator, this.submit);
     this._vivifyInputs(inputs, this.validator);
     this._wireGuestClick(guest);
+
+    /* keeping the call chain to Page */
+    super.componentDidMount();
   }
 
   private _wireGuestClick(guest: Button): void {
@@ -73,6 +72,7 @@ export class AuthPage extends Page<AuthProps> {
             console.error("AuthPage: Validator is not defined");
             return;
           }
+
           const formValid = validator.onFormCheck(type, onBadForm);
           if (!formValid) return;
 
@@ -116,19 +116,25 @@ export class AuthPage extends Page<AuthProps> {
     if (!this.children?.nodes)
       return /*html*/ `<span>ERROR: AuthPage: Children are not defined</span>`;
 
-    const { heading, buttonFormSubmit, buttonGuest, buttonReroute } = this
-      .children.nodes as AuthNodes;
+    const {
+      heading,
+      buttonLanguage,
+      buttonFormSubmit,
+      buttonGuest,
+      buttonReroute,
+    } = this.children.nodes as AuthNodes;
 
     return /*html*/ `
       <header class="${css.authHeading}">
         {{{ ${heading.params.configs.id} }}}
+        {{{ ${buttonLanguage.params.configs.id} }}}
       </header>
 
       <main class="${css.inputsWrapper}">
         {{{ inputs }}}
       </main>
 
-      <footer class="${css.authFooter} ${this.footerModifier}">
+      <footer class="${css.authFooter}">
         {{{ ${buttonReroute.params.configs.id} }}}
         <div class="${css.authFooter__submits}">
           {{{ ${buttonGuest.params.configs.id} }}}

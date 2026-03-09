@@ -5,17 +5,20 @@ import { ComponentId } from "@shared/lib/Component/model/types.ts";
 import EventBus from "@shared/lib/EventBus/EventBus.ts";
 import { initialState } from "../config/init.ts";
 import { set } from "../lib/utils.ts";
-import { APIState, StoreEventBusEvents } from "./types.ts";
+import { APIState, StoreEvent } from "./types.ts";
+import { Locale } from "@shared/i18n/types.ts";
 
 export interface AppState {
   api: APIState;
   controllers: {
+    language: Locale;
     isLoggedIn: boolean;
+    isGuestMode: boolean;
   };
   pageNodes: Record<ComponentId, PageNode<BaseProps, Page<BaseProps>>>;
 }
 
-class Store extends EventBus<StoreEventBusEvents> {
+class Store extends EventBus<StoreEvent> {
   private static __instance: Store;
   private state: AppState = { ...initialState };
   
@@ -37,7 +40,7 @@ class Store extends EventBus<StoreEventBusEvents> {
   public set(path: string, value: unknown) {
     set(this.state, path, value);
     /* passing the new state to the subscribers */
-    this.emit("updated", this.getState());
+    this.emit(StoreEvent.Updated, this.getState());
   }
 
   public reset() {

@@ -13,14 +13,18 @@ import { HeadingOn, HeadingProps } from "./types.ts";
 
 export const getHeadingNode = (
   id: string,
-  text: string,
+  i18nKey: string,
   {
     isClickable,
     isDrama,
     on,
-  }: { isClickable?: boolean; isDrama?: boolean; on?: HeadingOn } = {},
+  }: {
+    isClickable?: boolean;
+    isDrama?: boolean;
+    on?: HeadingOn;
+  } = {},
 ): ComponentNode<HeadingProps, Heading> => {
-  const params = getHeadingProps(id, text, isClickable, isDrama, on);
+  const params = getHeadingProps(id, i18nKey, isClickable, isDrama, on);
 
   return {
     params,
@@ -33,7 +37,7 @@ export const getHeadingNode = (
 
 const getHeadingProps = (
   id: ComponentId,
-  text: string,
+  i18nKey: string,
   isClickable: boolean = false,
   isDrama: boolean = false,
   on: HeadingOn = {},
@@ -41,9 +45,9 @@ const getHeadingProps = (
   return {
     configs: {
       id,
-      rootTag: "h1",
+      rootTag: isClickable ? "a" : "h1",
       classNames: css.heading,
-      text,
+      i18nKey,
       isClickable,
       isDrama,
     },

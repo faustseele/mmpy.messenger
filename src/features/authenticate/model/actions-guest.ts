@@ -1,35 +1,110 @@
 import Router from "@app/providers/router/Router.ts";
-import { handleFetchChats } from "@entities/chat/model/actions.ts";
+import Store from "@app/providers/store/model/Store.ts";
+import {
+  handleAddUser,
+  handleCreateChat,
+  handleFetchChats,
+  handleUpdateChatAvatar,
+  hardResetMessenger,
+} from "@entities/chat/model/actions.ts";
+import UserService from "@entities/user/model/UserService.ts";
 import { UserResponse } from "@shared/api/model/api.types.ts";
 import { ApiResponse } from "@shared/api/model/types.ts";
+import { ZERO_WIDTH_SPACE } from "@shared/config/const.ts";
+import { API_URL_RESOURCES } from "@shared/config/urls.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
+import { downloadFile } from "@shared/lib/helpers/file.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import { GUEST_CREDS } from "../config/guest.ts";
 import { handlePresentSession } from "./actions.ts";
 import AuthService from "./AuthService.ts";
 
+const GUEST_STARTER_NOTES = [
+  "messenger.notes.study",
+  "messenger.notes.dailyPlan",
+] as const;
+
+const GUEST_STARTER_USERS = ["liamgarcia", "emmawilson"] as const;
+
 export const handleGuestSignIn = async (): Promise<
   ApiResponse<UserResponse>
 > => {
-  globalBus.emit("toast", { msg: "Launching Guest Mode..." });
+  globalBus.emit(GlobalEvent.Toast, {
+    msg: i18n.t("toasts.auth.guestLoading"),
+  });
   const res = await AuthService.signIn(GUEST_CREDS);
 
   if (res.ok) {
     /* fetch chats on successful login */
-    handleFetchChats();
+    await handleFetchChats();
     Router.go(RouteLink.Messenger);
-    globalBus.emit("toast", {
-      msg: "👻 Guest Login Success!",
+    Store.set("controllers.isGuestMode", true);
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.auth.guestSuccess"),
       type: "success",
     });
+
+    /* bootstrap runs after navigation — non-blocking ux */
+    bootstrapGuestStarter();
   } else {
     if (res.err?.status === 400) handlePresentSession(res);
 
     console.error("Guest Login Failed", res);
-    globalBus.emit("toast", {
-      msg: res.err?.reason,
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n
+        .t("toasts.dev.devErrorStub")
+        .replace("${}", res.err?.reason || ""),
       type: "error",
     });
   }
   return res;
+};
+
+const bootstrapGuestStarter = async (): Promise<void> => {
+  globalBus.emit(GlobalEvent.Toast, {
+    msg: i18n.t("toasts.auth.guestResetting"),
+  });
+
+  /* wipe all existing chats & notes */
+  await hardResetMessenger();
+
+  /* seed test notes */
+  for (const noteKey of GUEST_STARTER_NOTES) {
+    const title = i18n.t(noteKey) + ZERO_WIDTH_SPACE;
+    await handleCreateChat(title, true);
+  }
+
+  /* seed test convos */
+  for (const login of GUEST_STARTER_USERS) {
+    const resUser = await UserService.findByLogin(login);
+    if (!resUser.ok || !resUser.data) {
+      console.error(`bootstrapGuestStarter: user ${login} not found`, resUser);
+      continue;
+    }
+
+    const user = resUser.data;
+    const chatTitle = `${user.first_name} ${user.second_name}`;
+    const resChat = await handleCreateChat(chatTitle, true);
+
+    if (resChat.ok && resChat.data) {
+      const chatId = resChat.data.id;
+      await handleAddUser(chatId, user.id);
+
+      const avatarUrl = user.avatar;
+      if (avatarUrl) {
+        const avatar = await downloadFile(`${API_URL_RESOURCES}${avatarUrl}`);
+        handleUpdateChatAvatar(resChat.data.id, avatar);
+      }
+    }
+  }
+
+  /* re-fetch to update sidebar */
+  await handleFetchChats();
+
+  globalBus.emit(GlobalEvent.Toast, {
+    msg: i18n.t("toasts.auth.guestSuccess"),
+    type: "success",
+  });
 };

@@ -1,0 +1,199 @@
+{
+  "langSwitch": "Language: 🇬🇧",
+  "auth": {
+    "signin": {
+      "heading": "Sign In 🚪",
+      "submit": "Sign In 🔑",
+      "guest": "Guest 👻",
+      "newHere": "New here?"
+    },
+    "signup": {
+      "heading": "Sign Up 🎀",
+      "submit": "Sign Up ✒️",
+      "guest": "Guest 👻",
+      "haveAccount": "I have an account!"
+    },
+    "inputs": {
+      "name": {
+        "label": "Name"
+      },
+      "surname": {
+        "label": "Surname"
+      },
+      "login": {
+        "label": "Username"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "password": {
+        "label": "Password"
+      },
+      "phone": {
+        "label": "Phone"
+      }
+    }
+  },
+  "errors": {
+    "404": {
+      "heading": "⛔ 404 Error",
+      "subheading": "You've gone astray",
+      "back": "Back to Chats 🗨️"
+    },
+    "500": {
+      "heading": "🪜 500 Error",
+      "subheading": "We're fixing it..",
+      "back": "Back to Chats 🗨️"
+    }
+  },
+  "messenger": {
+    "actions": {
+      "findUserPrompt": "User's login (or pick one of these):",
+      "newNotesPrompt": "Note's title:",
+      "deletionEnsuring": "Are you sure you want to delete"
+    },
+    "header": {
+      "chats": "Chats 👥",
+      "profile": "⚙️ Profile"
+    },
+    "search": {
+      "placeholder": "Search"
+    },
+    "buttons": {
+      "addNote": "Note ✏️",
+      "addNoteTooltip": "Add new notes",
+      "findUser": "Find User 👤",
+      "findUserTooltip": "Find user by login",
+      "closeChat": "❌",
+      "closeChatTooltip": "Close chat",
+      "deleteNotes": "Delete Notes 🔥",
+      "deleteNotesTooltip": "Erase notes",
+      "deleteChat": "Delete Chat 👤",
+      "deleteChatTooltip": "Delete chat with user"
+    },
+    "message": {
+      "notePlaceholder": "Note:",
+      "chatPlaceholder": "Message...",
+      "noNotes": "No notes",
+      "noMessages": "No messages",
+      "stub": "⬅️ Select a chat."
+    },
+    "notes": {
+      "personal": "Personal 👤",
+      "finance": "Finance 💰",
+      "ideas": "Ideas 💡",
+      "projects": "Projects 🧩",
+      "work": "Work 💼",
+      "study": "Study 🎓",
+      "health": "Health 🩺",
+      "family": "Family 👨‍👩‍👧‍👦",
+      "shopping": "Shopping 🛍️",
+      "travel": "Travel ✈️",
+      "reading": "Reading 📚",
+      "recipes": "Recipes 🍳",
+      "dailyPlan": "Daily Plan 🗓️",
+      "journal": "Journal 📓",
+      "archive": "Archive 🗃️"
+    }
+  },
+  "settings": {
+    "header": {
+      "profile": "Profile 👤",
+      "backToChats": "🗨️ to Chats"
+    },
+    "form": {
+      "subheadingInfo": "Your Data:",
+      "subheadingPsw": "Your Password:",
+      "editInfo": "Edit Data 📝",
+      "changePassword": "Change Password 🔑",
+      "logout": "Logout 🕳️",
+      "guestModeStub": "Guest mode. Sign up to edit."
+    },
+    "inputs": {
+      "email": {
+        "label": "Email"
+      },
+      "name": {
+        "label": "Name"
+      },
+      "surname": {
+        "label": "Surname"
+      },
+      "login": {
+        "label": "Login"
+      },
+      "displayName": {
+        "label": "Chat Name"
+      },
+      "phone": {
+        "label": "Phone Number"
+      },
+      "oldPassword": {
+        "label": "Old Password"
+      },
+      "newPassword": {
+        "label": "New Password"
+      }
+    }
+  },
+  "toasts": {
+    "auth": {
+      "timeout": "Request Timeout. Try Again.",
+      "alreadyLogged": "You are already logged in. Use Profile page to log out.",
+      "invalidSession": "This session is invalid, logging out. Try again.",
+      "loggingOut": "Logging out...",
+      "logoutSuccess": "See you! 👋",
+      "signupSuccess": "Account created successfully.",
+      "signinSuccess": "Welcome back!",
+      "guestLoading": "Launching Guest Mode...",
+      "guestSuccess": "Guest Login Success! 👻",
+      "guestResetting": "Resetting guest data..."
+    },
+    "chats": {
+      "creatingStub": "Creating ${}...",
+      "createSuccessStub": "${} successfully created!",
+      "deleteSuccessStub": "${} deleted successfully.",
+      "createLoading": "Creating chat..",
+      "createSuccess": "Chat created!",
+      "deleteLoading": "Deleting chat...",
+      "deleteSuccess": "Chat deleted successfully.",
+      "devErrorStub": "Dev-Error: ${}",
+      "fetchErrorStub": "Fetch-Error: ${}",
+      "addUserLoading": "Adding user...",
+      "addUserNotFoundStub": "User '${}' has not been found.",
+      "addUserErrorStub": "User '${}' could not be added.",
+      "addUserSuccessStub": "User '${}' added successfully."
+    },
+    "settings": {
+      "changeSuccess": "Your profile has been changed successfully.",
+      "changePswSuccess": "Your password has been changed successfully.",
+      "changePswErrorStub": "Your password could not be changed. API: ${}"
+    },
+    "dev": {
+      "unhandled": "Developer error: unhandled condition."
+    },
+    "api": {
+      "httpSendFailed": "HTTPTransport: xhr.send failed."
+    },
+    "message": {
+      "uploadImageLoading": "Uploading image..."
+    },
+    "validation": {
+      "badForm": "Please fill all the fields correctly. ",
+      "passwordError": "Either the old is incorrect or the new password is not valid."
+    }
+  },
+  "validation": {
+    "noValue": "Please fill in the field.",
+    "name": "Invalid name.",
+    "surname": "Invalid surname.",
+    "login": "3-20 letras.",
+    "email": "Invalid email.",
+    "password": "8-40 chars, 1 digit and uppercase.",
+    "phone": "Invalid phone number.",
+    "displayName": "Invalid display name."
+  },
+  "avatar": {
+    "alt": "Participant's avatar"
+  }
+}

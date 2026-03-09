@@ -5,8 +5,20 @@
 }
 
 .authHeading {
-  padding: 0 6px;
+  width: 100%;
   height: auto;
+
+  padding: 0 6px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.authHeading > button {
+  margin-top: 6px;
 }
 
 .inputsWrapper {
@@ -28,8 +40,4 @@
   display: flex;
   flex-direction: row;
   column-gap: 6px;
-}
-
-.authFooter_signUp {
-  justify-content: center;
 }

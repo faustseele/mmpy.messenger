@@ -16,7 +16,7 @@ import { InputEditor } from "../ui/InputEditor.ts";
 export const getEditorNode = (
   id: ComponentId,
   fieldId: FieldType,
-  label: string,
+  i18nLabelKey: string,
   {
     isError,
     errorMessage,
@@ -33,7 +33,7 @@ export const getEditorNode = (
   const params = getEditorProps(
     id,
     fieldId,
-    label,
+    i18nLabelKey,
     isError,
     errorMessage,
     autocomplete,
@@ -51,7 +51,7 @@ export const getEditorNode = (
 const getEditorProps = (
   id: ComponentId,
   fieldId: FieldType,
-  label: string,
+  i18nLabelKey: string,
   isError: boolean = false,
   errorMessage: string = "",
   autocomplete: "on" | "off" = "off",
@@ -64,7 +64,7 @@ const getEditorProps = (
       classNames: css.inputLabelWrap,
       for: fieldId,
       fieldId,
-      label,
+      i18nLabelKey,
       type: getInputTypeByFieldId(fieldId),
       placeholder: '...',
       isError,

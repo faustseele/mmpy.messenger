@@ -1,12 +1,14 @@
 import { UserResponse } from "@shared/api/model/api.types.ts";
 import { ApiResponse } from "@shared/api/model/types.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { ToastType } from "@shared/ui/Toast/types.ts";
 import {
   handleUpdatePassword,
   handleUpdateProfile,
 } from "@entities/user/model/actions.ts";
 import { SettingsType } from "./types.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
 
 export const onGoodForm = (
   submitType: SettingsType,
@@ -14,7 +16,7 @@ export const onGoodForm = (
   formData: Record<string, string>,
 ) => Promise<ApiResponse<Partial<UserResponse> | string>>) => {
   function dispatchToast(msg: string, type: ToastType = "info") {
-    globalBus.emit("toast", { msg, type });
+    globalBus.emit(GlobalEvent.Toast, { msg, type });
   }
 
   if (submitType === "change-info") {
@@ -29,7 +31,7 @@ export const onGoodForm = (
       });
 
       if (resApi.ok) {
-        dispatchToast("Your profile has been changed successfully.");
+        dispatchToast(i18n.t("toasts.settings.changeSuccess"));
       } else {
         dispatchToast(resApi.err?.reason ?? "Unknown error", "error");
       }
@@ -46,10 +48,10 @@ export const onGoodForm = (
       });
 
       if (resApi.ok) {
-        dispatchToast("Your password has been changed successfully.");
+        dispatchToast(i18n.t("toasts.settings.changePswSuccess"));
       } else {
         dispatchToast(
-          "Your password could not be changed. API: " + resApi.err?.reason,
+          i18n.t("toasts.settings.changePswErrorStub").replace('${}', resApi.err?.reason || ''),
           "error",
         );
       }
@@ -76,15 +78,15 @@ export const onGoodForm = (
 export const onBadForm = (submitType: SettingsType): (() => void) => {
   if (submitType === "change-info") {
     return () => {
-      globalBus.emit("toast", {
-        msg: "The field seems incorrect.",
+      globalBus.emit(GlobalEvent.Toast, {
+        msg: i18n.t("toasts.validation.fieldError"),
         type: "error",
       });
     };
   } else {
     return () => {
-      globalBus.emit("toast", {
-        msg: "Either the old is incorrect or the new password is not valid.",
+      globalBus.emit(GlobalEvent.Toast, {
+        msg: i18n.t("toasts.validation.passwordError"),
         type: "error",
       });
     };

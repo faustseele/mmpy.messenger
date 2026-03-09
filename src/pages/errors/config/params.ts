@@ -12,7 +12,6 @@ import { RouteLink } from "@shared/types/universal.ts";
 import { handleBack } from "../model/actions.ts";
 import { ErrorProps } from "../model/types.ts";
 import css from "../ui/errors.module.css";
-
 export const errorPageParams_404: ComponentParams<ErrorProps> = {
   configs: {
     id: PageId.Error404,
@@ -22,13 +21,13 @@ export const errorPageParams_404: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode("heading", "⛔ Ошибка 404", {
+      heading: getHeadingNode("heading", "errors.404.heading", {
         isDrama: true,
       }) as any,
-      subheading: getSubheadingNode("subheading", " не туда попали", {
+      subheading: getSubheadingNode("subheading", "errors.404.subheading", {
         isDrama: true,
       }) as any,
-      button_back: getButtonNode("button_back", "Назад к чатам 🗨️", {
+      button_back: getButtonNode("button_back", "errors.404.back", {
         on: { click: handleBack },
       }) as any,
     },
@@ -49,13 +48,13 @@ export const errorPageParams_500: ComponentParams<ErrorProps> = {
   },
   children: {
     nodes: {
-      heading: getHeadingNode("heading", "🪜 Ошибка 500", {
+      heading: getHeadingNode("heading", "errors.500.heading", {
         isDrama: true,
       }) as any,
-      subheading: getSubheadingNode("subheading", "мы уже фиксим..", {
+      subheading: getSubheadingNode("subheading", "errors.500.subheading", {
         isDrama: true,
       }) as any,
-      button_back: getButtonNode("button_back", "Назад к чатам 🗨️", {
+      button_back: getButtonNode("button_back", "errors.500.back", {
         on: { click: handleBack },
       }) as any,
     },

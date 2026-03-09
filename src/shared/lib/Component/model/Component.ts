@@ -5,7 +5,7 @@ import { isEqual } from "../../helpers/object/utils.ts";
 import { proxifyParams } from "../../helpers/proxy/functions.ts";
 import { BaseProps } from "./base.types.ts";
 import { ChildGraph, ChildrenFlat } from "./children.types.ts";
-import { ComponentEvents } from "./event.types.ts";
+import { ComponentEvent } from "./event.types.ts";
 import { ComponentId, ComponentPatch, ComponentProps } from "./types.ts";
 
 /**
@@ -35,7 +35,7 @@ export default abstract class Component<P extends BaseProps> {
   private _children?: ChildGraph;
 
   /* --- Helpers --- */
-  private _bus: EventBus<ComponentEvents> = new EventBus();
+  private _bus: EventBus<ComponentEvent> = new EventBus();
 
   /* --- Getters --- */
   public get configs(): P["configs"] {
@@ -47,7 +47,7 @@ export default abstract class Component<P extends BaseProps> {
   public get element(): HTMLElement | null {
     return this.domService.element;
   }
-  public get bus(): EventBus<ComponentEvents> {
+  public get bus(): EventBus<ComponentEvent> {
     return this._bus;
   }
   public get children(): ChildGraph | undefined {
@@ -59,10 +59,10 @@ export default abstract class Component<P extends BaseProps> {
       : undefined;
   }
 
-  /* --- Concrete Methods --- */
+  /* --- Concrete Component Methods --- */
   public componentDidRender(): void {}
   public componentDidMount(): void {}
-  public componentDidUpdate(): void {}
+  public componentDidUpdate(): void {} // for local-component use
   public componentDidUnmount(): void {}
 
   /**
@@ -105,17 +105,17 @@ export default abstract class Component<P extends BaseProps> {
 
   /* private methods are called through EventBus */
   private _registerEventBusEvents(): void {
-    this._bus.on("flow:render", this._componentDidRender.bind(this));
+    this._bus.on(ComponentEvent.Render, this._componentDidRender.bind(this));
     this._bus.on(
-      "flow:component-did-mount",
+      ComponentEvent.DidMount,
       this._componentDidMount.bind(this),
     );
     this._bus.on(
-      "flow:component-did-update",
+      ComponentEvent.DidUpdate,
       this._componentDidUpdate.bind(this),
     );
     this._bus.on(
-      "flow:component-did-unmount",
+      ComponentEvent.DidUnmount,
       this._componentDidUnmount.bind(this),
     );
   }
@@ -123,10 +123,10 @@ export default abstract class Component<P extends BaseProps> {
   /* emits -> CDU + CDR */
   private _initComponent(): void {
     /* creates the Element + CDR */
-    this._bus.emit("flow:render");
+    this._bus.emit(ComponentEvent.Render);
 
     /* element exists -> call CDM */
-    this._bus.emit("flow:component-did-mount");
+    this._bus.emit(ComponentEvent.DidMount);
   }
 
   /* on _initComponent; On CDU */
@@ -180,7 +180,7 @@ export default abstract class Component<P extends BaseProps> {
         console.error("Child has no instance", child, this);
         return;
       }
-      child.runtime.instance.bus.emit("flow:component-did-mount");
+      child.runtime.instance.bus.emit(ComponentEvent.DidMount);
     });
 
     /* allows components to run post-mount logic */
@@ -188,7 +188,7 @@ export default abstract class Component<P extends BaseProps> {
   }
 
   /* emits -> CDR */
-  private _componentDidUpdate(): void {
+  public _componentDidUpdate(): void {
     /* updates listners if !eq */
     if (!isEqual(this._on ?? {}, this._attachedListeners ?? {})) {
       this.domService.removeListeners(this._attachedListeners);
@@ -203,11 +203,21 @@ export default abstract class Component<P extends BaseProps> {
       this.domService.setRootTagCx(newCx);
     }
 
+    /* using bus to fully unmount children */
+    if (this.childrenFlat) {
+      Object.values(this.childrenFlat).forEach((value) => {
+        if (!value.runtime?.instance) {
+          console.error("Child has no instance", value, this);
+        }
+        value.runtime?.instance._componentDidUpdate();
+      });
+    }
+
     /* concrete component logic */
     this.componentDidUpdate();
 
     /* CDR emits after listeners & classNames updated */
-    this._bus.emit("flow:render");
+    this._bus.emit(ComponentEvent.Render);
   }
 
   /**
@@ -229,7 +239,7 @@ export default abstract class Component<P extends BaseProps> {
       if (!value.runtime?.instance) {
         console.error("Child has no instance", value, this);
       }
-      value.runtime?.instance._bus.emit("flow:component-did-unmount");
+      value.runtime?.instance._componentDidUnmount();
     });
 
     /* allows components to run post-unmount logic */
@@ -261,6 +271,8 @@ export default abstract class Component<P extends BaseProps> {
     if (children) Object.assign(this._children as object, children);
   }
 
+  /* --- Helper Methods --- */
+
   /* DOMService -> makes visible */
   public show(): void {
     const element = this.domService.element;
@@ -275,5 +287,9 @@ export default abstract class Component<P extends BaseProps> {
     if (!element) return;
 
     element!.style.display = "none";
+  }
+
+  public rerender(): void {
+    this.bus.emit(ComponentEvent.DidUpdate);
   }
 }

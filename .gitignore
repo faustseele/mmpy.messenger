@@ -11,8 +11,6 @@ dist
 dist-ssr
 plans
 *.local
-sprint3
-
 coverage
 
 # Editor directories and files
@@ -20,6 +18,7 @@ coverage
 !.vscode/extensions.json
 .idea
 .DS_Store
+*.local.*
 *.suo
 *.ntvs*
 *.njsproj

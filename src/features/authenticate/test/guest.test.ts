@@ -1,10 +1,12 @@
-import Router from "@/app/providers/router/Router.ts";
-import { handleFetchChats } from "@/entities/chat/model/actions.ts";
-import { globalBus } from "@/shared/lib/EventBus/EventBus.ts";
-import { RouteLink } from "@/shared/types/universal.ts";
+import Router from "@app/providers/router/Router.ts";
+import { handleFetchChats } from "@entities/chat/model/actions.ts";
+import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
+import { RouteLink } from "@shared/types/universal.ts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { handleGuestSignIn } from "../model/actions-guest.ts";
 import AuthService from "../model/AuthService.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
 
 /* vi.hoisted() here bc vi.mocks() are auto-hoisted to the top by vitest */
 const goodGuest = vi.hoisted(() => ({
@@ -47,10 +49,37 @@ vi.mock("../../../app/providers/router/Router.ts", () => {
   };
 });
 
-/* mock handleFetchChats */
+/* mock chat actions */
 vi.mock("../../../entities/chat/model/actions.ts", () => {
   return {
     handleFetchChats: vi.fn(),
+    handleCreateChat: vi.fn().mockResolvedValue({ ok: true, data: { id: 1 } }),
+    handleAddUser: vi.fn().mockResolvedValue({ ok: true }),
+    hardResetMessenger: vi.fn().mockResolvedValue(undefined),
+  };
+});
+
+/* mock Store for isGuestMode flag */
+vi.mock("../../../app/providers/store/model/Store.ts", () => {
+  return {
+    default: {
+      getState: vi.fn().mockReturnValue({
+        controllers: { isGuestMode: false },
+      }),
+      set: vi.fn(),
+    },
+  };
+});
+
+/* mock UserService for bootstrapGuestStarter */
+vi.mock("../../../entities/user/model/UserService.ts", () => {
+  return {
+    default: {
+      findByLogin: vi.fn().mockResolvedValue({
+        ok: true,
+        data: { id: 2, first_name: "Test", second_name: "User", login: "testuser" },
+      }),
+    },
   };
 });
 
@@ -63,7 +92,7 @@ describe("@Features/Auth: Guest", () => {
     vi.clearAllMocks();
 
     /* silencing console.error */
-    vi.spyOn(console, "error").mockImplementation(() => {})
+    vi.spyOn(console, "error").mockImplementation(() => {});
   });
 
   it("should navigate to Messenger-Page and fetch chats on success", async () => {
@@ -78,8 +107,8 @@ describe("@Features/Auth: Guest", () => {
     /* checking if Toast has been fired
     toHaveBeenCalledWith instead of toHaveBeenCalledExactlyOnceWith
     bc we call 2 toasts in Guest-Flow */
-    expect(spiedToast).toHaveBeenCalledWith("toast", {
-      msg: "👻 Guest Login Success!",
+    expect(spiedToast).toHaveBeenCalledWith(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.auth.guestSuccess"),
       type: "success",
     });
 
@@ -99,8 +128,8 @@ describe("@Features/Auth: Guest", () => {
     expect(handleFetchChats).not.toHaveBeenCalled();
 
     /* checking for the last-fired Toast */
-    expect(spiedToast).toHaveBeenLastCalledWith("toast", {
-      msg: badGuest.err?.reason,
+    expect(spiedToast).toHaveBeenLastCalledWith(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.dev.devErrorStub").replace('${}', badGuest.err?.reason || ''),
       type: "error",
     });
 

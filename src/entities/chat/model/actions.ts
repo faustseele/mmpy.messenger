@@ -1,3 +1,4 @@
+import Store from "@app/providers/store/model/Store.ts";
 import {
   ChatId,
   ChatResponse,
@@ -5,15 +6,18 @@ import {
   GetChatsQuery,
 } from "@shared/api/model/api.types.ts";
 import { ApiResponse } from "@shared/api/model/types.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import { ls_getLastChatId } from "@shared/lib/LocalStorage/actions.ts";
 import ChatService from "./ChatService.ts";
 
 export const handleAddUser = async (
-  id: ChatId,
+  chatId: ChatId,
   user: number,
 ): Promise<ApiResponse<string>> => {
-  return await ChatService.addUser(id, user);
+
+  return await ChatService.addUser(chatId, user);
 };
 
 export const handleCloseChat = () => {
@@ -24,39 +28,57 @@ export const handleCreateChat = async (
   title: string,
   noToast = false,
 ): Promise<ApiResponse<CreateChatResponse>> => {
-  if (!noToast) globalBus.emit("toast", { msg: `Creating ´${title}'..` });
+  if (!noToast)
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.chats.creatingStub").replace("${}", title),
+    });
 
   const res = await ChatService.createChat(title);
 
   if (res.ok) {
     await ChatService.fetchChats();
     await ChatService.selectChat(res.data!.id);
+
     if (!noToast)
-      globalBus.emit("toast", { msg: `'${title}' created!` }, "success");
+      globalBus.emit(GlobalEvent.Toast, {
+        msg: i18n.t("toasts.chats.createSuccessStub").replace("${}", title),
+      });
   } else {
     console.error("ChatService: createChat failed:", res);
-    globalBus.emit("toast", { msg: `Dev-Error: ${res.err?.reason}` }, "error");
+    globalBus.emit(
+      GlobalEvent.Toast,
+      {
+        msg: i18n
+          .t("toasts.dev.devErrorStub")
+          .replace("${}", res.err?.reason || ""),
+      },
+      "error",
+    );
   }
 
   return res;
 };
 
 export const handleDeleteChat = async (id: number, chatTitle: string) => {
-  globalBus.emit("toast", { msg: "Deleting chat..." });
+  globalBus.emit(GlobalEvent.Toast, {
+    msg: i18n.t("toasts.chats.deleteLoading"),
+  });
   const res = await ChatService.deleteChat(id);
 
   if (res.ok) {
     await ChatService.fetchChats();
 
-    globalBus.emit("toast", {
-      msg: `Chat '${chatTitle}' deleted successfully.`,
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.chats.deleteSuccessStub").replace("${}", chatTitle),
       type: "success",
     });
     ChatService.deselectChat();
   } else {
     console.error("ChatService: deleteChat failed:", res);
-    globalBus.emit("toast", {
-      msg: "Dev-Error: " + res.err?.reason,
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n
+        .t("toasts.dev.devErrorStub")
+        .replace("${}", res.err?.reason || ""),
       type: "error",
     });
   }
@@ -69,8 +91,10 @@ export const handleFetchChats = async (
 
   if (!resList.ok) {
     console.error("fetchChats failed:", resList.err?.response);
-    globalBus.emit("toast", {
-      msg: resList.err?.reason,
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n
+        .t("toasts.chats.fetchErrorStub")
+        .replace("${}", resList.err?.reason || ""),
       type: "error",
     });
     return resList;
@@ -101,4 +125,17 @@ export const handleUpdateChatAvatar = async (
 ): Promise<void> => {
   await ChatService.updateChatAvatar(id, file);
   await ChatService.fetchChats();
+};
+
+export const hardResetMessenger = async (): Promise<void> => {
+  const chats = Store.getState().api.chats.list;
+  const isEmpty = !chats || chats.length === 0;
+  if (isEmpty) return;
+
+  for (const chat of chats) {
+    await ChatService.deleteChat(chat.id);
+  }
+
+  ChatService.deselectChat();
+  Store.set("api.chats.list", []);
 };

@@ -1,16 +1,17 @@
 import Store from "@app/providers/store/model/Store.ts";
 import { MessageField } from "@features/send-message/ui/MessageField.ts";
-import { isMobile } from "@shared/lib/browser/isMobile.ts";
-import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
-import { Spinner } from "@shared/ui/Spinner/Spinner.ts";
 import cssPage from "@pages/page/ui/page.module.css";
 import { Page } from "@pages/page/ui/Page.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
+import { isMobile } from "@shared/lib/browser/isMobile.ts";
 import { ComponentProps } from "@shared/lib/Component/model/types.ts";
+import { cx } from "@shared/lib/helpers/formatting/classnames.ts";
 import { Button } from "@shared/ui/Button/Button.ts";
+import { Spinner } from "@shared/ui/Spinner/Spinner.ts";
 import {
-  handleAddChat,
-  handleAddNotes,
-  handleDeleteChat,
+  handleAddChatPrompt,
+  handleAddNotesPrompt,
+  handleDeleteChatPrompt,
 } from "../model/actions.ts";
 import { MessengerNodes, MessengerProps } from "../model/types.ts";
 import css from "./messenger.module.css";
@@ -38,8 +39,6 @@ export class MessengerPage extends Page<MessengerProps> {
     if (!this.children?.nodes) {
       throw new Error("MessengerPage: Children are not defined");
     }
-
-    console.log(Store.getState());
 
     /* --- getting instances --- */
     const {
@@ -82,14 +81,14 @@ export class MessengerPage extends Page<MessengerProps> {
   }
 
   private _wireAddChat(addUser: Button) {
-    if (!this.on.findUser || !this.on.addChatWithUser) {
-      console.error("MessengerPage: params.on is bad", this.on);
+    if (!addUser) {
+      console.error("MessengerPage: addUser Button", this.children);
       return;
     }
 
-    addUser?.setProps({
+    addUser.setProps({
       on: {
-        click: () => handleAddChat(this.on),
+        click: () => handleAddChatPrompt(),
       },
     });
   }
@@ -97,7 +96,7 @@ export class MessengerPage extends Page<MessengerProps> {
   private _wireAddNotes(addNotes: Button) {
     addNotes?.setProps({
       on: {
-        click: () => handleAddNotes(this.on),
+        click: handleAddNotesPrompt,
       },
     });
   }
@@ -105,7 +104,8 @@ export class MessengerPage extends Page<MessengerProps> {
   private _wireDeleteChat(deleteChat: Button) {
     deleteChat.setProps({
       on: {
-        click: (e: Event) => handleDeleteChat(e, this.configs.info, this.on),
+        click: (e: Event) =>
+          handleDeleteChatPrompt(e, this.configs.info),
       },
     });
   }
@@ -231,10 +231,13 @@ export class MessengerPage extends Page<MessengerProps> {
               {{else}}
 
                 {{#unless isLoadingMessages}}
-                  <p class="${css.noMessages}">${isNotes ? "Нет заметок" : "Нет сообщений"}</p>
+                  <p class="${css.chatPlaceholderText}">${i18n.t(isNotes ? "messenger.message.noNotes" : "messenger.message.noMessages")}</p>
                 {{/unless}}
                 
               {{/if}}
+            {{/if}}
+            {{#if ${isStub}}}
+              <p class="${css.chatPlaceholderText}">${i18n.t("messenger.message.stub")}</p>
             {{/if}}
           </div>
 

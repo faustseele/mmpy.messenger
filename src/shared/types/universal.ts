@@ -27,10 +27,10 @@ export type Indexed<T = unknown> = {
 export type PlainObject<T = unknown> = Record<string, T>;
 
 export enum RouteLink {
-  SignIn = "/",
-  SignUp = "/sign-up",
+  SignIn    = "/",
+  SignUp    = "/sign-up",
   Messenger = "/messenger",
-  Settings = "/settings",
-  NotFound = "/404",
-  Error = "/500",
+  Settings  = "/settings",
+  NotFound  = "/404",
+  Error     = "/500",
 }

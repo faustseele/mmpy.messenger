@@ -1,13 +1,17 @@
 import { UserResponse } from "@shared/api/model/api.types.ts"
 import { ApiResponse } from "@shared/api/model/types.ts";
 import { globalBus } from "@shared/lib/EventBus/EventBus.ts";
+import { GlobalEvent } from "@shared/lib/EventBus/events.ts";
 import Router from "@app/providers/router/Router.ts";
+import Store from "@app/providers/store/model/Store.ts";
 import {
   handleCreateChat,
   handleFetchChats,
+  hardResetMessenger,
 } from "@entities/chat/model/actions.ts";
 import { RouteLink } from "@shared/types/universal.ts";
 import AuthService from "./AuthService.ts";
+import { i18n } from "@shared/i18n/I18nService.ts";
 import { SignInData, SignUpData } from "./types.ts";
 
 export const handleFetchUser = async (): Promise<ApiResponse<UserResponse>> => {
@@ -17,8 +21,8 @@ export const handleFetchUser = async (): Promise<ApiResponse<UserResponse>> => {
     const status = res.err?.status;
 
     if (status === 408) {
-      globalBus.emit("toast", {
-        msg: "Request Timeout. Try Again.",
+      globalBus.emit(GlobalEvent.Toast, {
+        msg: i18n.t("toasts.auth.timeout"),
         type: "error",
       });
       return res;
@@ -74,8 +78,8 @@ export const handlePresentSession = async (res: ApiResponse<UserResponse>) => {
   const reason = res.err?.reason;
 
   if (reason === "User already in system") {
-    globalBus.emit("toast", {
-      msg: "You are already logged in. Use Profile page to log out.",
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.auth.alreadyLogged"),
       type: "info",
     });
 
@@ -87,8 +91,8 @@ export const handlePresentSession = async (res: ApiResponse<UserResponse>) => {
     /* straight logout & cookie removal; bypassing full handleLogout() */
     await AuthService.logout();
 
-    globalBus.emit("toast", {
-      msg: "This session is invalid, logging out. Try again.",
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.auth.invalidSession"),
       type: "error",
     });
 
@@ -100,20 +104,27 @@ export const handlePresentSession = async (res: ApiResponse<UserResponse>) => {
 };
 
 export const handleLogout = async (): Promise<ApiResponse<boolean>> => {
-  globalBus.emit("toast", { msg: "Logging out..." });
+  globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.auth.loggingOut") });
+
+  /* andcleanup on guest mode */
+  const isGuest = Store.getState().controllers.isGuestMode;
+  if (isGuest) {
+    await hardResetMessenger();
+    Store.set("controllers.isGuestMode", false);
+  }
 
   const res = await AuthService.logout();
   if (res.ok) {
     Router.go(RouteLink.SignIn);
-    globalBus.emit("toast", {
-      msg: "👋 See you!",
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.auth.logoutSuccess"),
       type: "success",
     });
   } else {
     Router.go(RouteLink.Error);
     console.error("Logout Failed", res);
-    globalBus.emit("toast", {
-      msg: res.err?.reason,
+    globalBus.emit(GlobalEvent.Toast, {
+      msg: i18n.t("toasts.dev.devErrorStub").replace('${}', res.err?.reason || ''),
       type: "error",
     });
   }
