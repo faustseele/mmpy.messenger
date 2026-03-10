@@ -1,52 +1,80 @@
-**mmpy.messenger** 💌 — portfolio pet-project
+**mmpy.messenger** 💌 — чат на TypeScript с нуля, без React/Vue
 
-*Built & [Designed](https://www.figma.com/design/SaTdkvEMsWoRl2dZn7S9Ab/middle.messenger.praktikum.yandex?node-id=0-1&p=f) for 'Middle Web-Developer' [course](https://github.com/yandex-praktikum/middle.messenger.praktikum.yandex) by [Y.Praktikum](practicum.yandex.ru/profile/middle-frontend)*
+*Компонентная система, реактивный стор, роутер, WebSocket, i18n — всё написано руками.*
 
----
-
-### Tech-Stack
-- Runs on: TypeScript + Handlebars
-- API: https://ya-praktikum.tech/api/v2/swagger + XHR
-- Styles: PostCSS + CSS-Modules
-- Code Style: ESLint (Standard), Stylelint
-- Build + Preview: Vite
+**[Демо](https://mmpy-messenger.netlify.app/)** &nbsp;·&nbsp; **[Figma](https://www.figma.com/design/SaTdkvEMsWoRl2dZn7S9Ab/middle.messenger.praktikum.yandex?node-id=0-1&p=f)** &nbsp;·&nbsp; **[API Swagger](https://ya-praktikum.tech/api/v2/swagger)** &nbsp;·&nbsp; **[English](README.en.md)**
 
 ---
 
-### Architecture
-**Feature-based** structure (lightweight Feature‑Sliced Design): `src/app`, `src/pages`, `src/features`, `src/entities`, `src/shared`.
+### Чем хорош MMPY-Чат?
 
-Component dependencies (**DI**) are explicit and minimal:
-- DOMService (DOM dependency) creates/updates elements & manages listeners: `src/shared/lib/DOM/DOMService.ts`
-- FragmentService (fragment dependency) compiles Handlebars markup to DocumentFragment & stitches children: `src/shared/lib/Fragment/FragmentService.ts`
-
-**Factory** + **DI**: components are created via factories that inject the services and wire child nodes, enabling *decoupling* and testability:
-- Factory helpers: `src/shared/lib/helpers/factory/functions.ts`
-- Usage with page blueprints and lazy instantiation: `src/app/providers/store/connect.ts`
+- Всё с нуля — Компоненты с lifecycle, DI, EventBus, без фреймворков
+- Feature-Sliced Design — слои, границы, однонаправленные зависимости
+- WebSocket-чат с токен-авторизацией и историей сообщений
+- Figma с собственным дизайном → pixel-perfect вёрстка
 
 ---
 
-### Deployed at Netlify
-**The link**: 
+### Стек
+
+- **Язык:** TypeScript (strict)
+- **Шаблоны:** Handlebars
+- **Стили:** PostCSS + CSS Modules
+- **Сборка:** Vite
+- **Тесты:** Vitest, jsdom
+- **Линтинг:** ESLint, Stylelint
+- **API:** REST (XHR) + WebSocket
+- **Деплой:** Netlify
 
 ---
 
-### How to run
-```bash 
-npm install
-```
+### Архитектура
+
+**Feature-Sliced Design:** `src/app` → `src/pages` → `src/features` → `src/entities` → `src/shared`
+
+Компоненты создаются через **Factory + DI** — зависимости инжектятся, не импортируются напрямую:
+
+- [`shared/lib/Component/`](src/shared/lib/Component/) — базовый класс с lifecycle на EventBus
+- [`shared/lib/DOM/DOMService.ts`](src/shared/lib/DOM/DOMService.ts) — создание/обновление элементов, управление слушателями
+- [`shared/lib/Fragment/FragmentService.ts`](src/shared/lib/Fragment/FragmentService.ts) — Handlebars → DocumentFragment
+- [`app/providers/store/`](src/app/providers/store/) — реактивный стор + connect
+- [`app/providers/router/`](src/app/providers/router/) — History API роутер с гардами
+
+---
+
+### Что умеет?
+
+- Авторизация (вход / регистрация) с валидацией форм
+- Сообщения в реальном времени через WebSocket
+- Список чатов с поиском
+- Редактирование профиля (аватар, данные, пароль)
+- Роутинг с гардами авторизации
+- i18n — 7 языков, переключение на лету
+- Адаптивная вёрстка
+
+---
+
+### Запуск
+
 ```bash
-npm run dev
+npm install && npm run dev
 ```
-```bash
-npm run build
-```
-**Available links**:
-- authentication: `/sign-up` `/`
-- app: `/messenger` `/settings`
-- error-pages: `/404` `/500`
+
+| Команда | Что делает |
+|---------|------------|
+| `npm run dev` | Дев-сервер с HMR |
+| `npm run build` | Продакшн-сборка |
+| `npm run lint` | ESLint + TS + Stylelint |
+| `npm test` | Тесты (watch) |
+
+**Маршруты:** `/` `/sign-up` `/messenger` `/settings` `/404` `/500`
 
 ---
 
-#### Design
-The design is available to everyone – [link to Figma](https://www.figma.com/design/SaTdkvEMsWoRl2dZn7S9Ab/middle.messenger.praktikum.yandex?node-id=0-1&p=f).
+### Дизайн
+
+UI спроектирован до кода — **[открыть в Figma →](https://www.figma.com/design/SaTdkvEMsWoRl2dZn7S9Ab/middle.messenger.praktikum.yandex?node-id=0-1&p=f)**
+
+---
+
+*Сделан по лекалам 'Middle Web-Developer' [course](https://github.com/yandex-praktikum/middle.messenger.praktikum.yandex) by [Y.Praktikum](practicum.yandex.ru/profile/middle-frontend)*
