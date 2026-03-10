@@ -84,9 +84,9 @@ export class SettingsPage extends Page<SettingsProps> {
       validator_psw,
     );
 
-    /* lock inputs & buttons in guest mode */
-
-    this._tryApplyGuestLock(editInfo, editPassword);
+    /* condition guest lock on every mount — restores fresh state
+       because setProps mutates original params via Proxy */
+    this._conditionGuestLock(editInfo, editPassword);
   }
 
   public componentDidRender(): void {
@@ -95,47 +95,50 @@ export class SettingsPage extends Page<SettingsProps> {
     /* sets placeholders for inputs from user-res */
     this._hydrateInputPlaceholders();
     /* re-apply guest lock after re-render */
-    this._tryApplyGuestLockDOM();
+    this._conditionGuestLockDOM();
   }
 
-  private _tryApplyGuestLock(editInfo: Button, editPassword: Button): void {
+  private _conditionGuestLock(editInfo: Button, editPassword: Button): void {
     const isGuest = Store.getState().controllers.isGuestMode;
     const { subheading_form } = this.children!.nodes as SettingsNodes;
     const subheading = subheading_form.runtime?.instance as Subheading;
 
-    if (!isGuest) {
-      /* restore default subheading (setProps mutates the original params via Proxy,
-         so a prior guest session leaves stale guest text in the blueprint) */
-      subheading.setProps({
-        configs: { i18nKey: "settings.form.subheadingInfo" },
-      });
-      return;
-    }
-
-    /* swap subheading to guest warning */
     subheading.setProps({
-      configs: { i18nKey: "settings.form.guestModeStub" },
+      configs: {
+        i18nKey: isGuest
+          ? "settings.form.guestModeStub"
+          : "settings.form.subheadingInfo",
+      },
     });
 
-    /* disable edit buttons */
+    /* buttons & inputs: explicitly set both branches */
     [editInfo, editPassword].forEach((btn) => {
       const el = btn.element;
-      if (el) {
+      if (!el) return;
+
+      if (isGuest) {
         el.setAttribute("disabled", "true");
         el.classList.add(css.footer__btn_disabled);
+      } else {
+        el.removeAttribute("disabled");
+        el.classList.remove(css.footer__btn_disabled);
       }
     });
 
-    /* disable all inputs */
-    this._tryApplyGuestLockDOM();
+    this._conditionGuestLockDOM();
   }
 
-  private _tryApplyGuestLockDOM(): void {
+  private _conditionGuestLockDOM(): void {
     const isGuest = Store.getState().controllers.isGuestMode;
-    if (!isGuest) return;
-
     const inputs = this.element?.querySelectorAll("input");
-    inputs?.forEach((input) => input.setAttribute("disabled", "true"));
+
+    inputs?.forEach((input) => {
+      if (isGuest) {
+        input.setAttribute("disabled", "true");
+      } else {
+        input.removeAttribute("disabled");
+      }
+    });
   }
 
   private _hydrateInputPlaceholders(): void {
