@@ -29,7 +29,6 @@ export function ls_setGuestMode(isGuest: boolean): void {
 }
 
 export function ls_getGuestMode(): boolean {
-  console.log("ls_getGuestMode", localStorage.getItem("isGuestMode"));
   return localStorage.getItem("isGuestMode") === "true";
 }
 
