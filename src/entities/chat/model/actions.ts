@@ -51,7 +51,7 @@ export const handleCreateChat = async (
       GlobalEvent.Toast,
       {
         msg: i18n
-          .t("toasts.dev.devErrorStub")
+          .t("toasts.chats.devErrorStub")
           .replace("${}", res.err?.reason || ""),
       },
       "error",
@@ -79,7 +79,7 @@ export const handleDeleteChat = async (id: number, chatTitle: string) => {
     console.error("ChatService: deleteChat failed:", res);
     globalBus.emit(GlobalEvent.Toast, {
       msg: i18n
-        .t("toasts.dev.devErrorStub")
+        .t("toasts.chats.devErrorStub")
         .replace("${}", res.err?.reason || ""),
       type: "error",
     });

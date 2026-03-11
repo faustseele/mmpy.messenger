@@ -12,6 +12,7 @@
 - Feature-Sliced Design — layers, boundaries, unidirectional dependencies
 - WebSocket chat with token auth and message history
 - Figma → pixel-perfect implementation
+- Lighthouse: 94-100 on all pages
 
 ---
 

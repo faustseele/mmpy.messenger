@@ -132,7 +132,7 @@ export const handleLogout = async (
     console.error("Logout Failed", res);
     globalBus.emit(GlobalEvent.Toast, {
       msg: i18n
-        .t("toasts.dev.devErrorStub")
+        .t("toasts.chats.devErrorStub")
         .replace("${}", res.err?.reason || ""),
       type: "error",
     });

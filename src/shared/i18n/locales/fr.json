@@ -147,7 +147,8 @@
       "signinSuccess": "Bon retour !",
       "guestLoading": "Lancement du mode invité...",
       "guestSuccess": "Connexion invité réussie ! 👻",
-      "guestResetting": "Réinitialisation des données invité..."
+      "guestResetting": "Réinitialisation des données invité...",
+      "unauthorized": "Le mot de passe ou l'identifiant est incorrect."
     },
     "chats": {
       "creatingStub": "Création de ${}...",

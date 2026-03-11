@@ -14,7 +14,18 @@ const emitToast = (res: ApiResponse<UserResponse>, type: SubmitTypes) => {
   if (!res.ok) {
     const err = res.err;
     const msg = `${err?.reason}`;
-    globalBus.emit(GlobalEvent.Toast, { msg: i18n.t("toasts.dev.devErrorStub").replace('${}', msg), type: "error" });
+
+    if (err?.status === 401) {
+      globalBus.emit(GlobalEvent.Toast, {
+        msg: i18n.t("toasts.auth.unauthorized"),
+        type: "error",
+      });
+    } else {
+      globalBus.emit(GlobalEvent.Toast, {
+        msg: i18n.t("toasts.chats.devErrorStub").replace("${}", msg),
+        type: "error",
+      });
+    }
     return;
   }
 

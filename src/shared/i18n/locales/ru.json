@@ -147,7 +147,8 @@
       "signinSuccess": "И снова здравствуйте!",
       "guestLoading": "Загружаем Гость-Мод...",
       "guestSuccess": "Вы вошли как Гость! 👻",
-      "guestResetting": "Сбрасываем гостевые данные..."
+      "guestResetting": "Сбрасываем гостевые данные...",
+      "unauthorized": "Неверный логин или пароль."
     },
     "chats": {
       "creatingStub": "Создаём ${}...",

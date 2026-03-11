@@ -56,7 +56,7 @@ export const handleGuestSignIn = async (): Promise<
     console.error("Guest Login Failed", res);
     globalBus.emit(GlobalEvent.Toast, {
       msg: i18n
-        .t("toasts.dev.devErrorStub")
+        .t("toasts.chats.devErrorStub")
         .replace("${}", res.err?.reason || ""),
       type: "error",
     });

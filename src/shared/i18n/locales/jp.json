@@ -147,7 +147,8 @@
       "signinSuccess": "おかえりなさい！",
       "guestLoading": "ゲストモードを起動中...",
       "guestSuccess": "ゲストログイン成功！ 👻",
-      "guestResetting": "ゲストデータをリセット中..."
+      "guestResetting": "ゲストデータをリセット中...",
+      "unauthorized": "パスワードまたはログイン情報が正しくありません。"
     },
     "chats": {
       "creatingStub": "${}を作成中...",

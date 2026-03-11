@@ -147,7 +147,8 @@
       "signinSuccess": "Willkommen zurück!",
       "guestLoading": "Gastmodus starten...",
       "guestSuccess": "Gast-Anmeldung erfolgreich! 👻",
-      "guestResetting": "Gastdaten werden zurückgesetzt..."
+      "guestResetting": "Gastdaten werden zurückgesetzt...",
+      "unauthorized": "Entweder Passwort oder Anmeldung ist falsch."
     },
     "chats": {
       "creatingStub": "Erstelle ${}...",
