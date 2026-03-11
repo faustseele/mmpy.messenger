@@ -13,7 +13,7 @@ const goodGuest = vi.hoisted(() => ({
   ok: true,
   data: {
     id: 1,
-    email: "whisper@mmpy.messenger.com",
+    email: "whisper@mmpy.chat.com",
     login: "whisper",
     first_name: "Whisper",
     second_name: "Guest",

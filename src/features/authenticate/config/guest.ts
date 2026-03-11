@@ -7,7 +7,7 @@ export const GUEST_CREDS: SignInRequest = {
 
 /**
  * Guest Credentials
- * Email: whisper@mmpy.messenger.com
+ * Email: whisper@mmpy.chat.com
  * Login: whisper
  * First Name: Whisper
  * Second Name: Guest
@@ -17,7 +17,7 @@ export const GUEST_CREDS: SignInRequest = {
  */
 
 export const GUEST_USER = {
-  email: "whisper@mmpy.messenger.com",
+  email: "whisper@mmpy.chat.com",
   login: "whisper",
   first_name: "Whisper",
   second_name: "Guest",

@@ -11,9 +11,9 @@ export default defineConfig({
       devOptions: { enabled: true },
       includeAssets: ["logo.ico", "icon-192.png", "icon-512.png", "*.svg"],
       manifest: {
-        name: "MMPY Messenger",
-        short_name: "MMPY-Msgr",
-        description: "mmpy.messenger 💌 — portfolio pet-project",
+        name: "MMPY-Chat",
+        short_name: "MMPY-Chat",
+        description: "mmpy.chat 💌 — portfolio pet-project",
         theme_color: "#b9dfa5",
         background_color: "#101607",
         display: "standalone",
