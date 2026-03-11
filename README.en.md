@@ -45,8 +45,8 @@ Components are created via **Factory + DI** — dependencies are injected, not i
 ### Features ⚡
 
 - 🚪 Authentication (sign-in / sign-up) with form validation
-- 🗨️ Chat & Notes list, real-time messaging via WebSocket
-- ✒️ Profile editing (avatar, credentials, password)
+- 🗨️ Chats + 📝 Notes list, real-time messaging 🔄 WebSocket
+- ⚙️ Profile editing (avatar, credentials, password)
 - 🗺️ Client-side routing with auth guards
 - 🌐 i18n — 7 languages, runtime switching
 - 📱 Mobile-first – responsive layout
