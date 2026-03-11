@@ -8,7 +8,7 @@ English | [**Русский README** ➡️](README.md)
 
 ---
 
-### What's so good about MMPY-messenger?
+### What's so good about MMPY-chat? 💌
 
 - Everything from scratch — components with lifecycle, DI, EventBus, no frameworks
 - Feature-Sliced Design — layers, boundaries, unidirectional dependencies
@@ -18,7 +18,7 @@ English | [**Русский README** ➡️](README.md)
 
 ---
 
-### Stack
+### Tech-Stack 🧩
 
 - **Language:** TypeScript (strict, generics, enums, guards)
 - **Templating:** Handlebars
@@ -31,7 +31,7 @@ English | [**Русский README** ➡️](README.md)
 
 ---
 
-### Architecture
+### Architecture 🕸️
 
 **Feature-Sliced Design:** `src/app` → `src/pages` → `src/features` → `src/entities` → `src/shared`
 
@@ -45,7 +45,7 @@ Components are created via **Factory + DI** — dependencies are injected, not i
 
 ---
 
-### Features
+### Features ⚡
 
 - Authentication (sign-in / sign-up) with form validation
 - Chat & Notes list, real-time messaging via WebSocket
@@ -56,7 +56,7 @@ Components are created via **Factory + DI** — dependencies are injected, not i
 
 ---
 
-### Getting started
+### Getting started 🔑
 
 ```bash
 npm install && npm run dev
@@ -73,7 +73,7 @@ npm install && npm run dev
 
 ---
 
-### Design
+### Design 📐
 
 UI was designed before code — **[open in Figma →](https://www.figma.com/design/SaTdkvEMsWoRl2dZn7S9Ab/middle.messenger.praktikum.yandex?node-id=0-1&p=f)**
 

@@ -8,7 +8,7 @@
 
 ---
 
-### Чем хорош MMPY-Чат?
+### Чем хорош MMPY-Чат? 💌
 
 - Всё с нуля — Компоненты с lifecycle, DI, EventBus, без фреймворков
 - Feature-Sliced Design — слои, границы, однонаправленные зависимости
@@ -18,7 +18,7 @@
 
 ---
 
-### Стек
+### Стек технологий 🧩
 
 - **Язык:** TypeScript (strict, generics, enums, guards)
 - **Шаблоны:** Handlebars
@@ -31,7 +31,7 @@
 
 ---
 
-### Архитектура
+### Архитектура 🕸️
 
 **Feature-Sliced Design:** `src/app` → `src/pages` → `src/features` → `src/entities` → `src/shared`
 
@@ -45,7 +45,7 @@
 
 ---
 
-### Что умеет?
+### Что умеет? ⚡
 
 - Авторизация (вход / регистрация) с валидацией форм
 - Список чатов & записок, cообщения в реальном времени через WebSocket
@@ -56,7 +56,7 @@
 
 ---
 
-### Запуск
+### Запуск 🔑
 
 ```bash
 npm install && npm run dev
@@ -73,7 +73,7 @@ npm install && npm run dev
 
 ---
 
-### Дизайн
+### Дизайн 📐
 
 UI спроектирован до кода — **[открыть в Figma →](https://www.figma.com/design/SaTdkvEMsWoRl2dZn7S9Ab/middle.messenger.praktikum.yandex?node-id=0-1&p=f)**
 
